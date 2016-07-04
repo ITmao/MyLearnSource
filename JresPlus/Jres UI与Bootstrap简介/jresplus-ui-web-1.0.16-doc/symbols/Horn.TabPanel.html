@@ -1,0 +1,621 @@
+
+	<!-- ============================== header ================================= -->	
+		<!-- begin static/header.html -->
+		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="keywords" content="jquery,ui,easy,FUI,web framekwork,ajax framekwork,ria,web development">
+		<meta name="description" content="FUI help you build your web page more Fast!!">
+		<title>UI API - JRES UI</title>
+   		<link rel="stylesheet" href="../resource/css/doc.css" type="text/css" />
+    	<link type="text/css" rel="stylesheet" href="../resource/SyntaxHighlighter/Styles/SyntaxHighlighter.css"/>
+		<script src="../resource/SyntaxHighlighter/Scripts/shCore.js"></script>
+		<script src="../resource/SyntaxHighlighter/Scripts/shBrushXml.js"></script>
+		<script src="../resource/SyntaxHighlighter/Scripts/shBrushJava.js"></script>
+		<script type="text/javascript" src="../resource/jquery-1.7.2.min.js"></script>
+		<style type="text/css">
+			.dp-xml .cdata { color: #ff1493; }.dp-xml .tag, .dp-xml .tag-name { color: #069; font-weight: bold; }.dp-xml .attribute { color: red; }.dp-xml .attribute-value { color: blue; }
+		</style>
+		<script>
+			
+		</script>
+	</head>
+	<body>
+		<div id="header">
+						<div id="header-inner">
+				<table cellpadding="0" cellspacing="0" style="width:100%;">
+					<tr>
+						<td rowspan="2" style="width:20px;">
+						</td>
+						<td style="height:52px;">
+							<div style="color:#fff;font-size:22px;font-weight:bold;">
+								<a href="#" style="color:#fff;font-size:22px;font-weight:bold;text-decoration:none">JRES UI</a>
+							</div>
+							<div style="color:#fff">
+								<a href="#" style="color:#fff;text-decoration:none">JRES UI是使用Velocity开发的服务器端UI组件，助力于组件化快速视图开发!</a>
+							</div>
+						</td>
+						<td style="padding-right:5px;text-align:right;vertical-align:bottom;">
+							<div id="topmenu" style="display:none;">
+								<a href="../../index.html">主页</a>
+								<a href="http://rdc.hundsun.com/forum.php?mod=forumdisplay&amp;fid=163" target="_blank">论坛</a>
+								<a href="../../demo/index.htm">示例</a>
+								<a href="../../documentation/index.html">文档</a>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+			
+		</div>
+		<!-- end static/header.html -->
+	<div id="mainwrap" >
+		<div id="content">
+        <!-- ============================== classes index ============================ -->
+        <script type="text/javascript">
+            $(function() {
+            	var bw=$.browser;
+				if(bw.msie&&bw.version<7||(bw.msie&&$.support.boxModel==false)){
+						//ie6
+						$("#plugin_title").hide();
+						$('#plugins').removeClass("plugins");
+						$('#plugins').addClass("plugins2");
+				}else{
+					$('#plugins').stop().animate({'marginLeft':'-285px'},1000);
+	                $('#plugins').hover(
+	                    function () {
+	                        $(this).stop().animate({'marginLeft':'-2px'},200);
+	                    },
+	                    function () {
+	                        $(this).stop().animate({'marginLeft':'-285px'},200);
+	                    }
+	                );
+				}
+                
+            });
+</script>
+	<div id="plugins" class="plugins">
+	<div id="plugin_title" class="plugin_title">控件清单</div>
+	<ul>
+        
+        
+        
+        <li><a href="../symbols/Horn.html">Horn</a></li>
+        
+        <li><a href="../symbols/Horn._Pagebar-pagebar.html">Horn._Pagebar-pagebar</a></li>
+        
+        <li><a href="../symbols/Horn.Base.html">Horn.Base</a></li>
+        
+        <li><a href="../symbols/Horn.ButtonPanel.html">Horn.ButtonPanel</a></li>
+        
+        <li><a href="../symbols/Horn.Calendar.html">Horn.Calendar</a></li>
+        
+        <li><a href="../symbols/Horn.CalendarGroup.html">Horn.CalendarGroup</a></li>
+        
+        <li><a href="../symbols/Horn.CheckboxGroup.html">Horn.CheckboxGroup</a></li>
+        
+        <li><a href="../symbols/Horn.Combox.html">Horn.Combox</a></li>
+        
+        <li><a href="../symbols/Horn.DataGrid.html">Horn.DataGrid</a></li>
+        
+        <li><a href="../symbols/Horn.Form.html">Horn.Form</a></li>
+        
+        <li><a href="../symbols/Horn.Grid.html">Horn.Grid</a></li>
+        
+        <li><a href="../symbols/Horn.HiddenField.html">Horn.HiddenField</a></li>
+        
+        <li><a href="../symbols/Horn.Label.html">Horn.Label</a></li>
+        
+        <li><a href="../symbols/Horn.Menu.html">Horn.Menu</a></li>
+        
+        <li><a href="../symbols/Horn.MessageBox.html">Horn.MessageBox</a></li>
+        
+        <li><a href="../symbols/Horn.PageBar.html">Horn.PageBar</a></li>
+        
+        <li><a href="../symbols/Horn.Panel.html">Horn.Panel</a></li>
+        
+        <li><a href="../symbols/Horn.Password.html">Horn.Password</a></li>
+        
+        <li><a href="../symbols/Horn.QueryTable.html">Horn.QueryTable</a></li>
+        
+        <li><a href="../symbols/Horn.RadioGroup.html">Horn.RadioGroup</a></li>
+        
+        <li><a href="../symbols/Horn.TabPanel.html">Horn.TabPanel</a></li>
+        
+        <li><a href="../symbols/Horn.Textarea.html">Horn.Textarea</a></li>
+        
+        <li><a href="../symbols/Horn.Textfield.html">Horn.Textfield</a></li>
+        
+        <li><a href="../symbols/Horn.Tip.html">Horn.Tip</a></li>
+        
+        <li><a href="../symbols/Horn.TypeField.html">Horn.TypeField</a></li>
+        
+        <li><a href="../symbols/Horn.Validate.html">Horn.Validate</a></li>
+        
+        <li><a href="../symbols/Horn.Window.html">Horn.Window</a></li>
+        
+	</ul>
+</div>
+        <div class="doc">
+        <div style="padding:10px">
+        <div style="text-align:right;"><a href="../index.html">返回控件主页</a>&nbsp;|&nbsp;<a href="../files.html">返回源码主页</a></div>
+        <!-- ============================== class overview ============================ -->
+        
+        
+<h3>TabPanel 标签页面板组件</h3>
+<p>用于分组或分类信息的容器，将内容按照分组或分类方式放到不同的标签页区域中，当前可视的仅有一个，其他的页签内容可以通过点击对应的页签激活展示</p>
+ <img src="../resource/images/tabPanel.jpg"/>
+
+<h4>依赖组件</h4>
+<ul>
+	<li>无</li>
+</ul>
+
+<h4>适用范围</h4>
+<p>
+适用于分组或分类信息的容器，将内容按照分组或分类方式放到不同的标签页区域中，当前可视的仅有一个，其他的页签内容可以通过点击对应的页签激活展示
+</p>
+<h4>约束</h4>
+<p>
+	<ol>
+		<li>无</li>
+	</ol>
+</p>
+<h4>注意事项</h4>
+<p>
+	<ol>
+		<li>使用lazy时加载的是页面片段，需要注意dom的上下文</li>
+		<li>tab中动态添加的标签页以及延迟加载的标签页的url只能是系统内部的视图请求</li>
+	</ol>
+</p>
+
+<h4>使用示例</h4>
+<p>示例1:</p>
+<textarea name="code" class="html" style="display: none;">
+##说明：width是自定义标签的宽度(可选项)，单位是像素（不支持百分百）;maxTabCn是自定义标签的最多数(可选项)，默认最大10个标签
+#@tab_panel({"name":"tp","width":"200","maxTabCn":"2"}) 
+	#@tab_panel_content({"name":"tab1","title":"页签1"})
+		#@panel({})
+			#textfield({"label":"输入"})
+		#end
+	#end
+	#@tab_panel_content({"name":"tab2","title":"页签2"})
+		#@panel({})
+			#textfield({"label":"输入2"})
+		#end
+	#end
+#end
+</textarea>
+
+<p>示例2：</p>
+<textarea name="code" class="html" style="display: none;">
+	##说明：maxTabCn是自定义标签的最多数(可选项)，默认最大10个标签
+		#@tab_panel({"name":"tp"})
+			#@tab_panel_content({"name":"tab1","title":"联系方式"})
+    			#@panel({})
+    			#textfield({"name":"phone", "label":"电话", "check": "required"})
+				#textfield({"name":"mail", "label":"邮箱", "check": "required"})
+				#textfield({"name":"addr", "label":"地址","cols":2, "check": "required"})
+				#end
+			#end
+			#@tab_panel_content({"name":"tab2","title":"账户信息"})
+    			#@panel({})
+    			#textfield({"name":"acc1", "label":"关联账号1"})
+				#textfield({"name":"acc2", "label":"关联账号2"})
+        		#end
+			#end
+		#end
+</textarea>
+
+        <p>&nbsp;</p>
+        
+        	
+            	<!-- doc_options_begin -->
+	        	<h4>属性</h4>
+	        	<p style="color:red;">
+	        		注意：组件的id、name属性只能是英文字母开始，由英文字母、数字和下划线组成，命名时应考虑易识别，不要太长，不要和其他组件重复（表单内的组件除外）。
+	        	</p>
+	        	<table class="doc-table">
+	        		<tbody>
+	        			<tr>
+	        				<th><strong>名称</strong></th>
+							<th><strong>类型</strong></th>
+							<th><strong>描述</strong></th>
+							<th><strong>默认值</strong></th>
+	        			</tr>
+	        			
+	        				<tr>
+	        					<td><b>id</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>组件的唯一标示<br/>此属性支持面板组件(<b>tab_panel</b>,<b>tab_panel_content</b>)</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td></td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>name</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>组件的名称(不能为空，不能重复)<br/>此属性支持面板组件(<b>tab_panel</b>,<b>tab_panel_content</b>)</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td></td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>title</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>页签的标题(可选项)<br/>此属性支持面板组件(<b>tab_panel_content</b>)</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td></td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>url</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>页签的页面地址(必填项,注意！url仅支持velocity的页面（.htm）,不支持外部地址(如：htttp://www.baidu.com))<br/>此属性支持面板组件(<b>tab_panel_content</b>)</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td></td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>lazy</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>页签内容使用延迟加载lazy用于配置延迟加载的url<br/>url只能是系统内的视图请求此属性支持面板组件(<b>tab_panel_content</b>)</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>#@tab_panel_content({"title":"延迟加载的标签","name":"tab1","lazy":"${appServer}/demo/tabpanel/lazy.htm"})#end或者#tab_panel_content_start({"title":"延迟加载的标签","name":"tab1","lazy":"${appServer}/demo/tabpanel/lazy.htm"})#tab_panel_content_end()</pre>
+		        						
+		        					
+	        					</td>
+	        					<td></td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>width</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>页签标题宽度(可选项，宽度仅支持像素，如："width":"100"),如果设置了宽度，就获取其值，否则默认<br/>注意：当在纵向tab页中配置或者设置width不会生效！<font color=red>注意点说明：(宏(@tab_panel)和API(addTab(...))都配置width的情况下,优先获取API的值)</font><br>此属性支持面板组件(<b>tab_panel_content</b>)</p>
+		        					
+		        						示例：
+		        						
+		        							<pre> #@screen()   #@panel({})  	#textfield({"label":"请输入tab的名称:","name":"tabName"})		#textfield({"label":"请输入tab的标题:","name":"tabTitle"})  #end  #button_panel_ex({"buttons":[{"label":"新增tab页","name":"btnSetTitle","event":"addTab()"}]})  #@tab_panel({"name":"tp","width":"150"}) ##优先获取API配置的width  #end	#end	#jscode()		function addTab(){			Horn.getComp("tp").addTab({"name":tabName,"title":Horn.getComp("tabTitle").getValue(),"width":"150","url":"$appServer.get('/test/textfield/status_change.htm')"});		}	#end</pre>
+		        						
+		        					
+	        					</td>
+	        					<td></td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>maxTabCn</b></td>
+	        					<td>int</td>
+	        					<td>
+	        						<p>最大页签个数(可选项，如："maxTabCn":5),如果设置了宽度，就获取其值，<br/><font color=red>注意点说明：(宏(@tab_panel)和API(addTab(...))都配置maxTabCn的情况下,优先获取API的值)</font><br>此属性支持面板组件(<b>tab_panel_content</b>)</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>#@screen()  #@panel({})  	#textfield({"label":"请输入tab的名称:","name":"tabName"})		#textfield({"label":"请输入tab的标题:","name":"tabTitle"})  #end  #button_panel_ex({"buttons":[{"label":"新增tab页","name":"btnSetTitle","event":"addTab()"}]})  #@tab_panel({"name":"tp","maxTabCn":5}) ##优先获取API配置的maxTabCn的值  #end#end#jscode()	function addTab(){		Horn.getComp("tp").addTab({"name":tabName,"title":Horn.getComp("tabTitle").getValue(),"maxTabCn":5,"url":"$appServer.get('/test/textfield/status_change.htm')"});	}#end</pre>
+		        						
+		        					
+	        					</td>
+	        					<td></td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>position</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>tabpanel页签展现方向调整,默认呈水平排列，提供纵向的左侧和右侧排列,属性值分别为：left、right<br/></p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>top  tab页签呈水平排列</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>themes</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>tabpanel页签的外观主题,默认是灰色主题，另外提供一套蓝色主题,属性值为blue<br/></p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>gray : tab页签呈灰色</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>height</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>提供高度支持。仅支持像素<br/>当高度未设置时，tab页签区域将自动扩充<br/>当高度设置固定值时，tab页签区域为设置高度<br/>默认每个tab页签的高度27px</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td></td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>isFormValidate</b></td>
+	        					<td>boolean</td>
+	        					<td>
+	        						<p>切换页签时是否自动校验<br/></p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>false</td>
+	        				</tr>
+	        			
+	        		</tbody>
+	        	</table>
+        	    <!-- doc_options_end -->
+            
+            
+            
+       		
+       		
+            	<!-- doc_methods_begin -->
+            	<h4>方法</h4>
+            	<table class="doc-table">
+          			<tbody>
+          				<tr>
+          					<th><strong>名称</strong></th>
+							<th><strong>参数</strong></th>
+							<th><strong>描述</strong></th>
+          				</tr>
+          				
+          					<tr>
+								<td>getCurrentTab</td>
+								<td>()</td>
+								<td>
+									<p>获取当前激活的tab</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        :<b></b>
+		                                        
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        激活的tab页签:<b></b>
+		                                        
+		                                    </li>
+										
+									
+									 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>getTab</td>
+								<td>(name)</td>
+								<td>
+									<p>获取tab</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        String:<b>name</b>
+		                                        tab页对应的name
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        对应的tab页签:<b></b>
+		                                        
+		                                    </li>
+										
+									
+									 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>addTab</td>
+								<td>(params)</td>
+								<td>
+									<p>动态添加tab</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        json:<b>params</b>
+		                                        {"name":"name"
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        string:<b></b>
+		                                        name tab页对应的name
+		                                    </li>
+										
+									
+									 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>removeTab</td>
+								<td>(name)</td>
+								<td>
+									<p>移除Tab</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        string:<b>name</b>
+		                                        tab页对应的name
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        void:<b></b>
+		                                        
+		                                    </li>
+										
+									
+									 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>activate</td>
+								<td>(name)</td>
+								<td>
+									<p>激活一个tab</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        String:<b>name</b>
+		                                        tab页对应的name
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        void:<b></b>
+		                                        
+		                                    </li>
+										
+									
+									 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>enable</td>
+								<td>(name)</td>
+								<td>
+									<p>启用对应的tab</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        string:<b>name</b>
+		                                        tab页对应的name
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        void:<b></b>
+		                                        
+		                                    </li>
+										
+									
+									 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>disable</td>
+								<td>(name)</td>
+								<td>
+									<p>禁用对应的tab</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        string:<b>name</b>
+		                                        tab页对应的name
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        void:<b></b>
+		                                        
+		                                    </li>
+										
+									
+									 
+								</td>
+							</tr>
+          				
+          			</tbody>
+          		</table>
+            	<!-- doc_methods_end -->
+            
+        	<br /><i>Defined in: </i> <a href="../symbols/src/E__jresplus_Sources_jresplus-ui_jresplus-ui-web_src_main_webapp_src_scripts_TabPanel.js.html">TabPanel.js</a>
+        </div>
+        </div>
+</div>
+</div>
+<!-- ============================== footer ================================= -->
+
+		<div id="footer">
+			<div>Copyright ? 2010-2013 www.hundsun.com</div>
+		</div>
+		<script type="text/javascript">
+			dp.SyntaxHighlighter.HighlightAll('code');
+		</script>
+	</body>
+</html>
+
+

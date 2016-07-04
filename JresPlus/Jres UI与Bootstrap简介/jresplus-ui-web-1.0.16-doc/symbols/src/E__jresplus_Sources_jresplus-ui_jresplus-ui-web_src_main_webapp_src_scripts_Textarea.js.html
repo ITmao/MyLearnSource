@@ -1,0 +1,244 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/**
+<span class='line'>  2</span>  * @name Horn.Textarea
+<span class='line'>  3</span>  * @class
+<span class='line'>  4</span>  * 普通文本输入组件
+<span class='line'>  5</span>  */</span><span class="WHIT">
+<span class='line'>  6</span> </span><span class="COMM">/**
+<span class='line'>  7</span>  * @lends Horn.Textarea#
+<span class='line'>  8</span>  */</span><span class="WHIT">
+<span class='line'>  9</span> </span><span class="WHIT">	 </span><span class="WHIT">
+<span class='line'> 10</span> </span><span class="COMM">/**
+<span class='line'> 11</span>  * 组件唯一标识
+<span class='line'> 12</span>  * @name Horn.Textarea#id
+<span class='line'> 13</span>  * @type String
+<span class='line'> 14</span>  * @default ""
+<span class='line'> 15</span>  * @example
+<span class='line'> 16</span>  * 无
+<span class='line'> 17</span>  */</span><span class="WHIT">
+<span class='line'> 18</span> </span><span class="COMM">/**
+<span class='line'> 19</span>  * 表单提交名字
+<span class='line'> 20</span>  * @name Horn.Textarea#name
+<span class='line'> 21</span>  * @type String
+<span class='line'> 22</span>  * @default ""
+<span class='line'> 23</span>  * @example
+<span class='line'> 24</span>  * 无
+<span class='line'> 25</span>  */</span><span class="WHIT">
+<span class='line'> 26</span> </span><span class="COMM">/**
+<span class='line'> 27</span>  * 表单组件的标签名，值过长会造成label显示不全，但是可以通过鼠标悬浮看到完整值
+<span class='line'> 28</span>  * @name Horn.Textarea#label
+<span class='line'> 29</span>  * @type String
+<span class='line'> 30</span>  * @default ""
+<span class='line'> 31</span>  * @example
+<span class='line'> 32</span>  * 无
+<span class='line'> 33</span>  */</span><span class="WHIT">
+<span class='line'> 34</span> </span><span class="COMM">/**
+<span class='line'> 35</span>  * @ignore
+<span class='line'> 36</span>  * 组件的别名，名字相同时，加别名区分
+<span class='line'> 37</span>  * @name Horn.Textarea#alias
+<span class='line'> 38</span>  * @type String
+<span class='line'> 39</span>  * @default ""
+<span class='line'> 40</span>  * @ignore
+<span class='line'> 41</span>  * @example
+<span class='line'> 42</span>  * var comp = Horn.getComp("name","alias")
+<span class='line'> 43</span>  */</span><span class="WHIT">
+<span class='line'> 44</span> 
+<span class='line'> 45</span> </span><span class="WHIT"> </span><span class="COMM">/**
+<span class='line'> 46</span>   * 表单的初始值，如果没有配置defValue属性，表单重置的时候，将采用value作为重置值
+<span class='line'> 47</span>   * @name Horn.Textarea#value
+<span class='line'> 48</span>   * @type String
+<span class='line'> 49</span>   * @default ""
+<span class='line'> 50</span>   * @example
+<span class='line'> 51</span>   * 无
+<span class='line'> 52</span>   */</span><span class="WHIT">
+<span class='line'> 53</span> 
+<span class='line'> 54</span> </span><span class="WHIT"> </span><span class="COMM">/**
+<span class='line'> 55</span>   * 组件的重置时的值，如果没有配置此值，将以value属性做为重置值。
+<span class='line'> 56</span>   * 如果指定了value值，并且defValue设置为空(defValue:"")，则无法重置为空值，请用form组件的clearValue方法清空form内组件的值或调用组件本身的clearValue方法清空值。
+<span class='line'> 57</span>   * @name Horn.Textarea#defValue
+<span class='line'> 58</span>   * @type String
+<span class='line'> 59</span>   * @default 无
+<span class='line'> 60</span>   * @example
+<span class='line'> 61</span>   * 无
+<span class='line'> 62</span>   */</span><span class="WHIT">
+<span class='line'> 63</span> 
+<span class='line'> 64</span> </span><span class="WHIT"> </span><span class="COMM">/**
+<span class='line'> 65</span>   * 组件的是读配置，被设置为只读的组件只能通过API的方式修改表单的值，可以获得焦点，参与表单校验（校验失败会阻止表单提交），并且可以参与表单提交；
+<span class='line'> 66</span>   * true表示只读状态，false表示正常状态
+<span class='line'> 67</span>   * @name Horn.Textarea#readonly
+<span class='line'> 68</span>   * @type Boolean
+<span class='line'> 69</span>   * @default false
+<span class='line'> 70</span>   * @example
+<span class='line'> 71</span>   * 无
+<span class='line'> 72</span>   */</span><span class="WHIT">
+<span class='line'> 73</span> 
+<span class='line'> 74</span> </span><span class="WHIT"> </span><span class="COMM">/**
+<span class='line'> 75</span>   * 组件的禁用状态，被设置禁用状态的组件，无法获得焦点，不参与表单校验（不会阻止表单提交），不会参与表单提交并且其所有校验状态都会消失，不可编辑，但是可以通过API修改表单的值；
+<span class='line'> 76</span>   * true表示禁用，false表示正常状态
+<span class='line'> 77</span>   * @name Horn.Textarea#disabled
+<span class='line'> 78</span>   * @type Boolean
+<span class='line'> 79</span>   * @default false
+<span class='line'> 80</span>   * @example
+<span class='line'> 81</span>   * 无
+<span class='line'> 82</span>   */</span><span class="WHIT">
+<span class='line'> 83</span> 
+<span class='line'> 84</span> </span><span class="COMM">/**
+<span class='line'> 85</span>  * 组件的跨列数，取值范围由外容器的screen的cols而定
+<span class='line'> 86</span>  * @name Horn.Textarea#cols
+<span class='line'> 87</span>  * @type int
+<span class='line'> 88</span>  * @default 1
+<span class='line'> 89</span>  * @example
+<span class='line'> 90</span>  * 无
+<span class='line'> 91</span>  */</span><span class="WHIT">
+<span class='line'> 92</span> 
+<span class='line'> 93</span> </span><span class="COMM">/**
+<span class='line'> 94</span>  * 组件的约束检查选项
+<span class='line'> 95</span>  * @name Horn.Textarea#check
+<span class='line'> 96</span>  * @type String
+<span class='line'> 97</span>  * @default ""
+<span class='line'> 98</span>  * @example
+<span class='line'> 99</span>  * 具体见Horn.Validate类的已经支持的正规、函数名
+<span class='line'>100</span>  * "check":"required;"
+<span class='line'>101</span>  */</span><span class="WHIT">
+<span class='line'>102</span> 
+<span class='line'>103</span> </span><span class="COMM">/**
+<span class='line'>104</span>  * 组件的所属组，可以对相同组内的元素进行约束检查
+<span class='line'>105</span>  * @name Horn.Textarea#group
+<span class='line'>106</span>  * @type String
+<span class='line'>107</span>  * @default ""
+<span class='line'>108</span>  * @ignore
+<span class='line'>109</span>  * @example
+<span class='line'>110</span>  * 验证指定对象$obj(scope)中组名为groupname的元素有有效性
+<span class='line'>111</span>  * Horn.Validate.validateAreaByGroup($obj,groupname)
+<span class='line'>112</span>  */</span><span class="WHIT">
+<span class='line'>113</span> 
+<span class='line'>114</span> </span><span class="WHIT"> </span><span class="COMM">/**
+<span class='line'>115</span>   * 组件的事件配置
+<span class='line'>116</span>   * @name Horn.Textarea#events
+<span class='line'>117</span>   * @type Array
+<span class='line'>118</span>   * @default ""
+<span class='line'>119</span>   * @example
+<span class='line'>120</span>   * "events":[{"event":"onchange","function":"getValue()"}]
+<span class='line'>121</span>   */</span><span class="WHIT">
+<span class='line'>122</span> 
+<span class='line'>123</span> </span><span class="COMM">/**
+<span class='line'>124</span>  * 加入一个分组中，可以根据组名进行分组校验，参见validate的validateAreaByGroup(scope, group)方法
+<span class='line'>125</span>  * @function
+<span class='line'>126</span>  * @name Horn.Textarea#addGroup
+<span class='line'>127</span>  * @param {String} group 组名
+<span class='line'>128</span>  * @ignore
+<span class='line'>129</span>  */</span><span class="WHIT">
+<span class='line'>130</span> </span><span class="COMM">/**
+<span class='line'>131</span>  * 从一个分组中删除
+<span class='line'>132</span>  * @function
+<span class='line'>133</span>  * @name Horn.Textarea#removeGroup
+<span class='line'>134</span>  * @param {String} group 组名
+<span class='line'>135</span>  * @ignore
+<span class='line'>136</span>  */</span><span class="WHIT">
+<span class='line'>137</span> </span><span class="COMM">/**
+<span class='line'>138</span>  * 判断组件上会否在分组中
+<span class='line'>139</span>  * @function
+<span class='line'>140</span>  * @name Horn.Textarea#inGroup
+<span class='line'>141</span>  * @param {String} group 组名
+<span class='line'>142</span>  * @ignore
+<span class='line'>143</span>  */</span><span class="WHIT">
+<span class='line'>144</span> 
+<span class='line'>145</span> </span><span class="COMM">/**
+<span class='line'>146</span>  * 增加校验规则
+<span class='line'>147</span>  * @function
+<span class='line'>148</span>  * @name Horn.Textarea#addRule
+<span class='line'>149</span>  * @param {String} rule 校验规则字符串
+<span class='line'>150</span>  */</span><span class="WHIT">
+<span class='line'>151</span> </span><span class="COMM">/**
+<span class='line'>152</span>  * 删除校验规则
+<span class='line'>153</span>  * @function
+<span class='line'>154</span>  * @name Horn.Textarea#removeRule
+<span class='line'>155</span>  * @param {String} rule 校验规则字符串
+<span class='line'>156</span>  */</span><span class="WHIT">
+<span class='line'>157</span> 
+<span class='line'>158</span> </span><span class="COMM">/**
+<span class='line'>159</span>  * 显示表单，如果表单已经显示，此方法无效果，hide方法与之相对应
+<span class='line'>160</span>  * @function
+<span class='line'>161</span>  * @name Horn.Textarea#show
+<span class='line'>162</span>  */</span><span class="WHIT">
+<span class='line'>163</span> </span><span class="COMM">/**
+<span class='line'>164</span>  * 隐藏表单，如果表单已经隐藏，此方法无效果，show方法与之对应
+<span class='line'>165</span>  * @function
+<span class='line'>166</span>  * @name Horn.Textarea#hide
+<span class='line'>167</span>  */</span><span class="WHIT">
+<span class='line'>168</span> 
+<span class='line'>169</span> </span><span class="COMM">/**
+<span class='line'>170</span>  * 设置label内容
+<span class='line'>171</span>  * @function
+<span class='line'>172</span>  * @name Horn.Textarea#setLabel
+<span class='line'>173</span>  * @param {String} label 标签内容
+<span class='line'>174</span>  * @ignore
+<span class='line'>175</span>  */</span><span class="WHIT">
+<span class='line'>176</span> </span><span class="COMM">/**
+<span class='line'>177</span>  * 获取label内容
+<span class='line'>178</span>  * @function
+<span class='line'>179</span>  * @name Horn.Textarea#getLabel
+<span class='line'>180</span>  * @return 标签内容
+<span class='line'>181</span>  * @ignore
+<span class='line'>182</span>  */</span><span class="WHIT">
+<span class='line'>183</span> 
+<span class='line'>184</span> </span><span class="COMM">/**
+<span class='line'>185</span>  * 设置为必填项，同时增加红色的 *
+<span class='line'>186</span>  * @function
+<span class='line'>187</span>  * @name Horn.Textarea#setRequired
+<span class='line'>188</span>  * @param {Boolean} required 不传值或者传true表示必选项，传false表示取消必选项
+<span class='line'>189</span>  */</span><span class="WHIT">
+<span class='line'>190</span> </span><span class="COMM">/**
+<span class='line'>191</span>  * 设置字段是否禁用，被设置为禁用的组件，不可以编辑，也不参与表单提交，但是可以通过API的方式修改表单的值
+<span class='line'>192</span>  * @function
+<span class='line'>193</span>  * @name Horn.Textarea#setDisabled
+<span class='line'>194</span>  * @param {Boolean} disabled true表示禁用，false表示正常
+<span class='line'>195</span>  */</span><span class="WHIT">
+<span class='line'>196</span> </span><span class="COMM">/**
+<span class='line'>197</span>  * 设置是否只读，设置为只读方式的组件，不可以编辑，但是可以通过setValue、reset等API修改表单的值，并可以可以参与表单提交
+<span class='line'>198</span>  * @function
+<span class='line'>199</span>  * @name Horn.Textarea#setReadonly
+<span class='line'>200</span>  * @param {Boolean} readonly true表示只读，false表示正常
+<span class='line'>201</span>  */</span><span class="WHIT">
+<span class='line'>202</span> 
+<span class='line'>203</span> </span><span class="COMM">/**
+<span class='line'>204</span>  * 设置表单的值
+<span class='line'>205</span>  * @function
+<span class='line'>206</span>  * @name Horn.Textarea#setValue
+<span class='line'>207</span>  * @param {String} value 值
+<span class='line'>208</span>  */</span><span class="WHIT">
+<span class='line'>209</span> </span><span class="COMM">/**
+<span class='line'>210</span>  * 获取表单的值
+<span class='line'>211</span>  * @function
+<span class='line'>212</span>  * @name Horn.Textarea#getValue
+<span class='line'>213</span>  * @return 表单的提交值
+<span class='line'>214</span>  */</span><span class="WHIT">
+<span class='line'>215</span> </span><span class="COMM">/**
+<span class='line'>216</span>  * 如果设置了defValue的值，重置成的defValue值，否则重置成value值
+<span class='line'>217</span>  * @function
+<span class='line'>218</span>  * @name Horn.Textarea#reset
+<span class='line'>219</span>  */</span><span class="WHIT">
+<span class='line'>220</span> </span><span class="COMM">/**
+<span class='line'>221</span>  * 清空表单的值，显示值和隐藏值都设置为""
+<span class='line'>222</span>  * @function
+<span class='line'>223</span>  * @name Horn.Textarea#clearValue
+<span class='line'>224</span>  */</span><span class="WHIT">
+<span class='line'>225</span> 
+<span class='line'>226</span> </span><span class="COMM">/**
+<span class='line'>227</span>  * 获取由validate方法触发表单校验后的结果，并通过返回值标识校验的结果
+<span class='line'>228</span>  * @function
+<span class='line'>229</span>  * @name Horn.Textarea#isValid
+<span class='line'>230</span>  * @return {Boolean} true表示校验通过，false表示校验失败
+<span class='line'>231</span>  */</span><span class="WHIT">
+<span class='line'>232</span> </span><span class="COMM">/**
+<span class='line'>233</span>  * 触发校验表单的内容，然后通过调用isValid方法获取校验的结果
+<span class='line'>234</span>  * @function
+<span class='line'>235</span>  * @name Horn.Textarea#validate
+<span class='line'>236</span>  */</span><span class="WHIT">
+<span class='line'>237</span> </span><span class="PUNC">;</span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span></pre></body></html>

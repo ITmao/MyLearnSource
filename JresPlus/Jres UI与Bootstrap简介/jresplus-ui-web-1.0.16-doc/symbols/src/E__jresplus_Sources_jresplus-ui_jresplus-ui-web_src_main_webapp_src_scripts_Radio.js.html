@@ -1,0 +1,520 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/*
+<span class='line'>  2</span>  * 修改日期         修改人员        修改说明
+<span class='line'>  3</span>  * -----------------------------------------------------------------------
+<span class='line'>  4</span>  *  2014-4-18    周智星    BUG #6440 【form】各个表单组件的校验提示不统一
+<span class='line'>  5</span>  *  2014-4-22    周智星    BUG #6792 【radiogroup】【checkboxgroup】radiogroup、checkboxgroup的validate方法无效
+<span class='line'>  6</span>  *  2014-4-29    周智星    addMsg方法性能优化。如果提示框已经存在，就不在创建提示框
+<span class='line'>  7</span>  *  2014-4-29    周智星    BUG #6912 【radio_group】在IE7下验证的错误提示信息显示的位置很远 
+<span class='line'>  8</span>  *  2014-5-23    吴席林    需求 #8363 {jresplus}[ui]-radioGroup组件配置onchange事件后，各浏览器兼容性有问题，IE无效
+<span class='line'>  9</span>  * -----------------------------------------------------------------------
+<span class='line'> 10</span>  */</span><span class="WHIT">
+<span class='line'> 11</span> </span><span class="COMM">/**
+<span class='line'> 12</span>  * @name Horn.RadioGroup   
+<span class='line'> 13</span>  * @class
+<span class='line'> 14</span>  * 单选框组组件&lt;/br>
+<span class='line'> 15</span>  */</span><span class="WHIT">
+<span class='line'> 16</span> 
+<span class='line'> 17</span> </span><span class="COMM">/**
+<span class='line'> 18</span>  * @lends Horn.RadioGroup#
+<span class='line'> 19</span>  */</span><span class="WHIT">
+<span class='line'> 20</span> 
+<span class='line'> 21</span> </span><span class="COMM">/**
+<span class='line'> 22</span>  * 组件的静态字典列表&lt;br/>
+<span class='line'> 23</span>  * 数据项不易过多（一行内可以完整显示），否则会导致换行显示影响美观，如果需要显示更多的项，可以考虑使用combox组件
+<span class='line'> 24</span>  * @name Horn.RadioGroup#&lt;b>items&lt;/b>
+<span class='line'> 25</span>  * @type Array[JSON]
+<span class='line'> 26</span>  * @default  
+<span class='line'> 27</span>  * @example
+<span class='line'> 28</span>  * "items":[{"label":"a","value":"a1"},{"label":"b","value":"b1"},{"label":"c","value":"c1"}]
+<span class='line'> 29</span>  */</span><span class="WHIT">
+<span class='line'> 30</span> 
+<span class='line'> 31</span> </span><span class="COMM">/**
+<span class='line'> 32</span>  * 组件的动态字典名字
+<span class='line'> 33</span>  * @name Horn.RadioGroup#&lt;b>dictName&lt;/b>
+<span class='line'> 34</span>  * @type String
+<span class='line'> 35</span>  * @default 无
+<span class='line'> 36</span>  * @example
+<span class='line'> 37</span>  * 无
+<span class='line'> 38</span>  */</span><span class="WHIT">
+<span class='line'> 39</span> 
+<span class='line'> 40</span> </span><span class="COMM">/**
+<span class='line'> 41</span>  * 组件唯一标识
+<span class='line'> 42</span>  * @name Horn.RadioGroup#id
+<span class='line'> 43</span>  * @type String
+<span class='line'> 44</span>  * @default ""
+<span class='line'> 45</span>  * @example
+<span class='line'> 46</span>  * 无
+<span class='line'> 47</span>  */</span><span class="WHIT">
+<span class='line'> 48</span> </span><span class="COMM">/**
+<span class='line'> 49</span>  * 表单提交名字
+<span class='line'> 50</span>  * @name Horn.RadioGroup#name
+<span class='line'> 51</span>  * @type String
+<span class='line'> 52</span>  * @default ""
+<span class='line'> 53</span>  * @example
+<span class='line'> 54</span>  * 无
+<span class='line'> 55</span>  */</span><span class="WHIT">
+<span class='line'> 56</span> </span><span class="COMM">/**
+<span class='line'> 57</span>  * 表单组件的标签名，值过长会造成label显示不全，但是可以通过鼠标悬浮看到完整值
+<span class='line'> 58</span>  * @name Horn.RadioGroup#label
+<span class='line'> 59</span>  * @type String
+<span class='line'> 60</span>  * @default ""
+<span class='line'> 61</span>  * @example
+<span class='line'> 62</span>  * 无
+<span class='line'> 63</span>  */</span><span class="WHIT">
+<span class='line'> 64</span> </span><span class="COMM">/**
+<span class='line'> 65</span>  * @ignore
+<span class='line'> 66</span>  * 组件的别名，名字相同时，加别名区分
+<span class='line'> 67</span>  * @name Horn.RadioGroup#alias
+<span class='line'> 68</span>  * @type String
+<span class='line'> 69</span>  * @default ""
+<span class='line'> 70</span>  * @ignore
+<span class='line'> 71</span>  * @example
+<span class='line'> 72</span>  * var comp = Horn.getComp("name","alias")
+<span class='line'> 73</span>  */</span><span class="WHIT">
+<span class='line'> 74</span> 
+<span class='line'> 75</span> </span><span class="WHIT"> </span><span class="COMM">/**
+<span class='line'> 76</span>   * 表单的初始值，如果没有配置defValue属性，表单重置的时候，将采用value作为重置值
+<span class='line'> 77</span>   * @name Horn.RadioGroup#value
+<span class='line'> 78</span>   * @type String
+<span class='line'> 79</span>   * @default ""
+<span class='line'> 80</span>   * @example
+<span class='line'> 81</span>   * 无
+<span class='line'> 82</span>   */</span><span class="WHIT">
+<span class='line'> 83</span> 
+<span class='line'> 84</span> </span><span class="WHIT"> </span><span class="COMM">/**
+<span class='line'> 85</span>   * 组件的重置时的值，如果没有配置此值，将以value属性做为重置值。
+<span class='line'> 86</span>   * 如果指定了value值，并且defValue设置为空(defValue:"")，则无法重置为空值，请用form组件的clearValue方法清空form内组件的值或调用组件本身的clearValue方法清空值。
+<span class='line'> 87</span>   * @name Horn.RadioGroup#defValue
+<span class='line'> 88</span>   * @type String
+<span class='line'> 89</span>   * @default 无
+<span class='line'> 90</span>   * @example
+<span class='line'> 91</span>   * 无
+<span class='line'> 92</span>   */</span><span class="WHIT">
+<span class='line'> 93</span> 
+<span class='line'> 94</span> </span><span class="WHIT"> </span><span class="COMM">/**
+<span class='line'> 95</span>   * 组件的禁用状态，被设置禁用状态的组件，无法获得焦点，不参与表单校验（不会阻止表单提交），不会参与表单提交并且其所有校验状态都会消失，不可编辑，但是可以通过API修改表单的值；
+<span class='line'> 96</span>   * true表示禁用，false表示正常状态
+<span class='line'> 97</span>   * @name Horn.RadioGroup#disabled
+<span class='line'> 98</span>   * @type Boolean
+<span class='line'> 99</span>   * @default false
+<span class='line'>100</span>   * @example
+<span class='line'>101</span>   * 无
+<span class='line'>102</span>   */</span><span class="WHIT">
+<span class='line'>103</span> 
+<span class='line'>104</span> </span><span class="COMM">/**
+<span class='line'>105</span>  * 组件的跨列数，取值范围由外容器的screen的cols而定
+<span class='line'>106</span>  * @name Horn.RadioGroup#cols
+<span class='line'>107</span>  * @type int
+<span class='line'>108</span>  * @default 1
+<span class='line'>109</span>  * @example
+<span class='line'>110</span>  * 无
+<span class='line'>111</span>  */</span><span class="WHIT">
+<span class='line'>112</span> 
+<span class='line'>113</span> </span><span class="COMM">/**
+<span class='line'>114</span>  * 组件的约束检查选项
+<span class='line'>115</span>  * @name Horn.RadioGroup#check
+<span class='line'>116</span>  * @type String
+<span class='line'>117</span>  * @default ""
+<span class='line'>118</span>  * @example
+<span class='line'>119</span>  * 具体见Horn.Validate类的已经支持的正规、函数名
+<span class='line'>120</span>  * "check":"required;"
+<span class='line'>121</span>  */</span><span class="WHIT">
+<span class='line'>122</span> 
+<span class='line'>123</span> </span><span class="COMM">/**
+<span class='line'>124</span>  * 组件的所属组，可以对相同组内的元素进行约束检查
+<span class='line'>125</span>  * @name Horn.RadioGroup#group
+<span class='line'>126</span>  * @type String
+<span class='line'>127</span>  * @default ""
+<span class='line'>128</span>  * @ignore
+<span class='line'>129</span>  * @example
+<span class='line'>130</span>  * 验证指定对象$obj(scope)中组名为groupname的元素有有效性
+<span class='line'>131</span>  * Horn.Validate.validateAreaByGroup($obj,groupname)
+<span class='line'>132</span>  */</span><span class="WHIT">
+<span class='line'>133</span> 
+<span class='line'>134</span> </span><span class="COMM">/**
+<span class='line'>135</span>  * 事件配置
+<span class='line'>136</span>  * 支持的事件列表：
+<span class='line'>137</span>  * onchange   radiogroup改变值时发生  事件参数： 无    
+<span class='line'>138</span>  * @name Horn.RadioGroup#&lt;b>events&lt;/b>
+<span class='line'>139</span>  * @type Array
+<span class='line'>140</span>  * @default 
+<span class='line'>141</span>  * @example
+<span class='line'>142</span>  * "events":[{"event":"onchange","function":"getValue()"}]
+<span class='line'>143</span>  */</span><span class="WHIT">
+<span class='line'>144</span> 
+<span class='line'>145</span> </span><span class="COMM">/**
+<span class='line'>146</span>  * 加入一个分组中，可以根据组名进行分组校验，参见validate的validateAreaByGroup(scope, group)方法
+<span class='line'>147</span>  * @function
+<span class='line'>148</span>  * @name Horn.RadioGroup#addGroup
+<span class='line'>149</span>  * @param {String} group 组名
+<span class='line'>150</span>  * @ignore
+<span class='line'>151</span>  */</span><span class="WHIT">
+<span class='line'>152</span> </span><span class="COMM">/**
+<span class='line'>153</span>  * 从一个分组中删除
+<span class='line'>154</span>  * @function
+<span class='line'>155</span>  * @name Horn.RadioGroup#removeGroup
+<span class='line'>156</span>  * @param {String} group 组名
+<span class='line'>157</span>  * @ignore
+<span class='line'>158</span>  */</span><span class="WHIT">
+<span class='line'>159</span> </span><span class="COMM">/**
+<span class='line'>160</span>  * 判断组件上会否在分组中
+<span class='line'>161</span>  * @function
+<span class='line'>162</span>  * @name Horn.RadioGroup#inGroup
+<span class='line'>163</span>  * @param {String} group 组名
+<span class='line'>164</span>  * @ignore
+<span class='line'>165</span>  */</span><span class="WHIT">
+<span class='line'>166</span> 
+<span class='line'>167</span> </span><span class="COMM">/**
+<span class='line'>168</span>  * 增加校验规则
+<span class='line'>169</span>  * @function
+<span class='line'>170</span>  * @name Horn.RadioGroup#addRule
+<span class='line'>171</span>  * @param {String} rule 校验规则字符串
+<span class='line'>172</span>  */</span><span class="WHIT">
+<span class='line'>173</span> </span><span class="COMM">/**
+<span class='line'>174</span>  * 删除校验规则
+<span class='line'>175</span>  * @function
+<span class='line'>176</span>  * @name Horn.RadioGroup#removeRule
+<span class='line'>177</span>  * @param {String} rule 校验规则字符串
+<span class='line'>178</span>  */</span><span class="WHIT">
+<span class='line'>179</span> 
+<span class='line'>180</span> </span><span class="COMM">/**
+<span class='line'>181</span>  * 显示表单，如果表单已经显示，此方法无效果，hide方法与之相对应
+<span class='line'>182</span>  * @function
+<span class='line'>183</span>  * @name Horn.RadioGroup#show
+<span class='line'>184</span>  */</span><span class="WHIT">
+<span class='line'>185</span> </span><span class="COMM">/**
+<span class='line'>186</span>  * 隐藏表单，如果表单已经隐藏，此方法无效果，show方法与之对应
+<span class='line'>187</span>  * @function
+<span class='line'>188</span>  * @name Horn.RadioGroup#hide
+<span class='line'>189</span>  */</span><span class="WHIT">
+<span class='line'>190</span> 
+<span class='line'>191</span> </span><span class="COMM">/**
+<span class='line'>192</span>  * 设置label内容
+<span class='line'>193</span>  * @function
+<span class='line'>194</span>  * @name Horn.RadioGroup#setLabel
+<span class='line'>195</span>  * @param {String} label 标签内容
+<span class='line'>196</span>  * @ignore
+<span class='line'>197</span>  */</span><span class="WHIT">
+<span class='line'>198</span> </span><span class="COMM">/**
+<span class='line'>199</span>  * 获取label内容
+<span class='line'>200</span>  * @function
+<span class='line'>201</span>  * @name Horn.RadioGroup#getLabel
+<span class='line'>202</span>  * @return 标签内容
+<span class='line'>203</span>  * @ignore
+<span class='line'>204</span>  */</span><span class="WHIT">
+<span class='line'>205</span> 
+<span class='line'>206</span> </span><span class="COMM">/**
+<span class='line'>207</span>  * 设置为必填项，同时增加红色的 *
+<span class='line'>208</span>  * @function
+<span class='line'>209</span>  * @name Horn.RadioGroup#setRequired
+<span class='line'>210</span>  * @param {Boolean} required 不传值或者传true表示必选项，传false表示取消必选项
+<span class='line'>211</span>  */</span><span class="WHIT">
+<span class='line'>212</span> </span><span class="COMM">/**
+<span class='line'>213</span>  * 设置字段是否禁用，被设置为禁用的组件，不可以编辑，也不参与表单提交，但是可以通过API的方式修改表单的值
+<span class='line'>214</span>  * @function
+<span class='line'>215</span>  * @name Horn.RadioGroup#setDisabled
+<span class='line'>216</span>  * @param {Boolean} disabled true表示禁用，false表示正常
+<span class='line'>217</span>  */</span><span class="WHIT">
+<span class='line'>218</span> 
+<span class='line'>219</span> </span><span class="COMM">/**
+<span class='line'>220</span>  * 设置表单的值
+<span class='line'>221</span>  * @function
+<span class='line'>222</span>  * @name Horn.RadioGroup#setValue
+<span class='line'>223</span>  * @param {String} value 值
+<span class='line'>224</span>  */</span><span class="WHIT">
+<span class='line'>225</span> </span><span class="COMM">/**
+<span class='line'>226</span>  * 获取表单的值
+<span class='line'>227</span>  * @function
+<span class='line'>228</span>  * @name Horn.RadioGroup#getValue
+<span class='line'>229</span>  * @return 表单的提交值
+<span class='line'>230</span>  */</span><span class="WHIT">
+<span class='line'>231</span> </span><span class="COMM">/**
+<span class='line'>232</span>  * 如果设置了defValue的值，重置成的defValue值，否则重置成value值
+<span class='line'>233</span>  * @function
+<span class='line'>234</span>  * @name Horn.RadioGroup#reset
+<span class='line'>235</span>  */</span><span class="WHIT">
+<span class='line'>236</span> </span><span class="COMM">/**
+<span class='line'>237</span>  * 清空表单的值，显示值和隐藏值都设置为""
+<span class='line'>238</span>  * @function
+<span class='line'>239</span>  * @name Horn.RadioGroup#clearValue
+<span class='line'>240</span>  */</span><span class="WHIT">
+<span class='line'>241</span> 
+<span class='line'>242</span> </span><span class="COMM">/**
+<span class='line'>243</span>  * 获取由validate方法触发表单校验后的结果，并通过返回值标识校验的结果
+<span class='line'>244</span>  * @function
+<span class='line'>245</span>  * @name Horn.RadioGroup#isValid
+<span class='line'>246</span>  * @return {Boolean} true表示校验通过，false表示校验失败
+<span class='line'>247</span>  */</span><span class="WHIT">
+<span class='line'>248</span> </span><span class="COMM">/**
+<span class='line'>249</span>  * 触发校验表单的内容，然后通过调用isValid方法获取校验的结果
+<span class='line'>250</span>  * @function
+<span class='line'>251</span>  * @name Horn.RadioGroup#validate
+<span class='line'>252</span>  */</span><span class="WHIT">
+<span class='line'>253</span> 
+<span class='line'>254</span> 
+<span class='line'>255</span> 
+<span class='line'>256</span> </span><span class="WHIT">	</span><span class="NAME">Horn.RadioGroup</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Horn.extend</span><span class="PUNC">(</span><span class="NAME">Horn.Field</span><span class="PUNC">,</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>257</span> </span><span class="WHIT">		</span><span class="NAME">COMPONENT_CLASS</span><span class="PUNC">:</span><span class="STRN">"RadioGroup"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>258</span> </span><span class="WHIT">	    </span><span class="NAME">radios</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="WHIT"> </span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>259</span> </span><span class="WHIT">	    </span><span class="NAME">name</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>260</span> </span><span class="WHIT">	    </span><span class="NAME">alias</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>261</span> </span><span class="WHIT">	    </span><span class="NAME">checkRegx</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>262</span> </span><span class="WHIT">	    </span><span class="NAME">init</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>263</span> </span><span class="WHIT">	        </span><span class="NAME">Horn.RadioGroup.superclass.init.apply</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="NAME">arguments</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>264</span> </span><span class="WHIT">	        </span><span class="NAME">this.radios</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.el.find</span><span class="PUNC">(</span><span class="STRN">"input[type='radio']"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>265</span> </span><span class="WHIT">	        </span><span class="NAME">this.name</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.el.attr</span><span class="PUNC">(</span><span class="STRN">'name'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>266</span> </span><span class="WHIT">	        </span><span class="NAME">this.alias</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.el.attr</span><span class="PUNC">(</span><span class="STRN">'alias'</span><span class="PUNC">)</span><span class="PUNC">||</span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>267</span> </span><span class="WHIT">	        </span><span class="COMM">//this.defValue=(this.params.defValue != undefined)?this.params.defValue:this.getValue();</span><span class="WHIT">
+<span class='line'>268</span> </span><span class="WHIT">	        </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.params.check</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">this.params.check.indexOf</span><span class="PUNC">(</span><span class="STRN">"required"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>269</span> </span><span class="WHIT">	        	</span><span class="NAME">this.checkRegx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="PUNC">[</span><span class="NAME">Horn.Validate.REQUIRED</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>270</span> </span><span class="WHIT">	        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>271</span> </span><span class="WHIT">            </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.params.value</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>272</span> </span><span class="WHIT">            	</span><span class="NAME">this.setValue</span><span class="PUNC">(</span><span class="NAME">this.params.value</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>273</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>274</span> </span><span class="COMM">//            if(this.params.readonly) {</span><span class="WHIT">
+<span class='line'>275</span> </span><span class="COMM">//            	this.setReadonly(true);</span><span class="WHIT">
+<span class='line'>276</span> </span><span class="COMM">//            }</span><span class="WHIT">
+<span class='line'>277</span> </span><span class="WHIT">            </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.params.disabled</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>278</span> </span><span class="WHIT">            	</span><span class="NAME">this.setDisabled</span><span class="PUNC">(</span><span class="KEYW">true</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>279</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>280</span> </span><span class="WHIT">            </span><span class="NAME">this.defValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.params.defValue</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">this.params.value</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>281</span> </span><span class="WHIT">            </span><span class="WHIT">
+<span class='line'>282</span> </span><span class="WHIT">	    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>283</span> </span><span class="WHIT">	    </span><span class="NAME">getEventTarget</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>284</span> </span><span class="WHIT">	    	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.el.find</span><span class="PUNC">(</span><span class="STRN">"input[type='radio']"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>285</span> </span><span class="WHIT">	    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>286</span> </span><span class="WHIT">	    </span><span class="NAME">getValue</span><span class="PUNC">:</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>287</span> </span><span class="WHIT">	        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.radios.filter</span><span class="PUNC">(</span><span class="STRN">":checked"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">val</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>288</span> </span><span class="WHIT">	    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>289</span> </span><span class="WHIT">	    </span><span class="NAME">setValue</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>290</span> </span><span class="WHIT">	    	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">radioGroup</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>291</span> </span><span class="WHIT">	    	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_radios</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.radios</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>292</span> </span><span class="WHIT">	    	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">value</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>293</span> </span><span class="WHIT">	    		</span><span class="NAME">this.radios.removeAttr</span><span class="PUNC">(</span><span class="STRN">"checked"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>294</span> </span><span class="WHIT">	    		</span><span class="COMM">//BUG #6440 【form】各个表单组件的校验提示不统一</span><span class="WHIT">
+<span class='line'>295</span> </span><span class="WHIT">	    		</span><span class="COMM">//this.isValid();</span><span class="WHIT">
+<span class='line'>296</span> </span><span class="WHIT">	    	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.radios.filter</span><span class="PUNC">(</span><span class="STRN">'[value="'</span><span class="PUNC">+</span><span class="NAME">value</span><span class="PUNC">+</span><span class="STRN">'"]'</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">length</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>297</span> </span><span class="WHIT">	    		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.radios.filter</span><span class="PUNC">(</span><span class="STRN">'[value="'</span><span class="PUNC">+</span><span class="NAME">value</span><span class="PUNC">+</span><span class="STRN">'"]'</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">attr</span><span class="PUNC">(</span><span class="STRN">"disabled"</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>298</span> </span><span class="WHIT">	    			</span><span class="NAME">setTimeout</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>299</span> </span><span class="WHIT">	    					</span><span class="NAME">_radios.attr</span><span class="PUNC">(</span><span class="STRN">"disabled"</span><span class="PUNC">,</span><span class="STRN">"disabled"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>300</span> </span><span class="WHIT">	    					</span><span class="NAME">_radios.removeAttr</span><span class="PUNC">(</span><span class="STRN">"checked"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>301</span> </span><span class="WHIT">	    					</span><span class="NAME">_radios.filter</span><span class="PUNC">(</span><span class="STRN">'[value="'</span><span class="PUNC">+</span><span class="NAME">value</span><span class="PUNC">+</span><span class="STRN">'"]'</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">attr</span><span class="PUNC">(</span><span class="STRN">"checked"</span><span class="PUNC">,</span><span class="STRN">"checked"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>302</span> </span><span class="WHIT">	    			</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="NUMB">10</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>303</span> </span><span class="WHIT">	    		</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>304</span> </span><span class="WHIT">	    			</span><span class="NAME">_radios.removeAttr</span><span class="PUNC">(</span><span class="STRN">"checked"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>305</span> </span><span class="WHIT">					</span><span class="NAME">_radios.each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">idx</span><span class="PUNC">,</span><span class="NAME">comp</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>306</span> </span><span class="WHIT">						</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">$</span><span class="PUNC">(</span><span class="NAME">comp</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">val</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">value</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>307</span> </span><span class="WHIT">							</span><span class="NAME">$</span><span class="PUNC">(</span><span class="NAME">comp</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">attr</span><span class="PUNC">(</span><span class="STRN">"checked"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"checked"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>308</span> </span><span class="WHIT">						</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>309</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>310</span> </span><span class="WHIT">	    		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>311</span> </span><span class="WHIT">		    	</span><span class="WHIT">
+<span class='line'>312</span> </span><span class="WHIT">	    	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>313</span> </span><span class="WHIT">			</span><span class="WHIT">
+<span class='line'>314</span> </span><span class="WHIT">			</span><span class="COMM">//设置新值之后重新校验</span><span class="WHIT">
+<span class='line'>315</span> </span><span class="WHIT">			</span><span class="NAME">this.validate</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>316</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>317</span> </span><span class="WHIT">        </span><span class="NAME">clearValue</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>318</span> </span><span class="WHIT">        	</span><span class="NAME">this.setValue</span><span class="PUNC">(</span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>319</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>320</span> </span><span class="WHIT">	    </span><span class="NAME">setEnable</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">enabled</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>321</span> </span><span class="WHIT">	    	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_this</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>322</span> </span><span class="WHIT">	    	</span><span class="NAME">this.radios.each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">idx</span><span class="PUNC">,</span><span class="NAME">comp</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>323</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">enabled</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>324</span> </span><span class="WHIT">					</span><span class="NAME">$</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">attr</span><span class="PUNC">(</span><span class="STRN">"disabled"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"disabled"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>325</span> </span><span class="WHIT">					</span><span class="COMM">//_this.removeMsg(_this);</span><span class="WHIT">
+<span class='line'>326</span> </span><span class="WHIT">					</span><span class="COMM">//_this.err = false;</span><span class="WHIT">
+<span class='line'>327</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>328</span> </span><span class="WHIT">					</span><span class="NAME">$</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">removeAttr</span><span class="PUNC">(</span><span class="STRN">"disabled"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>329</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>330</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>331</span> </span><span class="WHIT">	    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>332</span> </span><span class="WHIT">	    </span><span class="COMM">// 方法冗余</span><span class="WHIT">
+<span class='line'>333</span> </span><span class="WHIT">	    </span><span class="NAME">setDisabled</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">disabled</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>334</span> </span><span class="WHIT">	    	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_this</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>335</span> </span><span class="WHIT">	    	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">disabled</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>336</span> </span><span class="WHIT">	    		</span><span class="NAME">_this.disabled</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>337</span> </span><span class="WHIT">	    	</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">disabled</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>338</span> </span><span class="WHIT">	    		</span><span class="NAME">_this.disabled</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>339</span> </span><span class="WHIT">	    	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>340</span> </span><span class="WHIT">	    	</span><span class="NAME">this.radios.each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">idx</span><span class="PUNC">,</span><span class="NAME">comp</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>341</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">disabled</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>342</span> </span><span class="WHIT">					</span><span class="NAME">$</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">attr</span><span class="PUNC">(</span><span class="STRN">"disabled"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"disabled"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>343</span> </span><span class="WHIT">					</span><span class="COMM">//_this.removeMsg(_this);</span><span class="WHIT">
+<span class='line'>344</span> </span><span class="WHIT">					</span><span class="COMM">//_this.err = false;</span><span class="WHIT">
+<span class='line'>345</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>346</span> </span><span class="WHIT">					</span><span class="NAME">$</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">removeAttr</span><span class="PUNC">(</span><span class="STRN">"disabled"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>347</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>348</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>349</span> </span><span class="COMM">//	    	if(disabled === true){</span><span class="WHIT">
+<span class='line'>350</span> </span><span class="COMM">//	    		this.setNotRequired();</span><span class="WHIT">
+<span class='line'>351</span> </span><span class="COMM">//	    	}</span><span class="WHIT">
+<span class='line'>352</span> </span><span class="WHIT">	    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>353</span> </span><span class="COMM">//	    setReadonly : function(readonly) {</span><span class="WHIT">
+<span class='line'>354</span> </span><span class="COMM">//	    	if(readonly === true){</span><span class="WHIT">
+<span class='line'>355</span> </span><span class="COMM">//	    		this.readonly = true;</span><span class="WHIT">
+<span class='line'>356</span> </span><span class="COMM">//	    	}else if(readonly === false){</span><span class="WHIT">
+<span class='line'>357</span> </span><span class="COMM">//	    		this.readonly = false;</span><span class="WHIT">
+<span class='line'>358</span> </span><span class="COMM">//	    	}</span><span class="WHIT">
+<span class='line'>359</span> </span><span class="COMM">//	    	var isDisabled = true;</span><span class="WHIT">
+<span class='line'>360</span> </span><span class="COMM">//	    	this.radios.each(function(idx,comp){</span><span class="WHIT">
+<span class='line'>361</span> </span><span class="COMM">//				if (readonly === true) {</span><span class="WHIT">
+<span class='line'>362</span> </span><span class="COMM">//					if(!$(comp).attr("checked")){</span><span class="WHIT">
+<span class='line'>363</span> </span><span class="COMM">//						$(comp).attr("disabled", "disabled");</span><span class="WHIT">
+<span class='line'>364</span> </span><span class="COMM">//					}else{</span><span class="WHIT">
+<span class='line'>365</span> </span><span class="COMM">//						isDisabled = false;</span><span class="WHIT">
+<span class='line'>366</span> </span><span class="COMM">//					}</span><span class="WHIT">
+<span class='line'>367</span> </span><span class="COMM">//				} else {</span><span class="WHIT">
+<span class='line'>368</span> </span><span class="COMM">//					$(comp).removeAttr("disabled");</span><span class="WHIT">
+<span class='line'>369</span> </span><span class="COMM">//				}</span><span class="WHIT">
+<span class='line'>370</span> </span><span class="COMM">//			});</span><span class="WHIT">
+<span class='line'>371</span> </span><span class="COMM">//	    	if(isDisabled && readonly){</span><span class="WHIT">
+<span class='line'>372</span> </span><span class="COMM">//		    	this.setDisabled(true);</span><span class="WHIT">
+<span class='line'>373</span> </span><span class="COMM">//	    	}</span><span class="WHIT">
+<span class='line'>374</span> </span><span class="COMM">//	    },      </span><span class="WHIT">
+<span class='line'>375</span> </span><span class="WHIT">	    </span><span class="COMM">/**
+<span class='line'>376</span>          * @ignore
+<span class='line'>377</span>          * @description  内容校验
+<span class='line'>378</span>          * @function
+<span class='line'>379</span>          * @name Horn.CheckboxGroup.validate
+<span class='line'>380</span>          * @ignore
+<span class='line'>381</span>          */</span><span class="WHIT">
+<span class='line'>382</span> </span><span class="WHIT">        </span><span class="NAME">validate</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>383</span> </span><span class="WHIT">            </span><span class="COMM">//BUG #6792 【radiogroup】【checkboxgroup】radiogroup、checkboxgroup的validate方法无效</span><span class="WHIT">
+<span class='line'>384</span> </span><span class="WHIT">            </span><span class="NAME">this.isValid</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>385</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>386</span> </span><span class="WHIT">		</span><span class="NAME">isValid</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>387</span> </span><span class="WHIT">	    	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">rs</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>388</span> </span><span class="WHIT">	    	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_this</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>389</span> </span><span class="WHIT">	        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">name</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.name</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>390</span> </span><span class="WHIT">	        </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">_this.disabled</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>391</span> </span><span class="WHIT">	        	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>392</span> </span><span class="WHIT">	        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>393</span> </span><span class="WHIT">	        </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.checkRegx.length</span><span class="PUNC">></span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>394</span> </span><span class="WHIT">	        	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">val</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Horn.getComp</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">getValue</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>395</span> </span><span class="WHIT">	        	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">val</span><span class="PUNC">==</span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>396</span> </span><span class="WHIT">	        		</span><span class="NAME">rs</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>397</span> </span><span class="WHIT">	        		</span><span class="NAME">this.addMsg</span><span class="PUNC">(</span><span class="NAME">_this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>398</span> </span><span class="WHIT">	        		</span><span class="NAME">$</span><span class="PUNC">(</span><span class="STRN">"input[name="</span><span class="PUNC">+</span><span class="NAME">name</span><span class="PUNC">+</span><span class="STRN">"]"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">click</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>399</span> </span><span class="WHIT">	        			</span><span class="NAME">_this.el.unbind</span><span class="PUNC">(</span><span class="STRN">'mouseover'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="WHIT">
+<span class='line'>400</span> </span><span class="WHIT">		        		</span><span class="NAME">_this.el.unbind</span><span class="PUNC">(</span><span class="STRN">'mouseout'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="WHIT">
+<span class='line'>401</span> </span><span class="WHIT">	        			</span><span class="NAME">_this.el.removeClass</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>402</span> </span><span class="WHIT">		        		</span><span class="NAME">_this.el.addClass</span><span class="PUNC">(</span><span class="STRN">"hc_radio-group"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>403</span> </span><span class="WHIT">	        			</span><span class="NAME">$</span><span class="PUNC">(</span><span class="STRN">"#radio_"</span><span class="PUNC">+</span><span class="NAME">name</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">remove</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>404</span> </span><span class="WHIT">	        		</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>405</span> </span><span class="WHIT">	        		</span><span class="WHIT">
+<span class='line'>406</span> </span><span class="WHIT">	        	</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>407</span> </span><span class="WHIT">	        		</span><span class="NAME">this.removeMsg</span><span class="PUNC">(</span><span class="NAME">_this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>408</span> </span><span class="WHIT">	        	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>409</span> </span><span class="WHIT">	        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>410</span> </span><span class="WHIT">			</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">rs</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>411</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>412</span> </span><span class="WHIT">		</span><span class="NAME">addMsg</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">_this</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>413</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">userAgent</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">window.navigator.userAgent.toLowerCase</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>414</span> </span><span class="WHIT">			</span><span class="COMM">/*var msie10 = $.browser.msie && /msie 10\.0/i.test(userAgent);
+<span class='line'>415</span> 	        var msie9 = $.browser.msie && /msie 9\.0/i.test(userAgent); 
+<span class='line'>416</span> 	        var msie8 = $.browser.msie && /msie 8\.0/i.test(userAgent);*/</span><span class="WHIT">
+<span class='line'>417</span> </span><span class="WHIT">	        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">msie7</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">$.browser.msie</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="REGX">/msie 7\.0/i</span><span class="PUNC">.</span><span class="NAME">test</span><span class="PUNC">(</span><span class="NAME">userAgent</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>418</span> </span><span class="WHIT">	        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">greaterThanIe7</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>419</span> </span><span class="WHIT">	        </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">$.browser.msie</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>420</span> </span><span class="WHIT">		        </span><span class="COMM">//文本模式版本</span><span class="WHIT">
+<span class='line'>421</span> </span><span class="WHIT">		        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">document.documentMode</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">document.documentMode</span><span class="PUNC">>=</span><span class="NUMB">8</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT"> </span><span class="COMM">// IE8文本模式</span><span class="WHIT">
+<span class='line'>422</span> </span><span class="WHIT">		        	</span><span class="NAME">greaterThanIe7</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>423</span> </span><span class="WHIT">		        </span><span class="PUNC">}</span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">document.documentMode</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">document.documentMode</span><span class="PUNC">&lt;</span><span class="NUMB">8</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT"> </span><span class="COMM">// IE 5-7文本模式  </span><span class="WHIT">
+<span class='line'>424</span> </span><span class="WHIT">		        	</span><span class="NAME">greaterThanIe7</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>425</span> </span><span class="WHIT">		        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>426</span> </span><span class="WHIT">	        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>427</span> </span><span class="WHIT">			</span><span class="WHIT">
+<span class='line'>428</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">name</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_this.name</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>429</span> </span><span class="WHIT">			</span><span class="NAME">_this.el.removeClass</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>430</span> </span><span class="WHIT">    		</span><span class="NAME">_this.el.addClass</span><span class="PUNC">(</span><span class="STRN">"hc_radio-group hc_ver-bd"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>431</span> </span><span class="WHIT">    		</span><span class="NAME">_this.el.mouseover</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>432</span> </span><span class="WHIT">    			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hcHeight</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">$</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">css</span><span class="PUNC">(</span><span class="STRN">"height"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>433</span> </span><span class="WHIT">    			</span><span class="NAME">hcHeight</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">hcHeight.replace</span><span class="PUNC">(</span><span class="STRN">"px"</span><span class="PUNC">,</span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>434</span> </span><span class="WHIT">    			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">tmpHeiht</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">hcHeight</span><span class="PUNC">)</span><span class="PUNC">+</span><span class="NUMB">3</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>435</span> </span><span class="WHIT">    			</span><span class="COMM">//BUG #6912 【radio_group】在IE7下验证的错误提示信息显示的位置很远 </span><span class="WHIT">
+<span class='line'>436</span> </span><span class="WHIT">    			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">greaterThanIe7</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">msie7</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>437</span> </span><span class="WHIT">    				</span><span class="NAME">tmpHeiht</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>438</span> </span><span class="WHIT">    			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>439</span> </span><span class="WHIT">    			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">msgDiv</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'&lt;span class="hc_verification" id="radio_'</span><span class="PUNC">+</span><span class="NAME">name</span><span class="PUNC">+</span><span class="STRN">'" style="margin-top:'</span><span class="PUNC">+</span><span class="NAME">tmpHeiht</span><span class="PUNC">+</span><span class="STRN">'px;">当前的单选框不能为空&lt;/span>'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>440</span> </span><span class="WHIT">    			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">msg</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">$</span><span class="PUNC">(</span><span class="STRN">"#radio_"</span><span class="PUNC">+</span><span class="NAME">name</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>441</span> </span><span class="WHIT">    			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">msg.length</span><span class="PUNC">==</span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>442</span> </span><span class="WHIT">    				</span><span class="NAME">_this.el.after</span><span class="PUNC">(</span><span class="NAME">msgDiv</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>443</span> </span><span class="WHIT">    			</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="COMM">//如果提示框已经存在，就不在创建提示框</span><span class="WHIT">
+<span class='line'>444</span> </span><span class="WHIT">    				</span><span class="NAME">$</span><span class="PUNC">(</span><span class="STRN">"#radio_"</span><span class="PUNC">+</span><span class="NAME">name</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">css</span><span class="PUNC">(</span><span class="STRN">"display"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"inline"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>445</span> </span><span class="WHIT">    			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>446</span> </span><span class="WHIT">    		</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>447</span> </span><span class="WHIT">    		</span><span class="NAME">_this.el.mouseout</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>448</span> </span><span class="WHIT">    			</span><span class="NAME">$</span><span class="PUNC">(</span><span class="STRN">"#radio_"</span><span class="PUNC">+</span><span class="NAME">name</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">css</span><span class="PUNC">(</span><span class="STRN">"display"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"none"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>449</span> </span><span class="WHIT">    		</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>450</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>451</span> </span><span class="WHIT">		</span><span class="NAME">removeMsg</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">_this</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>452</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">name</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_this.name</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>453</span> </span><span class="WHIT">			</span><span class="NAME">_this.el.unbind</span><span class="PUNC">(</span><span class="STRN">'mouseover'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="WHIT">
+<span class='line'>454</span> </span><span class="WHIT">    		</span><span class="NAME">_this.el.unbind</span><span class="PUNC">(</span><span class="STRN">'mouseout'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="WHIT">
+<span class='line'>455</span> </span><span class="WHIT">    		</span><span class="NAME">_this.el.removeClass</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>456</span> </span><span class="WHIT">    		</span><span class="NAME">_this.el.addClass</span><span class="PUNC">(</span><span class="STRN">"hc_radio-group"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>457</span> </span><span class="WHIT">    		</span><span class="NAME">$</span><span class="PUNC">(</span><span class="STRN">"#radio_"</span><span class="PUNC">+</span><span class="NAME">name</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">remove</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>458</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>459</span> </span><span class="WHIT">        </span><span class="NAME">reset</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>460</span> </span><span class="WHIT">            </span><span class="NAME">this.setValue</span><span class="PUNC">(</span><span class="NAME">this.defValue</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>461</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>462</span> </span><span class="WHIT">        </span><span class="NAME">setRequired</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">required</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>463</span> </span><span class="WHIT">        	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">required</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>464</span> </span><span class="WHIT">        		</span><span class="NAME">this.setNotRequired</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>465</span> </span><span class="WHIT">        		</span><span class="KEYW">return</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>466</span> </span><span class="WHIT">        	</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">required</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">required</span><span class="PUNC">===</span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>467</span> </span><span class="WHIT">                </span><span class="NAME">this.addRule</span><span class="PUNC">(</span><span class="NAME">Horn.Validate.REQUIRED</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>468</span> </span><span class="WHIT">        	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>469</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>470</span> </span><span class="WHIT">        </span><span class="COMM">/**
+<span class='line'>471</span>          * 设置为非必填，同时删除红色的 *
+<span class='line'>472</span>          * @function
+<span class='line'>473</span>          * @name Horn.RadioGroup#setNotRequired
+<span class='line'>474</span>          * @ignore
+<span class='line'>475</span>          */</span><span class="WHIT">
+<span class='line'>476</span> </span><span class="WHIT">        </span><span class="NAME">setNotRequired</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>477</span> </span><span class="WHIT">            </span><span class="NAME">this.removeRule</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">Horn.Validate.REQUIRED</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>478</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>479</span> </span><span class="WHIT">        </span><span class="NAME">removeRule</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">rule</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>480</span> </span><span class="WHIT">            </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_radiogroup</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>481</span> </span><span class="WHIT">            </span><span class="NAME">_radiogroup.el.removeClass</span><span class="PUNC">(</span><span class="STRN">'hc_ver-bd'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>482</span> </span><span class="WHIT">            </span><span class="NAME">this.checkRegx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>483</span> </span><span class="WHIT">            </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">li</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.el.parent</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>484</span> </span><span class="WHIT">            </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">span</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">$</span><span class="PUNC">(</span><span class="STRN">"span"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">li</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>485</span> </span><span class="WHIT">            </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">red</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">$</span><span class="PUNC">(</span><span class="STRN">"b.hc_red"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">span</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>486</span> </span><span class="WHIT">            </span><span class="NAME">red.html</span><span class="PUNC">(</span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>487</span> </span><span class="WHIT">            </span><span class="NAME">_radiogroup.err</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>488</span> </span><span class="WHIT">            </span><span class="NAME">this.removeMsg</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>489</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>490</span> </span><span class="WHIT">        </span><span class="NAME">addRule</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">rule</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>491</span> </span><span class="WHIT">        	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_radiogroup</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>492</span> </span><span class="WHIT">        	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">rule</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">rule.indexOf</span><span class="PUNC">(</span><span class="NAME">Horn.Validate.REQUIRED</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>493</span> </span><span class="WHIT">            	</span><span class="NAME">_radiogroup.err</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>494</span> </span><span class="WHIT">            	</span><span class="NAME">this.checkRegx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="PUNC">[</span><span class="NAME">Horn.Validate.REQUIRED</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>495</span> </span><span class="WHIT">                </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">li</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_radiogroup.el.parent</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>496</span> </span><span class="WHIT">                </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">span</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">$</span><span class="PUNC">(</span><span class="STRN">"span"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">li</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>497</span> </span><span class="WHIT">                </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">red</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">$</span><span class="PUNC">(</span><span class="STRN">"b.hc_red"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">span</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>498</span> </span><span class="WHIT">                </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">red.length</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>499</span> </span><span class="WHIT">                    </span><span class="NAME">red</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">$</span><span class="PUNC">(</span><span class="STRN">"&lt;b>"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>500</span> </span><span class="WHIT">                        </span><span class="STRN">"class"</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"hc_red"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>501</span> </span><span class="WHIT">                        </span><span class="STRN">"html"</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"*"</span><span class="WHIT">
+<span class='line'>502</span> </span><span class="WHIT">                    </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>503</span> </span><span class="WHIT">                    </span><span class="NAME">span.prepend</span><span class="PUNC">(</span><span class="NAME">red</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>504</span> </span><span class="WHIT">                </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>505</span> </span><span class="WHIT">                    </span><span class="NAME">red.html</span><span class="PUNC">(</span><span class="STRN">"*"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>506</span> </span><span class="WHIT">                </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>507</span> </span><span class="WHIT">        	</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>508</span> </span><span class="WHIT">        		</span><span class="KEYW">return</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>509</span> </span><span class="WHIT">        	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>510</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>511</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>512</span> </span><span class="NAME">Horn.Field.regFieldType</span><span class="PUNC">(</span><span class="STRN">"div.hc_radio-group"</span><span class="PUNC">,</span><span class="NAME">Horn.RadioGroup</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>513</span> </span></pre></body></html>

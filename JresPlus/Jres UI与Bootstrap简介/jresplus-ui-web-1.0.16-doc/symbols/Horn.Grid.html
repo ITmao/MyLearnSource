@@ -1,0 +1,528 @@
+
+	<!-- ============================== header ================================= -->	
+		<!-- begin static/header.html -->
+		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="keywords" content="jquery,ui,easy,FUI,web framekwork,ajax framekwork,ria,web development">
+		<meta name="description" content="FUI help you build your web page more Fast!!">
+		<title>UI API - JRES UI</title>
+   		<link rel="stylesheet" href="../resource/css/doc.css" type="text/css" />
+    	<link type="text/css" rel="stylesheet" href="../resource/SyntaxHighlighter/Styles/SyntaxHighlighter.css"/>
+		<script src="../resource/SyntaxHighlighter/Scripts/shCore.js"></script>
+		<script src="../resource/SyntaxHighlighter/Scripts/shBrushXml.js"></script>
+		<script src="../resource/SyntaxHighlighter/Scripts/shBrushJava.js"></script>
+		<script type="text/javascript" src="../resource/jquery-1.7.2.min.js"></script>
+		<style type="text/css">
+			.dp-xml .cdata { color: #ff1493; }.dp-xml .tag, .dp-xml .tag-name { color: #069; font-weight: bold; }.dp-xml .attribute { color: red; }.dp-xml .attribute-value { color: blue; }
+		</style>
+		<script>
+			
+		</script>
+	</head>
+	<body>
+		<div id="header">
+						<div id="header-inner">
+				<table cellpadding="0" cellspacing="0" style="width:100%;">
+					<tr>
+						<td rowspan="2" style="width:20px;">
+						</td>
+						<td style="height:52px;">
+							<div style="color:#fff;font-size:22px;font-weight:bold;">
+								<a href="#" style="color:#fff;font-size:22px;font-weight:bold;text-decoration:none">JRES UI</a>
+							</div>
+							<div style="color:#fff">
+								<a href="#" style="color:#fff;text-decoration:none">JRES UI是使用Velocity开发的服务器端UI组件，助力于组件化快速视图开发!</a>
+							</div>
+						</td>
+						<td style="padding-right:5px;text-align:right;vertical-align:bottom;">
+							<div id="topmenu" style="display:none;">
+								<a href="../../index.html">主页</a>
+								<a href="http://rdc.hundsun.com/forum.php?mod=forumdisplay&amp;fid=163" target="_blank">论坛</a>
+								<a href="../../demo/index.htm">示例</a>
+								<a href="../../documentation/index.html">文档</a>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+			
+		</div>
+		<!-- end static/header.html -->
+	<div id="mainwrap" >
+		<div id="content">
+        <!-- ============================== classes index ============================ -->
+        <script type="text/javascript">
+            $(function() {
+            	var bw=$.browser;
+				if(bw.msie&&bw.version<7||(bw.msie&&$.support.boxModel==false)){
+						//ie6
+						$("#plugin_title").hide();
+						$('#plugins').removeClass("plugins");
+						$('#plugins').addClass("plugins2");
+				}else{
+					$('#plugins').stop().animate({'marginLeft':'-285px'},1000);
+	                $('#plugins').hover(
+	                    function () {
+	                        $(this).stop().animate({'marginLeft':'-2px'},200);
+	                    },
+	                    function () {
+	                        $(this).stop().animate({'marginLeft':'-285px'},200);
+	                    }
+	                );
+				}
+                
+            });
+</script>
+	<div id="plugins" class="plugins">
+	<div id="plugin_title" class="plugin_title">控件清单</div>
+	<ul>
+        
+        
+        
+        <li><a href="../symbols/Horn.html">Horn</a></li>
+        
+        <li><a href="../symbols/Horn._Pagebar-pagebar.html">Horn._Pagebar-pagebar</a></li>
+        
+        <li><a href="../symbols/Horn.Base.html">Horn.Base</a></li>
+        
+        <li><a href="../symbols/Horn.ButtonPanel.html">Horn.ButtonPanel</a></li>
+        
+        <li><a href="../symbols/Horn.Calendar.html">Horn.Calendar</a></li>
+        
+        <li><a href="../symbols/Horn.CalendarGroup.html">Horn.CalendarGroup</a></li>
+        
+        <li><a href="../symbols/Horn.CheckboxGroup.html">Horn.CheckboxGroup</a></li>
+        
+        <li><a href="../symbols/Horn.Combox.html">Horn.Combox</a></li>
+        
+        <li><a href="../symbols/Horn.DataGrid.html">Horn.DataGrid</a></li>
+        
+        <li><a href="../symbols/Horn.Form.html">Horn.Form</a></li>
+        
+        <li><a href="../symbols/Horn.Grid.html">Horn.Grid</a></li>
+        
+        <li><a href="../symbols/Horn.HiddenField.html">Horn.HiddenField</a></li>
+        
+        <li><a href="../symbols/Horn.Label.html">Horn.Label</a></li>
+        
+        <li><a href="../symbols/Horn.Menu.html">Horn.Menu</a></li>
+        
+        <li><a href="../symbols/Horn.MessageBox.html">Horn.MessageBox</a></li>
+        
+        <li><a href="../symbols/Horn.PageBar.html">Horn.PageBar</a></li>
+        
+        <li><a href="../symbols/Horn.Panel.html">Horn.Panel</a></li>
+        
+        <li><a href="../symbols/Horn.Password.html">Horn.Password</a></li>
+        
+        <li><a href="../symbols/Horn.QueryTable.html">Horn.QueryTable</a></li>
+        
+        <li><a href="../symbols/Horn.RadioGroup.html">Horn.RadioGroup</a></li>
+        
+        <li><a href="../symbols/Horn.TabPanel.html">Horn.TabPanel</a></li>
+        
+        <li><a href="../symbols/Horn.Textarea.html">Horn.Textarea</a></li>
+        
+        <li><a href="../symbols/Horn.Textfield.html">Horn.Textfield</a></li>
+        
+        <li><a href="../symbols/Horn.Tip.html">Horn.Tip</a></li>
+        
+        <li><a href="../symbols/Horn.TypeField.html">Horn.TypeField</a></li>
+        
+        <li><a href="../symbols/Horn.Validate.html">Horn.Validate</a></li>
+        
+        <li><a href="../symbols/Horn.Window.html">Horn.Window</a></li>
+        
+	</ul>
+</div>
+        <div class="doc">
+        <div style="padding:10px">
+        <div style="text-align:right;"><a href="../index.html">返回控件主页</a>&nbsp;|&nbsp;<a href="../files.html">返回源码主页</a></div>
+        <!-- ============================== class overview ============================ -->
+        
+        
+<h3>Grid 数据列表</h3>
+<p>以多行多列的形式展示数据，支持行数据选中、列的格式转换</p>
+ <img src="../resource/images/grid.jpg"/>
+
+<h4>依赖组件</h4>
+<ul>
+	<li>无</li>
+</ul>
+
+<h4>适用范围</h4>
+<p>
+</p>
+<h4>约束</h4>
+<p>
+	<ol>
+		<li>目前仅支持后台数据展示，不支持前台数据加载</li>
+		<li>该组件本身不支持分页，需要与#page_bar组件配合使用</li>
+	</ol>
+</p>
+<h4>注意事项</h4>
+<p>
+	<ol>
+		<li>无</li>
+	</ol>
+</p>
+
+<h4>使用示例</h4>
+<p>示例1:</p>
+<textarea name="code" class="html" style="display: none;">
+#grid({"name":"flowTable","title":"有数据的grid"
+    	    ,"numbercolumn":"true","selectModel":"muti"
+    		,"items":[{"name":"initDate","text":"发生日期","renderer":"domrender"},
+    			{"name":"branchNo", "text":"分支名称（静态字典）","items":[{"label":"杭州总部","value":"8888"},{"label":"b","value":"b1"},{"label":"c","value":"c1"}]},
+    			{"name":"branchNo", "dictName":"Branch", "text":"分支名称（动态字典）"},
+    			{"name":"scanType", "dictName":"ScanType", "text":"扫描类别"},
+    			{"name":"clientId","text":"客户编号"},
+    			{"name":"clientName","text":"客户名称"},
+    			{"name":"branchNo", "text":"操作","showwhenover":"true","buttons":[{"label":"设置默认","event":"edit"},{"label":"设置默认","event":"edit"}]},
+    			{"name":"taskStatus","text":"任务状态"}
+    			]
+    		,"data":$data
+    	})
+</textarea>
+
+        <p>&nbsp;</p>
+        
+        	
+            	<!-- doc_options_begin -->
+	        	<h4>属性</h4>
+	        	<p style="color:red;">
+	        		注意：组件的id、name属性只能是英文字母开始，由英文字母、数字和下划线组成，命名时应考虑易识别，不要太长，不要和其他组件重复（表单内的组件除外）。
+	        	</p>
+	        	<table class="doc-table">
+	        		<tbody>
+	        			<tr>
+	        				<th><strong>名称</strong></th>
+							<th><strong>类型</strong></th>
+							<th><strong>描述</strong></th>
+							<th><strong>默认值</strong></th>
+	        			</tr>
+	        			
+	        				<tr>
+	        					<td><b>id</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>Grid的唯一标识。</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>""</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>name</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>Grid的名称。</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>""</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>data</b></td>
+	        					<td>Json</td>
+	        					<td>
+	        						<p>Grid的数据。</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>示例：[{"branchNo":8888,"initDate":"20130101"},  {"branchNo":8888,"initDate":"20130101"},  {"branchNo":8888,"initDate":"20130101"},  {"branchNo":8888,"initDate":"20130101"},  {"branchNo":8888,"initDate":"20130101"},  {"branchNo":8888,"initDate":"20130101"},  {"branchNo":8888,"initDate":"20130101"}]</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>null</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>items</b></td>
+	        					<td>Array</td>
+	        					<td>
+	        						<p>Grid列表条目。</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>items中的单个列表条目属性：               name        {String}   列数据索引名 即dataIndex               text        {String}   列头名称               align       {String}   列内容文本位置设置，默认分为三种方位：居左：left ，居中：center ，居右：right               headerAlign {String}   列头文本位置设置，默认分为三种方位：居左：left ，居中：center ，居右：right               hidden      {Boolean}  列是否隐藏               width       {String}   列宽度               dataType    {String}   列格式化的类型，目前只支持日期和金额两种类型，日期：dataType="DATE",金额dataType="AMOUNT"               format      {String}   列格式化时的格式 ，需要传入日期才能被格式化,不包含时间格式化               renderer    {String}   列渲染函数               buttons     {Array}    操作列，设置此属性后，属性值会被渲染成多个链接               dictName    {String}   字典条目名称示例："items" : [{"name":"initDate","text":"发生日期","align":"left","headerAlign":"right","dataType":"DATE","format":"yyyy-MM-dd","width":"150"},			        {"name":"branchNo", "text":"分支名称（静态字典）","items":[{"label":"杭州总部","value":"8888"},{"label":"b","value":"b1"},{"label":"c","value":"c1"}]},			        {"name":"branchNo", "dictName":"Branch", "text":"分支名称（动态字典）"},			        {"name":"scanType", "dictName":"ScanType", "text":"扫描类别","hidden":true},			        {"name":"scanType2","text":"扫描类别","renderer":"domrender","hidden":false,"width":"350"},			        {"name":"clientId","text":"客户编号","dataType":"AMOUNT","format":"0,000.0"},			        {"name":"clientName","text":"客户名称"},			        {"name":"branchNo", "text":"操作1","buttons":[{"label":"设置默认","event":"edit"}]},			        {"name":"branchNo", "text":"操作2","buttons":[{"label":"noting","event":"edit"}]}			]</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>null</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>titleButtons</b></td>
+	        					<td>Array</td>
+	        					<td>
+	        						<p>Grid标题栏上的按钮组,当按钮的"event"属性不设置或者设置的方法在当前上下文中不存在时，按钮将被隐藏默认提供添加、修改、删除、确认、查询、打开、保存、刷新的样式,cls属性分别对应："add","edit","del","confirm","query","open","save","refresh"</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>单个按钮属性：	       label   {String}  按钮文本	       cls     {String}  按钮css样式	       event   {String}  按钮点击事件	       disabled {Boolean} 是否禁用/启用按钮		   refmenu {string} 按钮中关联menu组件示例："titleButtons" : [{"label":"添加","cls":"add","event":"add()"}]</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>null</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>events</b></td>
+	        					<td>Json</td>
+	        					<td>
+	        						<p>Grid上的事件属性控件支持的事件列表如下：<br>rowclick  行单击事件    事件参数：rowdata  当前被点击的一行数据<br>rowdblclick  行双击事件 事件参数：rowdata  当前被点击的一行数据<br>注意：双击事件会触发单击事件，所以在使用双击事件时应注意与单击事件的关系<br></p>
+		        					
+		        						示例：
+		        						
+		        							<pre>		   "events" :[	         {"event" : "rowclick" , "function" : "testgridrowclick"},	         {"event" : "rowdblclick", "function" : "testgridrowdbclick"}		   ]</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>null</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>numbercolumn</b></td>
+	        					<td>Boolean</td>
+	        					<td>
+	        						<p>Grid是否配置序号列，默认值为false，启用序号列,设置为true时才显示序列号</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>false</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>selectModel</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>Grid启用单选/多选选择框 ，默认值为single,(注意，多选框 muti的拼音错了，做了兼容处理，输入multi也可以) ,单选框值为:single当不配置selectModel或selectModel为""属性时,不显示选择列</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td></td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>rowSelect</b></td>
+	        					<td>Boolean</td>
+	        					<td>
+	        						<p>Grid是否启用点击行选中行操作,默认值为false，不启用,设置为true时点击行选中才生效</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>false</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>textOverHidden</b></td>
+	        					<td>Boolean</td>
+	        					<td>
+	        						<p>Grid列内容超出列宽时是否隐藏并加"...",默认值为false，不隐藏根据内容自适应,设置为true时才隐藏</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>false</td>
+	        				</tr>
+	        			
+	        		</tbody>
+	        	</table>
+        	    <!-- doc_options_end -->
+            
+            
+            
+          		<!-- doc_events_begin -->
+          		<h4>事件</h4>
+          		<table class="doc-table">
+          			<tbody>
+          				<tr>
+          					<th><strong>名称</strong></th>
+							<th><strong>参数</strong></th>
+							<th><strong>描述</strong></th>
+          				</tr>
+          				
+          					<tr>
+          						<td><b>rowclick</b></td>
+          						<td>function(data)</td>
+          						<td>
+          							<p>单击行时触发<br/>注意：双击事件会触发单击事件，所以在使用双击事件时应注意与单击事件的关系</p>
+          							
+		                         		参数:
+		                                
+		                                    <li>
+		                                        :<b>data</b>
+		                                        类型：[Object] 被点击的一行数据。
+		                                    </li>
+		                                
+		                            
+		                            
+	                                
+	                               		示例：
+	                                    
+	                                        <pre></pre>
+	                                    
+	                           		 
+	                            
+          						</td>
+          					</tr>
+          				
+          					<tr>
+          						<td><b>rowdblclick</b></td>
+          						<td>function(data)</td>
+          						<td>
+          							<p>双击行时触发<br/>注意：双击事件会触发单击事件，所以在使用双击事件时应注意与单击事件的关系</p>
+          							
+		                         		参数:
+		                                
+		                                    <li>
+		                                        :<b>data</b>
+		                                        类型：[Object] 被点击的一行数据。
+		                                    </li>
+		                                
+		                            
+		                            
+	                                
+	                               		示例：
+	                                    
+	                                        <pre></pre>
+	                                    
+	                           		 
+	                            
+          						</td>
+          					</tr>
+          				
+          			</tbody>
+          		</table>
+          	  	<!-- doc_events_end -->
+       		
+       		
+       		
+            	<!-- doc_methods_begin -->
+            	<h4>方法</h4>
+            	<table class="doc-table">
+          			<tbody>
+          				<tr>
+          					<th><strong>名称</strong></th>
+							<th><strong>参数</strong></th>
+							<th><strong>描述</strong></th>
+          				</tr>
+          				
+          					<tr>
+								<td><b>setTitle</b></td>
+								<td>(title)</td>
+								<td>
+									<p>设置标题</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        String:<b>title</b>
+		                                        
+		                                    </li>
+		                                
+									
+									
+									 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td><b>selectAll</b></td>
+								<td>()</td>
+								<td>
+									<p>选择所有行。</p>
+									
+									
+									 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td><b>unSelectAll</b></td>
+								<td>()</td>
+								<td>
+									<p>清除所有选择行。</p>
+									
+									
+									 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td><b>getSelecteds</b></td>
+								<td>(format(可选值有true,1,或者不传参数)<br/>)</td>
+								<td>
+									<p>获取所有的选择项</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        mix:<b>format(可选值有true,1,或者不传参数)<br/></b>
+		                                        true    ：返回整行完整数  如：[{"branchNo":"001","Date":"20140320"}{"branchNo":"001","Date":"20140320"}]<br/>        1       : 返回列数据的字段值，如果是字典列,返回字典的value值<br/>        无参数  : 返回列数据的字段值 如果是字典列,返回label值
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        Array:<b></b>
+		                                        返回选中的行数据
+		                                    </li>
+										
+									
+									 
+								</td>
+							</tr>
+          				
+          			</tbody>
+          		</table>
+            	<!-- doc_methods_end -->
+            
+        	<br /><i>Defined in: </i> <a href="../symbols/src/E__jresplus_Sources_jresplus-ui_jresplus-ui-web_src_main_webapp_src_scripts_Grid.js.html">Grid.js</a>
+        </div>
+        </div>
+</div>
+</div>
+<!-- ============================== footer ================================= -->
+
+		<div id="footer">
+			<div>Copyright ? 2010-2013 www.hundsun.com</div>
+		</div>
+		<script type="text/javascript">
+			dp.SyntaxHighlighter.HighlightAll('code');
+		</script>
+	</body>
+</html>
+
+

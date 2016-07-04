@@ -1,0 +1,119 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/*
+<span class='line'>  2</span>  * 修改日期                        修改人员        修改说明
+<span class='line'>  3</span>  * -------------------------------------------------------------------------------------
+<span class='line'>  4</span>  * 2014-4-8	 XIE		BUG #6662 [button_group]调用setEnable方法时传入非法enabled值，忽略
+<span class='line'>  5</span>  * 2014-4-14 周智星              BUG #6643 [button_panel]setEnable设置一个不存在的name
+<span class='line'>  6</span>  * -------------------------------------------------------------------------------------
+<span class='line'>  7</span>  */</span><span class="WHIT">
+<span class='line'>  8</span> </span><span class="COMM">/**
+<span class='line'>  9</span>  * @name Horn.ButtonPanel
+<span class='line'> 10</span>  * @class
+<span class='line'> 11</span>  * 按钮容器组件
+<span class='line'> 12</span>  * 
+<span class='line'> 13</span> */</span><span class="WHIT">
+<span class='line'> 14</span> 
+<span class='line'> 15</span> </span><span class="COMM">/**@lends Horn.ButtonPanel# */</span><span class="WHIT">
+<span class='line'> 16</span> 
+<span class='line'> 17</span> </span><span class="COMM">/**
+<span class='line'> 18</span>  * 组件唯一标识&lt;br/>
+<span class='line'> 19</span>  * 支持此属性的按钮容器组件(&lt;b>button_group&lt;/b>,&lt;b>button_panel&lt;/b>,&lt;b>button_panel_ex&lt;/b>)
+<span class='line'> 20</span>  * @name Horn.ButtonPanel#&lt;b>id&lt;/b>
+<span class='line'> 21</span>  * @type String
+<span class='line'> 22</span>  * @default
+<span class='line'> 23</span>  * @example
+<span class='line'> 24</span>  * 无
+<span class='line'> 25</span>  */</span><span class="WHIT">
+<span class='line'> 26</span> </span><span class="COMM">/**
+<span class='line'> 27</span>  * 组件的名字&lt;br/>
+<span class='line'> 28</span>  * 支持此属性的按钮容器组件(&lt;b>button_group&lt;/b>,&lt;b>button_panel&lt;/b>,&lt;b>button_panel_ex&lt;/b>)
+<span class='line'> 29</span>  * @name Horn.ButtonPanel#&lt;b>name&lt;/b>
+<span class='line'> 30</span>  * @type String
+<span class='line'> 31</span>  * @default
+<span class='line'> 32</span>  */</span><span class="WHIT">
+<span class='line'> 33</span> </span><span class="COMM">/**
+<span class='line'> 34</span>  * 组件所占的显示列数&lt;br/>
+<span class='line'> 35</span>  * 默认仅支持1,2,3列&lt;br/>
+<span class='line'> 36</span>  * 支持此属性的按钮容器组件(&lt;b>button_group&lt;/b>)
+<span class='line'> 37</span>  * @name Horn.ButtonPanel#&lt;b>cols&lt;/b>
+<span class='line'> 38</span>  * @type number
+<span class='line'> 39</span>  * @default 1
+<span class='line'> 40</span>  */</span><span class="WHIT">
+<span class='line'> 41</span> </span><span class="COMM">/**
+<span class='line'> 42</span>  * 表单中提交按钮的显示标签&lt;br/>
+<span class='line'> 43</span>  * 如果要使用默认属性，不要设置此属性，更不要使用空字符串&lt;br/>
+<span class='line'> 44</span>  * 支持此属性的按钮容器组件(&lt;b>button_panel&lt;/b>)
+<span class='line'> 45</span>  * @name Horn.ButtonPanel#&lt;b>submitLabel&lt;/b>
+<span class='line'> 46</span>  * @type String
+<span class='line'> 47</span>  * @default "提交"
+<span class='line'> 48</span>  */</span><span class="WHIT">
+<span class='line'> 49</span> </span><span class="COMM">/**
+<span class='line'> 50</span>  * 表单中重置按钮的显示标签&lt;br/>
+<span class='line'> 51</span>  * 如果要使用默认属性，不要设置此属性，更不要使用空字符串&lt;br/>
+<span class='line'> 52</span>  * 支持此属性的按钮容器组件(&lt;b>button_panel&lt;/b>)
+<span class='line'> 53</span>  * @name Horn.ButtonPanel#&lt;b>resetLabel&lt;/b>
+<span class='line'> 54</span>  * @type String
+<span class='line'> 55</span>  * @default "重置"
+<span class='line'> 56</span>  */</span><span class="WHIT">
+<span class='line'> 57</span> 
+<span class='line'> 58</span> </span><span class="COMM">/**
+<span class='line'> 59</span>  * 按钮组件中的自定义按钮配置&lt;br/>
+<span class='line'> 60</span>  * 支持此属性的按钮容器组件(&lt;b>button_group&lt;/b>,&lt;b>button_panel&lt;/b>,&lt;b>button_panel_ex&lt;/b>)&lt;br/>
+<span class='line'> 61</span>  * 按钮的数据格式:&lt;br/>
+<span class='line'> 62</span>  * {"name":"btn1",//按钮组件名称&lt;br/>
+<span class='line'> 63</span>  *  "label":"查询",//按钮显示名称&lt;br/>
+<span class='line'> 64</span>  *  "className":"h_btn-cencel",//按钮自定义样式，非必须项&lt;br/>
+<span class='line'> 65</span>  *  "event":"lhkh.query()"//按钮被点击时触发的函数执行&lt;br/>&lt;br/>
+<span class='line'> 66</span>  *  "refmenu":"test"//该按钮关联的menu组件（菜单）
+<span class='line'> 67</span>  * }
+<span class='line'> 68</span>  * @name Horn.ButtonPanel#&lt;b>buttons&lt;/b>
+<span class='line'> 69</span>  * @type Array[Json]
+<span class='line'> 70</span>  * @default ""
+<span class='line'> 71</span>  * @example
+<span class='line'> 72</span>  * 名称 标签 样式名 点击事件
+<span class='line'> 73</span>  * "buttons":[{"name":"query","label":"查询","className":"h_btn-cencel", "event":"lhkh.query()"}] 
+<span class='line'> 74</span>  */</span><span class="WHIT">
+<span class='line'> 75</span> 
+<span class='line'> 76</span> </span><span class="NAME">Horn.ButtonPanel</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Horn.extend</span><span class="PUNC">(</span><span class="NAME">Horn.Base</span><span class="PUNC">,</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 77</span> </span><span class="WHIT">	</span><span class="NAME">COMPONENT_CLASS</span><span class="PUNC">:</span><span class="STRN">"ButtonPanel"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 78</span> </span><span class="WHIT">    </span><span class="NAME">init</span><span class="PUNC">:</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 79</span> </span><span class="WHIT">        </span><span class="NAME">Horn.ButtonPanel.superclass.init.apply</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="NAME">arguments</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 80</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 81</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'> 82</span>      * 设置按纽是否可用，设置为不可用，则单击无响应
+<span class='line'> 83</span>      * @function
+<span class='line'> 84</span>      * @name Horn.ButtonPanel#setEnable
+<span class='line'> 85</span>      * @param {string} name 按纽的名字
+<span class='line'> 86</span>      * @param {boolean} enabled 如果为true设置为可用，设置为false，设置不可用,此参数不传入时默认为true;
+<span class='line'> 87</span>      * @return {void}
+<span class='line'> 88</span>      * @example
+<span class='line'> 89</span>      * Horn.getComp("buttonPaneName").setEnable("btnName",false);
+<span class='line'> 90</span>      */</span><span class="WHIT">
+<span class='line'> 91</span> </span><span class="WHIT">    </span><span class="NAME">setEnable</span><span class="PUNC">:</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">,</span><span class="NAME">enabled</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 92</span> </span><span class="WHIT">    	</span><span class="COMM">//BUG #6643 [button_panel]setEnable设置一个不存在的name</span><span class="WHIT">
+<span class='line'> 93</span> </span><span class="WHIT">    	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">enabled</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="STRN">'boolean'</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 94</span> </span><span class="WHIT">    		</span><span class="NAME">Horn.Tip.info</span><span class="PUNC">(</span><span class="STRN">"enabled属性只能是布尔型！"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 95</span> </span><span class="WHIT">    		</span><span class="KEYW">return</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 96</span> </span><span class="WHIT">    	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 97</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">button</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.el.find</span><span class="PUNC">(</span><span class="STRN">"button[name="</span><span class="PUNC">+</span><span class="NAME">name</span><span class="PUNC">+</span><span class="STRN">"]"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 98</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">button.length</span><span class="PUNC">==</span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 99</span> </span><span class="WHIT">        	</span><span class="NAME">Horn.Tip.info</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">+</span><span class="STRN">",不存在！"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>100</span> </span><span class="WHIT">        	</span><span class="KEYW">return</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>101</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>102</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">enabled</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="STRN">'undefined'</span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">enabled</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>103</span> </span><span class="WHIT">            </span><span class="NAME">button.removeClass</span><span class="PUNC">(</span><span class="STRN">"h_btn-disabled"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>104</span> </span><span class="WHIT">            </span><span class="NAME">button.removeAttr</span><span class="PUNC">(</span><span class="STRN">"disabled"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>105</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>106</span> </span><span class="WHIT">            </span><span class="NAME">button.addClass</span><span class="PUNC">(</span><span class="STRN">"h_btn-disabled"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>107</span> </span><span class="WHIT">            </span><span class="NAME">button.attr</span><span class="PUNC">(</span><span class="STRN">"disabled"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"disabled"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>108</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>109</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>110</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>111</span> </span><span class="NAME">Horn.regUI</span><span class="PUNC">(</span><span class="STRN">"div.h_btndiv"</span><span class="PUNC">,</span><span class="NAME">Horn.ButtonPanel</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>112</span> </span><span class="NAME">Horn.regUI</span><span class="PUNC">(</span><span class="STRN">"div.hc_button-group"</span><span class="PUNC">,</span><span class="NAME">Horn.ButtonPanel</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span></pre></body></html>

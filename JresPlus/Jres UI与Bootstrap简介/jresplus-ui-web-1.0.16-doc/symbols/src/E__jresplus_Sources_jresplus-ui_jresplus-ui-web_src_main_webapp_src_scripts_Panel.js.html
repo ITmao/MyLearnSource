@@ -1,0 +1,126 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/*
+<span class='line'>  2</span>  * -----------------------------------------------------------------------
+<span class='line'>  3</span>  * 修订日期                          修改人                    修改原因
+<span class='line'>  4</span>  * 2014-3-11 		谢晶晶		修正注释文档
+<span class='line'>  5</span>  * 2014-4-8         周智星                  BUG #6625 [panel]表单组件禁用启用 
+<span class='line'>  6</span>  * 2014-4-8         周智星                  BUG #6626 [panel]禁用表单类组件
+<span class='line'>  7</span>  * 2014-4-8         周智星                  BUG #6543 panel相关文档缺陷
+<span class='line'>  8</span>  * 2015-01-19       zhangsu      STORY #10593 [TS:201412180610][财富管理事业部-陈凯-]-JRESPlus-ui--对于查询条件中的extend_fields部分的查询条件，若】
+<span class='line'>  9</span>  * -----------------------------------------------------------------------
+<span class='line'> 10</span>  */</span><span class="WHIT">
+<span class='line'> 11</span> </span><span class="COMM">/**
+<span class='line'> 12</span>  * @name Horn.Panel
+<span class='line'> 13</span>  * @class
+<span class='line'> 14</span>  * 面板组件&lt;/br>
+<span class='line'> 15</span>  * 属于容器组件，一般做为单行组件的容器使用
+<span class='line'> 16</span>  */</span><span class="WHIT">
+<span class='line'> 17</span> </span><span class="COMM">/**@lends Horn.Panel# */</span><span class="WHIT">
+<span class='line'> 18</span> </span><span class="COMM">/**
+<span class='line'> 19</span>  * 组件的唯一标示
+<span class='line'> 20</span>  * @name Horn.Panel#&lt;b>id&lt;/b>
+<span class='line'> 21</span>  * @type String
+<span class='line'> 22</span>  * @default 
+<span class='line'> 23</span>  */</span><span class="WHIT">
+<span class='line'> 24</span> </span><span class="COMM">/**
+<span class='line'> 25</span>  * 组件的名称
+<span class='line'> 26</span>  * @name Horn.Panel#&lt;b>name&lt;/b>
+<span class='line'> 27</span>  * @type String
+<span class='line'> 28</span>  * @default 
+<span class='line'> 29</span>  */</span><span class="WHIT">
+<span class='line'> 30</span> 
+<span class='line'> 31</span> </span><span class="WHIT">	</span><span class="NAME">Horn.Panel</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Horn.extend</span><span class="PUNC">(</span><span class="NAME">Horn.Base</span><span class="PUNC">,</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 32</span> </span><span class="WHIT">		</span><span class="NAME">COMPONENT_CLASS</span><span class="PUNC">:</span><span class="STRN">"Panel"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 33</span> </span><span class="WHIT">		</span><span class="NAME">init</span><span class="PUNC">:</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 34</span> </span><span class="WHIT">			 </span><span class="NAME">Horn.Panel.superclass.init.apply</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="NAME">arguments</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 35</span> </span><span class="WHIT">			 </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">parent</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.el.parent</span><span class="PUNC">(</span><span class="STRN">'.hc_extendsearch'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 36</span> </span><span class="WHIT">			 </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_panel</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="WHIT">
+<span class='line'> 37</span> </span><span class="WHIT">			 </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">parent</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 38</span> </span><span class="WHIT">				 </span><span class="NAME">parent.find</span><span class="PUNC">(</span><span class="STRN">'.hc_btn-es-div'</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 39</span> </span><span class="WHIT">					 </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">div</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">$</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 40</span> </span><span class="WHIT">					 </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">div.hasClass</span><span class="PUNC">(</span><span class="STRN">'hc_minus'</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 41</span> </span><span class="WHIT">						 </span><span class="NAME">_panel.closebar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">div</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 42</span> </span><span class="WHIT">						</span><span class="NAME">div.click</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 43</span> </span><span class="WHIT">							</span><span class="NAME">_panel.hide</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 44</span> </span><span class="WHIT">							</span><span class="COMM">//_panel.disable();    #10593查询条件被隐藏了,不应该disabled</span><span class="WHIT">
+<span class='line'> 45</span> </span><span class="WHIT">							</span><span class="NAME">_panel.expanedbar.show</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 46</span> </span><span class="WHIT">							</span><span class="NAME">div.hide</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 47</span> </span><span class="WHIT">						</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 48</span> </span><span class="WHIT">					 </span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 49</span> </span><span class="WHIT">						 </span><span class="NAME">_panel.expanedbar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">div</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 50</span> </span><span class="WHIT">						</span><span class="NAME">div.click</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 51</span> </span><span class="WHIT">							</span><span class="NAME">_panel.show</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 52</span> </span><span class="WHIT">							</span><span class="COMM">//_panel.enable();    #10593</span><span class="WHIT">
+<span class='line'> 53</span> </span><span class="WHIT">							</span><span class="NAME">_panel.closebar.show</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 54</span> </span><span class="WHIT">							</span><span class="NAME">div.hide</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 55</span> </span><span class="WHIT">						</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 56</span> </span><span class="WHIT">					 </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 57</span> </span><span class="WHIT">				 </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 58</span> </span><span class="WHIT">			 </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 59</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 60</span> </span><span class="WHIT">        </span><span class="COMM">/**
+<span class='line'> 61</span>          * 显示&lt;br/>
+<span class='line'> 62</span>          * 显示面板容器的内容
+<span class='line'> 63</span>          * @name Horn.Panel#show
+<span class='line'> 64</span>          * @function
+<span class='line'> 65</span>          * @return {void}
+<span class='line'> 66</span>          */</span><span class="WHIT">
+<span class='line'> 67</span> </span><span class="WHIT">		</span><span class="NAME">show</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 68</span> </span><span class="WHIT">			</span><span class="NAME">this.el.show</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 69</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 70</span> </span><span class="WHIT">        </span><span class="COMM">/**
+<span class='line'> 71</span>          * 隐藏&lt;br/>
+<span class='line'> 72</span>          * 隐藏面板容器及容器内的内容
+<span class='line'> 73</span>          * @name Horn.Panel#hide
+<span class='line'> 74</span>          * @function
+<span class='line'> 75</span>          * @return {void}
+<span class='line'> 76</span>          */</span><span class="WHIT">
+<span class='line'> 77</span> </span><span class="WHIT">		</span><span class="NAME">hide</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 78</span> </span><span class="WHIT">			</span><span class="NAME">this.el.hide</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 79</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 80</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'> 81</span>          * 设置内部输入组件为可用状态&lt;br/>
+<span class='line'> 82</span>          * 对所有表单项起效（文本字段、文本区域、按钮、复选框、单选框和下拉框）
+<span class='line'> 83</span>          * @name Horn.Panel#enable
+<span class='line'> 84</span>          * @function
+<span class='line'> 85</span>          * @return {void}
+<span class='line'> 86</span>          */</span><span class="WHIT">
+<span class='line'> 87</span> </span><span class="WHIT">		</span><span class="NAME">enable</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 88</span> </span><span class="WHIT">			</span><span class="COMM">//this.el.find('input,textarea').not('input[realydisable],textarea[realydisable]').removeAttr('disabled');</span><span class="WHIT">
+<span class='line'> 89</span> </span><span class="WHIT">			</span><span class="WHIT">
+<span class='line'> 90</span> </span><span class="WHIT">			</span><span class="COMM">//BUG #6625 [panel]表单组件禁用启用</span><span class="WHIT">
+<span class='line'> 91</span> </span><span class="WHIT">			</span><span class="NAME">Horn.Field.findFieldCompsIn</span><span class="PUNC">(</span><span class="NAME">this.el</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">,</span><span class="NAME">f</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 92</span> </span><span class="WHIT">	    		</span><span class="NAME">this.setDisabled</span><span class="PUNC">(</span><span class="KEYW">false</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 93</span> </span><span class="WHIT">	    	</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 94</span> </span><span class="WHIT">			</span><span class="COMM">//BUG #6626 [panel]禁用表单类组件</span><span class="WHIT">
+<span class='line'> 95</span> </span><span class="WHIT">			</span><span class="NAME">this.el.find</span><span class="PUNC">(</span><span class="STRN">'button,select'</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">removeAttr</span><span class="PUNC">(</span><span class="STRN">'disabled'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 96</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 97</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'> 98</span>          * 设置内部输入组件为不可用状态(disabled)&lt;br/>
+<span class='line'> 99</span>          * 对所有表单项起效（文本字段、文本区域、按钮、复选框、单选框和下拉框）
+<span class='line'>100</span>          * @name Horn.Panel#disable
+<span class='line'>101</span>          * @function
+<span class='line'>102</span>          * @return {void}
+<span class='line'>103</span>          */</span><span class="WHIT">
+<span class='line'>104</span> </span><span class="WHIT">		</span><span class="NAME">disable</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>105</span> </span><span class="WHIT">			</span><span class="COMM">//this.el.find('input[disabled],textarea[disabled]').attr('realydisable','yes');</span><span class="WHIT">
+<span class='line'>106</span> </span><span class="WHIT">			</span><span class="COMM">//this.el.find('input,textarea').not('input[realydisable],textarea[realydisable]').attr('disabled','disabled');</span><span class="WHIT">
+<span class='line'>107</span> </span><span class="WHIT">			</span><span class="WHIT">
+<span class='line'>108</span> </span><span class="WHIT">			</span><span class="COMM">//BUG #6625 [panel]表单组件禁用启用</span><span class="WHIT">
+<span class='line'>109</span> </span><span class="WHIT">			</span><span class="NAME">Horn.Field.findFieldCompsIn</span><span class="PUNC">(</span><span class="NAME">this.el</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">,</span><span class="NAME">f</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>110</span> </span><span class="WHIT">	    		</span><span class="NAME">this.setDisabled</span><span class="PUNC">(</span><span class="KEYW">true</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>111</span> </span><span class="WHIT">	    	</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>112</span> </span><span class="WHIT">			</span><span class="WHIT">
+<span class='line'>113</span> </span><span class="WHIT">			</span><span class="COMM">//BUG #6626 [panel]禁用表单类组件</span><span class="WHIT">
+<span class='line'>114</span> </span><span class="WHIT">			</span><span class="NAME">this.el.find</span><span class="PUNC">(</span><span class="STRN">'button,select'</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">removeAttr</span><span class="PUNC">(</span><span class="STRN">'disabled'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>115</span> </span><span class="WHIT">			</span><span class="NAME">this.el.find</span><span class="PUNC">(</span><span class="STRN">'button,select'</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">attr</span><span class="PUNC">(</span><span class="STRN">'disabled'</span><span class="PUNC">,</span><span class="STRN">'disabled'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>116</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>117</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>118</span> </span><span class="WHIT">	</span><span class="NAME">Horn.regUI</span><span class="PUNC">(</span><span class="STRN">'ul.h_panel'</span><span class="PUNC">,</span><span class="NAME">Horn.Panel</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>119</span> </span></pre></body></html>
