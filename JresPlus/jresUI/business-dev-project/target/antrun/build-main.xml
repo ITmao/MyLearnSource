@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="maven-antrun-" default="main"  >
+<target name="main">
+  <ant antfile="F:\gitFolder\MyLearnSource-git\JresPlus\jresUI\business-dev-project\business-dev-project/build.xml"/>
+</target>
+</project>

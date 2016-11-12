@@ -1,0 +1,415 @@
+
+	<!-- ============================== header ================================= -->	
+		<!-- begin static/header.html -->
+		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="keywords" content="jquery,ui,easy,FUI,web framekwork,ajax framekwork,ria,web development">
+		<meta name="description" content="FUI help you build your web page more Fast!!">
+		<title>UI API - JRES UI</title>
+   		<link rel="stylesheet" href="../resource/css/doc.css" type="text/css" />
+    	<link type="text/css" rel="stylesheet" href="../resource/SyntaxHighlighter/Styles/SyntaxHighlighter.css"/>
+		<script src="../resource/SyntaxHighlighter/Scripts/shCore.js"></script>
+		<script src="../resource/SyntaxHighlighter/Scripts/shBrushXml.js"></script>
+		<script src="../resource/SyntaxHighlighter/Scripts/shBrushJava.js"></script>
+		<script type="text/javascript" src="../resource/jquery-1.7.2.min.js"></script>
+		<style type="text/css">
+			.dp-xml .cdata { color: #ff1493; }.dp-xml .tag, .dp-xml .tag-name { color: #069; font-weight: bold; }.dp-xml .attribute { color: red; }.dp-xml .attribute-value { color: blue; }
+		</style>
+		<script>
+			
+		</script>
+	</head>
+	<body>
+		<div id="header">
+						<div id="header-inner">
+				<table cellpadding="0" cellspacing="0" style="width:100%;">
+					<tr>
+						<td rowspan="2" style="width:20px;">
+						</td>
+						<td style="height:52px;">
+							<div style="color:#fff;font-size:22px;font-weight:bold;">
+								<a href="#" style="color:#fff;font-size:22px;font-weight:bold;text-decoration:none">JRES UI</a>
+							</div>
+							<div style="color:#fff">
+								<a href="#" style="color:#fff;text-decoration:none">JRES UI是使用Velocity开发的服务器端UI组件，助力于组件化快速视图开发!</a>
+							</div>
+						</td>
+						<td style="padding-right:5px;text-align:right;vertical-align:bottom;">
+							<div id="topmenu" style="display:none;">
+								<a href="../../index.html">主页</a>
+								<a href="http://rdc.hundsun.com/forum.php?mod=forumdisplay&amp;fid=163" target="_blank">论坛</a>
+								<a href="../../demo/index.htm">示例</a>
+								<a href="../../documentation/index.html">文档</a>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+			
+		</div>
+		<!-- end static/header.html -->
+	<div id="mainwrap" >
+		<div id="content">
+        <!-- ============================== classes index ============================ -->
+        <script type="text/javascript">
+            $(function() {
+            	var bw=$.browser;
+				if(bw.msie&&bw.version<7||(bw.msie&&$.support.boxModel==false)){
+						//ie6
+						$("#plugin_title").hide();
+						$('#plugins').removeClass("plugins");
+						$('#plugins').addClass("plugins2");
+				}else{
+					$('#plugins').stop().animate({'marginLeft':'-285px'},1000);
+	                $('#plugins').hover(
+	                    function () {
+	                        $(this).stop().animate({'marginLeft':'-2px'},200);
+	                    },
+	                    function () {
+	                        $(this).stop().animate({'marginLeft':'-285px'},200);
+	                    }
+	                );
+				}
+                
+            });
+</script>
+	<div id="plugins" class="plugins">
+	<div id="plugin_title" class="plugin_title">控件清单</div>
+	<ul>
+        
+        
+        
+        
+        
+        <li><a href="../symbols/Horn.html">Horn</a></li>
+        
+        <li><a href="../symbols/Horn._Pagebar-pagebar.html">Horn._Pagebar-pagebar</a></li>
+        
+        <li><a href="../symbols/Horn.Base.html">Horn.Base</a></li>
+        
+        <li><a href="../symbols/Horn.ButtonPanel.html">Horn.ButtonPanel</a></li>
+        
+        <li><a href="../symbols/Horn.Calendar.html">Horn.Calendar</a></li>
+        
+        <li><a href="../symbols/Horn.CalendarGroup.html">Horn.CalendarGroup</a></li>
+        
+        <li><a href="../symbols/Horn.Checkbox.html">Horn.Checkbox</a></li>
+        
+        <li><a href="../symbols/Horn.CheckboxGroup.html">Horn.CheckboxGroup</a></li>
+        
+        <li><a href="../symbols/Horn.Combox.html">Horn.Combox</a></li>
+        
+        <li><a href="../symbols/Horn.DataGrid.html">Horn.DataGrid</a></li>
+        
+        <li><a href="../symbols/Horn.Field.html">Horn.Field</a></li>
+        
+        <li><a href="../symbols/Horn.FieldSet.html">Horn.FieldSet</a></li>
+        
+        <li><a href="../symbols/Horn.Form.html">Horn.Form</a></li>
+        
+        <li><a href="../symbols/Horn.Grid.html">Horn.Grid</a></li>
+        
+        <li><a href="../symbols/Horn.HiddenField.html">Horn.HiddenField</a></li>
+        
+        <li><a href="../symbols/Horn.Label.html">Horn.Label</a></li>
+        
+        <li><a href="../symbols/Horn.Menu.html">Horn.Menu</a></li>
+        
+        <li><a href="../symbols/Horn.MessageBox.html">Horn.MessageBox</a></li>
+        
+        <li><a href="../symbols/Horn.PageBar.html">Horn.PageBar</a></li>
+        
+        <li><a href="../symbols/Horn.Panel.html">Horn.Panel</a></li>
+        
+        <li><a href="../symbols/Horn.Password.html">Horn.Password</a></li>
+        
+        <li><a href="../symbols/Horn.PasswordGroup.html">Horn.PasswordGroup</a></li>
+        
+        <li><a href="../symbols/Horn.QueryTable.html">Horn.QueryTable</a></li>
+        
+        <li><a href="../symbols/Horn.RadioGroup.html">Horn.RadioGroup</a></li>
+        
+        <li><a href="../symbols/Horn.Screen.html">Horn.Screen</a></li>
+        
+        <li><a href="../symbols/Horn.SelectTree.html">Horn.SelectTree</a></li>
+        
+        <li><a href="../symbols/Horn.TabPanel.html">Horn.TabPanel</a></li>
+        
+        <li><a href="../symbols/Horn.TargetSelect.html">Horn.TargetSelect</a></li>
+        
+        <li><a href="../symbols/Horn.Textarea.html">Horn.Textarea</a></li>
+        
+        <li><a href="../symbols/Horn.Textfield.html">Horn.Textfield</a></li>
+        
+        <li><a href="../symbols/Horn.Tip.html">Horn.Tip</a></li>
+        
+        <li><a href="../symbols/Horn.TypeField.html">Horn.TypeField</a></li>
+        
+        <li><a href="../symbols/Horn.Util.html">Horn.Util</a></li>
+        
+        <li><a href="../symbols/Horn.Validate.html">Horn.Validate</a></li>
+        
+        <li><a href="../symbols/Horn.Window.html">Horn.Window</a></li>
+        
+        <li><a href="../symbols/Horn.ZtreePanel.html">Horn.ZtreePanel</a></li>
+        
+        
+        
+	</ul>
+</div>
+        <div class="doc">
+        <div style="padding:10px">
+        <div style="text-align:right;"><a href="../index.html">返回控件主页</a>&nbsp;|&nbsp;<a href="../files.html">返回源码主页</a></div>
+        <!-- ============================== class overview ============================ -->
+        
+        
+<h3>隐藏域表单组件</h3>
+<p>用于隐藏表单元素数据的提交</p>
+ <img src="../resource/images/hiddenField.jpg"/>
+
+<h4>继承组件</h4>
+<ul>
+	<li><a href="../symbols/Horn.Field.html">Horn.Field</a></li>
+</ul>
+
+<h4>适用范围</h4>
+<p>
+</p>
+<h4>约束</h4>
+<p>
+	<ol>
+		<li>无</li>
+	</ol>
+</p>
+<h4>注意事项</h4>
+<p>
+	<ol>
+		<li>无</li>
+	</ol>
+</p>
+
+<h4>使用示例</h4>
+<p>示例1:</p>
+<textarea name="code" class="html" style="display: none;">
+#@screen({"title":"测试"})
+	#@form({})
+    	#@panel({})
+            #hidden({"id":"abc","name":"testHidden","value":"1111","alias":"cnt1"})
+            #hidden({"id":"def","name":"testHidden","value":"3333","alias":"cnt2"})
+    	#end
+	#end
+	#button_panel_ex({"buttons":[{"label":"设置值","event":"setValue()"},{"label":"查看值","event":"alertValue()"}]})
+#end
+#jscode()
+	function setValue(){
+		Horn.getComp('testHidden','cnt2').setValue(" 222222 ");
+	}
+	function alertValue(){
+		alert(Horn.getComp('testHidden','cnt2').getValue());
+	}
+#end
+</textarea>
+
+<p>示例2：</p>
+<textarea name="code" class="html" style="display: none;">
+无
+</textarea>
+
+        <p>&nbsp;</p>
+        
+        	
+            	<!-- doc_options_begin -->
+	        	<h4>属性</h4>
+	        	<p style="color:red;">
+	        		注意：组件的id、name属性只能是英文字母开始，由英文字母、数字和下划线组成，命名时应考虑易识别，不要太长，不要和其他组件重复（表单内的组件除外）。
+	        	</p>
+	        	<table class="doc-table">
+	        		<tbody>
+	        			<tr>
+	        				<th><strong>名称</strong></th>
+							<th><strong>类型</strong></th>
+							<th><strong>描述</strong></th>
+							<th><strong>默认值</strong></th>
+	        			</tr>
+	        			
+	        				<tr>
+	        					<td>id</td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>组件唯一标识</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>""</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td>name</td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>表单提交名字</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>""</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td>value</td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>表单的初始值，如果没有配置defValue属性，表单重置的时候，将采用value作为重置值</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>""</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td>defValue</td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>组件的重置时的值，如果没有配置此值，将以value属性做为重置值。如果指定了value值，并且defValue设置为空(defValue:"")，则无法重置为空值，请用form组件的clearValue方法清空form内组件的值或调用组件本身的clearValue方法清空值。</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>无</td>
+	        				</tr>
+	        			
+	        		</tbody>
+	        	</table>
+        	    <!-- doc_options_end -->
+            
+            
+            
+       		
+       		
+            	<!-- doc_methods_begin -->
+            	<h4>方法</h4>
+            	<table class="doc-table">
+          			<tbody>
+          				<tr>
+          					<th><strong>名称</strong></th>
+							<th><strong>参数</strong></th>
+							<th><strong>描述</strong></th>
+          				</tr>
+          				
+          					<tr>
+								<td>setDisabled</td>
+								<td>(disabled)</td>
+								<td>
+									<p>设置字段是否禁用，被设置为禁用的组件，不可以编辑，也不参与表单提交，但是可以通过API的方式修改表单的值,disabled对hidden无效</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        Boolean:<b>disabled</b>
+		                                        true表示禁用，false表示正常
+		                                    </li>
+		                                
+									
+									
+									 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>setValue</td>
+								<td>(value)</td>
+								<td>
+									<p>设置表单的值</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        String:<b>value</b>
+		                                        值
+		                                    </li>
+		                                
+									
+									
+									 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>getValue</td>
+								<td>()</td>
+								<td>
+									<p>获取表单的值</p>
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        表单的提交值
+		                                    </li>
+										
+									
+									 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>reset</td>
+								<td>()</td>
+								<td>
+									<p>如果设置了defValue的值，重置成的defValue值，否则重置成value值</p>
+									
+									
+									 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>clearValue</td>
+								<td>()</td>
+								<td>
+									<p>清空表单的值，显示值和隐藏值都设置为""</p>
+									
+									
+									 
+								</td>
+							</tr>
+          				
+          			</tbody>
+          		</table>
+            	<!-- doc_methods_end -->
+            
+        	<br /><i>Defined in: </i> <a href="../symbols/src/E__workspace_JRES-PLUS_Sources_jresplus-2.0_Sources_jresplus-ui_jresplus-ui-web_build_com.hundsun.jresplus.ui.hidden_public_scripts_Hidden.js.html">Hidden.js</a>
+        </div>
+        </div>
+</div>
+</div>
+<!-- ============================== footer ================================= -->
+
+		<div id="footer">
+			<div>Copyright ? 2010-2013 www.hundsun.com</div>
+		</div>
+		<script type="text/javascript">
+			dp.SyntaxHighlighter.HighlightAll('code');
+		</script>
+	</body>
+</html>
+
+

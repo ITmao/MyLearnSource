@@ -1,0 +1,44 @@
+
+<h3>Grid 数据列表</h3>
+<p>以多行多列的形式展示数据，支持行数据选中、列的格式转换</p>
+ <img src="../resource/images/grid.png"/>
+
+<h4>依赖组件</h4>
+<ul>
+	<li>无</li>
+</ul>
+
+<h4>适用范围</h4>
+<p>
+</p>
+<h4>约束</h4>
+<p>
+	<ol>
+		<li>目前仅支持后台数据展示，不支持前台数据加载</li>
+		<li>该组件本身不支持分页，需要与#page_bar组件配合使用</li>
+	</ol>
+</p>
+<h4>注意事项</h4>
+<p>
+	<ol>
+		<li>无</li>
+	</ol>
+</p>
+
+<h4>使用示例</h4>
+<p>示例1:</p>
+<textarea name="code" class="html" style="display: none;">
+#grid({"name":"flowTable","title":"有数据的grid"
+    	    ,"numbercolumn":"true","selectModel":"muti"
+    		,"items":[{"name":"initDate","text":"发生日期","renderer":"domrender"},
+    			{"name":"branchNo", "text":"分支名称（静态字典）","items":[{"label":"杭州总部","value":"8888"},{"label":"b","value":"b1"},{"label":"c","value":"c1"}]},
+    			{"name":"branchNo", "dictName":"Branch", "text":"分支名称（动态字典）"},
+    			{"name":"scanType", "dictName":"ScanType", "text":"扫描类别"},
+    			{"name":"clientId","text":"客户编号"},
+    			{"name":"clientName","text":"客户名称"},
+    			{"name":"branchNo", "text":"操作","showwhenover":"true","buttons":[{"label":"设置默认","event":"edit"},{"label":"设置默认","event":"edit"}]},
+    			{"name":"taskStatus","text":"任务状态"}
+    			]
+    		,"data":$data
+    	})
+</textarea>

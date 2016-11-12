@@ -1,0 +1,61 @@
+
+<h3>QueryTable 查询表格</h3>
+<p>带查询表单的表格展示</p>
+ <img src="../resource/images/queryTable.png"/>
+
+<h4>依赖组件</h4>
+<ul>
+	<li>无</li>
+</ul>
+
+<h4>适用范围</h4>
+<p>
+</p>
+<h4>约束</h4>
+<p>
+	<ol>
+		<li>无</li>
+	</ol>
+</p>
+<h4>注意事项</h4>
+<p>
+	<ol>
+		<li>如需要在分页栏中显示总行数及总页数，请以如下方式返回结果数据：{total:总行数,rows:结果数组}，如：{total:45, rows:[{a:"a1",b:"b1"},{a:"a2",b:"b2"}]}</li>
+	</ol>
+</p>
+
+<p>
+	<ol>
+		<li>无</li>
+	</ol>
+</p>
+
+<h4>使用示例</h4>
+<p>示例1:XX</p>
+<textarea name="code" class="html" style="display: none;">
+#query_table({
+	"name":"queryTable",
+	"url":"callback/getCallBack.json", 
+	"request_num":"2",
+	"requestMethod":"post"
+	"position_str":"positionStr",
+	"hasPage":true,
+	"bindformname":"testFormName",
+	"autoLoad":true,
+	"request_num":10,
+	"items":[{"name":"clientId","text":"客户号"},{"name":"clientName","text":"客户姓名"},
+		{"name":"fundAccount","text":"资产账号"},{"name":"operatorNo","text":"操作员编号"},
+		{"name":"phone","text":"移动电话"},{"name":"contact","text":"联系方式"},
+		{"name":"organFlag","text":"机构类型","dealFun":"lhkh.organFlagFn"}
+	],
+	"events":[{"event":"onclick","function":"lhkh.tableClick()"},
+		{"event":"callback","function":"lhkh.callback())"},
+		{"event":"rowclick","function":"lhkh.tableRowClick()"},
+		{"event":"rowdblclick","function":"lhkh.tableRowDblClick()"}
+	]})
+</textarea>
+
+<p>示例2：</p>
+<textarea name="code" class="html" style="display: none;">
+无
+</textarea>

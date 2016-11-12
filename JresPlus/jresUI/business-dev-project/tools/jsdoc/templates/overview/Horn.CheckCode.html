@@ -1,0 +1,115 @@
+
+<h3>checkcode 验证码组件</h3>
+<p>用于验证码输入</p>
+ <img src="../resource/images/checkCode.jpg"/>
+
+<h4>依赖组件</h4>
+<ul>
+	<li>无</li>
+</ul>
+
+<h4>适用范围</h4>
+<p>
+	验证码中的图片需要后台的请求处理支持
+</p>
+<h4>约束</h4>
+<p>
+	<ol>
+		<li>无</li>
+	</ol>
+</p>
+<h4>注意事项</h4>
+<p>
+	<ol>
+		<li>如果没有配置url时，使用默认url"/horn/checkCode/get.htm"</li>
+		<li>使用默认url时，必须有后台的action进行url的处理</li>
+	</ol>
+</p>
+
+<h4>使用示例</h4>
+<p>示例1:视图中使用</p>
+<textarea name="code" class="html" style="display: none;">
+#checkcode({"name":"checkcode","label":"验证码"})
+</textarea>
+
+<p>示例2：使用action处理验证码请求</p>
+<textarea name="code" class="java" style="display: none;">
+	@RequestMapping("/checkCode/get.htm")
+	public ModelAndView handleRequest(HttpServletRequest request,
+			HttpServletResponse response,
+			@RequestParam(value = "width", defaultValue = "100") int width,
+			@RequestParam(value = "height", defaultValue = "30") int height)
+			throws Exception {
+		response.setContentType("image/jpeg");
+		String randomString = String.valueOf(random.nextInt(9000) + 1000);
+		request.getSession(true).setAttribute(CheckCodeAgent.Check_Code_Agent,
+				randomString);
+		preventCaching(response);
+		ImageBuilder.buildImage(response.getOutputStream(), width, height,
+				randomString);
+		return null;
+	}
+
+	private void preventCaching(HttpServletResponse response) {
+		response.setHeader("Pragma", "No-cache");
+		response.setHeader("Cache-Control", "no-cache");
+	}
+</textarea>
+
+<p>示例1:生成图片的程序</p>
+<textarea name="code" class="java" style="display: none;">
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Random;
+
+import javax.imageio.ImageIO;
+
+public class ImageBuilder {
+	private static Random random = new Random();
+
+	public static final void buildImage(OutputStream outputStream, int width,
+			int height, String string) throws IOException {
+		BufferedImage image = new BufferedImage(width, height,
+				BufferedImage.TYPE_INT_RGB);
+
+		Graphics g = image.getGraphics();
+
+		g.setColor(Color.LIGHT_GRAY);
+		g.fillRect(0, 0, width, height);
+
+		g.setColor(Color.BLACK);
+		for (int i = 0; i < 18; i++) {
+			int x = random.nextInt(width);
+			int y = random.nextInt(height);
+			int xl = random.nextInt(width / 4);
+			int yl = random.nextInt(height / 4);
+			g.drawLine(x, y, x + xl, y + yl);
+		}
+
+		g.setFont(new Font("Times   New   Roman", Font.PLAIN, 24));
+
+		int jumpHight = -2;
+		for (int i = 0; i < string.length(); i++) {
+			String ch = string.substring(i, i + 1);
+
+			g.setColor(new Color(20 + random.nextInt(110), 20 + random
+					.nextInt(110), 20 + random.nextInt(110)));
+			if (jumpHight == -2) {
+				jumpHight = 2;
+			} else {
+				jumpHight = -2;
+			}
+			g.drawString(ch, 16 * i + 10 + random.nextInt(4), 24 + jumpHight
+					+ random.nextInt(4));
+		}
+
+		g.dispose();
+
+		ImageIO.write(image, "JPEG", outputStream);
+	}
+}
+</textarea>

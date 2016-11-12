@@ -1,0 +1,1224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="jres-ui-build" default="full-build">
+<dirname property="root_path" file="${ant.file.compress}" />
+<property name="web" value="${root_path}/src/main/webapp" />
+<property name="js_minify" value="${root_path}/build/scripts/min" />
+<property name="js_source" value="${root_path}/build/public/scripts" />
+<property name="js_target" value="${web}/components" />
+<property name="img_source" value="${root_path}/build/resources" />
+<property name="css_source" value="${root_path}/build/public/css" />
+<property name="css_concat" value="${root_path}/build/css/concat" />
+<property name="css_target" value="${web}/components" />
+<property name="vm_source" value="${root_path}/build/public/vm" />
+<property name="vm_target" value="${web}/WEB-INF/views/components" />
+<property name="plugin_source" value="${root_path}/build/plugins" />
+<property name="plugin_target" value="${web}/plugins" />
+<property name="jsdoc_dir" location="${root_path}/tools/jsdoc" />
+<property name="doc_dir" location="${root_path}/documentation"/>
+<property name="yuicompressor" value="${root_path}/tools/jsdoc/ext/yuicompressor-2.4.7.jar" />
+<taskdef name="jsdoctoolkit" classname="uk.co.darrenhurley.ant.tasks.JsDocToolkit" classpath="${root_path}/tools/jsdoc/jsdoc-toolkit-ant-task-1.1.2.jar;${root_path}/tools/jsdoc/java/classes/js.jar">
+</taskdef>
+<target name="full-build">
+<antcall target="clear-path" />
+<antcall target="minify-js" />
+<antcall target="concat-js" />
+<antcall target="concat-debug-js" />
+<antcall target="concat-css" />
+<antcall target="concat-vm" />
+<antcall target="copy-img" />
+<antcall target="build-doc" />
+</target>
+<target name="build-doc">
+<delete  failonerror="false">
+<fileset dir="${js.output.dir}">
+</fileset>
+</delete>
+<jsdoctoolkit template="documentation" jsdochome="${jsdoc_dir}/" outputdir="${doc_dir}/"  encoding="utf-8">
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.base/public/scripts">
+<include name="horn.Base.js" />
+<include name="horn.CommonUtil.js" />
+<include name="horn.Ui.js" />
+<include name="horn.Util.Format.js" />
+<include name="Screen.js" />
+<include name="Validate.js" />
+
+</fileset>
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.buttonpanel/public/scripts">
+<include name="ButtonPanel.js" />
+
+</fileset>
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.datagrid/public/scripts">
+<include name="DataGrid.js" />
+
+</fileset>
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.field/public/scripts">
+<include name="Field.js" />
+
+</fileset>
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.fieldset/public/scripts">
+<include name="FieldSet.js" />
+
+</fileset>
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.form/public/scripts">
+<include name="Form.js" />
+
+</fileset>
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.grid/public/scripts">
+<include name="Grid.js" />
+
+</fileset>
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.hidden/public/scripts">
+<include name="Hidden.js" />
+
+</fileset>
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.label/public/scripts">
+<include name="Label.js" />
+
+</fileset>
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.menu/public/scripts">
+<include name="Menu.js" />
+
+</fileset>
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.messagebox/public/scripts">
+<include name="MessageBox.js" />
+
+</fileset>
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.pagebar/public/scripts">
+<include name="PageBar.js" />
+
+</fileset>
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.panel/public/scripts">
+<include name="Panel.js" />
+
+</fileset>
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.password/public/scripts">
+<include name="Password.js" />
+
+</fileset>
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.passwordgroup/public/scripts">
+<include name="PasswordGroup.js" />
+
+</fileset>
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.qurytable/public/scripts">
+<include name="QueryTable.js" />
+
+</fileset>
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.radio/public/scripts">
+<include name="Radio.js" />
+
+</fileset>
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.select/public/scripts">
+<include name="Select.js" />
+
+</fileset>
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.selecttree/public/scripts">
+<include name="SelectTree.js" />
+
+</fileset>
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.tabpanel/public/scripts">
+<include name="TabPanel.js" />
+
+</fileset>
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.targetselect/public/scripts">
+<include name="TargetSelect.js" />
+
+</fileset>
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.textarea/public/scripts">
+<include name="Textarea.js" />
+
+</fileset>
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.textfield/public/scripts">
+<include name="Textfield.js" />
+
+</fileset>
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.tip/public/scripts">
+<include name="TipBox.js" />
+
+</fileset>
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.typefield/public/scripts">
+<include name="TypeField.js" />
+
+</fileset>
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.ucalendar/public/scripts">
+<include name="Calendar.js" />
+
+</fileset>
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.ucalendargroup/public/scripts">
+<include name="CalendarGroup.js" />
+
+</fileset>
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.ucheckbox/public/scripts">
+<include name="Checkbox.js" />
+
+</fileset>
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.ucheckboxgroup/public/scripts">
+<include name="CheckboxGroup.js" />
+
+</fileset>
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.window/public/scripts">
+<include name="drag.js" />
+<include name="Window.js" />
+
+</fileset>
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.zcombox/public/scripts">
+<include name="Combox.js" />
+
+</fileset>
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.ztree/public/scripts">
+<include name="Ztree.js" />
+
+</fileset>
+</jsdoctoolkit>
+</target>
+<target name="clear-path">
+<delete description="删除与打包相关的路径">
+<fileset dir="${js_minify}" />
+<fileset dir="${css_concat}" />
+<fileset dir="${css_target}" />
+<fileset dir="${vm_target}" />
+<fileset dir="${doc_dir}"/>
+</delete>
+</target>
+<target name="minify-js">
+<description>压缩组件的js</description>
+<apply executable="java" dest="${js_minify}/com.hundsun.jresplus.ui.base" parallel="false" failonerror="true" append="false" force="true">
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.base/public/scripts">
+<file name="horn.Base.js" />
+<file name="horn.CommonUtil.js" />
+<file name="horn.Ui.js" />
+<file name="horn.Util.Format.js" />
+<file name="Screen.js" />
+<file name="Validate.js" />
+</filelist>
+<arg line="-jar" />
+<arg path="${yuicompressor}" />
+<arg line="--charset utf-8" />
+<arg value="--type" />
+<arg value="js" />
+<arg value="-o" />
+<targetfile />
+<mapper type="glob" from="*.js" to="*.js" />
+</apply>
+<apply executable="java" dest="${js_minify}/com.hundsun.jresplus.ui.buttonpanel" parallel="false" failonerror="true" append="false" force="true">
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.buttonpanel/public/scripts">
+<file name="ButtonPanel.js" />
+</filelist>
+<arg line="-jar" />
+<arg path="${yuicompressor}" />
+<arg line="--charset utf-8" />
+<arg value="--type" />
+<arg value="js" />
+<arg value="-o" />
+<targetfile />
+<mapper type="glob" from="*.js" to="*.js" />
+</apply>
+<apply executable="java" dest="${js_minify}/com.hundsun.jresplus.ui.common.css" parallel="false" failonerror="true" append="false" force="true">
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.common.css/public/scripts">
+</filelist>
+<arg line="-jar" />
+<arg path="${yuicompressor}" />
+<arg line="--charset utf-8" />
+<arg value="--type" />
+<arg value="js" />
+<arg value="-o" />
+<targetfile />
+<mapper type="glob" from="*.js" to="*.js" />
+</apply>
+<apply executable="java" dest="${js_minify}/com.hundsun.jresplus.ui.datagrid" parallel="false" failonerror="true" append="false" force="true">
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.datagrid/public/scripts">
+<file name="DataGrid.js" />
+</filelist>
+<arg line="-jar" />
+<arg path="${yuicompressor}" />
+<arg line="--charset utf-8" />
+<arg value="--type" />
+<arg value="js" />
+<arg value="-o" />
+<targetfile />
+<mapper type="glob" from="*.js" to="*.js" />
+</apply>
+<apply executable="java" dest="${js_minify}/com.hundsun.jresplus.ui.datetimepicker" parallel="false" failonerror="true" append="false" force="true">
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.datetimepicker/public/scripts">
+</filelist>
+<arg line="-jar" />
+<arg path="${yuicompressor}" />
+<arg line="--charset utf-8" />
+<arg value="--type" />
+<arg value="js" />
+<arg value="-o" />
+<targetfile />
+<mapper type="glob" from="*.js" to="*.js" />
+</apply>
+<apply executable="java" dest="${js_minify}/com.hundsun.jresplus.ui.field" parallel="false" failonerror="true" append="false" force="true">
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.field/public/scripts">
+<file name="Field.js" />
+</filelist>
+<arg line="-jar" />
+<arg path="${yuicompressor}" />
+<arg line="--charset utf-8" />
+<arg value="--type" />
+<arg value="js" />
+<arg value="-o" />
+<targetfile />
+<mapper type="glob" from="*.js" to="*.js" />
+</apply>
+<apply executable="java" dest="${js_minify}/com.hundsun.jresplus.ui.fieldset" parallel="false" failonerror="true" append="false" force="true">
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.fieldset/public/scripts">
+<file name="FieldSet.js" />
+</filelist>
+<arg line="-jar" />
+<arg path="${yuicompressor}" />
+<arg line="--charset utf-8" />
+<arg value="--type" />
+<arg value="js" />
+<arg value="-o" />
+<targetfile />
+<mapper type="glob" from="*.js" to="*.js" />
+</apply>
+<apply executable="java" dest="${js_minify}/com.hundsun.jresplus.ui.form" parallel="false" failonerror="true" append="false" force="true">
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.form/public/scripts">
+<file name="Form.js" />
+</filelist>
+<arg line="-jar" />
+<arg path="${yuicompressor}" />
+<arg line="--charset utf-8" />
+<arg value="--type" />
+<arg value="js" />
+<arg value="-o" />
+<targetfile />
+<mapper type="glob" from="*.js" to="*.js" />
+</apply>
+<apply executable="java" dest="${js_minify}/com.hundsun.jresplus.ui.grid" parallel="false" failonerror="true" append="false" force="true">
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.grid/public/scripts">
+<file name="Grid.js" />
+</filelist>
+<arg line="-jar" />
+<arg path="${yuicompressor}" />
+<arg line="--charset utf-8" />
+<arg value="--type" />
+<arg value="js" />
+<arg value="-o" />
+<targetfile />
+<mapper type="glob" from="*.js" to="*.js" />
+</apply>
+<apply executable="java" dest="${js_minify}/com.hundsun.jresplus.ui.hidden" parallel="false" failonerror="true" append="false" force="true">
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.hidden/public/scripts">
+<file name="Hidden.js" />
+</filelist>
+<arg line="-jar" />
+<arg path="${yuicompressor}" />
+<arg line="--charset utf-8" />
+<arg value="--type" />
+<arg value="js" />
+<arg value="-o" />
+<targetfile />
+<mapper type="glob" from="*.js" to="*.js" />
+</apply>
+<apply executable="java" dest="${js_minify}/com.hundsun.jresplus.ui.jquery" parallel="false" failonerror="true" append="false" force="true">
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.jquery/public/scripts">
+</filelist>
+<arg line="-jar" />
+<arg path="${yuicompressor}" />
+<arg line="--charset utf-8" />
+<arg value="--type" />
+<arg value="js" />
+<arg value="-o" />
+<targetfile />
+<mapper type="glob" from="*.js" to="*.js" />
+</apply>
+<apply executable="java" dest="${js_minify}/com.hundsun.jresplus.ui.label" parallel="false" failonerror="true" append="false" force="true">
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.label/public/scripts">
+<file name="Label.js" />
+</filelist>
+<arg line="-jar" />
+<arg path="${yuicompressor}" />
+<arg line="--charset utf-8" />
+<arg value="--type" />
+<arg value="js" />
+<arg value="-o" />
+<targetfile />
+<mapper type="glob" from="*.js" to="*.js" />
+</apply>
+<apply executable="java" dest="${js_minify}/com.hundsun.jresplus.ui.menu" parallel="false" failonerror="true" append="false" force="true">
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.menu/public/scripts">
+<file name="Menu.js" />
+</filelist>
+<arg line="-jar" />
+<arg path="${yuicompressor}" />
+<arg line="--charset utf-8" />
+<arg value="--type" />
+<arg value="js" />
+<arg value="-o" />
+<targetfile />
+<mapper type="glob" from="*.js" to="*.js" />
+</apply>
+<apply executable="java" dest="${js_minify}/com.hundsun.jresplus.ui.messagebox" parallel="false" failonerror="true" append="false" force="true">
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.messagebox/public/scripts">
+<file name="MessageBox.js" />
+</filelist>
+<arg line="-jar" />
+<arg path="${yuicompressor}" />
+<arg line="--charset utf-8" />
+<arg value="--type" />
+<arg value="js" />
+<arg value="-o" />
+<targetfile />
+<mapper type="glob" from="*.js" to="*.js" />
+</apply>
+<apply executable="java" dest="${js_minify}/com.hundsun.jresplus.ui.pagebar" parallel="false" failonerror="true" append="false" force="true">
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.pagebar/public/scripts">
+<file name="PageBar.js" />
+</filelist>
+<arg line="-jar" />
+<arg path="${yuicompressor}" />
+<arg line="--charset utf-8" />
+<arg value="--type" />
+<arg value="js" />
+<arg value="-o" />
+<targetfile />
+<mapper type="glob" from="*.js" to="*.js" />
+</apply>
+<apply executable="java" dest="${js_minify}/com.hundsun.jresplus.ui.panel" parallel="false" failonerror="true" append="false" force="true">
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.panel/public/scripts">
+<file name="Panel.js" />
+</filelist>
+<arg line="-jar" />
+<arg path="${yuicompressor}" />
+<arg line="--charset utf-8" />
+<arg value="--type" />
+<arg value="js" />
+<arg value="-o" />
+<targetfile />
+<mapper type="glob" from="*.js" to="*.js" />
+</apply>
+<apply executable="java" dest="${js_minify}/com.hundsun.jresplus.ui.password" parallel="false" failonerror="true" append="false" force="true">
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.password/public/scripts">
+<file name="Password.js" />
+</filelist>
+<arg line="-jar" />
+<arg path="${yuicompressor}" />
+<arg line="--charset utf-8" />
+<arg value="--type" />
+<arg value="js" />
+<arg value="-o" />
+<targetfile />
+<mapper type="glob" from="*.js" to="*.js" />
+</apply>
+<apply executable="java" dest="${js_minify}/com.hundsun.jresplus.ui.passwordgroup" parallel="false" failonerror="true" append="false" force="true">
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.passwordgroup/public/scripts">
+<file name="PasswordGroup.js" />
+</filelist>
+<arg line="-jar" />
+<arg path="${yuicompressor}" />
+<arg line="--charset utf-8" />
+<arg value="--type" />
+<arg value="js" />
+<arg value="-o" />
+<targetfile />
+<mapper type="glob" from="*.js" to="*.js" />
+</apply>
+<apply executable="java" dest="${js_minify}/com.hundsun.jresplus.ui.qurytable" parallel="false" failonerror="true" append="false" force="true">
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.qurytable/public/scripts">
+<file name="QueryTable.js" />
+</filelist>
+<arg line="-jar" />
+<arg path="${yuicompressor}" />
+<arg line="--charset utf-8" />
+<arg value="--type" />
+<arg value="js" />
+<arg value="-o" />
+<targetfile />
+<mapper type="glob" from="*.js" to="*.js" />
+</apply>
+<apply executable="java" dest="${js_minify}/com.hundsun.jresplus.ui.radio" parallel="false" failonerror="true" append="false" force="true">
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.radio/public/scripts">
+<file name="Radio.js" />
+</filelist>
+<arg line="-jar" />
+<arg path="${yuicompressor}" />
+<arg line="--charset utf-8" />
+<arg value="--type" />
+<arg value="js" />
+<arg value="-o" />
+<targetfile />
+<mapper type="glob" from="*.js" to="*.js" />
+</apply>
+<apply executable="java" dest="${js_minify}/com.hundsun.jresplus.ui.select" parallel="false" failonerror="true" append="false" force="true">
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.select/public/scripts">
+<file name="Select.js" />
+</filelist>
+<arg line="-jar" />
+<arg path="${yuicompressor}" />
+<arg line="--charset utf-8" />
+<arg value="--type" />
+<arg value="js" />
+<arg value="-o" />
+<targetfile />
+<mapper type="glob" from="*.js" to="*.js" />
+</apply>
+<apply executable="java" dest="${js_minify}/com.hundsun.jresplus.ui.selecttree" parallel="false" failonerror="true" append="false" force="true">
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.selecttree/public/scripts">
+<file name="SelectTree.js" />
+</filelist>
+<arg line="-jar" />
+<arg path="${yuicompressor}" />
+<arg line="--charset utf-8" />
+<arg value="--type" />
+<arg value="js" />
+<arg value="-o" />
+<targetfile />
+<mapper type="glob" from="*.js" to="*.js" />
+</apply>
+<apply executable="java" dest="${js_minify}/com.hundsun.jresplus.ui.tabpanel" parallel="false" failonerror="true" append="false" force="true">
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.tabpanel/public/scripts">
+<file name="TabPanel.js" />
+</filelist>
+<arg line="-jar" />
+<arg path="${yuicompressor}" />
+<arg line="--charset utf-8" />
+<arg value="--type" />
+<arg value="js" />
+<arg value="-o" />
+<targetfile />
+<mapper type="glob" from="*.js" to="*.js" />
+</apply>
+<apply executable="java" dest="${js_minify}/com.hundsun.jresplus.ui.targetselect" parallel="false" failonerror="true" append="false" force="true">
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.targetselect/public/scripts">
+<file name="TargetSelect.js" />
+</filelist>
+<arg line="-jar" />
+<arg path="${yuicompressor}" />
+<arg line="--charset utf-8" />
+<arg value="--type" />
+<arg value="js" />
+<arg value="-o" />
+<targetfile />
+<mapper type="glob" from="*.js" to="*.js" />
+</apply>
+<apply executable="java" dest="${js_minify}/com.hundsun.jresplus.ui.textarea" parallel="false" failonerror="true" append="false" force="true">
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.textarea/public/scripts">
+<file name="Textarea.js" />
+</filelist>
+<arg line="-jar" />
+<arg path="${yuicompressor}" />
+<arg line="--charset utf-8" />
+<arg value="--type" />
+<arg value="js" />
+<arg value="-o" />
+<targetfile />
+<mapper type="glob" from="*.js" to="*.js" />
+</apply>
+<apply executable="java" dest="${js_minify}/com.hundsun.jresplus.ui.textfield" parallel="false" failonerror="true" append="false" force="true">
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.textfield/public/scripts">
+<file name="Textfield.js" />
+</filelist>
+<arg line="-jar" />
+<arg path="${yuicompressor}" />
+<arg line="--charset utf-8" />
+<arg value="--type" />
+<arg value="js" />
+<arg value="-o" />
+<targetfile />
+<mapper type="glob" from="*.js" to="*.js" />
+</apply>
+<apply executable="java" dest="${js_minify}/com.hundsun.jresplus.ui.tip" parallel="false" failonerror="true" append="false" force="true">
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.tip/public/scripts">
+<file name="TipBox.js" />
+</filelist>
+<arg line="-jar" />
+<arg path="${yuicompressor}" />
+<arg line="--charset utf-8" />
+<arg value="--type" />
+<arg value="js" />
+<arg value="-o" />
+<targetfile />
+<mapper type="glob" from="*.js" to="*.js" />
+</apply>
+<apply executable="java" dest="${js_minify}/com.hundsun.jresplus.ui.typefield" parallel="false" failonerror="true" append="false" force="true">
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.typefield/public/scripts">
+<file name="TypeField.js" />
+</filelist>
+<arg line="-jar" />
+<arg path="${yuicompressor}" />
+<arg line="--charset utf-8" />
+<arg value="--type" />
+<arg value="js" />
+<arg value="-o" />
+<targetfile />
+<mapper type="glob" from="*.js" to="*.js" />
+</apply>
+<apply executable="java" dest="${js_minify}/com.hundsun.jresplus.ui.ucalendar" parallel="false" failonerror="true" append="false" force="true">
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.ucalendar/public/scripts">
+<file name="Calendar.js" />
+</filelist>
+<arg line="-jar" />
+<arg path="${yuicompressor}" />
+<arg line="--charset utf-8" />
+<arg value="--type" />
+<arg value="js" />
+<arg value="-o" />
+<targetfile />
+<mapper type="glob" from="*.js" to="*.js" />
+</apply>
+<apply executable="java" dest="${js_minify}/com.hundsun.jresplus.ui.ucalendargroup" parallel="false" failonerror="true" append="false" force="true">
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.ucalendargroup/public/scripts">
+<file name="CalendarGroup.js" />
+</filelist>
+<arg line="-jar" />
+<arg path="${yuicompressor}" />
+<arg line="--charset utf-8" />
+<arg value="--type" />
+<arg value="js" />
+<arg value="-o" />
+<targetfile />
+<mapper type="glob" from="*.js" to="*.js" />
+</apply>
+<apply executable="java" dest="${js_minify}/com.hundsun.jresplus.ui.ucheckbox" parallel="false" failonerror="true" append="false" force="true">
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.ucheckbox/public/scripts">
+<file name="Checkbox.js" />
+</filelist>
+<arg line="-jar" />
+<arg path="${yuicompressor}" />
+<arg line="--charset utf-8" />
+<arg value="--type" />
+<arg value="js" />
+<arg value="-o" />
+<targetfile />
+<mapper type="glob" from="*.js" to="*.js" />
+</apply>
+<apply executable="java" dest="${js_minify}/com.hundsun.jresplus.ui.ucheckboxgroup" parallel="false" failonerror="true" append="false" force="true">
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.ucheckboxgroup/public/scripts">
+<file name="CheckboxGroup.js" />
+</filelist>
+<arg line="-jar" />
+<arg path="${yuicompressor}" />
+<arg line="--charset utf-8" />
+<arg value="--type" />
+<arg value="js" />
+<arg value="-o" />
+<targetfile />
+<mapper type="glob" from="*.js" to="*.js" />
+</apply>
+<apply executable="java" dest="${js_minify}/com.hundsun.jresplus.ui.window" parallel="false" failonerror="true" append="false" force="true">
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.window/public/scripts">
+<file name="drag.js" />
+<file name="Window.js" />
+</filelist>
+<arg line="-jar" />
+<arg path="${yuicompressor}" />
+<arg line="--charset utf-8" />
+<arg value="--type" />
+<arg value="js" />
+<arg value="-o" />
+<targetfile />
+<mapper type="glob" from="*.js" to="*.js" />
+</apply>
+<apply executable="java" dest="${js_minify}/com.hundsun.jresplus.ui.zcombox" parallel="false" failonerror="true" append="false" force="true">
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.zcombox/public/scripts">
+<file name="Combox.js" />
+</filelist>
+<arg line="-jar" />
+<arg path="${yuicompressor}" />
+<arg line="--charset utf-8" />
+<arg value="--type" />
+<arg value="js" />
+<arg value="-o" />
+<targetfile />
+<mapper type="glob" from="*.js" to="*.js" />
+</apply>
+<apply executable="java" dest="${js_minify}/com.hundsun.jresplus.ui.ztree" parallel="false" failonerror="true" append="false" force="true">
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.ztree/public/scripts">
+<file name="Ztree.js" />
+</filelist>
+<arg line="-jar" />
+<arg path="${yuicompressor}" />
+<arg line="--charset utf-8" />
+<arg value="--type" />
+<arg value="js" />
+<arg value="-o" />
+<targetfile />
+<mapper type="glob" from="*.js" to="*.js" />
+</apply>
+<apply executable="java" dest="${js_minify}/com.hundsun.jresplus.ui.ztreeplugin" parallel="false" failonerror="true" append="false" force="true">
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.ztreeplugin/public/scripts">
+</filelist>
+<arg line="-jar" />
+<arg path="${yuicompressor}" />
+<arg line="--charset utf-8" />
+<arg value="--type" />
+<arg value="js" />
+<arg value="-o" />
+<targetfile />
+<mapper type="glob" from="*.js" to="*.js" />
+</apply>
+<apply executable="java" dest="${js_minify}/com.hundsun.jresplus.ui.zverify" parallel="false" failonerror="true" append="false" force="true">
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.zverify/public/scripts">
+</filelist>
+<arg line="-jar" />
+<arg path="${yuicompressor}" />
+<arg line="--charset utf-8" />
+<arg value="--type" />
+<arg value="js" />
+<arg value="-o" />
+<targetfile />
+<mapper type="glob" from="*.js" to="*.js" />
+</apply>
+<apply executable="java" dest="${js_minify}/css" parallel="false" failonerror="true" append="false" force="true">
+<filelist dir="${root_path}/build/css/public/scripts">
+</filelist>
+<arg line="-jar" />
+<arg path="${yuicompressor}" />
+<arg line="--charset utf-8" />
+<arg value="--type" />
+<arg value="js" />
+<arg value="-o" />
+<targetfile />
+<mapper type="glob" from="*.js" to="*.js" />
+</apply>
+<apply executable="java" dest="${js_minify}/plugins" parallel="false" failonerror="true" append="false" force="true">
+<filelist dir="${root_path}/build/plugins/public/scripts">
+</filelist>
+<arg line="-jar" />
+<arg path="${yuicompressor}" />
+<arg line="--charset utf-8" />
+<arg value="--type" />
+<arg value="js" />
+<arg value="-o" />
+<targetfile />
+<mapper type="glob" from="*.js" to="*.js" />
+</apply>
+<apply executable="java" dest="${js_minify}/scripts" parallel="false" failonerror="true" append="false" force="true">
+<filelist dir="${root_path}/build/scripts/public/scripts">
+</filelist>
+<arg line="-jar" />
+<arg path="${yuicompressor}" />
+<arg line="--charset utf-8" />
+<arg value="--type" />
+<arg value="js" />
+<arg value="-o" />
+<targetfile />
+<mapper type="glob" from="*.js" to="*.js" />
+</apply>
+
+</target>
+<target name="concat-debug-js">
+<description>合并js</description>
+<concat destfile="${js_target}/components-debug.js" encoding="utf-8" fixlastline="on">
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.base/public/scripts">
+<file name="horn.Base.js" />
+<file name="horn.CommonUtil.js" />
+<file name="horn.Ui.js" />
+<file name="horn.Util.Format.js" />
+<file name="Screen.js" />
+<file name="Validate.js" />
+
+</filelist>
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.buttonpanel/public/scripts">
+<file name="ButtonPanel.js" />
+
+</filelist>
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.datagrid/public/scripts">
+<file name="DataGrid.js" />
+
+</filelist>
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.field/public/scripts">
+<file name="Field.js" />
+
+</filelist>
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.fieldset/public/scripts">
+<file name="FieldSet.js" />
+
+</filelist>
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.form/public/scripts">
+<file name="Form.js" />
+
+</filelist>
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.grid/public/scripts">
+<file name="Grid.js" />
+
+</filelist>
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.hidden/public/scripts">
+<file name="Hidden.js" />
+
+</filelist>
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.label/public/scripts">
+<file name="Label.js" />
+
+</filelist>
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.menu/public/scripts">
+<file name="Menu.js" />
+
+</filelist>
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.messagebox/public/scripts">
+<file name="MessageBox.js" />
+
+</filelist>
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.pagebar/public/scripts">
+<file name="PageBar.js" />
+
+</filelist>
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.panel/public/scripts">
+<file name="Panel.js" />
+
+</filelist>
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.password/public/scripts">
+<file name="Password.js" />
+
+</filelist>
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.passwordgroup/public/scripts">
+<file name="PasswordGroup.js" />
+
+</filelist>
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.qurytable/public/scripts">
+<file name="QueryTable.js" />
+
+</filelist>
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.radio/public/scripts">
+<file name="Radio.js" />
+
+</filelist>
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.select/public/scripts">
+<file name="Select.js" />
+
+</filelist>
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.selecttree/public/scripts">
+<file name="SelectTree.js" />
+
+</filelist>
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.tabpanel/public/scripts">
+<file name="TabPanel.js" />
+
+</filelist>
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.targetselect/public/scripts">
+<file name="TargetSelect.js" />
+
+</filelist>
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.textarea/public/scripts">
+<file name="Textarea.js" />
+
+</filelist>
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.textfield/public/scripts">
+<file name="Textfield.js" />
+
+</filelist>
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.tip/public/scripts">
+<file name="TipBox.js" />
+
+</filelist>
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.typefield/public/scripts">
+<file name="TypeField.js" />
+
+</filelist>
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.ucalendar/public/scripts">
+<file name="Calendar.js" />
+
+</filelist>
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.ucalendargroup/public/scripts">
+<file name="CalendarGroup.js" />
+
+</filelist>
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.ucheckbox/public/scripts">
+<file name="Checkbox.js" />
+
+</filelist>
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.ucheckboxgroup/public/scripts">
+<file name="CheckboxGroup.js" />
+
+</filelist>
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.window/public/scripts">
+<file name="drag.js" />
+<file name="Window.js" />
+
+</filelist>
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.zcombox/public/scripts">
+<file name="Combox.js" />
+
+</filelist>
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.ztree/public/scripts">
+<file name="Ztree.js" />
+
+</filelist>
+</concat>
+</target>
+<target name="concat-js">
+<description>合并js</description>
+<concat destfile="${js_target}/components.js" encoding="utf-8" fixlastline="on">
+<filelist dir="${js_minify}/com.hundsun.jresplus.ui.base">
+<file name="horn.Base.js" />
+<file name="horn.CommonUtil.js" />
+<file name="horn.Ui.js" />
+<file name="horn.Util.Format.js" />
+<file name="Screen.js" />
+<file name="Validate.js" />
+
+</filelist>
+<filelist dir="${js_minify}/com.hundsun.jresplus.ui.buttonpanel">
+<file name="ButtonPanel.js" />
+
+</filelist>
+<filelist dir="${js_minify}/com.hundsun.jresplus.ui.datagrid">
+<file name="DataGrid.js" />
+
+</filelist>
+<filelist dir="${js_minify}/com.hundsun.jresplus.ui.field">
+<file name="Field.js" />
+
+</filelist>
+<filelist dir="${js_minify}/com.hundsun.jresplus.ui.fieldset">
+<file name="FieldSet.js" />
+
+</filelist>
+<filelist dir="${js_minify}/com.hundsun.jresplus.ui.form">
+<file name="Form.js" />
+
+</filelist>
+<filelist dir="${js_minify}/com.hundsun.jresplus.ui.grid">
+<file name="Grid.js" />
+
+</filelist>
+<filelist dir="${js_minify}/com.hundsun.jresplus.ui.hidden">
+<file name="Hidden.js" />
+
+</filelist>
+<filelist dir="${js_minify}/com.hundsun.jresplus.ui.label">
+<file name="Label.js" />
+
+</filelist>
+<filelist dir="${js_minify}/com.hundsun.jresplus.ui.menu">
+<file name="Menu.js" />
+
+</filelist>
+<filelist dir="${js_minify}/com.hundsun.jresplus.ui.messagebox">
+<file name="MessageBox.js" />
+
+</filelist>
+<filelist dir="${js_minify}/com.hundsun.jresplus.ui.pagebar">
+<file name="PageBar.js" />
+
+</filelist>
+<filelist dir="${js_minify}/com.hundsun.jresplus.ui.panel">
+<file name="Panel.js" />
+
+</filelist>
+<filelist dir="${js_minify}/com.hundsun.jresplus.ui.password">
+<file name="Password.js" />
+
+</filelist>
+<filelist dir="${js_minify}/com.hundsun.jresplus.ui.passwordgroup">
+<file name="PasswordGroup.js" />
+
+</filelist>
+<filelist dir="${js_minify}/com.hundsun.jresplus.ui.qurytable">
+<file name="QueryTable.js" />
+
+</filelist>
+<filelist dir="${js_minify}/com.hundsun.jresplus.ui.radio">
+<file name="Radio.js" />
+
+</filelist>
+<filelist dir="${js_minify}/com.hundsun.jresplus.ui.select">
+<file name="Select.js" />
+
+</filelist>
+<filelist dir="${js_minify}/com.hundsun.jresplus.ui.selecttree">
+<file name="SelectTree.js" />
+
+</filelist>
+<filelist dir="${js_minify}/com.hundsun.jresplus.ui.tabpanel">
+<file name="TabPanel.js" />
+
+</filelist>
+<filelist dir="${js_minify}/com.hundsun.jresplus.ui.targetselect">
+<file name="TargetSelect.js" />
+
+</filelist>
+<filelist dir="${js_minify}/com.hundsun.jresplus.ui.textarea">
+<file name="Textarea.js" />
+
+</filelist>
+<filelist dir="${js_minify}/com.hundsun.jresplus.ui.textfield">
+<file name="Textfield.js" />
+
+</filelist>
+<filelist dir="${js_minify}/com.hundsun.jresplus.ui.tip">
+<file name="TipBox.js" />
+
+</filelist>
+<filelist dir="${js_minify}/com.hundsun.jresplus.ui.typefield">
+<file name="TypeField.js" />
+
+</filelist>
+<filelist dir="${js_minify}/com.hundsun.jresplus.ui.ucalendar">
+<file name="Calendar.js" />
+
+</filelist>
+<filelist dir="${js_minify}/com.hundsun.jresplus.ui.ucalendargroup">
+<file name="CalendarGroup.js" />
+
+</filelist>
+<filelist dir="${js_minify}/com.hundsun.jresplus.ui.ucheckbox">
+<file name="Checkbox.js" />
+
+</filelist>
+<filelist dir="${js_minify}/com.hundsun.jresplus.ui.ucheckboxgroup">
+<file name="CheckboxGroup.js" />
+
+</filelist>
+<filelist dir="${js_minify}/com.hundsun.jresplus.ui.window">
+<file name="drag.js" />
+<file name="Window.js" />
+
+</filelist>
+<filelist dir="${js_minify}/com.hundsun.jresplus.ui.zcombox">
+<file name="Combox.js" />
+
+</filelist>
+<filelist dir="${js_minify}/com.hundsun.jresplus.ui.ztree">
+<file name="Ztree.js" />
+
+</filelist>
+</concat>
+</target>
+<target name="concat-css">
+<description>合并css并压缩</description>
+<concat destfile="${css_concat}/components.css" encoding="utf-8" fixlastline="on">
+<filelist dir="${root_path}/build/com.hundsun.jresplus.ui.base/public/css">
+<file name="base.css" />
+<file name="screen.css" />
+
+</filelist><filelist dir="${root_path}/build/com.hundsun.jresplus.ui.buttonpanel/public/css">
+<file name="button.css" />
+
+</filelist><filelist dir="${root_path}/build/com.hundsun.jresplus.ui.common.css/public/css">
+<file name="datagrid.css" />
+<file name="message.css" />
+
+</filelist><filelist dir="${root_path}/build/com.hundsun.jresplus.ui.datagrid/public/css">
+<file name="datagridCss.css" />
+
+</filelist><filelist dir="${root_path}/build/com.hundsun.jresplus.ui.datetimepicker/public/css">
+
+</filelist><filelist dir="${root_path}/build/com.hundsun.jresplus.ui.field/public/css">
+
+</filelist><filelist dir="${root_path}/build/com.hundsun.jresplus.ui.fieldset/public/css">
+
+</filelist><filelist dir="${root_path}/build/com.hundsun.jresplus.ui.form/public/css">
+
+</filelist><filelist dir="${root_path}/build/com.hundsun.jresplus.ui.grid/public/css">
+<file name="grid.css" />
+
+</filelist><filelist dir="${root_path}/build/com.hundsun.jresplus.ui.hidden/public/css">
+
+</filelist><filelist dir="${root_path}/build/com.hundsun.jresplus.ui.jquery/public/css">
+
+</filelist><filelist dir="${root_path}/build/com.hundsun.jresplus.ui.label/public/css">
+<file name="label.css" />
+
+</filelist><filelist dir="${root_path}/build/com.hundsun.jresplus.ui.menu/public/css">
+<file name="menu.css" />
+
+</filelist><filelist dir="${root_path}/build/com.hundsun.jresplus.ui.messagebox/public/css">
+
+</filelist><filelist dir="${root_path}/build/com.hundsun.jresplus.ui.pagebar/public/css">
+<file name="pagebar.css" />
+
+</filelist><filelist dir="${root_path}/build/com.hundsun.jresplus.ui.panel/public/css">
+<file name="panel.css" />
+
+</filelist><filelist dir="${root_path}/build/com.hundsun.jresplus.ui.password/public/css">
+<file name="password.css" />
+
+</filelist><filelist dir="${root_path}/build/com.hundsun.jresplus.ui.passwordgroup/public/css">
+<file name="password-group.css" />
+
+</filelist><filelist dir="${root_path}/build/com.hundsun.jresplus.ui.qurytable/public/css">
+<file name="queryTable.css" />
+
+</filelist><filelist dir="${root_path}/build/com.hundsun.jresplus.ui.radio/public/css">
+<file name="radio.css" />
+
+</filelist><filelist dir="${root_path}/build/com.hundsun.jresplus.ui.select/public/css">
+<file name="select.css" />
+
+</filelist><filelist dir="${root_path}/build/com.hundsun.jresplus.ui.selecttree/public/css">
+<file name="selectTree.css" />
+
+</filelist><filelist dir="${root_path}/build/com.hundsun.jresplus.ui.tabpanel/public/css">
+<file name="hc_tabpanel.css" />
+<file name="tab.css" />
+
+</filelist><filelist dir="${root_path}/build/com.hundsun.jresplus.ui.targetselect/public/css">
+<file name="targetselect.css" />
+
+</filelist><filelist dir="${root_path}/build/com.hundsun.jresplus.ui.textarea/public/css">
+<file name="textarea.css" />
+
+</filelist><filelist dir="${root_path}/build/com.hundsun.jresplus.ui.textfield/public/css">
+<file name="textfield.css" />
+
+</filelist><filelist dir="${root_path}/build/com.hundsun.jresplus.ui.tip/public/css">
+<file name="tip.css" />
+
+</filelist><filelist dir="${root_path}/build/com.hundsun.jresplus.ui.typefield/public/css">
+<file name="typefield.css" />
+
+</filelist><filelist dir="${root_path}/build/com.hundsun.jresplus.ui.ucalendar/public/css">
+<file name="calendar.css" />
+
+</filelist><filelist dir="${root_path}/build/com.hundsun.jresplus.ui.ucalendargroup/public/css">
+<file name="calendar-group.css" />
+
+</filelist><filelist dir="${root_path}/build/com.hundsun.jresplus.ui.ucheckbox/public/css">
+<file name="checkbox.css" />
+
+</filelist><filelist dir="${root_path}/build/com.hundsun.jresplus.ui.ucheckboxgroup/public/css">
+<file name="checkbox.css" />
+
+</filelist><filelist dir="${root_path}/build/com.hundsun.jresplus.ui.window/public/css">
+
+</filelist><filelist dir="${root_path}/build/com.hundsun.jresplus.ui.zcombox/public/css">
+
+</filelist><filelist dir="${root_path}/build/com.hundsun.jresplus.ui.ztree/public/css">
+<file name="ztree.css" />
+
+</filelist><filelist dir="${root_path}/build/com.hundsun.jresplus.ui.ztreeplugin/public/css">
+
+</filelist><filelist dir="${root_path}/build/com.hundsun.jresplus.ui.zverify/public/css">
+<file name="verify.css" />
+
+</filelist></concat>
+<apply executable="java" parallel="false" failonerror="true" dest="${css_target}" append="false" force="true">
+<filelist dir="${css_concat}">
+<file name="components.css" />
+</filelist>
+<arg line="-jar" />
+<arg path="${yuicompressor}" />
+<arg line="--charset utf-8" />
+<arg value="--type" />
+<arg value="css" />
+<arg value="-o" />
+<targetfile />
+<mapper type="glob" from="*.css" to="*.css" />
+</apply>
+</target>
+<target name="concat-vm">
+<description>合并vm文件</description>
+<concat destfile="${vm_target}/components.vm" encoding="utf-8" fixlastline="on">
+<path path="${root_path}/build/com.hundsun.jresplus.ui.base/public/vm/base.vm" />
+<path path="${root_path}/build/com.hundsun.jresplus.ui.base/public/vm/blankcol.vm" />
+<path path="${root_path}/build/com.hundsun.jresplus.ui.base/public/vm/xssutil.vm" />
+<path path="${root_path}/build/com.hundsun.jresplus.ui.buttonpanel/public/vm/buttonGroup.vm" />
+<path path="${root_path}/build/com.hundsun.jresplus.ui.buttonpanel/public/vm/buttonPanel.vm" />
+<path path="${root_path}/build/com.hundsun.jresplus.ui.buttonpanel/public/vm/buttonPanelEx.vm" />
+<path path="${root_path}/build/com.hundsun.jresplus.ui.datagrid/public/vm/datagrid.vm" />
+<path path="${root_path}/build/com.hundsun.jresplus.ui.fieldset/public/vm/fieldset.vm" />
+<path path="${root_path}/build/com.hundsun.jresplus.ui.form/public/vm/form.vm" />
+<path path="${root_path}/build/com.hundsun.jresplus.ui.grid/public/vm/grid.vm" />
+<path path="${root_path}/build/com.hundsun.jresplus.ui.hidden/public/vm/hidden.vm" />
+<path path="${root_path}/build/com.hundsun.jresplus.ui.label/public/vm/label.vm" />
+<path path="${root_path}/build/com.hundsun.jresplus.ui.menu/public/vm/menu.vm" />
+<path path="${root_path}/build/com.hundsun.jresplus.ui.pagebar/public/vm/pageBar.vm" />
+<path path="${root_path}/build/com.hundsun.jresplus.ui.panel/public/vm/panel.vm" />
+<path path="${root_path}/build/com.hundsun.jresplus.ui.password/public/vm/password.vm" />
+<path path="${root_path}/build/com.hundsun.jresplus.ui.passwordgroup/public/vm/passwordgroup.vm" />
+<path path="${root_path}/build/com.hundsun.jresplus.ui.qurytable/public/vm/queryTable.vm" />
+<path path="${root_path}/build/com.hundsun.jresplus.ui.radio/public/vm/radio.vm" />
+<path path="${root_path}/build/com.hundsun.jresplus.ui.select/public/vm/select.vm" />
+<path path="${root_path}/build/com.hundsun.jresplus.ui.selecttree/public/vm/selectTree.vm" />
+<path path="${root_path}/build/com.hundsun.jresplus.ui.tabpanel/public/vm/tabPanel.vm" />
+<path path="${root_path}/build/com.hundsun.jresplus.ui.tabpanel/public/vm/tabPanelContent.vm" />
+<path path="${root_path}/build/com.hundsun.jresplus.ui.targetselect/public/vm/targetSelect.vm" />
+<path path="${root_path}/build/com.hundsun.jresplus.ui.textarea/public/vm/textarea.vm" />
+<path path="${root_path}/build/com.hundsun.jresplus.ui.textfield/public/vm/textfield.vm" />
+<path path="${root_path}/build/com.hundsun.jresplus.ui.typefield/public/vm/typefield.vm" />
+<path path="${root_path}/build/com.hundsun.jresplus.ui.ucalendar/public/vm/calendar.vm" />
+<path path="${root_path}/build/com.hundsun.jresplus.ui.ucalendargroup/public/vm/calendargroup.vm" />
+<path path="${root_path}/build/com.hundsun.jresplus.ui.ucheckbox/public/vm/checkbox.vm" />
+<path path="${root_path}/build/com.hundsun.jresplus.ui.ucheckboxgroup/public/vm/checkboxGroup.vm" />
+<path path="${root_path}/build/com.hundsun.jresplus.ui.window/public/vm/window.vm" />
+<path path="${root_path}/build/com.hundsun.jresplus.ui.zcombox/public/vm/combox.vm" />
+<path path="${root_path}/build/com.hundsun.jresplus.ui.ztree/public/vm/ztree.vm" />
+</concat>
+</target>
+<target name="copy-img">
+<description>复制组件图片资源</description>
+<copy todir="${css_target}/">
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.base/resources/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.buttonpanel/resources/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.common.css/resources/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.datagrid/resources/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.datetimepicker/resources/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.field/resources/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.fieldset/resources/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.form/resources/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.grid/resources/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.hidden/resources/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.jquery/resources/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.label/resources/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.menu/resources/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.messagebox/resources/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.pagebar/resources/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.panel/resources/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.password/resources/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.passwordgroup/resources/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.qurytable/resources/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.radio/resources/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.select/resources/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.selecttree/resources/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.tabpanel/resources/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.targetselect/resources/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.textarea/resources/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.textfield/resources/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.tip/resources/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.typefield/resources/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.ucalendar/resources/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.ucalendargroup/resources/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.ucheckbox/resources/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.ucheckboxgroup/resources/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.window/resources/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.zcombox/resources/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.ztree/resources/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.ztreeplugin/resources/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.zverify/resources/" />
+</copy>
+<copy todir="${plugin_target}/">
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.base/plugins/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.buttonpanel/plugins/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.common.css/plugins/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.datagrid/plugins/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.datetimepicker/plugins/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.field/plugins/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.fieldset/plugins/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.form/plugins/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.grid/plugins/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.hidden/plugins/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.jquery/plugins/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.label/plugins/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.menu/plugins/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.messagebox/plugins/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.pagebar/plugins/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.panel/plugins/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.password/plugins/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.passwordgroup/plugins/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.qurytable/plugins/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.radio/plugins/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.select/plugins/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.selecttree/plugins/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.tabpanel/plugins/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.targetselect/plugins/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.textarea/plugins/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.textfield/plugins/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.tip/plugins/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.typefield/plugins/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.ucalendar/plugins/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.ucalendargroup/plugins/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.ucheckbox/plugins/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.ucheckboxgroup/plugins/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.window/plugins/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.zcombox/plugins/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.ztree/plugins/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.ztreeplugin/plugins/" />
+<fileset dir="${root_path}/build/com.hundsun.jresplus.ui.zverify/plugins/" />
+</copy>
+</target>
+</project>

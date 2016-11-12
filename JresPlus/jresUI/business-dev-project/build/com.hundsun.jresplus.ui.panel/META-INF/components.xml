@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui-components xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+          xsi:noNamespaceSchemaLocation="components.xsd">
+	<namespace>com.hundsun.jresplus.ui.panel</namespace>
+	<name>面板组件包</name>
+	<description><![CDATA[面板组件属于容器组件，一般做为单行组件的容器使用述]]></description>
+	<dependencies>
+		<dependency>
+			<namespace>com.hundsun.jresplus.ui.base</namespace>
+			<description><![CDATA[基础组件包]]></description>
+		</dependency>
+	</dependencies>
+	<components>
+		<component>
+			<category>VM</category>
+			<id>Horn.Panel</id>
+			<name>面板组件</name>
+			<description><![CDATA[测试组件的描述信息]]></description>
+			<ideinfo>
+				<label>面板组件</label>
+				<icon>images/component/panel.png</icon>
+				<template>
+					<![CDATA[
+					#@panel({"expandable":false,"isExpand":false})
+
+ 					#end
+					]]>	
+				</template>
+			</ideinfo>
+		</component>
+	</components>
+</ui-components>

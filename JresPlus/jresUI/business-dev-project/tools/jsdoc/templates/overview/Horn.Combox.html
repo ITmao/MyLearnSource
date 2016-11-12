@@ -1,0 +1,58 @@
+
+<h3>combox </h3>
+<p>替代html的select组件，有更加丰富的交互和功能</p>
+ <img src="../resource/images/select.png"/>
+
+<h4>继承组件</h4>
+<ul>
+	<li><a href="../symbols/Horn.Field.html">Horn.Field</a></li>
+</ul>
+
+<h4>适用范围</h4>
+<p>
+替代原生html的实现，支持单选和多选，也可以绑定数据词典，但是不支持筛选
+</p>
+<h4>约束</h4>
+<p>
+	<ol>
+		<li>无</li>
+	</ol>
+</p>
+<h4>注意事项</h4>
+<p>
+	<ol>
+		<li>如果需要自定义code和text，codeField属性和textField必须同时设置</li>
+		<li>需要使用panel组件做为容器</li>
+	</ol>
+</p>
+
+<h4>使用示例</h4>
+<p>动态字典</p>
+<textarea name="code" class="html" style="display: none;">
+#combox({"headItem":{"label":"", "value":"请选择..."}, "name":"test1","label":"combox","defValue":"", "dictName": "country"})
+</textarea>
+
+<p>多选</p>
+<textarea name="code" class="html" style="display: none;">
+#combox({"multiple": true, "headItem":{"label":"", "value":"请选择..."}, "name":"test1","label":"combox","defValue":"", "dictName": "country"})
+</textarea>
+
+<p>静态数据</p>
+<textarea name="code" class="html" style="display: none;">
+#combox({"name":"test1","label":"combox","items":[
+	{"text":"葡萄","code":"0"},
+	{"text":"苹果","code":"1"},
+	{"text":"香蕉","code":"2"},
+	{"text":"桔子","code":"3"}
+]})
+</textarea>
+
+<p>自定义显示字段和隐藏字段名</p>
+<textarea name="code" class="html" style="display: none;">
+#combox({"codeField": "idCode", "textField": "desc", "name":"test1","label":"combox","defValue":"3","items":[
+	{"desc":"葡萄","idCode":"0"},
+	{"desc":"苹果","idCode":"1"},
+	{"desc":"香蕉","idCode":"2"},
+	{"desc":"桔子","idCode":"3"}
+]})
+</textarea>

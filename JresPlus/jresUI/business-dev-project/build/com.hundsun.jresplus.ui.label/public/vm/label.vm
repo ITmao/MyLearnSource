@@ -1,0 +1,90 @@
+#**   
+ * @author huling   
+ * @class
+ * @name label
+ * @param cols {String} 跨列数
+ * @param id {String} 唯一标识
+ * @param dictName {String} 字典名称
+ * @param items {Array} 静态字典（若有的话）
+ * @param value {String} 初始值
+ * @param hiddenName {String} 如有值，则以此name提交一个当前的值到后台。
+ * @description blankcol组件，空白占位符组件
+ * @see The <a href="huling@hundsun.com">huling</a >.   
+ * @example \#label({"cols":"3","label":"用户名"})
+ * @since version 0.1
+ *#	
+#**
+ * @lends label
+ *#
+#macro(label $uiLabelConfig)
+	#set($col = 4)
+	#set($cols = "")
+    #if($layoutcolumn) 
+    	#if($layoutcolumn==1)
+			#set($col = 12)
+		#elseif($layoutcolumn==2)
+			#set($col = 6)
+			#if($uiLabelConfig.cols&&$uiLabelConfig.cols=="2")
+				#set($cols = "g-grid-6-row")
+			#end
+		#elseif($layoutcolumn==3)
+			#set($col = 4)
+			#if($uiLabelConfig.cols)
+				#if($uiLabelConfig.cols==3)
+					#set($cols = "g-grid-4-row")
+				#elseif($uiLabelConfig.cols==2)
+					#set($cols = "g-grid-4-8-row")
+				#end
+			#end
+		#elseif($layoutcolumn==4)
+			#set($col = 3)
+			#if($uiLabelConfig.cols)
+				#if($uiLabelConfig.cols==4)
+					#set($cols = "g-grid-3-row")
+				#elseif($uiLabelConfig.cols==3)
+					#set($cols = "g-grid-3-9-row")
+				#elseif($uiLabelConfig.cols==2)
+					#set($cols = "g-grid-3-6-row")
+				#end
+			#end
+		#end
+    #end
+	#set($val = "")
+	#set($val = $!{uiLabelConfig.value})
+    #if((!$val || $val =="") && $uiLabelConfig.name )
+		#set($val =  "$horn.getValue($!uiLabelConfig.name)")
+	#end
+	#if($view && $uiLabelConfig.hiddenName)
+		#set($command = "$" + "!" + $!{uiLabelConfig.hiddenName} )
+		#set($val = "#evaluate($command)")
+    	#if(!$val || $val =="" )
+            #set($val =  "$horn.getValue($!uiLabelConfig.hiddenName)")
+		#end
+	#end
+	<div class="g-grid-$col #if($cols!="")$cols#end">
+	  	<div class="g-unit-wrap">
+			#if(!$uiLabelConfig.hiddenLabel)
+		    <label #if($layoutcolumn==1)class="g-grid-2 unit-label"#else class="g-grid-4 unit-label"#end><span ref="$!uiLabelConfig.name" title="$!{uiLabelConfig.label}">$!{uiLabelConfig.label}</span></label>
+		    #end
+			<div class="g-grid-8">
+				<div $horn.paramsCache($uiLabelConfig) id="$!{uiLabelConfig.id}" name="$!{uiLabelConfig.name}" alias="$!{uiLabelConfig.alias}" class="hc_label u-label" mutivalue="$!{uiLabelConfig.mutivalue}"
+    			title="$!{val}"
+    			#if($uiLabelConfig.dictName)
+    				dictName="$!{uiLabelConfig.dictName}"
+    				$horn.addGlobal('componentSelects_s',$!{uiLabelConfig.dictName})
+    			#end
+        		#if($uiLabelConfig.alias)
+        			alias="$!{uiLabelConfig.alias}"
+        		#end
+                #if($uiLabelConfig.dictName)
+    				dictName="$!{uiLabelConfig.dictName}"
+    				$horn.addGlobal('componentSelects_s',$!{uiLabelConfig.dictName})
+
+    			#end	
+    			>$!val</div>
+				#if($uiLabelConfig.hiddenName) <input type='hidden' name='$uiLabelConfig.hiddenName' value='$!val' /> #end
+			</div>
+	    </div>
+	 </div>
+	
+#end

@@ -1,0 +1,292 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/*
+<span class='line'>  2</span>  * -----------------------------------------------------------------------
+<span class='line'>  3</span>  * 修订记录：
+<span class='line'>  4</span>  * 2014-2-11     zhangc   修正错误显示逻辑，removeError之后无法再次显示的问题
+<span class='line'>  5</span>  * 2014-2-26     zhangc   修正翻译后内容超长溢出的问题。
+<span class='line'>  6</span>  * 2015-04-20    zhangsu  BUG #9731 需求11320--label原先有value值，再用setvalue设置值，tip还是原先的值
+<span class='line'>  7</span>  * ----------------------------------------------------------------------- 
+<span class='line'>  8</span>  */</span><span class="WHIT">
+<span class='line'>  9</span> </span><span class="COMM">/**
+<span class='line'> 10</span>  * @name Horn.Label   
+<span class='line'> 11</span>  * @class
+<span class='line'> 12</span>  * 用于显示标签的标签组件&lt;/br>
+<span class='line'> 13</span>  */</span><span class="WHIT">	</span><span class="WHIT">
+<span class='line'> 14</span> </span><span class="COMM">/**
+<span class='line'> 15</span>  * @lends Horn.Label#
+<span class='line'> 16</span>  */</span><span class="WHIT">
+<span class='line'> 17</span> 
+<span class='line'> 18</span> </span><span class="COMM">/**
+<span class='line'> 19</span>  * 组件唯一标识
+<span class='line'> 20</span>  * @name Horn.Label#&lt;b>id&lt;/b>
+<span class='line'> 21</span>  * @type String
+<span class='line'> 22</span>  * @default
+<span class='line'> 23</span>  */</span><span class="WHIT">
+<span class='line'> 24</span> </span><span class="COMM">/**
+<span class='line'> 25</span>  * 组件的名字
+<span class='line'> 26</span>  * @name Horn.Label#&lt;b>name&lt;/b>
+<span class='line'> 27</span>  * @type String
+<span class='line'> 28</span>  * @default
+<span class='line'> 29</span>  */</span><span class="WHIT">
+<span class='line'> 30</span> </span><span class="COMM">/**
+<span class='line'> 31</span>  * 组件的别名，名字相同时，加别名区分
+<span class='line'> 32</span>  * @name Horn.Label#&lt;b>alias&lt;/b>
+<span class='line'> 33</span>  * @type String
+<span class='line'> 34</span>  * @default ""
+<span class='line'> 35</span>  * @ignore
+<span class='line'> 36</span>  * @example
+<span class='line'> 37</span>  * var comp = Horn.getComp("name","alias")
+<span class='line'> 38</span>  */</span><span class="WHIT">
+<span class='line'> 39</span> </span><span class="COMM">/**
+<span class='line'> 40</span>  * 组件的初始值(值过长时，将截断字符，以...代替，鼠标移上去显示全部内容)
+<span class='line'> 41</span>  * @name Horn.Label#&lt;b>value&lt;/b>
+<span class='line'> 42</span>  * @type String
+<span class='line'> 43</span>  * @default ""
+<span class='line'> 44</span>  * @example
+<span class='line'> 45</span>  * 无
+<span class='line'> 46</span>  */</span><span class="WHIT">
+<span class='line'> 47</span> </span><span class="COMM">/**
+<span class='line'> 48</span>  * 标签的显示文本(内容过长时，将截断字符，以...代替，鼠标移上去显示全部内容)
+<span class='line'> 49</span>  * @name Horn.Label#&lt;b>label&lt;/b>
+<span class='line'> 50</span>  * @type String
+<span class='line'> 51</span>  * @default
+<span class='line'> 52</span>  */</span><span class="WHIT">
+<span class='line'> 53</span> </span><span class="COMM">/**
+<span class='line'> 54</span>  * 隐藏标签（也就是label属性）。适用场景：单独使用一个组件，但是又不想要label的。不推荐混合适用，否则布局会乱。
+<span class='line'> 55</span>  * @name Horn.Label#hiddenLabel
+<span class='line'> 56</span>  * @type Boolean
+<span class='line'> 57</span>  * @default false
+<span class='line'> 58</span>  * @example
+<span class='line'> 59</span>  * 无
+<span class='line'> 60</span>  */</span><span class="WHIT">
+<span class='line'> 61</span> </span><span class="COMM">/**
+<span class='line'> 62</span>  * 标签组件布局上所占的列数（1-4）
+<span class='line'> 63</span>  * @name Horn.Label#&lt;b>cols&lt;/b>
+<span class='line'> 64</span>  * @type Int
+<span class='line'> 65</span>  * @default 1
+<span class='line'> 66</span>  * @example
+<span class='line'> 67</span>  * 无
+<span class='line'> 68</span>  */</span><span class="WHIT">
+<span class='line'> 69</span> </span><span class="COMM">/**
+<span class='line'> 70</span>  * 组件的静态字典列表
+<span class='line'> 71</span>  * @name Horn.Label#&lt;b>items&lt;/b>
+<span class='line'> 72</span>  * @type Array[Json
+<span class='line'> 73</span>  * @default  
+<span class='line'> 74</span>  * @ignore
+<span class='line'> 75</span>  * @example
+<span class='line'> 76</span>  * "items":[{"label":"a","value":"a1"},{"label":"b","value":"b1"},{"label":"c","value":"c1"}]
+<span class='line'> 77</span>  */</span><span class="WHIT">
+<span class='line'> 78</span> </span><span class="COMM">/**
+<span class='line'> 79</span>  * 组件的动态字典名字
+<span class='line'> 80</span>  * @name Horn.Label#&lt;b>dictName&lt;/b>
+<span class='line'> 81</span>  * @type String
+<span class='line'> 82</span>  * @default  
+<span class='line'> 83</span>  * @ignore
+<span class='line'> 84</span>  * @example
+<span class='line'> 85</span>  * 无
+<span class='line'> 86</span>  */</span><span class="WHIT">
+<span class='line'> 87</span> </span><span class="COMM">/**
+<span class='line'> 88</span>  * 组件的隐藏名，如有值，则以此name提交一个当前的值到后台
+<span class='line'> 89</span>  * @name Horn.Label#&lt;b>hiddenName&lt;/b>
+<span class='line'> 90</span>  * @type String
+<span class='line'> 91</span>  * @default  
+<span class='line'> 92</span>  * @example
+<span class='line'> 93</span>  * 无
+<span class='line'> 94</span>  */</span><span class="WHIT">
+<span class='line'> 95</span> </span><span class="COMM">/**
+<span class='line'> 96</span>  * 组件的标签字段名字
+<span class='line'> 97</span>  * @name Horn.Label#&lt;b>labelField&lt;/b>
+<span class='line'> 98</span>  * @type String
+<span class='line'> 99</span>  * @default "label" 
+<span class='line'>100</span>  * @ignore
+<span class='line'>101</span>  * @example
+<span class='line'>102</span>  * 无
+<span class='line'>103</span>  */</span><span class="WHIT">
+<span class='line'>104</span> </span><span class="COMM">/**
+<span class='line'>105</span>  * 组件的值字段名字
+<span class='line'>106</span>  * @name Horn.Label#&lt;b>valueField&lt;/b>
+<span class='line'>107</span>  * @type String
+<span class='line'>108</span>  * @default "value" 
+<span class='line'>109</span>  * @ignore
+<span class='line'>110</span>  * @example
+<span class='line'>111</span>  * 无
+<span class='line'>112</span>  */</span><span class="WHIT">
+<span class='line'>113</span> </span><span class="WHIT"> </span><span class="COMM">/**
+<span class='line'>114</span>   * 组件的多个值时的分割符号,定义了分割符为多选,如果定义的分割为空，则用逗号分割
+<span class='line'>115</span>   * @name Horn.Label#&lt;b>delimiter&lt;/b>
+<span class='line'>116</span>   * @type String
+<span class='line'>117</span>   * @default "" 
+<span class='line'>118</span>   * @ignore
+<span class='line'>119</span>   * @example
+<span class='line'>120</span>   * 无
+<span class='line'>121</span>   */</span><span class="WHIT">
+<span class='line'>122</span> </span><span class="NAME">Horn.Label</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Horn.extend</span><span class="PUNC">(</span><span class="NAME">Horn.Base</span><span class="PUNC">,</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>123</span> </span><span class="WHIT">	</span><span class="NAME">COMPONENT_CLASS</span><span class="PUNC">:</span><span class="STRN">"Label"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>124</span> </span><span class="WHIT">	</span><span class="NAME">el</span><span class="PUNC">:</span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>125</span> </span><span class="WHIT">	</span><span class="NAME">dictName</span><span class="PUNC">:</span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>126</span> </span><span class="WHIT">	</span><span class="NAME">staticDict</span><span class="PUNC">:</span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>127</span> </span><span class="WHIT">	</span><span class="NAME">mutiValue</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>128</span> </span><span class="WHIT">	</span><span class="NAME">init</span><span class="PUNC">:</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">dom</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>129</span> </span><span class="WHIT">		</span><span class="NAME">Horn.Label.superclass.init.apply</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="NAME">arguments</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>130</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">params</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.params</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>131</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">params</span><span class="PUNC">[</span><span class="STRN">'name'</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">params</span><span class="PUNC">[</span><span class="STRN">'hiddenName'</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>132</span> </span><span class="WHIT">			</span><span class="NAME">this.name</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">params</span><span class="PUNC">[</span><span class="STRN">'name'</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">params</span><span class="PUNC">[</span><span class="STRN">'hiddenName'</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>133</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>134</span> </span><span class="COMM">//		this.mutiValue = params.multiple ;</span><span class="WHIT">
+<span class='line'>135</span> </span><span class="WHIT">		</span><span class="NAME">this.mutiValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">$</span><span class="PUNC">(</span><span class="NAME">dom</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">attr</span><span class="PUNC">(</span><span class="STRN">'mutivalue'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>136</span> </span><span class="WHIT">		</span><span class="WHIT">
+<span class='line'>137</span> </span><span class="WHIT">		</span><span class="NAME">this.label</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.el.prev</span><span class="PUNC">(</span><span class="STRN">'span'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>138</span> </span><span class="WHIT">		</span><span class="NAME">this.hidden</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.el.find</span><span class="PUNC">(</span><span class="STRN">'input:hidden'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>139</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">params</span><span class="PUNC">[</span><span class="STRN">'hiddenName'</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">                            </span><span class="COMM">//STORY #8616 </span><span class="WHIT">
+<span class='line'>140</span> </span><span class="WHIT">			</span><span class="NAME">this.hidden</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.el.next</span><span class="PUNC">(</span><span class="STRN">'input:hidden'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>141</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>142</span> </span><span class="WHIT">		</span><span class="COMM">/*
+<span class='line'>143</span> 		if(!this.hidden.get(0)){
+<span class='line'>144</span> 			this.hidden = this.el.next('input:hidden');
+<span class='line'>145</span> 		}*/</span><span class="WHIT">
+<span class='line'>146</span> </span><span class="WHIT">		</span><span class="NAME">this.li</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.el.parent</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>147</span> </span><span class="WHIT">		</span><span class="WHIT">
+<span class='line'>148</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.hidden</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>149</span> </span><span class="WHIT">			</span><span class="NAME">this.el.parent</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">append</span><span class="PUNC">(</span><span class="NAME">this.hidden</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>150</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>151</span> </span><span class="WHIT">		</span><span class="WHIT">
+<span class='line'>152</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">dictName</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">params</span><span class="PUNC">[</span><span class="STRN">"dictName"</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>153</span> </span><span class="WHIT">			</span><span class="NAME">staticDict</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">params</span><span class="PUNC">[</span><span class="STRN">"items"</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>154</span> </span><span class="WHIT">			</span><span class="NAME">labelName</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">params</span><span class="PUNC">[</span><span class="STRN">'labelField'</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="STRN">'label'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>155</span> </span><span class="WHIT">			</span><span class="NAME">valueName</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">params</span><span class="PUNC">[</span><span class="STRN">'valueField'</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="STRN">'value'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>156</span> </span><span class="WHIT">			</span><span class="NAME">delimiter</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">params</span><span class="PUNC">[</span><span class="STRN">'delimiter'</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>157</span> </span><span class="WHIT">			</span><span class="NAME">value</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.hidden.get</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">?</span><span class="NAME">this.hidden.val</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">:</span><span class="NAME">this.el.html</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>158</span> </span><span class="WHIT">			</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>159</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">delimiter</span><span class="PUNC">==</span><span class="STRN">""</span><span class="PUNC">||</span><span class="NAME">this.delimiter</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>160</span> </span><span class="WHIT">			</span><span class="NAME">this.delimiter</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="NAME">delimiter</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>161</span> </span><span class="WHIT">			</span><span class="NAME">this.mutiValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="COMM">//只要定义了分隔符，皆为多选</span><span class="WHIT">
+<span class='line'>162</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>163</span> </span><span class="WHIT">			</span><span class="NAME">this.delimiter</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="STRN">","</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>164</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>165</span> </span><span class="WHIT">		</span><span class="WHIT">
+<span class='line'>166</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">staticDict</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>167</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">tmpDict</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>168</span> </span><span class="WHIT">			</span><span class="KEYW">for</span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">=</span><span class="NUMB">0</span><span class="PUNC">;</span><span class="NAME">i</span><span class="PUNC">&lt;</span><span class="NAME">staticDict.length</span><span class="PUNC">;</span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>169</span> </span><span class="WHIT">				</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">obj</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">staticDict</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>170</span> </span><span class="WHIT">				</span><span class="NAME">tmpDict</span><span class="PUNC">[</span><span class="NAME">obj</span><span class="PUNC">[</span><span class="NAME">labelName</span><span class="PUNC">]</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">obj</span><span class="PUNC">[</span><span class="NAME">valueName</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>171</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>172</span> </span><span class="WHIT">			</span><span class="NAME">staticDict</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">tmpDict</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>173</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>174</span> </span><span class="WHIT">		</span><span class="WHIT">
+<span class='line'>175</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">dictName</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>176</span> </span><span class="WHIT">			</span><span class="NAME">this.dictName</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">dictName</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="WHIT">
+<span class='line'>177</span> </span><span class="WHIT">			</span><span class="NAME">staticDict</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Horn.getDict</span><span class="PUNC">(</span><span class="NAME">dictName</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>178</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>179</span> </span><span class="WHIT">		</span><span class="WHIT">
+<span class='line'>180</span> </span><span class="WHIT">		</span><span class="NAME">this.staticDict</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">staticDict</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>181</span> </span><span class="WHIT">		</span><span class="WHIT">
+<span class='line'>182</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>183</span> </span><span class="WHIT">			</span><span class="NAME">this.setValue</span><span class="PUNC">(</span><span class="WHIT">  </span><span class="NAME">value</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>184</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>185</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>186</span> </span><span class="WHIT">	 </span><span class="COMM">/**
+<span class='line'>187</span>      * @description 设置标签的值
+<span class='line'>188</span>      * @function
+<span class='line'>189</span>      * @ignore
+<span class='line'>190</span>      * @name Horn.Label#setValue
+<span class='line'>191</span>      * @param {String} val 标签的值
+<span class='line'>192</span>      */</span><span class="WHIT">
+<span class='line'>193</span> </span><span class="WHIT">	</span><span class="NAME">setValue</span><span class="PUNC">:</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>194</span> </span><span class="WHIT">		</span><span class="NAME">value</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">$.trim</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>195</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.hidden</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>196</span> </span><span class="WHIT">			</span><span class="NAME">this.hidden.val</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>197</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>198</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='line'>199</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">dictName</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.dictName</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>200</span> </span><span class="WHIT">			</span><span class="NAME">staticDict</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.staticDict</span><span class="WHIT">
+<span class='line'>201</span> </span><span class="WHIT">			</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>202</span> </span><span class="WHIT">		</span><span class="WHIT">
+<span class='line'>203</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">getVal</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">val</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>204</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">tmpval</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>205</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">staticDict</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>206</span> </span><span class="WHIT">				</span><span class="NAME">tmpval</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">staticDict</span><span class="PUNC">[</span><span class="NAME">val</span><span class="PUNC">]</span><span class="PUNC">||</span><span class="NAME">val</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>207</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">dictName</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>208</span> </span><span class="WHIT">				</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">li</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">$</span><span class="PUNC">(</span><span class="STRN">'.hc_checkboxdiv[ref_target='</span><span class="PUNC">+</span><span class="NAME">dictName</span><span class="PUNC">+</span><span class="STRN">'_s]'</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">find</span><span class="PUNC">(</span><span class="STRN">"li[key="</span><span class="PUNC">+</span><span class="NAME">val</span><span class="PUNC">+</span><span class="STRN">"]"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>209</span> </span><span class="WHIT">				</span><span class="NAME">tmpval</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">li.attr</span><span class="PUNC">(</span><span class="STRN">'title'</span><span class="PUNC">)</span><span class="PUNC">||</span><span class="NAME">val</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>210</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>211</span> </span><span class="WHIT">				</span><span class="NAME">tmpval</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">val</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>212</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>213</span> </span><span class="WHIT">			</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">tmpval</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>214</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>215</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">fval</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>216</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">overflow</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>217</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">value</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">value</span><span class="PUNC">=</span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>218</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.mutiValue</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>219</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">vv</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>220</span> </span><span class="WHIT">			</span><span class="NAME">$</span><span class="PUNC">(</span><span class="NAME">value.split</span><span class="PUNC">(</span><span class="NAME">this.delimiter</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">idx</span><span class="PUNC">,</span><span class="NAME">item</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>221</span> </span><span class="WHIT">				</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">v</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">getVal</span><span class="PUNC">(</span><span class="NAME">item</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>222</span> </span><span class="WHIT">				</span><span class="NAME">vv.push</span><span class="PUNC">(</span><span class="NAME">v</span><span class="PUNC">||</span><span class="NAME">item</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>223</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>224</span> </span><span class="WHIT">			</span><span class="NAME">fval</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">vv.join</span><span class="PUNC">(</span><span class="NAME">this.delimiter</span><span class="PUNC">||</span><span class="STRN">','</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="COMM">//若存在分隔符但分隔符为空，则用逗号代替</span><span class="WHIT">
+<span class='line'>225</span> </span><span class="WHIT">			</span><span class="NAME">overflow</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>226</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>227</span> </span><span class="WHIT">			</span><span class="NAME">fval</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">getVal</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>228</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>229</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='line'>230</span> </span><span class="WHIT">		</span><span class="NAME">this.el.html</span><span class="PUNC">(</span><span class="NAME">fval</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>231</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">title</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.el.attr</span><span class="PUNC">(</span><span class="STRN">'title'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>232</span> </span><span class="WHIT">		</span><span class="COMM">/*if(title){
+<span class='line'>233</span> 			//如何title已经存在，什么都不用做 20151103 modify by 周智星
+<span class='line'>234</span> 		}else{
+<span class='line'>235</span> 			this.el.attr('title',fval);
+<span class='line'>236</span> 		}*/</span><span class="WHIT">
+<span class='line'>237</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">overflow</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>238</span> </span><span class="WHIT">			</span><span class="NAME">this.el.addClass</span><span class="PUNC">(</span><span class="STRN">'hc_texthide'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>239</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>240</span> 
+<span class='line'>241</span> </span><span class="WHIT">		</span><span class="NAME">this.el.attr</span><span class="PUNC">(</span><span class="STRN">'title'</span><span class="PUNC">,</span><span class="NAME">fval</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>242</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>243</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='line'>244</span>      * @description 取标签的值
+<span class='line'>245</span>      * @function
+<span class='line'>246</span>      * @ignore
+<span class='line'>247</span>      * @name Horn.Label#getValue
+<span class='line'>248</span>      * @return 标签的值
+<span class='line'>249</span>      */</span><span class="WHIT">
+<span class='line'>250</span> </span><span class="WHIT">	</span><span class="NAME">getValue</span><span class="PUNC">:</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>251</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.hidden.get</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>252</span> </span><span class="WHIT">			</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.hidden.val</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>253</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>254</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.el.text</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>255</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>256</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>257</span>      * @description 设置标签的名字
+<span class='line'>258</span>      * @function
+<span class='line'>259</span>      * @ignore
+<span class='line'>260</span>      * @name Horn.Label#setLabel
+<span class='line'>261</span>      * @param {string} val 标签的名字
+<span class='line'>262</span>      */</span><span class="WHIT">
+<span class='line'>263</span> </span><span class="WHIT">	</span><span class="NAME">setLabel</span><span class="PUNC">:</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">val</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>264</span> </span><span class="WHIT">		</span><span class="NAME">this.label.html</span><span class="PUNC">(</span><span class="NAME">val</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>265</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>266</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>267</span>      * @description 取标签的名字
+<span class='line'>268</span>      * @function
+<span class='line'>269</span>      * @ignore
+<span class='line'>270</span>      * @name Horn.Label#getLabel
+<span class='line'>271</span>      * @return 标签的名字
+<span class='line'>272</span>      */</span><span class="WHIT">
+<span class='line'>273</span> </span><span class="WHIT">	</span><span class="NAME">getLabel</span><span class="PUNC">:</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>274</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.label.html</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>275</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>276</span> </span><span class="WHIT">	</span><span class="NAME">hide</span><span class="PUNC">:</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>277</span> </span><span class="WHIT">		</span><span class="NAME">this.li.hide</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>278</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>279</span> </span><span class="WHIT">	</span><span class="NAME">show</span><span class="PUNC">:</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>280</span> </span><span class="WHIT">		</span><span class="NAME">this.li.show</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>281</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>282</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>283</span> 
+<span class='line'>284</span> </span><span class="NAME">Horn.regUI</span><span class="PUNC">(</span><span class="STRN">"div.hc_label"</span><span class="PUNC">,</span><span class="NAME">Horn.Label</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>285</span> </span></pre></body></html>

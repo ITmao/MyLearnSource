@@ -1,0 +1,90 @@
+
+<h3>Horn UI基础对象</h3>
+<p>Horn的js对象，提供获取UI组件的功能</p>
+
+<h4>适用范围</h4>
+<p>
+	Horn本身并不提供宏组件，只是javascript对象，但提供的获取UI组件的方法。
+</p>
+
+<h4>注意事项</h4>
+<p>
+	<ol>
+		<li>使用Horn.ready注册初始函数，需要注意执行顺序：<br/>
+		 head资源引入的顺序，如果是在components的js加载之前加载，则之前的jquery.ready会先被执行；<br/>
+		 在components的js加载之后的脚本以及代码中的片段代码遵守以下规则：<br>
+		 Horn.ready的执行顺序优先于jquery.ready<br>
+		 多个Horn.ready按照代码顺序执行</li>
+		 <li>所有组件的名称（name）不能重名，否则使用名称取组件时只能获取到最后一个</li>
+		 <li>所有组件的ID（id）不能重名，否则使用id 取组件时只能获取到第一个</li>
+	</ol>
+</p>
+<h4>使用示例</h4>
+<p>通过组件名称获取组件:</p>
+<textarea name="code" class="html" style="display: none;">
+#textfield({"label":"用户姓名", "name":"userName"})
+#jscode()
+	Horn.getComp("userName").setValue("zhangsan");
+#end
+</textarea>
+<p>通过组件ID获取组件:</p>
+<textarea name="code" class="html" style="display: none;">
+#textfield({"label":"用户姓名","id":"userNameField", "name":"userName"})
+#jscode()
+	Horn.getCompById("userNameField").setValue("zhangsan");
+#end
+</textarea>
+<p>使用Horn.ready与jquery的ready的执行顺序</p>
+<textarea name="code" class="java" style="display:none;">
+#jscode()
+	console.log("执行顺序---1");
+	$(function() {
+		console.log("执行顺序---13");
+	});
+	Horn.ready(function () {
+		console.log("执行顺序---7");
+	});
+	$(function() {
+		console.log("执行顺序---14");
+	});
+	Horn.ready(function () {
+		console.log("执行顺序---8");
+	});
+	console.log("执行顺序---2");
+
+#end
+#@screen()
+#jscode()
+	console.log("执行顺序---3");
+	Horn.ready(function () {
+		console.log("执行顺序---9");
+	});
+	$(function() {
+		console.log("执行顺序---15");
+	});
+	Horn.ready(function () {
+		console.log("执行顺序---10");
+	});
+	$(function() {
+		console.log("执行顺序---16");
+	});
+	console.log("执行顺序---4");
+#end
+#end
+#jscode()
+	console.log("执行顺序---5");
+	Horn.ready(function () {
+		console.log("执行顺序---11");
+	});
+	$(function() {
+		console.log("执行顺序---17");
+	});
+	Horn.ready(function () {
+		console.log("执行顺序---12");
+	});
+	$(function() {
+		console.log("执行顺序---18");
+	});
+	console.log("执行顺序---6");
+#end
+</textarea>

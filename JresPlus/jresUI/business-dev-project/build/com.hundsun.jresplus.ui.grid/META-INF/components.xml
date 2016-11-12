@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui-components xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+          xsi:noNamespaceSchemaLocation="components.xsd">
+	<namespace>com.hundsun.jresplus.ui.grid</namespace>
+	<name>静态态表格组件包</name>
+	<description><![CDATA[组件包的具体描述]]></description>
+	<dependencies>
+		<dependency>
+			<namespace>com.hundsun.jresplus.ui.base</namespace>
+			<description><![CDATA[基础组件包]]></description>
+		</dependency>
+		<dependency>
+			<namespace>com.hundsun.jresplus.ui.common.css</namespace>
+			<description><![CDATA[公共样式组件包]]></description>
+		</dependency>
+	</dependencies>
+	<components>
+		<component>
+			<category>VM</category>
+			<id>Horn.Grid</id>
+			<name>静态态表格组件</name>
+			<description><![CDATA[组件的描述信息]]></description>
+			<ideinfo>
+				<label>静态态表格组件</label>
+				<icon>images/component/grid.png</icon>
+				<template>
+					<![CDATA[
+						#grid({  
+           				"id" : "",
+							   	"name":"",
+						      "title":"",
+						      "titleButtons":[],
+							   "numbercolumn":false,
+							   "selectModel":"multi",
+							   "textOverHidden":false,
+							   "rowSelect":true,
+							   "events" :[],
+							   "items":[]
+							,"data":$data
+						})
+					]]>	
+				</template>
+			</ideinfo>
+		</component>
+	</components>
+</ui-components>

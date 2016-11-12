@@ -1,0 +1,31 @@
+
+<h3>站点搜索组件</h3>
+<p>内置form，包含有且仅有一个输入框和一个提交按钮，可以通过点击按钮做表单提交</p>
+ <img src="../resource/images/search_panel.png"/>
+<h4>依赖组件</h4>
+<ul>
+	<li>无</li>
+</ul>
+
+<h4>适用范围</h4>
+<p>
+框架主页面上的站点搜索功能，<span style="color: red;">除非您非常了解此组件的使用场景，否则不建议直接使用此组件</span>
+</p>
+<h4>约束</h4>
+<p>
+	<ol>
+		<li>本组件的适用范围非常受限，在使用之前请确认要使用的场景，是否可以通过panel+form的方式替代</li>
+	</ol>
+</p>
+<h4>注意事项</h4>
+<p>
+	<ol>
+		<li>无</li>
+	</ol>
+</p>
+
+<h4>使用示例</h4>
+<p>示例1:</p>
+<textarea name="code" class="html" style="display: none;">
+#search_panel({"url":"$appServer.get('/main_search.htm')","name":"query","text":"请输入客户号"})
+</textarea>

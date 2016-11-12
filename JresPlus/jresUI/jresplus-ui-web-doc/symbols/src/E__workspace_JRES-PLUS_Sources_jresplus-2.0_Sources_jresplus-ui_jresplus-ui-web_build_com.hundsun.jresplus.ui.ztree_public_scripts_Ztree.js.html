@@ -1,0 +1,1584 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/*
+<span class='line'>  2</span>  * -----------------------------------------------------------------------
+<span class='line'>  3</span>  * 修订纪录
+<span class='line'>  4</span>  * 2014-3-11 		谢晶晶		修正注释文档
+<span class='line'>  5</span>  * -----------------------------------------------------------------------
+<span class='line'>  6</span>  */</span><span class="WHIT">
+<span class='line'>  7</span> </span><span class="COMM">/**
+<span class='line'>  8</span>  * @name Horn.ZtreePanel
+<span class='line'>  9</span>  * @class
+<span class='line'> 10</span>  * ztree封装组件&lt;/br>
+<span class='line'> 11</span>  * 基于ztree 3.5版本上进行封装树形展示组件，支持同步和异步树，拥有3.5版本的所有功能,同时拥有展开、收缩、刷新和模糊收缩功能
+<span class='line'> 12</span>  */</span><span class="WHIT">
+<span class='line'> 13</span> </span><span class="COMM">/**
+<span class='line'> 14</span>  * @lends Horn.ZtreePanel#
+<span class='line'> 15</span>  */</span><span class="WHIT">
+<span class='line'> 16</span> </span><span class="WHIT">	 </span><span class="WHIT">
+<span class='line'> 17</span> </span><span class="WHIT"> </span><span class="COMM">/**
+<span class='line'> 18</span>  * 组件的唯一标示
+<span class='line'> 19</span>  * @name Horn.ZtreePanel#&lt;b>id&lt;/b>
+<span class='line'> 20</span>  * @type String
+<span class='line'> 21</span>  * @default ""
+<span class='line'> 22</span>  * @example
+<span class='line'> 23</span>  * 无
+<span class='line'> 24</span>  */</span><span class="WHIT">
+<span class='line'> 25</span> </span><span class="COMM">/**
+<span class='line'> 26</span>  * 组件的名称，必填
+<span class='line'> 27</span>  * @name Horn.ZtreePanel#&lt;b>name&lt;/b>
+<span class='line'> 28</span>  * @type String
+<span class='line'> 29</span>  * @default ""
+<span class='line'> 30</span>  * @example
+<span class='line'> 31</span>  * 无
+<span class='line'> 32</span>  */</span><span class="WHIT">
+<span class='line'> 33</span> </span><span class="WHIT">	 </span><span class="WHIT">
+<span class='line'> 34</span> </span><span class="COMM">/**
+<span class='line'> 35</span>  * 同步加载，静态数据
+<span class='line'> 36</span>  * @name Horn.ZtreePanel#&lt;b>data&lt;/b>
+<span class='line'> 37</span>  * @type String
+<span class='line'> 38</span>  * @default 
+<span class='line'> 39</span>  * @example
+<span class='line'> 40</span>  * '[{"id":"1","name":"root"},{"id":"21","name":"sub11","pId":"1"},{"id":"22","name":"sub12","pId":"1"}]'
+<span class='line'> 41</span>  */</span><span class="WHIT">
+<span class='line'> 42</span> </span><span class="COMM">/**
+<span class='line'> 43</span>  * 是否异步
+<span class='line'> 44</span>  * @name Horn.ZtreePanel#&lt;b>async&lt;/b>
+<span class='line'> 45</span>  * @type Boolean
+<span class='line'> 46</span>  * @default false
+<span class='line'> 47</span>  * @example
+<span class='line'> 48</span>  * #ztree({  
+<span class='line'> 49</span>  *  "id":"tree1",  
+<span class='line'> 50</span>  *  "name":"ztree1",
+<span class='line'> 51</span>  *	"checkMode":"checkbox",
+<span class='line'> 52</span>  *	"async":true,
+<span class='line'> 53</span>  *   "url":"$appServer.get('/test/ztree/asynTree.htm')"})
+<span class='line'> 54</span>  */</span><span class="WHIT">	</span><span class="WHIT">
+<span class='line'> 55</span> </span><span class="COMM">/**
+<span class='line'> 56</span>  * 异步加载,url返回的数据格式跟静态的data一致(async为true时生效)
+<span class='line'> 57</span>  * @name Horn.ZtreePanel#&lt;b>url&lt;/b>
+<span class='line'> 58</span>  * @type String
+<span class='line'> 59</span>  * @default ""
+<span class='line'> 60</span>  * @example
+<span class='line'> 61</span>  * #ztree({  
+<span class='line'> 62</span>  *  "id":"tree1",  
+<span class='line'> 63</span>  *  "name":"ztree1",
+<span class='line'> 64</span>  *	"checkMode":"checkbox",
+<span class='line'> 65</span>  *	"async":true,
+<span class='line'> 66</span>  *   "url":"$appServer.get('/test/ztree/asynTree.htm')"})
+<span class='line'> 67</span>  */</span><span class="WHIT">	</span><span class="WHIT">
+<span class='line'> 68</span> </span><span class="COMM">/**
+<span class='line'> 69</span>  * 选择模式"checkbox","radio"&lt;br/>
+<span class='line'> 70</span>  * 注：模式为radio时，勾选子节点，父节点不是勾选状态，灰色标示作用&lt;br/>
+<span class='line'> 71</span>  *   模式为checkbox时，勾选子节点，父节点默认勾选状态
+<span class='line'> 72</span>  * @name Horn.ZtreePanel#&lt;b>checkMode&lt;/b>
+<span class='line'> 73</span>  * @type String 
+<span class='line'> 74</span>  * @default 
+<span class='line'> 75</span>  * @example
+<span class='line'> 76</span>  * #ztree({  
+<span class='line'> 77</span>  *  "id":"tree1",  
+<span class='line'> 78</span>  *  "name":"ztree1",
+<span class='line'> 79</span>  *	"checkMode":"checkbox",
+<span class='line'> 80</span>  *	"async":true,
+<span class='line'> 81</span>  *   "url":"$appServer.get('/test/ztree/asynTree.htm')"})
+<span class='line'> 82</span>  */</span><span class="WHIT">
+<span class='line'> 83</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='line'> 84</span> </span><span class="COMM">/**
+<span class='line'> 85</span>  * 页面加载时，树组件默认是否展开
+<span class='line'> 86</span>  * @name Horn.ZtreePanel#&lt;b>expandFirst&lt;/b>
+<span class='line'> 87</span>  * @type Boolean
+<span class='line'> 88</span>  * @default false
+<span class='line'> 89</span>  * @example
+<span class='line'> 90</span>  * 无
+<span class='line'> 91</span>  */</span><span class="WHIT">
+<span class='line'> 92</span> </span><span class="COMM">/**
+<span class='line'> 93</span>  * 是否显示操作按钮栏（包含展开、收缩和刷新）,默认不显示&lt;br/>
+<span class='line'> 94</span>  * 注：收缩/展开按钮，若有选中节点则展开/收缩选中节点，无选中节点，则展开/收缩整棵树；&lt;br/>
+<span class='line'> 95</span>  *   收缩/展开按钮，不会触发树的收缩与展开事件，必须点树节点击前面的加减号，才能触发树的收缩与展开事件；
+<span class='line'> 96</span>  * @name Horn.ZtreePanel#&lt;b>toolbar&lt;/b>
+<span class='line'> 97</span>  * @type Boolean
+<span class='line'> 98</span>  * @default false
+<span class='line'> 99</span>  * @example
+<span class='line'>100</span>  * #ztree({  
+<span class='line'>101</span>  *       "id":"tree1",  
+<span class='line'>102</span>  *       "name":"ztree1",
+<span class='line'>103</span>  *   	"checkMode":"checkbox",
+<span class='line'>104</span>  *   	"onClick":"nodeClick",
+<span class='line'>105</span>  *   	"async":true,
+<span class='line'>106</span>  *		"toolbar":false,
+<span class='line'>107</span>  *      "url":"$appServer.get('/test/ztree/asynTree.htm')"})
+<span class='line'>108</span>  */</span><span class="WHIT">
+<span class='line'>109</span> </span><span class="COMM">/**
+<span class='line'>110</span>  * 是否使用模糊搜索,默认不使用
+<span class='line'>111</span>  * @name Horn.ZtreePanel#&lt;b>search&lt;/b>
+<span class='line'>112</span>  * @type Boolean
+<span class='line'>113</span>  * @default false
+<span class='line'>114</span>  * @example
+<span class='line'>115</span>  * #ztree({  
+<span class='line'>116</span>  *       "id":"tree1",  
+<span class='line'>117</span>  *       "name":"ztree1",
+<span class='line'>118</span>  *   	"checkMode":"checkbox",
+<span class='line'>119</span>  *   	"onClick":"nodeClick",
+<span class='line'>120</span>  *   	"async":true,
+<span class='line'>121</span>  *		"toolbar":false,
+<span class='line'>122</span>  *		"search":false,
+<span class='line'>123</span>  *      "url":"$appServer.get('/test/ztree/asynTree.htm')"})
+<span class='line'>124</span>  */</span><span class="WHIT">
+<span class='line'>125</span> </span><span class="COMM">/**
+<span class='line'>126</span>  * 重新渲染的回调函数
+<span class='line'>127</span>  * @name Horn.ZtreePanel#&lt;b>reRenderFn&lt;/b>
+<span class='line'>128</span>  * @type String
+<span class='line'>129</span>  * @default 
+<span class='line'>130</span>  * @example
+<span class='line'>131</span>  *  #ztree({  
+<span class='line'>132</span>  *  "id":"tree1",  
+<span class='line'>133</span>  *  "name":"ztree1",
+<span class='line'>134</span>  *	"checkMode":"checkbox",
+<span class='line'>135</span>  *  "reRenderFn":"reRenderFn",
+<span class='line'>136</span>  *	"async":true,
+<span class='line'>137</span>  *   "url":"$appServer.get('/test/ztree/asynTree.htm')"})
+<span class='line'>138</span>  * #jscode()
+<span class='line'>139</span>  * ##srcNode 源树节点
+<span class='line'>140</span>  * ##newDom　目标树节点
+<span class='line'>141</span>  * function reRenderFn(srcNode,newDom){
+<span class='line'>142</span>  * 	newDom.before("&lt;span>*&lt;/span>")
+<span class='line'>143</span>  * }
+<span class='line'>144</span>  *  #end
+<span class='line'>145</span>  */</span><span class="WHIT">
+<span class='line'>146</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='line'>147</span> </span><span class="COMM">/**
+<span class='line'>148</span>  * 用于捕获节点被点击的事件回调函数
+<span class='line'>149</span>  * 注：该点击事件只针对节点文本，对于节点前面的单选/复选按钮无效&lt;br/>
+<span class='line'>150</span>  * 如果设置了beforeClick 方法，且返回 false，将无法触发 onClick 事件回调函数
+<span class='line'>151</span>  * @name Horn.ZtreePanel#&lt;b>nodeclick或onClick&lt;/b>
+<span class='line'>152</span>  * @type String
+<span class='line'>153</span>  * @default 
+<span class='line'>154</span>  * @example
+<span class='line'>155</span>  *  #ztree({  
+<span class='line'>156</span>  *  "id":"tree1",  
+<span class='line'>157</span>  *  "name":"ztree1",
+<span class='line'>158</span>  *	"checkMode":"checkbox",
+<span class='line'>159</span>  *  "onClick":"nodeClick",
+<span class='line'>160</span>  *	"async":true,
+<span class='line'>161</span>  *   "url":"$appServer.get('/test/ztree/asynTree.htm')"})
+<span class='line'>162</span>  * #jscode()
+<span class='line'>163</span>  * ##标准的 js event 对象
+<span class='line'>164</span>  * ##对应 zTree 的 treeId，便于用户操控
+<span class='line'>165</span>  * ##treeNode被单击的节点 JSON 数据对象
+<span class='line'>166</span>  *   function nodeClick(event, treeId, treeNode){
+<span class='line'>167</span>  *   	alert(treeNode.tId + ", " + treeNode.name);
+<span class='line'>168</span>  *   }
+<span class='line'>169</span>  *  #end
+<span class='line'>170</span>  */</span><span class="WHIT">
+<span class='line'>171</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='line'>172</span> </span><span class="COMM">/**
+<span class='line'>173</span>  * 节点点击前触发的函数,return false则取消点击事件执行
+<span class='line'>174</span>  * @name Horn.ZtreePanel#&lt;b>beforenodeclick或beforeClick&lt;/b>
+<span class='line'>175</span>  * @type String
+<span class='line'>176</span>  * @default 
+<span class='line'>177</span>  * @example
+<span class='line'>178</span>   #ztree({  
+<span class='line'>179</span>  *  "id":"tree1",  
+<span class='line'>180</span>  *  "name":"ztree1",
+<span class='line'>181</span>  *	"checkMode":"checkbox",
+<span class='line'>182</span>  *  "beforeClick":"nodeBeforeClick",
+<span class='line'>183</span>  *	"async":true,
+<span class='line'>184</span>  *   "url":"$appServer.get('/test/ztree/asynTree.htm')"})
+<span class='line'>185</span>  * #jscode()
+<span class='line'>186</span>  *  ##对应 zTree 的 treeId，便于用户操控
+<span class='line'>187</span>  *  ##treeNode被单击的节点 JSON 数据对象
+<span class='line'>188</span>  *  ## clickFlag 节点被点击后的选中操作类型(0,1,2)
+<span class='line'>189</span>  *   function nodeBeforeClick(treeId, treeNode, clickFlag){
+<span class='line'>190</span>  *   	alert(treeNode.tId + ", " + treeNode.name);
+<span class='line'>191</span>  *   }
+<span class='line'>192</span>  *  #end
+<span class='line'>193</span>  */</span><span class="WHIT">
+<span class='line'>194</span> </span><span class="COMM">/**
+<span class='line'>195</span>  * 用于捕获异步加载之前的事件回调函数，zTree 根据返回值确定是否允许进行异步加载
+<span class='line'>196</span>  * @name Horn.ZtreePanel#&lt;b>beforeAsync&lt;/b>
+<span class='line'>197</span>  * @type String
+<span class='line'>198</span>  * @default 
+<span class='line'>199</span>  * @example
+<span class='line'>200</span>   #ztree({  
+<span class='line'>201</span>  *  "id":"tree1",  
+<span class='line'>202</span>  *  "name":"ztree1",
+<span class='line'>203</span>  *	"checkMode":"checkbox",
+<span class='line'>204</span>  *  "beforeAsync":"beforeAsync",
+<span class='line'>205</span>  *	"async":true,
+<span class='line'>206</span>  *   "url":"$appServer.get('/test/ztree/asynTree.htm')"})
+<span class='line'>207</span>  * #jscode()
+<span class='line'>208</span>  *  ##treeId:对应 zTree 的 treeId，便于用户操控
+<span class='line'>209</span>  *  ##treeNode:进行异步加载的父节点 JSON 数据对象，针对根进行异步加载时，treeNode = null 
+<span class='line'>210</span>  *  ##禁止 id 为 1 的父节点进行异步加载操作 
+<span class='line'>211</span>  * function beforeAsync(treeId, treeNode) {
+<span class='line'>212</span>  * 	return (treeNode.id !== 1);
+<span class='line'>213</span>  * };
+<span class='line'>214</span>  *  #end
+<span class='line'>215</span>  */</span><span class="WHIT">
+<span class='line'>216</span> </span><span class="COMM">/**
+<span class='line'>217</span>  * 用于捕获 勾选 或 取消勾选 之前的事件回调函数，并且根据返回值确定是否允许 勾选 或 取消勾选
+<span class='line'>218</span>  * @name Horn.ZtreePanel#&lt;b>beforeCheck&lt;/b>
+<span class='line'>219</span>  * @type String
+<span class='line'>220</span>  * @default 
+<span class='line'>221</span>  * @example
+<span class='line'>222</span>   #ztree({  
+<span class='line'>223</span>  *  "id":"tree1",  
+<span class='line'>224</span>  *  "name":"ztree1",
+<span class='line'>225</span>  *	"checkMode":"checkbox",
+<span class='line'>226</span>  *  "beforeCheck":"beforeCheck",
+<span class='line'>227</span>  *	"async":true,
+<span class='line'>228</span>  *   "url":"$appServer.get('/test/ztree/asynTree.htm')"})
+<span class='line'>229</span>  * #jscode()
+<span class='line'>230</span>  *  ##对应 zTree 的 treeId，便于用户操控
+<span class='line'>231</span>  *  ##treeNode被单击的节点 JSON 数据对象
+<span class='line'>232</span>  *   function beforeCheck(treeId, treeNode){
+<span class='line'>233</span>  *   	alert(treeNode.tId + ", " + treeNode.name);
+<span class='line'>234</span>  *   }
+<span class='line'>235</span>  *  #end
+<span class='line'>236</span>  */</span><span class="WHIT">
+<span class='line'>237</span> </span><span class="COMM">/**
+<span class='line'>238</span>  * 用于捕获异步加载正常结束的事件回调函数。
+<span class='line'>239</span>  * 如果设置了beforeAsync 事件，且返回 false，将无法触发 onAsyncSuccess / onAsyncError 事件回调函数。
+<span class='line'>240</span>  * @name Horn.ZtreePanel#&lt;b>onAsyncSuccess&lt;/b>
+<span class='line'>241</span>  * @type String
+<span class='line'>242</span>  * @default 
+<span class='line'>243</span>  * @example
+<span class='line'>244</span>   #ztree({  
+<span class='line'>245</span>  *  "id":"tree1",  
+<span class='line'>246</span>  *  "name":"ztree1",
+<span class='line'>247</span>  *	"checkMode":"checkbox",
+<span class='line'>248</span>  *  "onAsyncSuccess":"onAsyncSuccess",
+<span class='line'>249</span>  *	"async":true,
+<span class='line'>250</span>  *   "url":"$appServer.get('/test/ztree/asynTree.htm')"})
+<span class='line'>251</span>  * #jscode()
+<span class='line'>252</span>  *  ##treeId: 对应 zTree 的 treeId，便于用户操控
+<span class='line'>253</span>  *  ##treeNode: 进行异步加载的父节点 JSON 数据对象,针对根进行异步加载时，treeNode = null
+<span class='line'>254</span>  *  ##异步加载成功后，弹出提示信息
+<span class='line'>255</span>  *  function onAsyncSuccess(event, treeId, treeNode, msg) {
+<span class='line'>256</span>  * 	 alert(msg);
+<span class='line'>257</span>  *  };
+<span class='line'>258</span>  *  #end
+<span class='line'>259</span>  */</span><span class="WHIT">
+<span class='line'>260</span> </span><span class="COMM">/**
+<span class='line'>261</span>  * 用于捕获异步加载出现异常错误的事件回调函数。
+<span class='line'>262</span>  * 如果设置了beforeAsync 事件，且返回 false，将无法触发 onAsyncSuccess / onAsyncError 事件回调函数。
+<span class='line'>263</span>  * @name Horn.ZtreePanel#&lt;b>onAsyncError&lt;/b>
+<span class='line'>264</span>  * @type String
+<span class='line'>265</span>  * @default 
+<span class='line'>266</span>  * @example
+<span class='line'>267</span>   #ztree({  
+<span class='line'>268</span>  *  "id":"tree1",  
+<span class='line'>269</span>  *  "name":"ztree1",
+<span class='line'>270</span>  *	"checkMode":"checkbox",
+<span class='line'>271</span>  *  "onAsyncError":"onAsyncError",
+<span class='line'>272</span>  *	"async":true,
+<span class='line'>273</span>  *  "url":"$appServer.get('/test/ztree/asynTree.htm')"})
+<span class='line'>274</span>  * #jscode()
+<span class='line'>275</span>  *  ##treeId: 对应 zTree 的 treeId，便于用户操控
+<span class='line'>276</span>  *  ##treeNode: 进行异步加载的父节点 JSON 数据对象,针对根进行异步加载时，treeNode = null
+<span class='line'>277</span>  *  ## 异步加载出现异常后，弹出错误信息
+<span class='line'>278</span>  *   function onAsyncError(event, treeId, treeNode, XMLHttpRequest, textStatus, errorThrown) {
+<span class='line'>279</span>  *   	alert(XMLHttpRequest);
+<span class='line'>280</span>  *   }
+<span class='line'>281</span>  *  #end
+<span class='line'>282</span>  */</span><span class="WHIT">
+<span class='line'>283</span> </span><span class="COMM">/**
+<span class='line'>284</span>  * 用于捕获父节点折叠之前的事件回调函数，并且根据返回值确定是否允许折叠操作&lt;br/>
+<span class='line'>285</span>  * 注：收缩/展开按钮，不会触发该事件，必须点击树节点击前面的减号，才能触发该事件；
+<span class='line'>286</span>  * @name Horn.ZtreePanel#&lt;b>beforeCollapse&lt;/b>
+<span class='line'>287</span>  * @type String
+<span class='line'>288</span>  * @default 
+<span class='line'>289</span>  * @example
+<span class='line'>290</span>   #ztree({  
+<span class='line'>291</span>  *  "id":"tree1",  
+<span class='line'>292</span>  *  "name":"ztree1",
+<span class='line'>293</span>  *	"checkMode":"checkbox",
+<span class='line'>294</span>  *  "beforeCollapse":"beforeCollapse",
+<span class='line'>295</span>  *	"async":true,
+<span class='line'>296</span>  *   "url":"$appServer.get('/test/ztree/asynTree.htm')"})
+<span class='line'>297</span>  * #jscode()
+<span class='line'>298</span>  *  ##对应 zTree 的 treeId，便于用户操控
+<span class='line'>299</span>  *  ##treeNode被单击的节点 JSON 数据对象
+<span class='line'>300</span>  *   function beforeCollapse(treeId, treeNode) {
+<span class='line'>301</span>  *   	alert(treeNode.tId + ", " + treeNode.name);
+<span class='line'>302</span>  *   }
+<span class='line'>303</span>  *  #end
+<span class='line'>304</span>  */</span><span class="WHIT">
+<span class='line'>305</span> </span><span class="COMM">/**
+<span class='line'>306</span>  * 用于捕获 zTree 上鼠标双击之前的事件回调函数，并且根据返回值确定触发 onDblClick 事件回调函数
+<span class='line'>307</span>  * @name Horn.ZtreePanel#&lt;b>beforeDblClick&lt;/b>
+<span class='line'>308</span>  * @type String
+<span class='line'>309</span>  * @default 
+<span class='line'>310</span>  * @example
+<span class='line'>311</span>   #ztree({  
+<span class='line'>312</span>  *  "id":"tree1",  
+<span class='line'>313</span>  *  "name":"ztree1",
+<span class='line'>314</span>  *	"checkMode":"checkbox",
+<span class='line'>315</span>  *  "beforeDblClick":"beforeDblClick",
+<span class='line'>316</span>  *	"async":true,
+<span class='line'>317</span>  *   "url":"$appServer.get('/test/ztree/asynTree.htm')"})
+<span class='line'>318</span>  * #jscode()
+<span class='line'>319</span>  *  ##对应 zTree 的 treeId，便于用户操控
+<span class='line'>320</span>  *  ##treeNode被单击的节点 JSON 数据对象
+<span class='line'>321</span>  *   function beforeDblClick(treeId, treeNode) {
+<span class='line'>322</span>  *   	alert(treeNode.tId + ", " + treeNode.name);
+<span class='line'>323</span>  *   }
+<span class='line'>324</span>  *  #end
+<span class='line'>325</span>  */</span><span class="WHIT">
+<span class='line'>326</span> </span><span class="COMM">/**
+<span class='line'>327</span>  * 用于捕获节点被拖拽之前的事件回调函数，并且根据返回值确定是否允许开启拖拽操作
+<span class='line'>328</span>  * @name Horn.ZtreePanel#&lt;b>beforeDrag&lt;/b>
+<span class='line'>329</span>  * @type String
+<span class='line'>330</span>  * @default 
+<span class='line'>331</span>  * @ignore
+<span class='line'>332</span>  * @example
+<span class='line'>333</span>   #ztree({  
+<span class='line'>334</span>  *  "id":"tree1",  
+<span class='line'>335</span>  *  "name":"ztree1",
+<span class='line'>336</span>  *	"checkMode":"checkbox",
+<span class='line'>337</span>  *  "beforeDrag":"beforeDrag",
+<span class='line'>338</span>  *	"async":true,
+<span class='line'>339</span>  *  "url":"$appServer.get('/test/ztree/asynTree.htm')"})
+<span class='line'>340</span>  * #jscode()
+<span class='line'>341</span>  *  ##对应 zTree 的 treeId，便于用户操控
+<span class='line'>342</span>  *  ##treeNode被单击的节点 JSON 数据对象
+<span class='line'>343</span>  *   function beforeDrag(treeId, treeNode) {
+<span class='line'>344</span>  *   	alert(treeNode.tId + ", " + treeNode.name);
+<span class='line'>345</span>  *   }
+<span class='line'>346</span>  *  #end
+<span class='line'>347</span>  */</span><span class="WHIT">
+<span class='line'>348</span> </span><span class="COMM">/**
+<span class='line'>349</span>  * 用于捕获拖拽节点移动到折叠状态的父节点后，即将自动展开该父节点之前的事件回调函数，并且根据返回值确定是否允许自动展开操作
+<span class='line'>350</span>  * @name Horn.ZtreePanel#&lt;b>beforeDragOpen&lt;/b>
+<span class='line'>351</span>  * @type String
+<span class='line'>352</span>  * @default 
+<span class='line'>353</span>  * @ignore
+<span class='line'>354</span>  * @example
+<span class='line'>355</span>   #ztree({  
+<span class='line'>356</span>  *  "id":"tree1",  
+<span class='line'>357</span>  *  "name":"ztree1",
+<span class='line'>358</span>  *	"checkMode":"checkbox",
+<span class='line'>359</span>  *  "beforeDragOpen":"beforeDragOpen",
+<span class='line'>360</span>  *	"async":true,
+<span class='line'>361</span>  *  "url":"$appServer.get('/test/ztree/asynTree.htm')"})
+<span class='line'>362</span>  * #jscode()
+<span class='line'>363</span>  *  ##对应 zTree 的 treeId，便于用户操控
+<span class='line'>364</span>  *  ##treeNode被单击的节点 JSON 数据对象
+<span class='line'>365</span>  *   function beforeDragOpen(treeId, treeNode) {
+<span class='line'>366</span>  *   	alert(treeNode.tId + ", " + treeNode.name);
+<span class='line'>367</span>  *   }
+<span class='line'>368</span>  *  #end
+<span class='line'>369</span>  */</span><span class="WHIT">
+<span class='line'>370</span> </span><span class="COMM">/**
+<span class='line'>371</span>  * 用于捕获拖拽节点移动到折叠状态的父节点后，即将自动展开该父节点之前的事件回调函数，并且根据返回值确定是否允许自动展开操作
+<span class='line'>372</span>  * @name Horn.ZtreePanel#&lt;b>beforeDrop&lt;/b>
+<span class='line'>373</span>  * @type String
+<span class='line'>374</span>  * @default 
+<span class='line'>375</span>  * @ignore
+<span class='line'>376</span>  * @example
+<span class='line'>377</span>   #ztree({  
+<span class='line'>378</span>  *  "id":"tree1",  
+<span class='line'>379</span>  *  "name":"ztree1",
+<span class='line'>380</span>  *	"checkMode":"checkbox",
+<span class='line'>381</span>  *  "beforeDrop":"beforeDrop",
+<span class='line'>382</span>  *	"async":true,
+<span class='line'>383</span>  *  "url":"$appServer.get('/test/ztree/asynTree.htm')"})
+<span class='line'>384</span>  * #jscode()
+<span class='line'>385</span>  *  ##对应 zTree 的 treeId，便于用户操控
+<span class='line'>386</span>  *  ##treeNode被单击的节点 JSON 数据对象
+<span class='line'>387</span>  *   function beforeDrop(treeId, treeNodes, targetNode, moveType) {
+<span class='line'>388</span>  *   	alert(treeNode.tId + ", " + treeNode.name);
+<span class='line'>389</span>  *   }
+<span class='line'>390</span>  *  #end
+<span class='line'>391</span>  */</span><span class="WHIT">
+<span class='line'>392</span> </span><span class="COMM">/**
+<span class='line'>393</span>  * 用于捕获节点编辑按钮的 click 事件，并且根据返回值确定是否允许进入名称编辑状态
+<span class='line'>394</span>  *    此事件回调函数最主要是用于捕获编辑按钮的点击事件，然后触发自定义的编辑界面操作。
+<span class='line'>395</span>  * @name Horn.ZtreePanel#&lt;b>beforeEditName&lt;/b>
+<span class='line'>396</span>  * @type String
+<span class='line'>397</span>  * @default 
+<span class='line'>398</span>  * @ignore
+<span class='line'>399</span>  * @example
+<span class='line'>400</span>   #ztree({  
+<span class='line'>401</span>  *  "id":"tree1",  
+<span class='line'>402</span>  *  "name":"ztree1",
+<span class='line'>403</span>  *	"checkMode":"checkbox",
+<span class='line'>404</span>  *  "beforeEditName":"beforeEditName",
+<span class='line'>405</span>  *	"async":true,
+<span class='line'>406</span>  *  "url":"$appServer.get('/test/ztree/asynTree.htm')"})
+<span class='line'>407</span>  * #jscode()
+<span class='line'>408</span>  *  ##对应 zTree 的 treeId，便于用户操控
+<span class='line'>409</span>  *  ##treeNode被单击的节点 JSON 数据对象
+<span class='line'>410</span>  *   function beforeEditName(treeId, treeNode) {
+<span class='line'>411</span>  *   	alert(treeNode.tId + ", " + treeNode.name);
+<span class='line'>412</span>  *   }
+<span class='line'>413</span>  *  #end
+<span class='line'>414</span>  */</span><span class="WHIT">
+<span class='line'>415</span> </span><span class="COMM">/**
+<span class='line'>416</span>  * 用于捕获父节点展开之前的事件回调函数，并且根据返回值确定是否允许展开操作&lt;br/>
+<span class='line'>417</span>  * 注：收缩/展开按钮，不会触发该事件，必须点击树节点击前面的加号，才能触发该事件；
+<span class='line'>418</span>  * @name Horn.ZtreePanel#&lt;b>beforeExpand&lt;/b>
+<span class='line'>419</span>  * @type String
+<span class='line'>420</span>  * @default 
+<span class='line'>421</span>  * @example
+<span class='line'>422</span>   #ztree({  
+<span class='line'>423</span>  *  "id":"tree1",  
+<span class='line'>424</span>  *  "name":"ztree1",
+<span class='line'>425</span>  *	"checkMode":"checkbox",
+<span class='line'>426</span>  *  "beforeExpand":"beforeExpand",
+<span class='line'>427</span>  *	"async":true,
+<span class='line'>428</span>  *  "url":"$appServer.get('/test/ztree/asynTree.htm')"})
+<span class='line'>429</span>  * #jscode()
+<span class='line'>430</span>  *  ##对应 zTree 的 treeId，便于用户操控
+<span class='line'>431</span>  *  ##treeNode被单击的节点 JSON 数据对象
+<span class='line'>432</span>  *   function beforeExpand(treeId, treeNode) {
+<span class='line'>433</span>  *   	alert(treeNode.tId + ", " + treeNode.name);
+<span class='line'>434</span>  *   }
+<span class='line'>435</span>  *  #end
+<span class='line'>436</span>  */</span><span class="WHIT">
+<span class='line'>437</span> </span><span class="COMM">/**
+<span class='line'>438</span>  * 用于捕获 zTree 上鼠标按键按下之前的事件回调函数，并且根据返回值确定触发 onMouseDown 事件回调函数
+<span class='line'>439</span>  * @name Horn.ZtreePanel#&lt;b>beforeMouseDown&lt;/b>
+<span class='line'>440</span>  * @type String
+<span class='line'>441</span>  * @default 
+<span class='line'>442</span>  * @example
+<span class='line'>443</span>   #ztree({  
+<span class='line'>444</span>  *  "id":"tree1",  
+<span class='line'>445</span>  *  "name":"ztree1",
+<span class='line'>446</span>  *	"checkMode":"checkbox",
+<span class='line'>447</span>  *  "beforeMouseDown":"beforeMouseDown",
+<span class='line'>448</span>  *	"async":true,
+<span class='line'>449</span>  *  "url":"$appServer.get('/test/ztree/asynTree.htm')"})
+<span class='line'>450</span>  * #jscode()
+<span class='line'>451</span>  *  ##对应 zTree 的 treeId，便于用户操控
+<span class='line'>452</span>  *  ##treeNode被单击的节点 JSON 数据对象
+<span class='line'>453</span>  *   function beforeMouseDown(treeId, treeNode) {
+<span class='line'>454</span>  *   	alert(treeNode.tId + ", " + treeNode.name);
+<span class='line'>455</span>  *   }
+<span class='line'>456</span>  *  #end
+<span class='line'>457</span>  */</span><span class="WHIT">
+<span class='line'>458</span> </span><span class="COMM">/**
+<span class='line'>459</span>  * 用于捕获 zTree 上鼠标按键松开之前的事件回调函数，并且根据返回值确定触发 onMouseUp 事件回调函数
+<span class='line'>460</span>  * @name Horn.ZtreePanel#&lt;b>beforeMouseUp&lt;/b>
+<span class='line'>461</span>  * @type String
+<span class='line'>462</span>  * @default 
+<span class='line'>463</span>  * @example
+<span class='line'>464</span>   #ztree({  
+<span class='line'>465</span>  *  "id":"tree1",  
+<span class='line'>466</span>  *  "name":"ztree1",
+<span class='line'>467</span>  *	"checkMode":"checkbox",
+<span class='line'>468</span>  *  "beforeMouseUp":"beforeMouseUp",
+<span class='line'>469</span>  *	"async":true,
+<span class='line'>470</span>  *  "url":"$appServer.get('/test/ztree/asynTree.htm')"})
+<span class='line'>471</span>  * #jscode()
+<span class='line'>472</span>  *  ##对应 zTree 的 treeId，便于用户操控
+<span class='line'>473</span>  *  ##treeNode被单击的节点 JSON 数据对象
+<span class='line'>474</span>  *   function beforeMouseUp(treeId, treeNode) {
+<span class='line'>475</span>  *   	alert(treeNode.tId + ", " + treeNode.name);
+<span class='line'>476</span>  *   }
+<span class='line'>477</span>  *  #end
+<span class='line'>478</span>  */</span><span class="WHIT">
+<span class='line'>479</span> </span><span class="COMM">/**
+<span class='line'>480</span>  * 用于捕获节点被删除之前的事件回调函数，并且根据返回值确定是否允许删除操作
+<span class='line'>481</span>  * @name Horn.ZtreePanel#&lt;b>beforeRemove&lt;/b>
+<span class='line'>482</span>  * @type String
+<span class='line'>483</span>  * @default
+<span class='line'>484</span>  * @ignore 
+<span class='line'>485</span>  * @example
+<span class='line'>486</span>   #ztree({  
+<span class='line'>487</span>  *  "id":"tree1",  
+<span class='line'>488</span>  *  "name":"ztree1",
+<span class='line'>489</span>  *	"checkMode":"checkbox",
+<span class='line'>490</span>  *  "beforeRemove":"beforeRemove",
+<span class='line'>491</span>  *	"async":true,
+<span class='line'>492</span>  *  "url":"$appServer.get('/test/ztree/asynTree.htm')"})
+<span class='line'>493</span>  * #jscode()
+<span class='line'>494</span>  *  ##对应 zTree 的 treeId，便于用户操控
+<span class='line'>495</span>  *  ##treeNode被单击的节点 JSON 数据对象
+<span class='line'>496</span>  *   function beforeRemove(treeId, treeNode) {
+<span class='line'>497</span>  *   	alert(treeNode.tId + ", " + treeNode.name);
+<span class='line'>498</span>  *   }
+<span class='line'>499</span>  *  #end
+<span class='line'>500</span>  */</span><span class="WHIT">
+<span class='line'>501</span> </span><span class="COMM">/**
+<span class='line'>502</span>  * 用于捕获节点编辑名称结束（Input 失去焦点 或 按下 Enter 键）之后，更新节点名称数据之前的事件回调函数，并且根据返回值确定是否允许更改名称的操作
+<span class='line'>503</span>  * 节点进入编辑名称状态后，按 ESC 键可以放弃当前修改，恢复原名称，取消编辑名称状态
+<span class='line'>504</span> *从 v3.5.13 开始，取消编辑状态也会触发此回调，根据 isCancel 参数判断
+<span class='line'>505</span>  * @name Horn.ZtreePanel#&lt;b>beforeRename&lt;/b>
+<span class='line'>506</span>  * @type String
+<span class='line'>507</span>  * @default 
+<span class='line'>508</span>  * @ignore
+<span class='line'>509</span>  * @example
+<span class='line'>510</span>   #ztree({  
+<span class='line'>511</span>  *  "id":"tree1",  
+<span class='line'>512</span>  *  "name":"ztree1",
+<span class='line'>513</span>  *	"checkMode":"checkbox",
+<span class='line'>514</span>  *  "beforeRename":"beforeRename",
+<span class='line'>515</span>  *	"async":true,
+<span class='line'>516</span>  *  "url":"$appServer.get('/test/ztree/asynTree.htm')"})
+<span class='line'>517</span>  * #jscode()
+<span class='line'>518</span>  *  ##对应 zTree 的 treeId，便于用户操控
+<span class='line'>519</span>  *  ##treeNode被单击的节点 JSON 数据对象
+<span class='line'>520</span>  *   function beforeRename(treeId, treeNode, newName, isCancel) {
+<span class='line'>521</span>  *   	alert(treeNode.tId + ", " + treeNode.name);
+<span class='line'>522</span>  *   }
+<span class='line'>523</span>  *  #end
+<span class='line'>524</span>  */</span><span class="WHIT">
+<span class='line'>525</span> </span><span class="COMM">/**
+<span class='line'>526</span>  * 用于捕获 zTree 上鼠标右键点击之前的事件回调函数，并且根据返回值确定触发 onRightClick 事件回调函数
+<span class='line'>527</span>  * @name Horn.ZtreePanel#&lt;b>beforeRightClick&lt;/b>
+<span class='line'>528</span>  * @type String
+<span class='line'>529</span>  * @default 
+<span class='line'>530</span>  * @example
+<span class='line'>531</span>   #ztree({  
+<span class='line'>532</span>  *  "id":"tree1",  
+<span class='line'>533</span>  *  "name":"ztree1",
+<span class='line'>534</span>  *	"checkMode":"checkbox",
+<span class='line'>535</span>  *  "beforeRightClick":"beforeRightClick",
+<span class='line'>536</span>  *	"async":true,
+<span class='line'>537</span>  *  "url":"$appServer.get('/test/ztree/asynTree.htm')"})
+<span class='line'>538</span>  * #jscode()
+<span class='line'>539</span>  *  ##对应 zTree 的 treeId，便于用户操控
+<span class='line'>540</span>  *  ##treeNode被单击的节点 JSON 数据对象
+<span class='line'>541</span>  *   function beforeRightClick(treeId, treeNode) {
+<span class='line'>542</span>  *   	alert(treeNode.tId + ", " + treeNode.name);
+<span class='line'>543</span>  *   }
+<span class='line'>544</span>  *  #end
+<span class='line'>545</span>  */</span><span class="WHIT">
+<span class='line'>546</span> </span><span class="COMM">/**
+<span class='line'>547</span>  * 用于捕获 checkbox / radio 被勾选 或 取消勾选的事件回调函数。
+<span class='line'>548</span>  *  如果设置了 beforeCheck 方法，且返回 false，将无法触发 onCheck 事件回调函数。
+<span class='line'>549</span>  * @name Horn.ZtreePanel#&lt;b>onCheck&lt;/b>
+<span class='line'>550</span>  * @type String
+<span class='line'>551</span>  * @default 
+<span class='line'>552</span>  * @example
+<span class='line'>553</span>   #ztree({  
+<span class='line'>554</span>  *  "id":"tree1",  
+<span class='line'>555</span>  *  "name":"ztree1",
+<span class='line'>556</span>  *	"checkMode":"checkbox",
+<span class='line'>557</span>  *  "onCheck":"onCheck",
+<span class='line'>558</span>  *	"async":true,
+<span class='line'>559</span>  *  "url":"$appServer.get('/test/ztree/asynTree.htm')"})
+<span class='line'>560</span>  * #jscode()
+<span class='line'>561</span>  *  ##对应 zTree 的 treeId，便于用户操控
+<span class='line'>562</span>  *  ##treeNode被单击的节点 JSON 数据对象
+<span class='line'>563</span>  *   function onCheck(event, treeId, treeNode) {
+<span class='line'>564</span>  *   	alert(treeNode.tId + ", " + treeNode.name);
+<span class='line'>565</span>  *   }
+<span class='line'>566</span>  *  #end
+<span class='line'>567</span>  */</span><span class="WHIT">
+<span class='line'>568</span> </span><span class="COMM">/**
+<span class='line'>569</span>  * 用于捕获节点被折叠的事件回调函数。
+<span class='line'>570</span>  *  如果设置了 beforeCollapse 方法，且返回 false，将无法触发 onCollapse 事件回调函数。&lt;br/>
+<span class='line'>571</span>  * 注：收缩/展开按钮，不会触发该事件，必须点树节点击前面的减号，才能触发该事件；
+<span class='line'>572</span>  * @name Horn.ZtreePanel#&lt;b>onCollapse&lt;/b>
+<span class='line'>573</span>  * @type String
+<span class='line'>574</span>  * @default 
+<span class='line'>575</span>  * @example
+<span class='line'>576</span>   #ztree({  
+<span class='line'>577</span>  *  "id":"tree1",  
+<span class='line'>578</span>  *  "name":"ztree1",
+<span class='line'>579</span>  *	"checkMode":"checkbox",
+<span class='line'>580</span>  *  "onCollapse":"onCollapse",
+<span class='line'>581</span>  *	"async":true,
+<span class='line'>582</span>  *  "url":"$appServer.get('/test/ztree/asynTree.htm')"})
+<span class='line'>583</span>  * #jscode()
+<span class='line'>584</span>  *  ##对应 zTree 的 treeId，便于用户操控
+<span class='line'>585</span>  *  ##treeNode被单击的节点 JSON 数据对象
+<span class='line'>586</span>  *   function onCollapse(event, treeId, treeNode) {
+<span class='line'>587</span>  *   	alert(treeNode.tId + ", " + treeNode.name);
+<span class='line'>588</span>  *   }
+<span class='line'>589</span>  *  #end
+<span class='line'>590</span>  */</span><span class="WHIT">
+<span class='line'>591</span> </span><span class="COMM">/**
+<span class='line'>592</span>  * 用于捕获 zTree 上鼠标双击之后的事件回调函数。
+<span class='line'>593</span>  * 如果设置了 beforeDblClick 方法，且返回 false，将无法触发 onDblClick 事件回调函数。
+<span class='line'>594</span>  * @name Horn.ZtreePanel#&lt;b>onDblClick&lt;/b>
+<span class='line'>595</span>  * @type String
+<span class='line'>596</span>  * @default 
+<span class='line'>597</span>  * @example
+<span class='line'>598</span>   #ztree({  
+<span class='line'>599</span>  *  "id":"tree1",  
+<span class='line'>600</span>  *  "name":"ztree1",
+<span class='line'>601</span>  *	"checkMode":"checkbox",
+<span class='line'>602</span>  *  "onDblClick":"onDblClick",
+<span class='line'>603</span>  *	"async":true,
+<span class='line'>604</span>  *  "url":"$appServer.get('/test/ztree/asynTree.htm')"})
+<span class='line'>605</span>  * #jscode()
+<span class='line'>606</span>  *  ##对应 zTree 的 treeId，便于用户操控
+<span class='line'>607</span>  *  ##treeNode被单击的节点 JSON 数据对象
+<span class='line'>608</span>  *   function onDblClick(event, treeId, treeNode) {
+<span class='line'>609</span>  *   	alert(treeNode.tId + ", " + treeNode.name);
+<span class='line'>610</span>  *   }
+<span class='line'>611</span>  *  #end
+<span class='line'>612</span>  */</span><span class="WHIT">
+<span class='line'>613</span> </span><span class="COMM">/**
+<span class='line'>614</span>  * 用于捕获 zTree 上鼠标双击之后的事件回调函数。
+<span class='line'>615</span>  * 如果设置了 beforeMouseDown 方法，且返回 false，将无法触发 onMouseDown 事件回调函数。
+<span class='line'>616</span>  * @name Horn.ZtreePanel#&lt;b>onMouseDown&lt;/b>
+<span class='line'>617</span>  * @type String
+<span class='line'>618</span>  * @default 
+<span class='line'>619</span>  * @example
+<span class='line'>620</span>   #ztree({  
+<span class='line'>621</span>  *  "id":"tree1",  
+<span class='line'>622</span>  *  "name":"ztree1",
+<span class='line'>623</span>  *	"checkMode":"checkbox",
+<span class='line'>624</span>  *  "onMouseDown":"onMouseDown",
+<span class='line'>625</span>  *	"async":true,
+<span class='line'>626</span>  *  "url":"$appServer.get('/test/ztree/asynTree.htm')"})
+<span class='line'>627</span>  * #jscode()
+<span class='line'>628</span>  *  ##对应 zTree 的 treeId，便于用户操控
+<span class='line'>629</span>  *  ##treeNode被单击的节点 JSON 数据对象
+<span class='line'>630</span>  *   function onMouseDown(event, treeId, treeNode) {
+<span class='line'>631</span>  *   	alert(treeNode.tId + ", " + treeNode.name);
+<span class='line'>632</span>  *   }
+<span class='line'>633</span>  *  #end
+<span class='line'>634</span>  */</span><span class="WHIT">
+<span class='line'>635</span> </span><span class="COMM">/**
+<span class='line'>636</span>  * 用于捕获 zTree 上鼠标双击之后的事件回调函数。
+<span class='line'>637</span>  * 如果设置了 beforeMouseUp 方法，且返回 false，将无法触发 onMouseUp 事件回调函数。
+<span class='line'>638</span>  * @name Horn.ZtreePanel#&lt;b>onMouseUp&lt;/b>
+<span class='line'>639</span>  * @type String
+<span class='line'>640</span>  * @default 
+<span class='line'>641</span>  * @example
+<span class='line'>642</span>   #ztree({  
+<span class='line'>643</span>  *  "id":"tree1",  
+<span class='line'>644</span>  *  "name":"ztree1",
+<span class='line'>645</span>  *	"checkMode":"checkbox",
+<span class='line'>646</span>  *  "onMouseUp":"onMouseUp",
+<span class='line'>647</span>  *	"async":true,
+<span class='line'>648</span>  *  "url":"$appServer.get('/test/ztree/asynTree.htm')"})
+<span class='line'>649</span>  * #jscode()
+<span class='line'>650</span>  *  ##对应 zTree 的 treeId，便于用户操控
+<span class='line'>651</span>  *  ##treeNode被单击的节点 JSON 数据对象
+<span class='line'>652</span>  *   function onMouseUp(event, treeId, treeNode) {
+<span class='line'>653</span>  *   	alert(treeNode.tId + ", " + treeNode.name);
+<span class='line'>654</span>  *   }
+<span class='line'>655</span>  *  #end
+<span class='line'>656</span>  */</span><span class="WHIT">
+<span class='line'>657</span> </span><span class="COMM">/**
+<span class='line'>658</span>  * 用于捕获 zTree 上鼠标双击之后的事件回调函数。
+<span class='line'>659</span>  * 如果设置了 beforeRightClick 方法，且返回 false，将无法触发 onRightClick 事件回调函数。
+<span class='line'>660</span>  * @name Horn.ZtreePanel#&lt;b>onRightClick&lt;/b>
+<span class='line'>661</span>  * @type String
+<span class='line'>662</span>  * @default 
+<span class='line'>663</span>  * @example
+<span class='line'>664</span>   #ztree({  
+<span class='line'>665</span>  *  "id":"tree1",  
+<span class='line'>666</span>  *  "name":"ztree1",
+<span class='line'>667</span>  *	"checkMode":"checkbox",
+<span class='line'>668</span>  *  "onRightClick":"onRightClick",
+<span class='line'>669</span>  *	"async":true,
+<span class='line'>670</span>  *  "url":"$appServer.get('/test/ztree/asynTree.htm')"})
+<span class='line'>671</span>  * #jscode()
+<span class='line'>672</span>  *  ##对应 zTree 的 treeId，便于用户操控
+<span class='line'>673</span>  *  ##treeNode被单击的节点 JSON 数据对象
+<span class='line'>674</span>  *   function onRightClick(event, treeId, treeNode) {
+<span class='line'>675</span>  *   	alert(treeNode.tId + ", " + treeNode.name);
+<span class='line'>676</span>  *   }
+<span class='line'>677</span>  *  #end
+<span class='line'>678</span>  */</span><span class="WHIT">
+<span class='line'>679</span> </span><span class="COMM">/**
+<span class='line'>680</span>  * 用于捕获节点被拖拽的事件回调函数。
+<span class='line'>681</span>  *  如果设置了 setting.callback.beforeDrag 方法，且返回 false，将无法触发 onDragMove 和 onDrag 事件回调函数。
+<span class='line'>682</span>  * @name Horn.ZtreePanel#&lt;b>onDrag&lt;/b>
+<span class='line'>683</span>  * @type String
+<span class='line'>684</span>  * @default 
+<span class='line'>685</span>  * @ignore
+<span class='line'>686</span>  * @example
+<span class='line'>687</span>   #ztree({  
+<span class='line'>688</span>  *  "id":"tree1",  
+<span class='line'>689</span>  *  "name":"ztree1",
+<span class='line'>690</span>  *	"checkMode":"checkbox",
+<span class='line'>691</span>  *  "onDrag":"onDrag",
+<span class='line'>692</span>  *	"async":true,
+<span class='line'>693</span>  *  "url":"$appServer.get('/test/ztree/asynTree.htm')"})
+<span class='line'>694</span>  * #jscode()
+<span class='line'>695</span>  *  ##对应 zTree 的 treeId，便于用户操控
+<span class='line'>696</span>  *  ##treeNode被单击的节点 JSON 数据对象
+<span class='line'>697</span>  *   function onDrag(event, treeId, treeNode) {
+<span class='line'>698</span>  *   	alert(treeNode.tId + ", " + treeNode.name);
+<span class='line'>699</span>  *   }
+<span class='line'>700</span>  *  #end
+<span class='line'>701</span>  */</span><span class="WHIT">
+<span class='line'>702</span> </span><span class="COMM">/**
+<span class='line'>703</span>  * 用于捕获节点被拖拽过程中移动的事件回调函数。
+<span class='line'>704</span>  *  主要用于捕获 zTree 节点拖拽到的 DOM，从而操作对应的 DOM。
+<span class='line'>705</span>  * @name Horn.ZtreePanel#&lt;b>onDragMove&lt;/b>
+<span class='line'>706</span>  * @type String
+<span class='line'>707</span>  * @default 
+<span class='line'>708</span>  * @ignore
+<span class='line'>709</span>  * @example
+<span class='line'>710</span>   #ztree({  
+<span class='line'>711</span>  *  "id":"tree1",  
+<span class='line'>712</span>  *  "name":"ztree1",
+<span class='line'>713</span>  *	"checkMode":"checkbox",
+<span class='line'>714</span>  *  "onDragMove":"onDragMove",
+<span class='line'>715</span>  *	"async":true,
+<span class='line'>716</span>  *  "url":"$appServer.get('/test/ztree/asynTree.htm')"})
+<span class='line'>717</span>  * #jscode()
+<span class='line'>718</span>  *  ##对应 zTree 的 treeId，便于用户操控
+<span class='line'>719</span>  *  ##treeNode被单击的节点 JSON 数据对象
+<span class='line'>720</span>  *   function onDragMove(event, treeId, treeNode) {
+<span class='line'>721</span>  *   	alert(treeNode.tId + ", " + treeNode.name);
+<span class='line'>722</span>  *   }
+<span class='line'>723</span>  *  #end
+<span class='line'>724</span>  */</span><span class="WHIT">
+<span class='line'>725</span> </span><span class="COMM">/**
+<span class='line'>726</span>  * 用于捕获节点被展开的事件回调函数
+<span class='line'>727</span>  *  如果设置了beforeExpand 方法，且返回 false，将无法触发 onExpand 事件回调函数。&lt;br/>
+<span class='line'>728</span>  * 注：收缩/展开按钮，不会触发该事件，必须点树节点击前面的加号，才能触发该事件；
+<span class='line'>729</span>  * @name Horn.ZtreePanel#&lt;b>onExpand&lt;/b>
+<span class='line'>730</span>  * @type String
+<span class='line'>731</span>  * @default 
+<span class='line'>732</span>  * @example
+<span class='line'>733</span>   #ztree({  
+<span class='line'>734</span>  *  "id":"tree1",  
+<span class='line'>735</span>  *  "name":"ztree1",
+<span class='line'>736</span>  *	"checkMode":"checkbox",
+<span class='line'>737</span>  *  "onExpand":"onExpand",
+<span class='line'>738</span>  *	"async":true,
+<span class='line'>739</span>  *  "url":"$appServer.get('/test/ztree/asynTree.htm')"})
+<span class='line'>740</span>  * #jscode()
+<span class='line'>741</span>  *  ##对应 zTree 的 treeId，便于用户操控
+<span class='line'>742</span>  *  ##treeNode被单击的节点 JSON 数据对象
+<span class='line'>743</span>  *   function onExpand(event, treeId, treeNode) {
+<span class='line'>744</span>  *   	alert(treeNode.tId + ", " + treeNode.name);
+<span class='line'>745</span>  *   }
+<span class='line'>746</span>  *  #end
+<span class='line'>747</span>  */</span><span class="WHIT">
+<span class='line'>748</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">expandfirst</span><span class="PUNC">=</span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>749</span> </span><span class="NAME">Horn.ZtreePanel</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Horn.extend</span><span class="PUNC">(</span><span class="NAME">Horn.Base</span><span class="PUNC">,</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>750</span> </span><span class="WHIT">	</span><span class="NAME">COMPONENT_CLASS</span><span class="PUNC">:</span><span class="STRN">"ZtreePanel"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>751</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>752</span>      * 引用的dom对象
+<span class='line'>753</span>      * @field
+<span class='line'>754</span>      * @name Horn.ZtreePanel#el
+<span class='line'>755</span>      * @type {HTMLDomDocument}
+<span class='line'>756</span>      * @ignore
+<span class='line'>757</span>      */</span><span class="WHIT">
+<span class='line'>758</span> </span><span class="WHIT">	</span><span class="NAME">el</span><span class="PUNC">:</span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>759</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>760</span>      * 异步调用时使用的url，用于进行动态加载节点
+<span class='line'>761</span>      * @field
+<span class='line'>762</span>      * @name Horn.ZtreePanel#url
+<span class='line'>763</span>      * @type {string}
+<span class='line'>764</span>      * @ignore
+<span class='line'>765</span>      */</span><span class="WHIT">
+<span class='line'>766</span> </span><span class="WHIT">	</span><span class="NAME">url</span><span class="PUNC">:</span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>767</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>768</span>      * 异步调用时使用的params
+<span class='line'>769</span>      * @field
+<span class='line'>770</span>      * @name Horn.ZtreePanel#params
+<span class='line'>771</span>      * @type {Object}
+<span class='line'>772</span>      * @ignore
+<span class='line'>773</span>      */</span><span class="WHIT">
+<span class='line'>774</span> </span><span class="WHIT">	</span><span class="NAME">params</span><span class="PUNC">:</span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>775</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>776</span>      * 静态载入时使用的Data,或用作初始化使用
+<span class='line'>777</span>      * @field
+<span class='line'>778</span>      * @name Horn.ZtreePanel#treedata
+<span class='line'>779</span>      * @type {Object}
+<span class='line'>780</span>      * @ignore
+<span class='line'>781</span>      */</span><span class="WHIT">
+<span class='line'>782</span> </span><span class="WHIT">	</span><span class="NAME">treedata</span><span class="PUNC">:</span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>783</span> 
+<span class='line'>784</span> </span><span class="WHIT">	</span><span class="NAME">beforeClick</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>785</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>786</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>787</span> </span><span class="WHIT">	</span><span class="NAME">onClick</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>788</span> </span><span class="WHIT">		</span><span class="WHIT">
+<span class='line'>789</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>790</span> </span><span class="WHIT">	</span><span class="NAME">onExpand</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>791</span> </span><span class="WHIT">	</span><span class="NAME">check</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>792</span> </span><span class="WHIT">	</span><span class="NAME">chkStyle</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'checkbox'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>793</span> </span><span class="WHIT">	</span><span class="NAME">init</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">dom</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>794</span> </span><span class="WHIT">		</span><span class="NAME">Horn.ZtreePanel.superclass.init.apply</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="NAME">arguments</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>795</span> </span><span class="WHIT">		</span><span class="NAME">Horn.apply</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="NAME">this.params</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>796</span> </span><span class="WHIT">		</span><span class="NAME">this.treeEl</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.el.find</span><span class="PUNC">(</span><span class="STRN">'.ztree'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>797</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_tree</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>798</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.el.attr</span><span class="PUNC">(</span><span class="STRN">'treeclick'</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>799</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">fn</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.el.attr</span><span class="PUNC">(</span><span class="STRN">'treeclick'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>800</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">fn</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>801</span> </span><span class="WHIT">				</span><span class="NAME">fn</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">window</span><span class="PUNC">[</span><span class="NAME">fn</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>802</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>803</span> </span><span class="WHIT">			</span><span class="NAME">this.onClick</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">fn</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>804</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>805</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.params.onClick</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>806</span> </span><span class="WHIT">				</span><span class="NAME">this.onClick</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">window</span><span class="PUNC">[</span><span class="NAME">this.params.onClick</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>807</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>808</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>809</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.el.attr</span><span class="PUNC">(</span><span class="STRN">'beforetreeclick'</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>810</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">fn</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.el.attr</span><span class="PUNC">(</span><span class="STRN">'beforetreeclick'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>811</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">fn</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>812</span> </span><span class="WHIT">				</span><span class="NAME">fn</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">window</span><span class="PUNC">[</span><span class="NAME">fn</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>813</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>814</span> </span><span class="WHIT">			</span><span class="NAME">this.beforeClick</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">fn</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>815</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>816</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.params.beforeClick</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>817</span> </span><span class="WHIT">				</span><span class="NAME">this.beforeClick</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">window</span><span class="PUNC">[</span><span class="NAME">this.params.beforeClick</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>818</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>819</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>820</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.el.attr</span><span class="PUNC">(</span><span class="STRN">'reRenderFn'</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>821</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">fn</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.el.attr</span><span class="PUNC">(</span><span class="STRN">'reRenderFn'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>822</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">fn</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>823</span> </span><span class="WHIT">				</span><span class="NAME">fn</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">window</span><span class="PUNC">[</span><span class="NAME">fn</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>824</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>825</span> </span><span class="WHIT">			</span><span class="NAME">this.reRender</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">fn</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>826</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>827</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.el.attr</span><span class="PUNC">(</span><span class="STRN">'onExpand'</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>828</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">fn</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.el.attr</span><span class="PUNC">(</span><span class="STRN">'onExpand'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>829</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">fn</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>830</span> </span><span class="WHIT">				</span><span class="NAME">fn</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">window</span><span class="PUNC">[</span><span class="NAME">fn</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>831</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>832</span> </span><span class="WHIT">			</span><span class="NAME">this.onExpand</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">fn</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>833</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>834</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">async</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>835</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.params.async</span><span class="PUNC">&&</span><span class="NAME">this.params.async</span><span class="PUNC">==</span><span class="KEYW">true</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>836</span> </span><span class="WHIT">			</span><span class="NAME">async</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>837</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>838</span> </span><span class="WHIT">       	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">setting</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>839</span> </span><span class="WHIT">			</span><span class="NAME">data</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>840</span> </span><span class="WHIT">				</span><span class="NAME">simpleData</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>841</span> </span><span class="WHIT">					</span><span class="NAME">enable</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="WHIT">
+<span class='line'>842</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>843</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>844</span> </span><span class="WHIT">			</span><span class="NAME">view</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>845</span> </span><span class="WHIT">				</span><span class="NAME">nameIsHTML</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>846</span> </span><span class="WHIT">				</span><span class="NAME">showLine</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>847</span> </span><span class="WHIT">				</span><span class="NAME">showIcon</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>848</span> </span><span class="WHIT">				</span><span class="NAME">showTitle</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>849</span> </span><span class="WHIT">				</span><span class="NAME">selectedMulti</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>850</span> </span><span class="WHIT">				</span><span class="NAME">dblClickExpand</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>851</span> </span><span class="WHIT">				</span><span class="NAME">addDiyDom</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">treeId</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">treeNode</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>852</span> </span><span class="WHIT">					</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">IDMark_A</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"_a"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>853</span> </span><span class="WHIT">					</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">aObj</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">$</span><span class="PUNC">(</span><span class="STRN">"#"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">treeNode.tId</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">IDMark_A</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>854</span> </span><span class="WHIT">					</span><span class="NAME">_tree.reRender</span><span class="PUNC">(</span><span class="NAME">treeNode</span><span class="PUNC">,</span><span class="NAME">aObj</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>855</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>856</span> </span><span class="WHIT">				</span><span class="NAME">fontCss</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.getFontCss</span><span class="WHIT">
+<span class='line'>857</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>858</span> </span><span class="WHIT">			</span><span class="NAME">async</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>859</span> </span><span class="WHIT">				</span><span class="NAME">enable</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">async</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>860</span> </span><span class="WHIT">				</span><span class="NAME">url</span><span class="PUNC">:</span><span class="NAME">this.params.url</span><span class="PUNC">?</span><span class="NAME">this.params.url</span><span class="PUNC">:</span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>861</span> </span><span class="WHIT">				</span><span class="NAME">autoParam</span><span class="PUNC">:</span><span class="NAME">this.params.otherParam</span><span class="PUNC">?</span><span class="NAME">this.params.otherParam</span><span class="PUNC">:</span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>862</span> </span><span class="WHIT">				</span><span class="NAME">otherParam</span><span class="PUNC">:</span><span class="NAME">this.params.otherParam</span><span class="PUNC">?</span><span class="NAME">this.params.otherParam</span><span class="PUNC">:</span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>863</span> </span><span class="WHIT">			    </span><span class="NAME">type</span><span class="PUNC">:</span><span class="NAME">this.params.type</span><span class="PUNC">?</span><span class="NAME">this.params.type</span><span class="PUNC">:</span><span class="STRN">"post"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>864</span> </span><span class="WHIT">				</span><span class="NAME">dataFilter</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.params.dataFilter</span><span class="PUNC">?</span><span class="NAME">window</span><span class="PUNC">[</span><span class="NAME">this.params.dataFilter</span><span class="PUNC">]</span><span class="PUNC">:</span><span class="KEYW">null</span><span class="WHIT">
+<span class='line'>865</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>866</span> </span><span class="WHIT">			</span><span class="NAME">callback</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>867</span> </span><span class="WHIT">				</span><span class="NAME">beforeClick</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.beforeClick</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>868</span> </span><span class="WHIT">				</span><span class="NAME">beforeCheck</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.params.beforeCheck</span><span class="PUNC">?</span><span class="NAME">window</span><span class="PUNC">[</span><span class="NAME">this.params.beforeCheck</span><span class="PUNC">]</span><span class="PUNC">:</span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>869</span> </span><span class="WHIT">				</span><span class="NAME">beforeAsync</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.params.beforeAsync</span><span class="PUNC">?</span><span class="NAME">window</span><span class="PUNC">[</span><span class="NAME">this.params.beforeAsync</span><span class="PUNC">]</span><span class="PUNC">:</span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>870</span> </span><span class="WHIT">				</span><span class="NAME">onAsyncSuccess</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.params.onAsyncSuccess</span><span class="PUNC">?</span><span class="NAME">window</span><span class="PUNC">[</span><span class="NAME">this.params.onAsyncSuccess</span><span class="PUNC">]</span><span class="PUNC">:</span><span class="NAME">this.onAsyncSuccess</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>871</span> </span><span class="WHIT">				</span><span class="NAME">onAsyncError</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.params.onAsyncError</span><span class="PUNC">?</span><span class="NAME">window</span><span class="PUNC">[</span><span class="NAME">this.params.onAsyncError</span><span class="PUNC">]</span><span class="PUNC">:</span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>872</span> </span><span class="WHIT">				</span><span class="NAME">beforeCollapse</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.params.beforeCollapse</span><span class="PUNC">?</span><span class="NAME">window</span><span class="PUNC">[</span><span class="NAME">this.params.beforeCollapse</span><span class="PUNC">]</span><span class="PUNC">:</span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>873</span> </span><span class="WHIT">				</span><span class="NAME">beforeDblClick</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.params.beforeDblClick</span><span class="PUNC">?</span><span class="NAME">window</span><span class="PUNC">[</span><span class="NAME">this.params.beforeDblClick</span><span class="PUNC">]</span><span class="PUNC">:</span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>874</span> </span><span class="WHIT">				</span><span class="NAME">beforeDrag</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.params.beforeDrag</span><span class="PUNC">?</span><span class="NAME">window</span><span class="PUNC">[</span><span class="NAME">this.params.beforeDrag</span><span class="PUNC">]</span><span class="PUNC">:</span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>875</span> </span><span class="WHIT">				</span><span class="NAME">beforeDragOpen</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.params.beforeDragOpen</span><span class="PUNC">?</span><span class="NAME">window</span><span class="PUNC">[</span><span class="NAME">this.params.beforeDragOpen</span><span class="PUNC">]</span><span class="PUNC">:</span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>876</span> </span><span class="WHIT">				</span><span class="NAME">beforeDrop</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.params.beforeDrop</span><span class="PUNC">?</span><span class="NAME">window</span><span class="PUNC">[</span><span class="NAME">this.params.beforeDrop</span><span class="PUNC">]</span><span class="PUNC">:</span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>877</span> </span><span class="WHIT">				</span><span class="NAME">beforeEditName</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.params.beforeEditName</span><span class="PUNC">?</span><span class="NAME">window</span><span class="PUNC">[</span><span class="NAME">this.params.beforeEditName</span><span class="PUNC">]</span><span class="PUNC">:</span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>878</span> </span><span class="WHIT">				</span><span class="NAME">beforeExpand</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.params.beforeExpand</span><span class="PUNC">?</span><span class="NAME">window</span><span class="PUNC">[</span><span class="NAME">this.params.beforeExpand</span><span class="PUNC">]</span><span class="PUNC">:</span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>879</span> </span><span class="WHIT">				</span><span class="NAME">beforeMouseDown</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.params.beforeMouseDown</span><span class="PUNC">?</span><span class="NAME">window</span><span class="PUNC">[</span><span class="NAME">this.params.beforeMouseDown</span><span class="PUNC">]</span><span class="PUNC">:</span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>880</span> </span><span class="WHIT">				</span><span class="NAME">beforeMouseUp</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.params.beforeMouseUp</span><span class="PUNC">?</span><span class="NAME">window</span><span class="PUNC">[</span><span class="NAME">this.params.beforeMouseUp</span><span class="PUNC">]</span><span class="PUNC">:</span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>881</span> </span><span class="WHIT">				</span><span class="NAME">beforeRemove</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.params.beforeRemove</span><span class="PUNC">?</span><span class="NAME">window</span><span class="PUNC">[</span><span class="NAME">this.params.beforeRemove</span><span class="PUNC">]</span><span class="PUNC">:</span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>882</span> </span><span class="WHIT">				</span><span class="NAME">beforeRename</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.params.beforeRename</span><span class="PUNC">?</span><span class="NAME">window</span><span class="PUNC">[</span><span class="NAME">this.params.beforeRename</span><span class="PUNC">]</span><span class="PUNC">:</span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>883</span> </span><span class="WHIT">				</span><span class="NAME">beforeRightClick</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.params.beforeRightClick</span><span class="PUNC">?</span><span class="NAME">window</span><span class="PUNC">[</span><span class="NAME">this.params.beforeRightClick</span><span class="PUNC">]</span><span class="PUNC">:</span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>884</span> </span><span class="WHIT">				</span><span class="NAME">onCheck</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.params.onCheck</span><span class="PUNC">?</span><span class="NAME">window</span><span class="PUNC">[</span><span class="NAME">this.params.onCheck</span><span class="PUNC">]</span><span class="PUNC">:</span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>885</span> </span><span class="WHIT">				</span><span class="NAME">onCollapse</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.params.onCollapse</span><span class="PUNC">?</span><span class="NAME">window</span><span class="PUNC">[</span><span class="NAME">this.params.onCollapse</span><span class="PUNC">]</span><span class="PUNC">:</span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>886</span> </span><span class="WHIT">				</span><span class="NAME">onDblClick</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.params.onDblClick</span><span class="PUNC">?</span><span class="NAME">window</span><span class="PUNC">[</span><span class="NAME">this.params.onDblClick</span><span class="PUNC">]</span><span class="PUNC">:</span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>887</span> </span><span class="WHIT">				</span><span class="NAME">onDrag</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.params.onDrag</span><span class="PUNC">?</span><span class="NAME">window</span><span class="PUNC">[</span><span class="NAME">this.params.onDrag</span><span class="PUNC">]</span><span class="PUNC">:</span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>888</span> </span><span class="WHIT">				</span><span class="NAME">onDragMove</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.params.onDragMove</span><span class="PUNC">?</span><span class="NAME">window</span><span class="PUNC">[</span><span class="NAME">this.params.onDragMove</span><span class="PUNC">]</span><span class="PUNC">:</span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>889</span> </span><span class="WHIT">				</span><span class="NAME">onExpand</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.params.onExpand</span><span class="PUNC">?</span><span class="NAME">window</span><span class="PUNC">[</span><span class="NAME">this.params.onExpand</span><span class="PUNC">]</span><span class="PUNC">:</span><span class="NAME">this.onExpand</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>890</span> </span><span class="WHIT">				</span><span class="NAME">onMouseDown</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.params.onMouseDown</span><span class="PUNC">?</span><span class="NAME">window</span><span class="PUNC">[</span><span class="NAME">this.params.onMouseDown</span><span class="PUNC">]</span><span class="PUNC">:</span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>891</span> </span><span class="WHIT">				</span><span class="NAME">onMouseUp</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.params.onMouseUp</span><span class="PUNC">?</span><span class="NAME">window</span><span class="PUNC">[</span><span class="NAME">this.params.onMouseUp</span><span class="PUNC">]</span><span class="PUNC">:</span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>892</span> </span><span class="WHIT">				</span><span class="NAME">onNodeCreated</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.params.onNodeCreated</span><span class="PUNC">?</span><span class="NAME">window</span><span class="PUNC">[</span><span class="NAME">this.params.onNodeCreated</span><span class="PUNC">]</span><span class="PUNC">:</span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>893</span> </span><span class="WHIT">				</span><span class="NAME">onRemove</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.params.onRemove</span><span class="PUNC">?</span><span class="NAME">window</span><span class="PUNC">[</span><span class="NAME">this.params.onRemove</span><span class="PUNC">]</span><span class="PUNC">:</span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>894</span> </span><span class="WHIT">				</span><span class="NAME">onRename</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.params.onRename</span><span class="PUNC">?</span><span class="NAME">window</span><span class="PUNC">[</span><span class="NAME">this.params.onRename</span><span class="PUNC">]</span><span class="PUNC">:</span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>895</span> </span><span class="WHIT">				</span><span class="NAME">onRightClick</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.params.onRightClick</span><span class="PUNC">?</span><span class="NAME">window</span><span class="PUNC">[</span><span class="NAME">this.params.onRightClick</span><span class="PUNC">]</span><span class="PUNC">:</span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>896</span> </span><span class="WHIT">				</span><span class="NAME">onClick</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.onClick</span><span class="WHIT">
+<span class='line'>897</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>898</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>899</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">checkMode</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.el.attr</span><span class="PUNC">(</span><span class="STRN">'checkMode'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>900</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">checkMode</span><span class="PUNC">&&</span><span class="NAME">checkMode</span><span class="PUNC">==</span><span class="STRN">"checkbox"</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>901</span> </span><span class="WHIT">			</span><span class="NAME">setting.check</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>902</span> </span><span class="WHIT">				</span><span class="NAME">enable</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>903</span> </span><span class="WHIT">				</span><span class="NAME">chkStyle</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">checkMode</span><span class="WHIT">
+<span class='line'>904</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>905</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>906</span> </span><span class="WHIT">       	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">data</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT">  </span><span class="NAME">this.el.attr</span><span class="PUNC">(</span><span class="STRN">"items"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>907</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">data</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>908</span> </span><span class="WHIT">			</span><span class="NAME">data</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">$.parseJSON</span><span class="PUNC">(</span><span class="NAME">data</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>909</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>910</span> </span><span class="WHIT">			</span><span class="NAME">data</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>911</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>912</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">treeObj</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.treeEl</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>913</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">treeid</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.treeEl.attr</span><span class="PUNC">(</span><span class="STRN">'id'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>914</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">treeid</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>915</span> </span><span class="WHIT">			</span><span class="NAME">treeid</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Horn.id</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>916</span> </span><span class="WHIT">			</span><span class="NAME">this.treeEl.attr</span><span class="PUNC">(</span><span class="STRN">'id'</span><span class="PUNC">,</span><span class="NAME">treeid</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>917</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>918</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">async</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>919</span> </span><span class="WHIT">			</span><span class="NAME">$.fn.zTree.init</span><span class="PUNC">(</span><span class="NAME">treeObj</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">setting</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>920</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>921</span> </span><span class="WHIT">			</span><span class="NAME">$.fn.zTree.init</span><span class="PUNC">(</span><span class="NAME">treeObj</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">setting</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">data</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>922</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>923</span> </span><span class="WHIT">		</span><span class="NAME">this.treedata</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">data</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>924</span> </span><span class="WHIT">		</span><span class="NAME">this.treeObj</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">$.fn.zTree.getZTreeObj</span><span class="PUNC">(</span><span class="NAME">treeid</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>925</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.el.attr</span><span class="PUNC">(</span><span class="STRN">'expandfirst'</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>926</span> </span><span class="WHIT">			</span><span class="NAME">expandfirst</span><span class="PUNC">=</span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>927</span> </span><span class="WHIT">			</span><span class="NAME">this.treeObj.expandAll</span><span class="PUNC">(</span><span class="KEYW">true</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>928</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>929</span> </span><span class="WHIT">		</span><span class="WHIT">
+<span class='line'>930</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">name</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.el.attr</span><span class="PUNC">(</span><span class="STRN">'name'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>931</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">expandBtn</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT">  </span><span class="NAME">this.el.parent</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">parent</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">find</span><span class="PUNC">(</span><span class="STRN">"#expand_"</span><span class="PUNC">+</span><span class="NAME">name</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>932</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">unexpandBtn</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT">  </span><span class="NAME">this.el.parent</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">parent</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">find</span><span class="PUNC">(</span><span class="STRN">"#unexpand_"</span><span class="PUNC">+</span><span class="NAME">name</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>933</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">refreshBtn</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT">  </span><span class="NAME">this.el.parent</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">parent</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">find</span><span class="PUNC">(</span><span class="STRN">"#refresh_"</span><span class="PUNC">+</span><span class="NAME">name</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>934</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">searchBtn</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT">  </span><span class="NAME">this.el.parent</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">parent</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">find</span><span class="PUNC">(</span><span class="STRN">"#search_"</span><span class="PUNC">+</span><span class="NAME">name</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>935</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_this</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>936</span> </span><span class="WHIT">		</span><span class="NAME">expandBtn.bind</span><span class="PUNC">(</span><span class="STRN">'click'</span><span class="PUNC">,</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">e</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="WHIT">
+<span class='line'>937</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">checkNodes</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_this.getCheckedNodes</span><span class="PUNC">(</span><span class="KEYW">true</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>938</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">checkNodes</span><span class="PUNC">!=</span><span class="KEYW">null</span><span class="PUNC">&&</span><span class="NAME">checkNodes.length</span><span class="PUNC">></span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>939</span> </span><span class="WHIT">				</span><span class="NAME">$.each</span><span class="PUNC">(</span><span class="NAME">checkNodes</span><span class="PUNC">,</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">index</span><span class="PUNC">,</span><span class="NAME">node</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>940</span> </span><span class="WHIT">			        </span><span class="NAME">_this.treeObj.expandNode</span><span class="PUNC">(</span><span class="NAME">node.getParentNode</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="KEYW">true</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>941</span> </span><span class="WHIT">			    </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>942</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>943</span> </span><span class="WHIT">				</span><span class="NAME">_this.expandAll</span><span class="PUNC">(</span><span class="KEYW">true</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>944</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>945</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>946</span> </span><span class="WHIT">		</span><span class="NAME">unexpandBtn.bind</span><span class="PUNC">(</span><span class="STRN">'click'</span><span class="PUNC">,</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">e</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="WHIT">
+<span class='line'>947</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">checkNodes</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_this.getCheckedNodes</span><span class="PUNC">(</span><span class="KEYW">true</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>948</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">checkNodes</span><span class="PUNC">!=</span><span class="KEYW">null</span><span class="PUNC">&&</span><span class="NAME">checkNodes.length</span><span class="PUNC">></span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>949</span> </span><span class="WHIT">				</span><span class="NAME">$.each</span><span class="PUNC">(</span><span class="NAME">checkNodes</span><span class="PUNC">,</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">index</span><span class="PUNC">,</span><span class="NAME">node</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>950</span> </span><span class="WHIT">			        </span><span class="NAME">_this.treeObj.expandNode</span><span class="PUNC">(</span><span class="NAME">node.getParentNode</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="KEYW">false</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>951</span> </span><span class="WHIT">			    </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>952</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>953</span> </span><span class="WHIT">				</span><span class="NAME">_this.expandAll</span><span class="PUNC">(</span><span class="KEYW">false</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>954</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>955</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>956</span> </span><span class="WHIT">		</span><span class="NAME">refreshBtn.bind</span><span class="PUNC">(</span><span class="STRN">'click'</span><span class="PUNC">,</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">e</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="WHIT">
+<span class='line'>957</span> </span><span class="WHIT">			</span><span class="NAME">_this.refresh</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>958</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>959</span> </span><span class="WHIT">			</span><span class="NAME">searchBtn.bind</span><span class="PUNC">(</span><span class="STRN">'keyup'</span><span class="PUNC">,</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">e</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>960</span> </span><span class="WHIT">				</span><span class="WHIT">
+<span class='line'>961</span> </span><span class="WHIT">				</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">nodeList</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_this.getNodesByParamFuzzy</span><span class="PUNC">(</span><span class="STRN">"name"</span><span class="PUNC">,</span><span class="NAME">this.value</span><span class="PUNC">,</span><span class="KEYW">null</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>962</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.value</span><span class="PUNC">!=</span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>963</span> </span><span class="WHIT">					</span><span class="NAME">$.each</span><span class="PUNC">(</span><span class="NAME">nodeList</span><span class="PUNC">,</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">index</span><span class="PUNC">,</span><span class="NAME">node</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>964</span> </span><span class="WHIT">				        </span><span class="NAME">node.highlight</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>965</span> </span><span class="WHIT">				        </span><span class="NAME">_this.treeObj.updateNode</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>966</span> </span><span class="WHIT">				        </span><span class="NAME">_this.treeObj.expandNode</span><span class="PUNC">(</span><span class="NAME">node.getParentNode</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="KEYW">true</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>967</span> </span><span class="WHIT">				    </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>968</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>969</span> </span><span class="WHIT">					</span><span class="NAME">$.each</span><span class="PUNC">(</span><span class="NAME">nodeList</span><span class="PUNC">,</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">index</span><span class="PUNC">,</span><span class="NAME">node</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>970</span> </span><span class="WHIT">				        </span><span class="NAME">node.highlight</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>971</span> </span><span class="WHIT">				        </span><span class="NAME">_this.treeObj.updateNode</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>972</span> </span><span class="WHIT">				    </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>973</span> </span><span class="WHIT">					</span><span class="NAME">_this.expandAll</span><span class="PUNC">(</span><span class="KEYW">false</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>974</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>975</span> </span><span class="WHIT">			</span><span class="WHIT">
+<span class='line'>976</span> </span><span class="WHIT">			</span><span class="NAME">this.focus</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>977</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>978</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>979</span> </span><span class="WHIT">	</span><span class="NAME">getFontCss</span><span class="PUNC">:</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">treeId</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">treeNode</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">  </span><span class="WHIT">
+<span class='line'>980</span> </span><span class="WHIT">	    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="PUNC">!</span><span class="NAME">treeNode.highlight</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="STRN">"font-weight"</span><span class="PUNC">:</span><span class="STRN">"bold"</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">color</span><span class="PUNC">:</span><span class="STRN">"#333"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"font-weight"</span><span class="PUNC">:</span><span class="STRN">"normal"</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">  </span><span class="WHIT">
+<span class='line'>981</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>982</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>983</span>      * 指定渲染函数
+<span class='line'>984</span>      * @name Horn.ZtreePanel#reRender
+<span class='line'>985</span>      * @function
+<span class='line'>986</span>      * @param {HTMLDomDocument} srcNode 源树节点
+<span class='line'>987</span>      * @param {HTMLDomDocument} treeNodeObj　目标树节点
+<span class='line'>988</span>      * @ignore
+<span class='line'>989</span>      */</span><span class="WHIT">
+<span class='line'>990</span> </span><span class="WHIT">	</span><span class="NAME">reRender</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">srcNode</span><span class="PUNC">,</span><span class="NAME">treeNodeObj</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>991</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>992</span> </span><span class="WHIT">	</span><span class="NAME">onAsyncSuccess</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">event</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">treeId</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">treeNode</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">msg</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>993</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">expandfirst</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>994</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">treeObj</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">$.fn.zTree.getZTreeObj</span><span class="PUNC">(</span><span class="NAME">treeId</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>995</span> </span><span class="WHIT">			</span><span class="NAME">treeObj.expandAll</span><span class="PUNC">(</span><span class="KEYW">true</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>996</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>997</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>998</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>999</span>      * 获取树
+<span class='line'>1000</span>      * @name Horn.ZtreePanel#getTreeObj
+<span class='line'>1001</span>      * @function
+<span class='line'>1002</span>      * @ignore
+<span class='line'>1003</span>      * @return {ztree object} treeObj
+<span class='line'>1004</span>      */</span><span class="WHIT">
+<span class='line'>1005</span> </span><span class="WHIT">	</span><span class="NAME">getTreeObj</span><span class="PUNC">:</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1006</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.treeObj</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1007</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1008</span> </span><span class="WHIT">	 </span><span class="COMM">/**
+<span class='line'>1009</span>      * 获取 zTree 的全部节点数据
+<span class='line'>1010</span>      * @name Horn.ZtreePanel#getNodes
+<span class='line'>1011</span>      * @function
+<span class='line'>1012</span>      * @example
+<span class='line'>1013</span>      * ##获取全部节点数据
+<span class='line'>1014</span>      * Horn.getComp("ztree1").getNodes();
+<span class='line'>1015</span>      * 例子，请参考ztree官网(http://www.ztree.me/v3/api.php)
+<span class='line'>1016</span>      * @return  Array(JSON)
+<span class='line'>1017</span>      * 全部节点数据：
+<span class='line'>1018</span>      * 1、Array 仅仅是根节点的集合（默认情况子节点都处于 children 属性下）；
+<span class='line'>1019</span>      * 2、如需遍历全部节点需要利用递归，或利用 transformToArray 方法 将数据变成简单的 Array 集合
+<span class='line'>1020</span>      * 3、对于异步加载模式下，尚未加载的子节点是无法通过此方法获取的。		     
+<span class='line'>1021</span>      */</span><span class="WHIT">
+<span class='line'>1022</span> </span><span class="WHIT">	</span><span class="NAME">getNodes</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1023</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">nodes</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.treeObj.getNodes</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1024</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">nodes</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1025</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1026</span> </span><span class="WHIT">	 </span><span class="COMM">/**
+<span class='line'>1027</span>      * 新增节点
+<span class='line'>1028</span>      * 如果需要获取数据在 zTree 内的对象，请获取此方法的返回值，请通过 zTree 对象执行此方法。
+<span class='line'>1029</span>      * @name Horn.ZtreePanel#addNodes
+<span class='line'>1030</span>      * @function
+<span class='line'>1031</span>      * @param parentNode 指定的父节点，如果增加根节点，请设置 parentNode 为 null 即可。
+<span class='line'>1032</span>      * @param index 索引值
+<span class='line'>1033</span>      * @param newNodes 需要增加的节点数据 JSON 对象集合，数据只需要满足 zTree 的节点数据必需的属性即可
+<span class='line'>1034</span>      * @param isSilent 设定增加节点后是否自动展开父节点。isSilent = true 时，不展开父节点，其他值或缺省状态都自动展开。
+<span class='line'>1035</span>      * @return  Array(JSON)
+<span class='line'>1036</span>      * 返回值是 zTree 最终添加的节点数据集合。
+<span class='line'>1037</span>      * 如果 newNodes 是单个节点数据 JSON，返回值也是将其包在 Array 内，
+<span class='line'>1038</span>      * 请务必记住：返回值中的数据对象 是 newNodes 被 clone 后的，所以绝对不相等！
+<span class='line'>1039</span>      * @example
+<span class='line'>1040</span>      * ##对于 id = "tree" 的 zTree 增加 3 个根节点
+<span class='line'>1041</span>      * var newNodes = [{name:"newNode1"}, {name:"newNode2"}, {name:"newNode3"}];
+<span class='line'>1042</span>      * Horn.getComp("ztree1").addNodes(null, newNodes);
+<span class='line'>1043</span>      * 例子，请参考ztree官网(http://www.ztree.me/v3/api.php)
+<span class='line'>1044</span>      * 	function addNode(){
+<span class='line'>1045</span> 	 *      var zTree = Horn.getComp("ztree1").getTreeObj(),
+<span class='line'>1046</span> 	 *		isParent = true,
+<span class='line'>1047</span> 	 *		nodes = zTree.getSelectedNodes(),
+<span class='line'>1048</span> 	 *		treeNode = nodes[0];
+<span class='line'>1049</span> 	 *		var newCount = 1;
+<span class='line'>1050</span> 	 *		if (treeNode) {
+<span class='line'>1051</span> 	 *			treeNode = Horn.getComp("ztree1").addNodes(treeNode, {id:(100 + newCount), pId:treeNode.id, isParent:isParent, name:"new node" + (newCount++)});
+<span class='line'>1052</span> 	 *		} else {
+<span class='line'>1053</span> 	 *			treeNode = Horn.getComp("ztree1").addNodes(null, {id:(100 + newCount), pId:0, isParent:isParent, name:"new node" + (newCount++)});
+<span class='line'>1054</span> 	 *		}
+<span class='line'>1055</span> 	 *   }
+<span class='line'>1056</span>      */</span><span class="WHIT">
+<span class='line'>1057</span> </span><span class="WHIT">	</span><span class="NAME">addNodes</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">parentNode</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">index</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">newNodes</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">isSilent</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1058</span> </span><span class="WHIT">		</span><span class="NAME">this.treeObj.addNodes</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">parentNode</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">index</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">newNodes</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">isSilent</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1059</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1060</span> </span><span class="WHIT">	 </span><span class="COMM">/**
+<span class='line'>1061</span>      * 
+<span class='line'>1062</span>      * 取消节点的编辑名称状态，可以恢复原名称，也可以强行赋给新的名称
+<span class='line'>1063</span>      * @name Horn.ZtreePanel#cancelEditName
+<span class='line'>1064</span>      * @function
+<span class='line'>1065</span>      * @param newName 重新给定的新名称。
+<span class='line'>1066</span>      * @ignore
+<span class='line'>1067</span>      * @example
+<span class='line'>1068</span>      * Horn.getComp("ztree1").cancelEditName("aaa");
+<span class='line'>1069</span>      * 例子，请参考ztree官网(http://www.ztree.me/v3/api.php)
+<span class='line'>1070</span>      * @return
+<span class='line'>1071</span>      */</span><span class="WHIT">
+<span class='line'>1072</span> </span><span class="WHIT">	</span><span class="NAME">cancelEditName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">newName</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1073</span> </span><span class="WHIT">		</span><span class="NAME">this.treeObj.cancelEditName</span><span class="PUNC">(</span><span class="NAME">newName</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1074</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1075</span> </span><span class="WHIT">	 </span><span class="COMM">/**
+<span class='line'>1076</span>      * 
+<span class='line'>1077</span>      * 取消节点的选中状态
+<span class='line'>1078</span>      * @name Horn.ZtreePanel#cancelSelectedNode
+<span class='line'>1079</span>      * @function
+<span class='line'>1080</span>      * @param node 需要取消选中状态的节点。
+<span class='line'>1081</span>      * @example
+<span class='line'>1082</span>      * ##取消当前第一个被选中节点的选中状态
+<span class='line'>1083</span>      * var nodes = Horn.getComp("ztree1").getSelectedNodes();
+<span class='line'>1084</span>      * if (nodes.length>0) { 
+<span class='line'>1085</span>      * 	Horn.getComp("ztree1").cancelSelectedNode(nodes[0]);
+<span class='line'>1086</span>      * }
+<span class='line'>1087</span>      * 例子，请参考ztree官网(http://www.ztree.me/v3/api.php)
+<span class='line'>1088</span>      * @return 无
+<span class='line'>1089</span>      */</span><span class="WHIT">
+<span class='line'>1090</span> </span><span class="WHIT">	</span><span class="NAME">cancelSelectedNode</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1091</span> </span><span class="WHIT">		</span><span class="NAME">this.treeObj.cancelSelectedNode</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1092</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1093</span> </span><span class="WHIT">	 </span><span class="COMM">/**
+<span class='line'>1094</span>      * 
+<span class='line'>1095</span>      * 勾选 或 取消勾选 全部节点。[checkMode = "checkbox" 时有效]
+<span class='line'>1096</span>      * 此方法不会触发 beforeCheck / onCheck 事件回调函数。
+<span class='line'>1097</span>      * @name Horn.ZtreePanel#checkAllNodes
+<span class='line'>1098</span>      * @function
+<span class='line'>1099</span>      * @param checked  true 表示勾选全部节点,false 表示全部节点取消勾选。
+<span class='line'>1100</span>      * @example
+<span class='line'>1101</span>      * Horn.getComp("ztree1").checkAllNodes(true);
+<span class='line'>1102</span>      * 例子，请参考ztree官网(http://www.ztree.me/v3/api.php)
+<span class='line'>1103</span>      * @return 无
+<span class='line'>1104</span>      */</span><span class="WHIT">
+<span class='line'>1105</span> </span><span class="WHIT">	</span><span class="NAME">checkAllNodes</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">checked</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1106</span> </span><span class="WHIT">		</span><span class="NAME">this.treeObj.checkAllNodes</span><span class="PUNC">(</span><span class="NAME">checked</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1107</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1108</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='line'>1109</span>      * 
+<span class='line'>1110</span>      * 勾选 或 取消勾选 单个节点。
+<span class='line'>1111</span>      * 此方法可以触发 beforeCheck / onCheck 事件回调函数。
+<span class='line'>1112</span>      * @name Horn.ZtreePanel#checkNode
+<span class='line'>1113</span>      * @function
+<span class='line'>1114</span>      * @param node  需要勾选 或 取消勾选 的节点数据。
+<span class='line'>1115</span>      * @param checked  true 表示勾选节点,false 表示节点取消勾选。
+<span class='line'>1116</span>      * @param checkTypeFlag Boolean：true表示按照 进行父子节点的勾选联动操作；false表示只修改此节点勾选状态，无任何勾选联动操作
+<span class='line'>1117</span>      * @param callbackFlag Boolean： true表示执行此方法时触发 beforeCheck & onCheck 事件回调函数；false表示执行此方法时不触发事件回调函数
+<span class='line'>1118</span>      * @example
+<span class='line'>1119</span>      * ##勾选当前选中的节点
+<span class='line'>1120</span>      * var nodes = Horn.getComp("ztree1").getSelectedNodes();
+<span class='line'>1121</span> 	 *	for (var i=0, l=nodes.length; i &lt; l; i++) {
+<span class='line'>1122</span> 	 *		Horn.getComp("ztree1").checkNode(nodes[i], true, true);
+<span class='line'>1123</span> 	 *	}
+<span class='line'>1124</span>      * 例子，请参考ztree官网(http://www.ztree.me/v3/api.php)
+<span class='line'>1125</span>      * @return 无
+<span class='line'>1126</span>      */</span><span class="WHIT">
+<span class='line'>1127</span> </span><span class="WHIT">	</span><span class="NAME">checkNode</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">checked</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">checkTypeFlag</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callbackFlag</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1128</span> </span><span class="WHIT">		</span><span class="NAME">this.treeObj.checkNode</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">checked</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">checkTypeFlag</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callbackFlag</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1129</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1130</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='line'>1131</span>      * 
+<span class='line'>1132</span>      * 复制节点
+<span class='line'>1133</span>      * 3.x 复制节点时进行 clone 操作。如果需要获取数据在 zTree 内的对象，请获取此方法的返回值
+<span class='line'>1134</span>      * @name Horn.ZtreePanel#copyNode
+<span class='line'>1135</span>      * @function
+<span class='line'>1136</span>      * @param targetNode  要复制到的目标节点 JSON 数据。
+<span class='line'>1137</span>      * @param node  需要被复制的节点数据,如果复制成为根节点，请设置 targetNode 为 null 即可。
+<span class='line'>1138</span>      * @param moveType  复制到目标节点的相对位置。
+<span class='line'>1139</span>      * @param isSilent   设定复制节点后是否自动展开父节点。
+<span class='line'>1140</span>      * @ignore
+<span class='line'>1141</span>      * @example
+<span class='line'>1142</span>      * Horn.getComp("ztree1").copyNode(targetNode, node, moveType, isSilent);
+<span class='line'>1143</span>      * 例子，请参考ztree官网(http://www.ztree.me/v3/api.php)
+<span class='line'>1144</span>      * @return
+<span class='line'>1145</span>      */</span><span class="WHIT">
+<span class='line'>1146</span> </span><span class="WHIT">	</span><span class="NAME">copyNode</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">targetNode</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">node</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">moveType</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">isSilent</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1147</span> </span><span class="WHIT">		</span><span class="NAME">this.treeObj.copyNode</span><span class="PUNC">(</span><span class="NAME">targetNode</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">node</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">moveType</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">isSilent</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1148</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1149</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='line'>1150</span>      * 
+<span class='line'>1151</span> 	 * 用此方法可以销毁 zTreeObj 代表的 zTree。
+<span class='line'>1152</span>      * @name Horn.ZtreePanel#destroy
+<span class='line'>1153</span>      * @function
+<span class='line'>1154</span>      * @example
+<span class='line'>1155</span>      * Horn.getComp("ztree1").destroy();
+<span class='line'>1156</span>      * 例子，请参考ztree官网(http://www.ztree.me/v3/api.php)
+<span class='line'>1157</span>      * @return 无
+<span class='line'>1158</span>      */</span><span class="WHIT">
+<span class='line'>1159</span> </span><span class="WHIT">	</span><span class="NAME">destroy</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1160</span> </span><span class="WHIT">		</span><span class="NAME">this.treeObj.destroy</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1161</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1162</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='line'>1163</span>      * 
+<span class='line'>1164</span>      * 设置某节点进入编辑名称状态。
+<span class='line'>1165</span> 	 *1、如果需要用 js 取消编辑名称状态，请使用 cancelEditName(newName) 方法。。
+<span class='line'>1166</span>      *2、可利用此方法让当前正编辑的节点 input 输入框获取焦点。
+<span class='line'>1167</span>      *3、请通过 zTree 对象执行此方法。
+<span class='line'>1168</span>      * @name Horn.ZtreePanel#editName
+<span class='line'>1169</span>      * @function
+<span class='line'>1170</span>      * @param node   指定进入编辑名称状态的节点 JSON 数据。
+<span class='line'>1171</span>      * @ignore
+<span class='line'>1172</span>      * @example
+<span class='line'>1173</span>      * var treeObj = Horn.getComp("ztree1").getTreeObj();
+<span class='line'>1174</span>      *var nodes = treeObj.getNodes();
+<span class='line'>1175</span>      *treeObj.editName(nodes[0]);
+<span class='line'>1176</span>      * 例子，请参考ztree官网(http://www.ztree.me/v3/api.php)
+<span class='line'>1177</span>      * @return
+<span class='line'>1178</span>      */</span><span class="WHIT">
+<span class='line'>1179</span> </span><span class="WHIT">	</span><span class="NAME">editName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1180</span> </span><span class="WHIT">		</span><span class="NAME">this.treeObj.editName</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1181</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1182</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='line'>1183</span>      * 
+<span class='line'>1184</span>      * 展开 / 折叠 全部节点
+<span class='line'>1185</span>      * 此方法不会触发 beforeExpand / onExpand 和 beforeCollapse / onCollapse 事件回调函数
+<span class='line'>1186</span>      * @name Horn.ZtreePanel#expandAll
+<span class='line'>1187</span>      * @function
+<span class='line'>1188</span>      * @param expandFlag  true 表示 展开 全部节点,false 表示 折叠 全部节点。
+<span class='line'>1189</span>      * @example
+<span class='line'>1190</span>      * Horn.getComp("ztree1").expandAll(true);
+<span class='line'>1191</span>      * 例子，请参考ztree官网(http://www.ztree.me/v3/api.php)
+<span class='line'>1192</span>      * @return Boolean
+<span class='line'>1193</span>      * 返回值表示最终实际操作情况；
+<span class='line'>1194</span>      * true 表示 展开 全部节点；
+<span class='line'>1195</span>      * false 表示 折叠 全部节点；
+<span class='line'>1196</span>      * null 表示 不存在任何父节点
+<span class='line'>1197</span>      */</span><span class="WHIT">
+<span class='line'>1198</span> </span><span class="WHIT">	</span><span class="NAME">expandAll</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">expandFlag</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1199</span> </span><span class="WHIT">		</span><span class="NAME">this.treeObj.expandAll</span><span class="PUNC">(</span><span class="NAME">expandFlag</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1200</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1201</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='line'>1202</span>      * 
+<span class='line'>1203</span>      * 展开 / 折叠 指定的节点;
+<span class='line'>1204</span>      * 注：必须选中节点文本，勾选状态无效；
+<span class='line'>1205</span>      * 此方法可以触发 beforeExpand / onExpand 或 beforeCollapse / onCollapse 事件回调函数
+<span class='line'>1206</span>      * @name Horn.ZtreePanel#expandNode
+<span class='line'>1207</span>      * @function
+<span class='line'>1208</span>      * @param node  需要 展开 / 折叠 的节点 JSON 数据。
+<span class='line'>1209</span>      * @param expandFlag  true 表示 展开 节点,false 表示 折叠 节点
+<span class='line'>1210</span>      * @param sonSign  true 表示 全部子孙节点 进行与 expandFlag 相同的操作,false 表示 只影响此节点，对于其 子孙节点无任何影响(sonSign = false 且 expandFirst = expandFlag 时，不会触发回调函数，直接返回)。
+<span class='line'>1211</span>      * @param focus    true 表示 展开 / 折叠 操作后，通过设置焦点保证此焦点进入可视区域内, false 表示 展开 / 折叠 操作后，不设置任何焦点。
+<span class='line'>1212</span>      * @param callbackFlag   true 表示执行此方法时触发 beforeExpand / onExpand 或 beforeCollapse / onCollapse 事件回调函数,callbackFlag = false 表示执行此方法时不触发事件回调函数。
+<span class='line'>1213</span>      * @example
+<span class='line'>1214</span>      * ##展开当前选择的第一个节点（包括其全部子节点）
+<span class='line'>1215</span>      * var treeObj =  Horn.getComp("ztree1");
+<span class='line'>1216</span> 	 *	var nodes = treeObj.getSelectedNodes();
+<span class='line'>1217</span> 	 *	if (nodes.length>0) {
+<span class='line'>1218</span> 	 *		treeObj.expandNode(nodes[0], true, true, true);
+<span class='line'>1219</span> 	 *	}
+<span class='line'>1220</span>      * 例子，请参考ztree官网(http://www.ztree.me/v3/api.php)
+<span class='line'>1221</span>      * @return Boolean
+<span class='line'>1222</span>      * 返回值表示最终实际操作情况；
+<span class='line'>1223</span>      * true 表示 展开 节点；
+<span class='line'>1224</span>      * false 表示 折叠 节点；
+<span class='line'>1225</span>      * null 表示 不是父节点
+<span class='line'>1226</span>      */</span><span class="WHIT">
+<span class='line'>1227</span> </span><span class="WHIT">	</span><span class="NAME">expandNode</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">expandFlag</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">sonSign</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">focus</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callbackFlag</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1228</span> </span><span class="WHIT">		</span><span class="NAME">this.treeObj.expandNode</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">expandFlag</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">sonSign</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">focus</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callbackFlag</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1229</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1230</span> </span><span class="WHIT">	 </span><span class="COMM">/**
+<span class='line'>1231</span>      * 获取输入框勾选状态被改变的节点集合（与原始数据 checkedOld 对比）
+<span class='line'>1232</span>      * @name Horn.ZtreePanel#getChangeCheckedNodes
+<span class='line'>1233</span>      * @ignore
+<span class='line'>1234</span>      * @function
+<span class='line'>1235</span>      * @return {ztree.getChangeCheckedNodes}
+<span class='line'>1236</span>      */</span><span class="WHIT">
+<span class='line'>1237</span> </span><span class="WHIT">	</span><span class="NAME">getChangeCheckedNodes</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1238</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.treeObj.getChangeCheckedNodes</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1239</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1240</span> </span><span class="WHIT">	</span><span class="NAME">getCheckedNodes</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">checked</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1241</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.treeObj.getCheckedNodes</span><span class="PUNC">(</span><span class="NAME">checked</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1242</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1243</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='line'>1244</span>      * 
+<span class='line'>1245</span>      * 根据节点数据的属性搜索，获取条件完全匹配的节点数据 JSON 对象
+<span class='line'>1246</span>      * @name Horn.ZtreePanel#getNodeByParam
+<span class='line'>1247</span>      * @function
+<span class='line'>1248</span>      * @param key   需要精确匹配的属性名称。
+<span class='line'>1249</span>      * @param value  需要精确匹配的属性值，可以是任何类型，只要保证与 key 指定的属性值保持一致即可。
+<span class='line'>1250</span>      * @param parentNode   搜索范围，指定在某个父节点下的子节点中进行搜索。
+<span class='line'>1251</span>      * @example
+<span class='line'>1252</span>      * var treeObj =  Horn.getComp("ztree1");
+<span class='line'>1253</span> 	 * var node = treeObj.getNodesByParam("id", 1, null);
+<span class='line'>1254</span>      * 例子，请参考ztree官网(http://www.ztree.me/v3/api.php)
+<span class='line'>1255</span>      * @return Array(JSON)
+<span class='line'>1256</span>      * 匹配精确搜索的节点数据集合;
+<span class='line'>1257</span>      * 如无结果，返回 [ ]
+<span class='line'>1258</span>      */</span><span class="WHIT">
+<span class='line'>1259</span> </span><span class="WHIT">	</span><span class="NAME">getNodesByParam</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">key</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">value</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">parentNode</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1260</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.treeObj.getNodeByParam</span><span class="PUNC">(</span><span class="NAME">key</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">value</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">parentNode</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1261</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1262</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='line'>1263</span>      * 
+<span class='line'>1264</span>      * 根据节点数据的属性搜索，获取条件模糊匹配的节点数据 JSON 对象集合
+<span class='line'>1265</span>      * @name Horn.ZtreePanel#getNodesByParamFuzzy
+<span class='line'>1266</span>      * @function
+<span class='line'>1267</span>      * @param key   需要精确匹配的属性名称。
+<span class='line'>1268</span>      * @param value  需要精确匹配的属性值，可以是任何类型，只要保证与 key 指定的属性值保持一致即可。
+<span class='line'>1269</span>      * @param parentNode   可以指定在某个父节点下的子节点中搜索。
+<span class='line'>1270</span>      * @example
+<span class='line'>1271</span>      * ##查找 name 包含 "test" 的节点数据
+<span class='line'>1272</span>      * var treeObj =  Horn.getComp("ztree1");
+<span class='line'>1273</span> 	 * var node = treeObj.getNodesByParamFuzzy("name", "test", null);;
+<span class='line'>1274</span>      * 例子，请参考ztree官网(http://www.ztree.me/v3/api.php)
+<span class='line'>1275</span>      * @return Array(JSON)
+<span class='line'>1276</span>      * 匹配模糊搜索的节点数据集合;
+<span class='line'>1277</span>      * 如无结果，返回 [ ]
+<span class='line'>1278</span>      */</span><span class="WHIT">
+<span class='line'>1279</span> </span><span class="WHIT">	</span><span class="NAME">getNodesByParamFuzzy</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">key</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">value</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">parentNode</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1280</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.treeObj.getNodesByParamFuzzy</span><span class="PUNC">(</span><span class="NAME">key</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">value</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">parentNode</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1281</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1282</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='line'>1283</span>      * 获取 zTree 当前被选中的节点数据集合
+<span class='line'>1284</span>      * @name Horn.ZtreePanel#getSelectedNodes
+<span class='line'>1285</span>      * @function
+<span class='line'>1286</span>      * @return Array(JSON)
+<span class='line'>1287</span>      * 当前被选中的节点数据集合
+<span class='line'>1288</span>      */</span><span class="WHIT">
+<span class='line'>1289</span> </span><span class="WHIT">	</span><span class="NAME">getSelectedNodes</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1290</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.treeObj.getSelectedNodes</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1291</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1292</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='line'>1293</span>      * 
+<span class='line'>1294</span>      * 隐藏某个节点。
+<span class='line'>1295</span>      * @name Horn.ZtreePanel#hideNode
+<span class='line'>1296</span>      * @function
+<span class='line'>1297</span>      * @param node 指定被隐藏的节点 JSON 数据
+<span class='line'>1298</span>      * @example
+<span class='line'>1299</span>      * ##隐藏根节点第一个节点
+<span class='line'>1300</span>      * var treeObj =  Horn.getComp("ztree1");
+<span class='line'>1301</span>      * var nodes = treeObj.getNodes();
+<span class='line'>1302</span>      * treeObj.hideNode(nodes[0]);
+<span class='line'>1303</span>      * 例子，请参考ztree官网(http://www.ztree.me/v3/api.php)
+<span class='line'>1304</span>      * @return 无
+<span class='line'>1305</span>      */</span><span class="WHIT">
+<span class='line'>1306</span> </span><span class="WHIT">	</span><span class="NAME">hideNode</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1307</span> </span><span class="WHIT">		</span><span class="NAME">this.treeObj.hideNode</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1308</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1309</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='line'>1310</span>      * 
+<span class='line'>1311</span>      * 隐藏一批节点。
+<span class='line'>1312</span>      * @name Horn.ZtreePanel#hideNodes
+<span class='line'>1313</span>      * @function
+<span class='line'>1314</span>      * @param nodes 指定被隐藏的节点 JSON 数据
+<span class='line'>1315</span>      * @example
+<span class='line'>1316</span>      * var treeObj =  Horn.getComp("ztree1");
+<span class='line'>1317</span>      * var nodes = treeObj.getNodes();
+<span class='line'>1318</span>      * treeObj.hideNodes(nodes[0].children);
+<span class='line'>1319</span>      * 例子，请参考ztree官网(http://www.ztree.me/v3/api.php)
+<span class='line'>1320</span>      * @return 无
+<span class='line'>1321</span>      */</span><span class="WHIT">
+<span class='line'>1322</span> </span><span class="WHIT">	</span><span class="NAME">hideNodes</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">nodes</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1323</span> </span><span class="WHIT">		</span><span class="NAME">this.treeObj.hideNodes</span><span class="PUNC">(</span><span class="NAME">nodes</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1324</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1325</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='line'>1326</span>      * 
+<span class='line'>1327</span>      * 移动节点。
+<span class='line'>1328</span>      * @name Horn.ZtreePanel#moveNode
+<span class='line'>1329</span>      * @function
+<span class='line'>1330</span>      * @ignore
+<span class='line'>1331</span>      * @param targetNode 要移动到的目标节点 JSON 数据
+<span class='line'>1332</span>      * @param node 需要被移动的节点数据
+<span class='line'>1333</span>      * @param moveType 指定移动到目标节点的相对位置
+<span class='line'>1334</span>      * @param isSilent 设定移动节点后是否自动展开父节点,isSilent = true 时，不展开父节点，其他值或缺省状态都自动展开
+<span class='line'>1335</span>      * @example
+<span class='line'>1336</span>      * var treeObj =  Horn.getComp("ztree1");
+<span class='line'>1337</span>      * var nodes = treeObj.getNodes();
+<span class='line'>1338</span>      * treeObj.moveNode(nodes[0], nodes[1], "inner");
+<span class='line'>1339</span>      * 例子，请参考ztree官网(http://www.ztree.me/v3/api.php)
+<span class='line'>1340</span>      * @return JSON 返回值是最终被移动的节点数据，正常情况下与 treeNode 参数完全相同
+<span class='line'>1341</span>      */</span><span class="WHIT">
+<span class='line'>1342</span> </span><span class="WHIT">	</span><span class="NAME">moveNode</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">targetNode</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">node</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">moveType</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">isSilent</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1343</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.treeObj.moveNode</span><span class="PUNC">(</span><span class="NAME">targetNode</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">node</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">moveType</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">isSilent</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1344</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1345</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='line'>1346</span>      * 
+<span class='line'>1347</span>      * 强行异步加载父节点的子节点。
+<span class='line'>1348</span>      * 已经加载过的父节点可反复使用此方法重新加载。
+<span class='line'>1349</span>      * @ignore
+<span class='line'>1350</span>      * @name Horn.ZtreePanel#reAsyncChildNodes
+<span class='line'>1351</span>      * @function
+<span class='line'>1352</span>      * @param targetNode 指定需要异步加载的父节点 JSON 数据
+<span class='line'>1353</span>      * @param reloadType reloadType = "refresh" 表示清空后重新加载
+<span class='line'>1354</span>      * @param isSilent 设定异步加载后是否自动展开父节点,isSilent = true 时，不展开父节点，其他值或缺省状态都自动展开
+<span class='line'>1355</span>      * @example
+<span class='line'>1356</span>      * var treeObj =  Horn.getComp("ztree1");
+<span class='line'>1357</span>      * treeObj.reAsyncChildNodes(null, "refresh");
+<span class='line'>1358</span>      * 例子，请参考ztree官网(http://www.ztree.me/v3/api.php)
+<span class='line'>1359</span>      * @return 无
+<span class='line'>1360</span>      */</span><span class="WHIT">
+<span class='line'>1361</span> </span><span class="WHIT">	</span><span class="NAME">reAsyncChildNodes</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">parentNode</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">reloadType</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">isSilent</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1362</span> </span><span class="WHIT">		</span><span class="NAME">this.treeObj.reAsyncChildNodes</span><span class="PUNC">(</span><span class="NAME">parentNode</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">reloadType</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">isSilent</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1363</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1364</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='line'>1365</span>      * 刷新 zTree
+<span class='line'>1366</span>      * @name Horn.ZtreePanel#refresh
+<span class='line'>1367</span>      * @function
+<span class='line'>1368</span>      * @return  无
+<span class='line'>1369</span>      */</span><span class="WHIT">
+<span class='line'>1370</span> </span><span class="WHIT">	</span><span class="NAME">refresh</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1371</span> </span><span class="WHIT">		</span><span class="NAME">this.treeObj.refresh</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1372</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1373</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='line'>1374</span>      * 
+<span class='line'>1375</span>      * 清空某父节点的子节点
+<span class='line'>1376</span>      * 1、清空子节点后，父节点会自动变为叶子节点。
+<span class='line'>1377</span>      * 2、请勿用此方法清空根节点，如果需要清空根节点，直接初始化 zTree，并且设置初始节点为 null 即可。
+<span class='line'>1378</span>      * 3、此方法不会触发任何事件回调函数。
+<span class='line'>1379</span>      * @name Horn.ZtreePanel#removeChildNodes
+<span class='line'>1380</span>      * @function
+<span class='line'>1381</span>      * @param parentNode 需要清空子节点的父节点数据 JSON 数据
+<span class='line'>1382</span>      * @example
+<span class='line'>1383</span>      * var treeObj =  Horn.getComp("ztree1");
+<span class='line'>1384</span>      * var nodes = treeObj.getSelectedNodes();
+<span class='line'>1385</span> 	*if (nodes && nodes.length>0) {
+<span class='line'>1386</span> 	*	treeObj.removeChildNodes(nodes[0]);
+<span class='line'>1387</span> 	*}
+<span class='line'>1388</span>      * 例子，请参考ztree官网(http://www.ztree.me/v3/api.php)
+<span class='line'>1389</span>      * @return Array(JSON)
+<span class='line'>1390</span>      * 将该父节点的子节点数据返回，如果不存在则返回 null
+<span class='line'>1391</span>      */</span><span class="WHIT">
+<span class='line'>1392</span> </span><span class="WHIT">	</span><span class="NAME">removeChildNodes</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">parentNode</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1393</span> </span><span class="WHIT">		</span><span class="NAME">this.treeObj.removeChildNodes</span><span class="PUNC">(</span><span class="NAME">parentNode</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1394</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1395</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='line'>1396</span>      * 
+<span class='line'>1397</span>      * 删除节点
+<span class='line'>1398</span>      * @name Horn.ZtreePanel#removeNode
+<span class='line'>1399</span>      * @function
+<span class='line'>1400</span>      * @param node 需要被删除的节点数据 JSON 数据
+<span class='line'>1401</span>      * @example
+<span class='line'>1402</span>      * var treeObj =  Horn.getComp("ztree1");
+<span class='line'>1403</span>      * var nodes = treeObj.getSelectedNodes();
+<span class='line'>1404</span> 	*if (nodes && nodes.length>0) {
+<span class='line'>1405</span> 	*	for (var i=0, l=nodes.length; i &lt; l; i++) {
+<span class='line'>1406</span> 	*		treeObj.removeNode(nodes[i]);
+<span class='line'>1407</span> 	*	}
+<span class='line'>1408</span> 	*}
+<span class='line'>1409</span>      * 例子，请参考ztree官网(http://www.ztree.me/v3/api.php)
+<span class='line'>1410</span>      * @return 无
+<span class='line'>1411</span>      */</span><span class="WHIT">
+<span class='line'>1412</span> </span><span class="WHIT">	</span><span class="NAME">removeNode</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callbackFlag</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1413</span> </span><span class="WHIT">		</span><span class="NAME">this.treeObj.removeNode</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callbackFlag</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1414</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1415</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='line'>1416</span>      * 
+<span class='line'>1417</span>      * 选中指定节点
+<span class='line'>1418</span>      * @name Horn.ZtreePanel#selectNode
+<span class='line'>1419</span>      * @function
+<span class='line'>1420</span>      * @param node 需要被选中的节点数据 JSON 数据
+<span class='line'>1421</span>      * @param addFlag true 表示追加选中，会出现多点同时被选中的情况, false 表示单独选中，原先被选中的节点会被取消选中状态
+<span class='line'>1422</span>      * @param isSilent true 选中节点时，不会让节点自动滚到到可视区域内, false （默认）表示选中节点时，会让节点自动滚到到可视区域内
+<span class='line'>1423</span>      * @example
+<span class='line'>1424</span>      * var treeObj =  Horn.getComp("ztree1");
+<span class='line'>1425</span>      * var nodes = treeObj.getNodes();
+<span class='line'>1426</span> 	*if (nodes && nodes.length>0) {
+<span class='line'>1427</span> 	*	treeObj.selectNode(nodes[0]);
+<span class='line'>1428</span> 	*}
+<span class='line'>1429</span>      * 例子，请参考ztree官网(http://www.ztree.me/v3/api.php)
+<span class='line'>1430</span>      * @return 无
+<span class='line'>1431</span>      */</span><span class="WHIT">
+<span class='line'>1432</span> </span><span class="WHIT">	</span><span class="NAME">selectNode</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">addFlag</span><span class="PUNC">,</span><span class="NAME">isSilent</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1433</span> </span><span class="WHIT">		</span><span class="NAME">this.treeObj.selectNode</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">addFlag</span><span class="PUNC">,</span><span class="NAME">isSilent</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1434</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1435</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='line'>1436</span>      * 
+<span class='line'>1437</span>      * 禁用 或 解禁 某个节点的 checkbox / radio 
+<span class='line'>1438</span>      * 1、节点的 checkbox / radio 被禁用后，无法勾选或取消勾选。
+<span class='line'>1439</span>      * 2、请不要直接修改已加载节点的 treeNode.chkDisabled 属性。
+<span class='line'>1440</span>      * @name Horn.ZtreePanel#setChkDisabled
+<span class='line'>1441</span>      * @function
+<span class='line'>1442</span>      * @param node 需要禁用 或 解禁 checkbox / radio 的节点数据 JSON 数据
+<span class='line'>1443</span>      * @param disabled true  true 表示禁用 checkbox / radio,  false 表示解禁 checkbox / radio
+<span class='line'>1444</span>      * @example
+<span class='line'>1445</span>      * var treeObj =  Horn.getComp("ztree1");
+<span class='line'>1446</span>      * var nodes = treeObj.getSelectedNodes();
+<span class='line'>1447</span> 	*if (nodes && nodes.length>0) {
+<span class='line'>1448</span> 	*	for (var i=0, l=nodes.length; i &lt; l; i++) {
+<span class='line'>1449</span> 	*      treeObj.setChkDisabled(nodes[i], true);
+<span class='line'>1450</span> 	*   }
+<span class='line'>1451</span> 	*}
+<span class='line'>1452</span>      * 例子，请参考ztree官网(http://www.ztree.me/v3/api.php)
+<span class='line'>1453</span>      * @return 无
+<span class='line'>1454</span>      */</span><span class="WHIT">
+<span class='line'>1455</span> </span><span class="WHIT">	</span><span class="NAME">setChkDisabled</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">disabled</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">inheritParent</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">inheritChildren</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1456</span> </span><span class="WHIT">		</span><span class="NAME">this.treeObj.setChkDisabled</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">disabled</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">inheritParent</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">inheritChildren</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1457</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1458</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='line'>1459</span>      * 
+<span class='line'>1460</span>      * 设置 zTree 进入 / 取消 编辑状态。
+<span class='line'>1461</span>      * @name Horn.ZtreePanel#setEditable
+<span class='line'>1462</span>      * @ignore
+<span class='line'>1463</span>      * @function
+<span class='line'>1464</span>      * @param editable true 表示进入 编辑状态,false 表示取消 编辑状态
+<span class='line'>1465</span>      * @example
+<span class='line'>1466</span>      * var treeObj =  Horn.getComp("ztree1");
+<span class='line'>1467</span>      * treeObj.setEditable(true);
+<span class='line'>1468</span>      * 例子，请参考ztree官网(http://www.ztree.me/v3/api.php)
+<span class='line'>1469</span>      * @return
+<span class='line'>1470</span>      */</span><span class="WHIT">
+<span class='line'>1471</span> </span><span class="WHIT">	</span><span class="NAME">setEditable</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">editable</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1472</span> </span><span class="WHIT">		</span><span class="NAME">this.treeObj.setEditable</span><span class="PUNC">(</span><span class="NAME">editable</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1473</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1474</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='line'>1475</span>      * 
+<span class='line'>1476</span>      * 显示某个被隐藏的节点。
+<span class='line'>1477</span>      * @name Horn.ZtreePanel#showNode
+<span class='line'>1478</span>      * @function
+<span class='line'>1479</span>      * @param node 指定被显示的节点 JSON 数据
+<span class='line'>1480</span>      * @example
+<span class='line'>1481</span>      * var treeObj =  Horn.getComp("ztree1");
+<span class='line'>1482</span>      * var node = treeObj.getNodeByParam("isHidden", true);
+<span class='line'>1483</span> 	 *if (node) {
+<span class='line'>1484</span> 	 *  treeObj.showNode(node);
+<span class='line'>1485</span> 	 *}
+<span class='line'>1486</span>      * 例子，请参考ztree官网(http://www.ztree.me/v3/api.php)
+<span class='line'>1487</span>      * @return 无
+<span class='line'>1488</span>      */</span><span class="WHIT">
+<span class='line'>1489</span> </span><span class="WHIT">	</span><span class="NAME">showNode</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1490</span> </span><span class="WHIT">		</span><span class="NAME">this.treeObj.showNode</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1491</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1492</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='line'>1493</span>      * 
+<span class='line'>1494</span>      * 显示一批已经被隐藏的节点。
+<span class='line'>1495</span>      * @name Horn.ZtreePanel#showNode
+<span class='line'>1496</span>      * @function
+<span class='line'>1497</span>      * @param nodes 指定被显示的节点 JSON 数据集合
+<span class='line'>1498</span>      * @example
+<span class='line'>1499</span>      * var treeObj =  Horn.getComp("ztree1");
+<span class='line'>1500</span>      * var nodes = treeObj.getNodesByParam("isHidden", true);
+<span class='line'>1501</span> 	 *if (nodes) {
+<span class='line'>1502</span> 	 *  treeObj.showNodes(nodes);
+<span class='line'>1503</span> 	 *}
+<span class='line'>1504</span>      * 例子，请参考ztree官网(http://www.ztree.me/v3/api.php)
+<span class='line'>1505</span>      * @return 无
+<span class='line'>1506</span>      */</span><span class="WHIT">
+<span class='line'>1507</span> </span><span class="WHIT">	</span><span class="NAME">showNodes</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">nodes</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1508</span> </span><span class="WHIT">		</span><span class="NAME">this.treeObj.showNodes</span><span class="PUNC">(</span><span class="NAME">nodes</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1509</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1510</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='line'>1511</span>      * 
+<span class='line'>1512</span>      * 将 zTree 使用的标准 JSON 嵌套格式的数据转换为简单 Array 格式。(免去用户自行编写递归遍历全部节点的麻烦)
+<span class='line'>1513</span>      * @name Horn.ZtreePanel#transformToArray
+<span class='line'>1514</span>      * @function
+<span class='line'>1515</span>      * @param nodes 需要被转换的 zTree 节点数据对象集合 或 某个单独节点的数据对象
+<span class='line'>1516</span>      * @example
+<span class='line'>1517</span>      * var treeObj =  Horn.getComp("ztree1");
+<span class='line'>1518</span>      * var nodes = treeObj.transformToArray(treeObj.getNodes());
+<span class='line'>1519</span>      * 例子，请参考ztree官网(http://www.ztree.me/v3/api.php)
+<span class='line'>1520</span>      * @return Array(JSON)
+<span class='line'>1521</span>      * 转换后的简单 Array 数据格式
+<span class='line'>1522</span>      */</span><span class="WHIT">
+<span class='line'>1523</span> </span><span class="WHIT">	</span><span class="NAME">transformToArray</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">nodes</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1524</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.treeObj.transformToArray</span><span class="PUNC">(</span><span class="NAME">nodes</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1525</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1526</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='line'>1527</span>      * 
+<span class='line'>1528</span>      * 将简单 Array 格式数据转换为 zTree 使用的标准 JSON 嵌套数据格式。
+<span class='line'>1529</span>      * @name Horn.ZtreePanel#transformTozTreeNodes
+<span class='line'>1530</span>      * @function
+<span class='line'>1531</span>      * @param nodes 需要被转换的简单 Array 格式数据 或 某个单独的数据对象
+<span class='line'>1532</span>      * @example
+<span class='line'>1533</span>      * var simpleNodes = [
+<span class='line'>1534</span>      * {"id":1, "pId":0, "name":"test1"},
+<span class='line'>1535</span>      * {"id":11, "pId":1, "name":"test11"},
+<span class='line'>1536</span>      * {"id":12, "pId":1, "name":"test12"},
+<span class='line'>1537</span>      * {"id":111, "pId":11, "name":"test111"}
+<span class='line'>1538</span>      * ];
+<span class='line'>1539</span>      * var treeObj =  Horn.getComp("ztree1");
+<span class='line'>1540</span>      * var nodes = treeObj.transformTozTreeNodes(simpleNodes);
+<span class='line'>1541</span>      * 例子，请参考ztree官网(http://www.ztree.me/v3/api.php)
+<span class='line'>1542</span>      * @return Array(JSON)
+<span class='line'>1543</span>      * zTree 使用的标准数据，子节点都存在于父节点数据的 children 属性中；
+<span class='line'>1544</span>      * 如果 simpleNodes 是一个 JSON 对象，则被简单封装成长度为 1 的数组。
+<span class='line'>1545</span>      */</span><span class="WHIT">
+<span class='line'>1546</span> </span><span class="WHIT">	</span><span class="NAME">transformTozTreeNodes</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">simpleNodes</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1547</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.treeObj.transformToArray</span><span class="PUNC">(</span><span class="NAME">simpleNodes</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1548</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1549</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='line'>1550</span>      * 
+<span class='line'>1551</span>      * 更新某节点数据，主要用于该节点显示属性的更新。
+<span class='line'>1552</span>      * @name Horn.ZtreePanel#updateNode
+<span class='line'>1553</span>      * @function
+<span class='line'>1554</span>      * @param node 指定需要更新的节点 JSON 数据
+<span class='line'>1555</span>      * @example
+<span class='line'>1556</span>      * var treeObj =  Horn.getComp("ztree1");
+<span class='line'>1557</span>      * var nodes = treeObj.getNodes();
+<span class='line'>1558</span> 	 *	if (nodes.length>0) {
+<span class='line'>1559</span> 	 *		nodes[0].name = "test";
+<span class='line'>1560</span> 	 *		treeObj.updateNode(nodes[0]);
+<span class='line'>1561</span> 	 *	}
+<span class='line'>1562</span>      * 例子，请参考ztree官网(http://www.ztree.me/v3/api.php)
+<span class='line'>1563</span>      * @return 无
+<span class='line'>1564</span>      */</span><span class="WHIT">
+<span class='line'>1565</span> </span><span class="WHIT">	</span><span class="NAME">updateNode</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">checkTypeFlag</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1566</span> </span><span class="WHIT">		</span><span class="NAME">this.treeObj.updateNode</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">checkTypeFlag</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1567</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1568</span> </span><span class="WHIT">	</span><span class="NAME">getCheckedNodes</span><span class="PUNC">:</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1569</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.treeObj.getCheckedNodes</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1570</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1571</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1572</span> 
+<span class='line'>1573</span> </span><span class="NAME">Horn.regUI</span><span class="PUNC">(</span><span class="STRN">"div.h_ztree"</span><span class="PUNC">,</span><span class="NAME">Horn.ZtreePanel</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1574</span> 
+<span class='line'>1575</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">jresplusUIZtreeOnExpand</span><span class="PUNC">(</span><span class="NAME">event</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">treeId</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">treeNode</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1576</span> </span><span class="WHIT">	</span><span class="NAME">$</span><span class="PUNC">(</span><span class="STRN">"#"</span><span class="PUNC">+</span><span class="NAME">treeId</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">children</span><span class="PUNC">(</span><span class="STRN">"li"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">children</span><span class="PUNC">(</span><span class="STRN">"ul"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">removeAttr</span><span class="PUNC">(</span><span class="STRN">"style"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1577</span> </span><span class="PUNC">}</span></pre></body></html>

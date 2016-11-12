@@ -1,0 +1,152 @@
+
+<h3>目标选择器组件</h3>
+<p>目标选择器组件，点击组件打开目前页面，通过setTargetSelectValue(label,key)方法进行赋值,如图：</p>
+ <img src="../resource/images/targetSelect1.jpg"/><br>
+<h4>依赖组件</h4>
+<ul>
+	<li>无</li>
+</ul>
+
+<h4>适用范围</h4>
+<p>
+适用于需要弹窗口或者跳转到其它页面来赋值给组件的应用场景
+</p>
+<h4>约束</h4>
+<p>
+	<ol>
+		<li>组件默认只读</li>
+		<li>不支持绑定数据词典</li>
+	</ol>
+</p>
+<h4>注意事项</h4>
+<p>
+	<ol>
+		<li>组件必须编写id属性</li>
+	</ol>
+</p>
+
+<h4>使用示例</h4>
+<p>宏用法</p>
+<textarea name="code" class="html" style="display: none;">
+#targetselect({"label": "所属组织：", "name": "org", "id": "orgId", "check":"required","event":"orgSelector('orgId')"})
+</textarea>
+
+<p>通过API给组件赋值</p>
+<textarea name="code" class="html" style="display: none;">
+$("#orgId").setTargetSelectValue("恒生电子股份有限公司","0_000000");
+</textarea>
+<p>静态赋值（注意！如果通过java后台返回的值，就组装成这个格式即可：{"label":"恒生电子股份有限公司","key":"0_000000"}）</p>
+<textarea name="code" class="html" style="display: none;">
+#targetselect({"label": "所属组织：", "name": "org", "id": "orgId","value":{"label":"恒生电子股份有限公司","key":"0_000000"} "check":"required","event":"orgSelector('orgId')"})
+</textarea>
+
+<p>完整的例子代码</p>
+<textarea name="code" class="html" style="display: none;">
+查询页面代码：
+#parse("/screen/test/targetselect/orgSelectorWin.vm")
+#@screen()
+	#@panel({})
+	#form_start({"url":"$appServer.get('/pe/bizframe/user/modify.htm')","name":"modifyForm","id":"modifyForm","events":[{"event":"onSubmit","function":"onSubmitFn()"}]})
+	#panel_start
+			#textfield({"label": "员工号：","name":"extField1","value":"","check":"required;num","maxlength":"32"})
+			#textfield({"label": "用户编号：", "name": "userId","readonly": true, "value": "$!user.userId","check":"required"})
+			#textfield({"label": "用户昵称：", "name": "userName", "value": "$!user.userName","check":"required;checkImproperChar","maxlength":"32"})
+			#targetselect({"label": "所属组织：", "name": "orgId", "id": "orgId", "check":"required","event":"orgSelector('orgId')"})
+			#targetselect({"label": "上级组织：", "name": "orgId", "id": "parentId","check":"required","event":"orgSelector('parentId')"})
+	#panel_end
+	#button_panel
+	#form_end()
+#end
+#end
+
+
+弹窗口代码：
+
+#@window({"title":"组织选择器","name":"orgSelector","width":"500","height":"420"})
+      <table cellpadding="0" cellspacing="0" class="js_list_table"> 
+          <tr id="headId"> 
+            <th class="h_querytable_checkboxcolumn"><input class="h_querytable_select_all" type="checkbox" id="chkAll" value="$!item.dictItemCode"></th> 
+            <th name="dictItemCode" colno="1">组织编号</th> 
+            <th name="dictItemName" colno="2">组织名称</th> 
+          </tr> 
+          <tr class="modify_1"> 
+            <td><input class="h_querytable_select" type="checkbox" name="dictItem" id="dictItem" value="0_0000#研发中心"></td> 
+            <td class="align-left" nowrap="" >0_0000</td> 
+            <td class="align-left" nowrap="">研发中心</td> 
+          </tr> 
+		  <tr class="modify_2"> 
+            <td><input class="h_querytable_select" type="checkbox" name="dictItem" id="dictItem" value="0_0001#银行事业部"></td> 
+            <td class="align-left" nowrap="" >0_0001</td> 
+            <td class="align-left" nowrap="">银行事业部</td> 
+          </tr> 
+		  <tr class="modify_3"> 
+            <td><input class="h_querytable_select" type="checkbox" name="dictItem" id="dictItem" value="0_0002#基财事业部"></td> 
+            <td class="align-left" nowrap="" >0_0002</td> 
+            <td class="align-left" nowrap="">基财事业部</td> 
+          </tr> 
+		  <tr class="modify_4"> 
+            <td><input class="h_querytable_select" type="checkbox" name="dictItem" id="dictItem" value="0_0003#海外事业部"></td> 
+            <td class="align-left" nowrap="" >0_0003</td> 
+            <td class="align-left" nowrap="">海外事业部</td> 
+          </tr> 
+      </table> 
+	<table width="100%"  border="0" cellspacing="0" cellpadding="0">
+	  <tr>
+	    <td align="center">
+		    <div  class="h_btndiv">
+				<button type="button" class="h_btn-submit" name="button_submit" onclick="submitBtn()">确定</button>
+				<button type="button" class="h_btn-cencel" name="button_reset" onclick="closeOrgWindow()">取消</button>
+	    	</div>
+	    </td>
+	  </tr>
+	</table>
+#end
+<input type="hidden" id="targetId" name="targetId" value=""/>
+#jscode()
+	
+	function orgSelector(targetId){
+		Horn.getComp("orgSelector").show();
+		$("#targetId").val(targetId);
+		
+	}
+
+	function submitBtn(){
+		var cn = 0;
+		var ids = "";
+		var names = "";
+		$("input[name=dictItem]").each(function(){
+			
+			if(this.checked){
+				cn++;
+				var tmp = this.value.split("#");
+				var id = tmp[0];
+				var name = tmp[1];
+				ids = ids+id+",";
+				names = names+name+",";
+			}
+		});
+		if(cn>0){
+    		ids = ids.substring(0,ids.length-1);
+    		names = names.substring(0,names.length-1);
+			$("#"+$("#targetId").val()).setTargetSelectValue(names,ids);
+		}else{
+			alert("至少要选中一项");
+		}
+		closeOrgWindow();
+	}
+	
+	function closeOrgWindow(){
+		Horn.getComp("orgSelector").hide();
+	}
+    $("#chkAll").click(function() {// 全选复选框单击事件
+    			if (this.checked) {
+    				$(".js_list_table tr td input[type=checkbox]").attr(
+    						"checked", true);
+    			} else {
+    				$(".js_list_table tr td input[type=checkbox]").attr(
+    						"checked", false);
+    			}
+    	});
+#end
+
+</textarea>

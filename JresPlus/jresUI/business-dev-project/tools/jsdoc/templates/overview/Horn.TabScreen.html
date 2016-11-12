@@ -1,0 +1,58 @@
+
+<h3>TabScreen 多标签页内容容器</h3>
+<p>多tab方式打开菜单时所用</p>
+ <img src=""/>
+
+<h4>依赖组件</h4>
+<ul>
+	<li>无</li>
+</ul>
+
+<h4>适用范围</h4>
+<p>
+</p>
+<h4>约束</h4>
+<p>
+	<ol>
+		<li>无</li>
+	</ol>
+</p>
+<h4>注意事项</h4>
+<p>
+	<ol>
+		<li>无</li>
+	</ol>
+</p>
+
+<h4>使用示例</h4>
+<p>框架页面中使用</p>
+<textarea name="code" class="html" style="display: none;">
+<div class="h_totalwidth">
+    <div class="h_menu">
+    	$asyncContain.get('/sys/menu.htm')
+    </div>
+    <div class="h_screen">
+    	#tab_screen
+    </div>
+    <div class="h_index">
+		$contain.get('/index.htm')
+	</div>
+</div>
+</textarea>
+
+<p>注册框架页面中的tab</p>
+<textarea name="code" class="html" style="display: none;">
+#jscode()
+    Horn.ready(function(){
+    	Horn.TabScreen = Horn.getCompByEl($('div.h_tab-screen'));
+    	Horn.TabScreen.maxTabNum = 10;
+		var topHeight = $(".h_top").height() + Horn.TabScreen.maxTopSpace;
+    	var bodyHeight = document.documentElement.clientHeight - topHeight;
+		Horn.TabScreen.createTab({name:'index',ref:'index',standard:true,closeable:false,title:'首页',context:$('div.h_index')});
+		#if($request.getParameter("loadurl"))
+			var url = '$request.getParameter("loadurl")';
+			Horn.TabScreen.create({url:'$request.getParameter("loadurl")'});
+		#end
+	});
+#end
+</textarea>

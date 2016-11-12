@@ -1,0 +1,1253 @@
+
+	<!-- ============================== header ================================= -->	
+		<!-- begin static/header.html -->
+		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="keywords" content="jquery,ui,easy,FUI,web framekwork,ajax framekwork,ria,web development">
+		<meta name="description" content="FUI help you build your web page more Fast!!">
+		<title>UI API - JRES UI</title>
+   		<link rel="stylesheet" href="../resource/css/doc.css" type="text/css" />
+    	<link type="text/css" rel="stylesheet" href="../resource/SyntaxHighlighter/Styles/SyntaxHighlighter.css"/>
+		<script src="../resource/SyntaxHighlighter/Scripts/shCore.js"></script>
+		<script src="../resource/SyntaxHighlighter/Scripts/shBrushXml.js"></script>
+		<script src="../resource/SyntaxHighlighter/Scripts/shBrushJava.js"></script>
+		<script type="text/javascript" src="../resource/jquery-1.7.2.min.js"></script>
+		<style type="text/css">
+			.dp-xml .cdata { color: #ff1493; }.dp-xml .tag, .dp-xml .tag-name { color: #069; font-weight: bold; }.dp-xml .attribute { color: red; }.dp-xml .attribute-value { color: blue; }
+		</style>
+		<script>
+			
+		</script>
+	</head>
+	<body>
+		<div id="header">
+						<div id="header-inner">
+				<table cellpadding="0" cellspacing="0" style="width:100%;">
+					<tr>
+						<td rowspan="2" style="width:20px;">
+						</td>
+						<td style="height:52px;">
+							<div style="color:#fff;font-size:22px;font-weight:bold;">
+								<a href="#" style="color:#fff;font-size:22px;font-weight:bold;text-decoration:none">JRES UI</a>
+							</div>
+							<div style="color:#fff">
+								<a href="#" style="color:#fff;text-decoration:none">JRES UI是使用Velocity开发的服务器端UI组件，助力于组件化快速视图开发!</a>
+							</div>
+						</td>
+						<td style="padding-right:5px;text-align:right;vertical-align:bottom;">
+							<div id="topmenu" style="display:none;">
+								<a href="../../index.html">主页</a>
+								<a href="http://rdc.hundsun.com/forum.php?mod=forumdisplay&amp;fid=163" target="_blank">论坛</a>
+								<a href="../../demo/index.htm">示例</a>
+								<a href="../../documentation/index.html">文档</a>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+			
+		</div>
+		<!-- end static/header.html -->
+	<div id="mainwrap" >
+		<div id="content">
+        <!-- ============================== classes index ============================ -->
+        <script type="text/javascript">
+            $(function() {
+            	var bw=$.browser;
+				if(bw.msie&&bw.version<7||(bw.msie&&$.support.boxModel==false)){
+						//ie6
+						$("#plugin_title").hide();
+						$('#plugins').removeClass("plugins");
+						$('#plugins').addClass("plugins2");
+				}else{
+					$('#plugins').stop().animate({'marginLeft':'-285px'},1000);
+	                $('#plugins').hover(
+	                    function () {
+	                        $(this).stop().animate({'marginLeft':'-2px'},200);
+	                    },
+	                    function () {
+	                        $(this).stop().animate({'marginLeft':'-285px'},200);
+	                    }
+	                );
+				}
+                
+            });
+</script>
+	<div id="plugins" class="plugins">
+	<div id="plugin_title" class="plugin_title">控件清单</div>
+	<ul>
+        
+        
+        
+        
+        
+        <li><a href="../symbols/Horn.html">Horn</a></li>
+        
+        <li><a href="../symbols/Horn._Pagebar-pagebar.html">Horn._Pagebar-pagebar</a></li>
+        
+        <li><a href="../symbols/Horn.Base.html">Horn.Base</a></li>
+        
+        <li><a href="../symbols/Horn.ButtonPanel.html">Horn.ButtonPanel</a></li>
+        
+        <li><a href="../symbols/Horn.Calendar.html">Horn.Calendar</a></li>
+        
+        <li><a href="../symbols/Horn.CalendarGroup.html">Horn.CalendarGroup</a></li>
+        
+        <li><a href="../symbols/Horn.Checkbox.html">Horn.Checkbox</a></li>
+        
+        <li><a href="../symbols/Horn.CheckboxGroup.html">Horn.CheckboxGroup</a></li>
+        
+        <li><a href="../symbols/Horn.Combox.html">Horn.Combox</a></li>
+        
+        <li><a href="../symbols/Horn.DataGrid.html">Horn.DataGrid</a></li>
+        
+        <li><a href="../symbols/Horn.Field.html">Horn.Field</a></li>
+        
+        <li><a href="../symbols/Horn.FieldSet.html">Horn.FieldSet</a></li>
+        
+        <li><a href="../symbols/Horn.Form.html">Horn.Form</a></li>
+        
+        <li><a href="../symbols/Horn.Grid.html">Horn.Grid</a></li>
+        
+        <li><a href="../symbols/Horn.HiddenField.html">Horn.HiddenField</a></li>
+        
+        <li><a href="../symbols/Horn.Label.html">Horn.Label</a></li>
+        
+        <li><a href="../symbols/Horn.Menu.html">Horn.Menu</a></li>
+        
+        <li><a href="../symbols/Horn.MessageBox.html">Horn.MessageBox</a></li>
+        
+        <li><a href="../symbols/Horn.PageBar.html">Horn.PageBar</a></li>
+        
+        <li><a href="../symbols/Horn.Panel.html">Horn.Panel</a></li>
+        
+        <li><a href="../symbols/Horn.Password.html">Horn.Password</a></li>
+        
+        <li><a href="../symbols/Horn.PasswordGroup.html">Horn.PasswordGroup</a></li>
+        
+        <li><a href="../symbols/Horn.QueryTable.html">Horn.QueryTable</a></li>
+        
+        <li><a href="../symbols/Horn.RadioGroup.html">Horn.RadioGroup</a></li>
+        
+        <li><a href="../symbols/Horn.Screen.html">Horn.Screen</a></li>
+        
+        <li><a href="../symbols/Horn.SelectTree.html">Horn.SelectTree</a></li>
+        
+        <li><a href="../symbols/Horn.TabPanel.html">Horn.TabPanel</a></li>
+        
+        <li><a href="../symbols/Horn.TargetSelect.html">Horn.TargetSelect</a></li>
+        
+        <li><a href="../symbols/Horn.Textarea.html">Horn.Textarea</a></li>
+        
+        <li><a href="../symbols/Horn.Textfield.html">Horn.Textfield</a></li>
+        
+        <li><a href="../symbols/Horn.Tip.html">Horn.Tip</a></li>
+        
+        <li><a href="../symbols/Horn.TypeField.html">Horn.TypeField</a></li>
+        
+        <li><a href="../symbols/Horn.Util.html">Horn.Util</a></li>
+        
+        <li><a href="../symbols/Horn.Validate.html">Horn.Validate</a></li>
+        
+        <li><a href="../symbols/Horn.Window.html">Horn.Window</a></li>
+        
+        <li><a href="../symbols/Horn.ZtreePanel.html">Horn.ZtreePanel</a></li>
+        
+        
+        
+	</ul>
+</div>
+        <div class="doc">
+        <div style="padding:10px">
+        <div style="text-align:right;"><a href="../index.html">返回控件主页</a>&nbsp;|&nbsp;<a href="../files.html">返回源码主页</a></div>
+        <!-- ============================== class overview ============================ -->
+        
+        
+<h3>DataGrid 可冻结列的数据列表</h3>
+<p>以多行多列的形式展示数据，支持行数据选中、列的格式转换,支持冻结列</p>
+ <img src="../resource/images/datagrid.png" />
+
+<h4>依赖组件</h4>
+<ul>
+	<li>无</li>
+</ul>
+
+<h4>适用范围</h4>
+<p>
+</p>
+<h4>约束</h4>
+<p>
+	<ol>
+		<li>不支持行列可编辑功能；</li>
+		<li>不支持分组grid和treegrid；</li>
+		<li>不支持多列头；</li>
+		<li>不支持筛选的功能；</li>
+		<li>不支持导出功能</li>
+		<li>不支持列排序</li>
+		<li>不支持翻页记录</li>
+	</ol>
+</p>
+<h4>返回的数据格式</h4>
+<p>
+	<ol>
+		<li>
+		rows:表格当前页展现的数据集合
+		total:数据总条数，用于计算分页
+		{"rows":[{...},{...}],"total":100}</li>
+	</ol>
+</p>
+
+<h4>使用示例</h4>
+<p>示例1:</p>
+<textarea name="code" class="html" style="display: none;">
+#datagrid({
+           "title":"datagrid-title",
+		   "rowSelect":"true",
+		   "numbercolumn":true,
+		   "numberColWidth":30,
+		   "selectModel":"single",
+		   "autoLoad":true,
+		   "url":"/test/datagrid/getData.json",
+		   "buttons":[{"label":"新增","cls":"add","refmenu":"test11","event":"add()"},
+		              {"label":"修改","cls":"edit","refmenu":"test11","event":"edit()"},
+					  {"label":"删除","cls":"del","refmenu":"test11"},
+					  {"label":"保存","cls":"save","refmenu":"test11"},
+					  {"label":"查询","cls":"query","refmenu":"test11"},
+					  {"label":"刷新","cls":"refresh","refmenu":"test11"},
+					    {"label":"打开","cls":"open","refmenu":"test11"}
+					  ],
+		   "pageConfig":{"pageSize":20},
+		   "name":"dyncGrid123",
+		   "events":[{"event":"rowclick","function":"testRowClick"},
+		             {"event":"rowDblclick","function":"testRowDblClick"},
+					 {"event":"beforeLoad","function":"testbeforeLoad"},
+					 {"event":"loadSuccess","function":"testloadSuccess"},
+					 {"event":"loadError","function":"testloadError"}],
+		   "hasPage":true,
+		   "baseParams":{"aa":10},
+		   "frozen":["branchNo1","initDate"],
+		   "autoWidth":true,
+		   "items":[{"name":"initDate","text":"发生日期","hAlign":"left","tAlign":"right","hidden":"false","buttons":[{"label":"设置默认1","event":"edit"}]},
+			        {"name":"taskStatus","text":"静态字典测试","items":[{"label":"杭州总部","value":"0"},{"label":"上海分部1","value":"2"},{"label":"上海分部2","value":"3"}]},
+			        {"name":"branchNo1", "dictName":"country", "text":"（动态字典）","renderer":"domrender"},
+			        {"name":"scanType", "text":"扫描类别","hidden":false,"buttons":[{"label":"设置默认2","event":"edit"}]},
+			        {"name":"scanType2","text":"扫描类别2","renderer":"domrender"},
+			        {"name":"clientId","text":"客户金额"},
+			        {"name":"clientName","text":"客户名称","renderer":"domrender"},
+			        {"name":"clientName", "text":"列1","renderer":"domrender"},
+					{"name":"position_str", "text":"列22324"},
+					{"name":"clientName", "text":"列3"},
+					{"name":"clientName", "text":"列4"},
+					{"name":"clientName", "text":"列5"},
+					{"name":"clientName", "text":"列6"}
+			]
+ })
+</textarea>
+
+        <p>&nbsp;</p>
+        
+        	
+            	<!-- doc_options_begin -->
+	        	<h4>属性</h4>
+	        	<p style="color:red;">
+	        		注意：组件的id、name属性只能是英文字母开始，由英文字母、数字和下划线组成，命名时应考虑易识别，不要太长，不要和其他组件重复（表单内的组件除外）。
+	        	</p>
+	        	<table class="doc-table">
+	        		<tbody>
+	        			<tr>
+	        				<th><strong>名称</strong></th>
+							<th><strong>类型</strong></th>
+							<th><strong>描述</strong></th>
+							<th><strong>默认值</strong></th>
+	        			</tr>
+	        			
+	        				<tr>
+	        					<td><b>id</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>组件唯一标识。</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>""</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>name</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>组件名称。通过Horn.getComp(name)来获取组件。</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>”name":"dataGridName"Horn.getComp("dataGridName");</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>""</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>data</b></td>
+	        					<td>array</td>
+	        					<td>
+	        						<p>列表初始化数据。加载的静态数据,可以使用内置的分页栏，支持前端数据分页特性</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>"data":$!somedatasomedata为springMVC当中Model中数据集的键</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>""</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>selectModel</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>组件启用单选/多选选择框,当值为single时为单选列表，仅能够选择一条数据；当其值为multi时为多选列表，可同时选择多条数据。</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>"selectModel":"single",单选列表"selectModel":"multi",多选列表</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>无</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>autoLoad</b></td>
+	        					<td>boolean</td>
+	        					<td>
+	        						<p>组件是否自动加载url指向的数据集的控制开关。当autoLoad为true时会自动ajax请求url，并加载请求到的数据。</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>"autoLoad":true,"url":"/data/get_data.htm"</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>false</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>baseParams</b></td>
+	        					<td>object</td>
+	        					<td>
+	        						<p>组件初始化加载数据列表的基础参数,基础参数每次请求时都会传入。</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>无</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>autoWidth</b></td>
+	        					<td>boolean</td>
+	        					<td>
+	        						<p>autoWidth可以配置在items中的某一项，使这一列成为根据内容自适应的宽度
+					autoWidth可以配置在表上，使当前所有的列都成为根据内容的自适应
+					表头也作为其所在列的内容，也会计算长度
+					
+					如果当前列配置了固定宽又配置了autoWidth则固定宽配置生效（固定宽配置的优先级最高）
+					如果当前列为配置了renderer或者dataType或者buttons等会变更数据长度的属性，则autoWidth配置不可使用，请直接使用width配置固定宽</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>false</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>items</b></td>
+	        					<td>object</td>
+	        					<td>
+	        						<p>表格的列数据模型对象。控制数据列表的列显示状态，包含许多可配置参数。</p>
+		        					
+		        						示例：
+		        						
+		        							<pre><table>	<tr><td>属性名</td>	<td>类型</td>	<td>说明</td>	<td>默认值</td></tr>
+		<tr><td>name</td>	<td>sring</td>		<td>列字段名</td>	<td>--</td>	</tr>
+		<tr><td>text</td>		<td>string	</td>	<td>列标题</td>	<td>--</td>	</tr>
+		<tr><td>hAlign</td>	<td>string	</td>	<td>设置列标题居左、居中、居右显示；分为："left"，"center"，"right"</td>	<td>center</td>	</tr>
+		<tr><td>tAlign</td>	<td>string</td>	<td>设置单元格内容居左、居中、居右显示分为："left"，"center"，"right"</td>	<td>left</td>	</tr>
+		<tr><td>hidden</td>	<td>boolean</td>	<td>是否隐藏列</td>	<td>false</td>	</tr>
+		<tr><td>renderer</td>	<td>	func</td>	<td>列渲染函数,函数参数:Object,例如{val : String ,rowdata : Object,alldata : Array,table : this,rowidx :num,tdidx : num,tr : jquery,td : jquery}}，其中rowData代表行数据，allData代表所有行的数据，table代表当前组件的对象，rowidx代表行索引，tdidx代表单元格的索引，tr代表行的jquery对象，td代表单元格的jquery的对象</td>	<td>--</td>	</tr>
+		<tr><td>dictName</td>	<td>string</td>	<td>列翻译的字典条目名称</td>	<td>--</td>	</tr>
+		<tr><td>width</td>	<td>numbe</td>	<td>列宽	px</td>	<td>--</td>	</tr>
+		<tr><td>buttons</td>	<td>array</td>	<td>操作列, 设置此属性后，属性值会被渲染成多个链接</td><td>--</td>	</tr>
+		</table>
+		新增：
+		format      {String}   列格式化时的格式 ，需要与dataType属性结合使用，单独设置此值不生效。1.dataType="DATE"时，format格式形如"yyyyMMdd"；2.dataType="AMOUNT"时，format格式形如",.00"，其中逗号控制是否显示千位分隔符，点号控制小数位数。
+		dataType    {String}   列格式化的类型，目前只支持日期和金额两种类型，日期：dataType="DATE",金额dataType="AMOUNT"。1.如果不设置format属性，"DATE"默认显示格式为："yyyy-MM-dd HH:mm:ss"，"AMOUNT"默认显示格式为："0,000.00"。2.dataType="DATE"时，待格式化列的数据若为字符串，只能是6位，形式如："20130101";若为非字符串形式，一律按GMT时间进行格式化，形式如：1137075575000。
+		items		{object}   增加对静态字典的支持，注意：1.items不能和dictName同时使用！2.如果字典无法成功翻译，则保持原值不变；
+		
+			使用方法：{
+			"name":"name6",
+			"text":"字段6",
+			"hAlign":"right",
+			"tAlign":"right",
+			"items":[{"label":"杭州总部","value":"0"},{"label":"b","value":"2"},{"label":"c","value":"3"}]
+			}
+		
+		新增：
+		autoWidth {boolean} 用于配置是否使用自适应宽度（使用及注意事项请参考）Horn.DataGrid#<b>autoWidth</b>"items":[{"name":"name1","text":"列名","hAlign":"center","tAlign":"left","hidden":false,"renderer":"func","dictName":"dict","width":200}] *renderer属性用法示例：{"name":"scanType2","text":"扫描类别","renderer":"domrender","hidden":false,"width":"350"}#jscode() function domrender(obj){   var val = obj.val;   if(val==0){   	return "返回想要翻译的值";   }else{   	return val;   } }#end</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>无</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>url</b></td>
+	        					<td>string</td>
+	        					<td>
+	        						<p>数据请求的地址。请求该地址后返回的数据为符合要求的json数据对象。</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>后台返回的数据格式例子：total：总条数rows :数据集[分页场景存在，返回的数据结构]{"total":200,"rows":[{"id":"1","name":"zhangsan"},
+        {"id":"2","name":"zhangsan"},
+        {"id":"3","name":"zhangsan"}]</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>""</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>numbercolumn</b></td>
+	        					<td>boolean</td>
+	        					<td>
+	        						<p>列表是否配置序号列的开关。默认不配置序号列。</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>false</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>title</b></td>
+	        					<td>string</td>
+	        					<td>
+	        						<p>datagrid的标题展示。</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>无</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>buttons</b></td>
+	        					<td>object</td>
+	        					<td>
+	        						<p>datagrid的titleButton显示。</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>默认的图标样式有add/edit/query/del/save/refresh/open还可以在按钮中关联menu组件，配置方式为，"refmenu":"test"//该按钮关联的menu组件（菜单）"buttons":[{"label":"测试","name":"test","cls":"del"},{"label":"测试","name":"test","cls":"del"},{"label":"测试","name":"test","cls":"del"},{"label":"测试","name":"test","cls":"del"},{"label":"测试","name":"test","cls":"del"},{"label":"测试","name":"test","cls":"del"}]默认提供了add,edit,del,save,query,refresh,open供选择</pre>
+		        						
+		        							<pre>"buttons":[{"label":"新增","cls":"add","refmenu":"test11","event":"add()"},	              {"label":"修改","cls":"edit","refmenu":"test11","event":"edit()"},				  {"label":"删除","cls":"del","refmenu":"test11"},				  {"label":"保存","cls":"save","refmenu":"test11"},				  {"label":"查询","cls":"query","refmenu":"test11"},				  {"label":"刷新","cls":"refresh","refmenu":"test11"},				  {"label":"打开","cls":"open","refmenu":"test11"}				  ]</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>无</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>height</b></td>
+	        					<td>number</td>
+	        					<td>
+	        						<p>配置表格的高度的属性，默认是自适应宽高。</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>无</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>width</b></td>
+	        					<td>number</td>
+	        					<td>
+	        						<p>配置表格的宽度的属性，默认是自适应宽高。</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>无</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>bindFormName</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>如果有绑定表单，就会把表单参数提交到后台。</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>"bindFormName":"formName"</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>无</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>rowSelect</b></td>
+	        					<td>boolean</td>
+	        					<td>
+	        						<p>配置点击行选中的开关。默认不开启。配置开启后当点击列表行会主动选中这一行的数据而不需要点击选择框。</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>"rowSelect":true可以开启行选中</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>false</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>hasPage</b></td>
+	        					<td>boolean</td>
+	        					<td>
+	        						<p>配置是否启用分页栏的开关，默认不开启分页栏。同时可以支持静态数据和动态加载，以及loadData的分页</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>"hasPage":true可以配置开启分页栏,暂时对于静态数据不提供分页栏！</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>false</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>pageConfig</b></td>
+	        					<td>object</td>
+	        					<td>
+	        						<p>配置分页栏的参数，仅在开启分页栏的时候有效。</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>"pageConfig":{"pageSize":20,"pageNo":3}其中pageSize表示每页的显示的数据条数;pageNo为当前显示页数，当pageNo值大于实际总页数时，自动取实际最大页码数</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>无</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>frozen</b></td>
+	        					<td>string或者array</td>
+	        					<td>
+	        						<p>1.冻结列的配置项，支持单列冻结和多列冻结，冻结的数据列在横向滚动时保持位置不变。2.此属性支持IE8及以上，不支持IE7。3.不建议配置超过三列的冻结内容（冻结列过多会影响datagrid渲染的效率和性能！）,不建议在弹出窗口(window组件)上使用4.冻结列区域上不支持单击、双击事件的触发。</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>“frozen”:["name1","name2"]，可以冻结items当中name属性配置为name1,name2的那两列列数据。</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>无</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>events</b></td>
+	        					<td>Array</td>
+	        					<td>
+	        						<p>事件属性，所有的事件都需要在此配置</p>
+		        					
+		        						示例：
+		        						
+		        							<pre> "events":[{      "event":"rowClick","function":"testRowClick"},		             {"event":"rowDblclick","function":"testRowDblClick"},					 {"event":"beforeLoad","function":"testbeforeLoad"},					 {"event":"loadSuccess","function":"testloadSuccess"},					 {"event":"loadError","function":"testloadError"}]</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>无</td>
+	        				</tr>
+	        			
+	        		</tbody>
+	        	</table>
+        	    <!-- doc_options_end -->
+            
+            
+            
+          		<!-- doc_events_begin -->
+          		<h4>事件</h4>
+          		<table class="doc-table">
+          			<tbody>
+          				<tr>
+          					<th><strong>名称</strong></th>
+							<th><strong>参数</strong></th>
+							<th><strong>描述</strong></th>
+          				</tr>
+          				
+          					<tr>
+          						<td><b>rowClick</b></td>
+          						<td>function(rowdata)</td>
+          						<td>
+          							<p>行单击事件<br/></p>
+          							
+		                         		参数:
+		                                
+		                                    <li>
+		                                        object:<b>rowdata</b>
+		                                        当前被点击的一行数据
+		                                    </li>
+		                                
+		                            
+		                            
+	                                
+	                               		示例：
+	                                    
+	                                        <pre>无</pre>
+	                                    
+	                           		 
+	                            
+          						</td>
+          					</tr>
+          				
+          					<tr>
+          						<td><b>rowDblclick</b></td>
+          						<td>function(rowdata)</td>
+          						<td>
+          							<p>行双击事件<br/>注意：双击事件会触发单击事件，所以在使用双击事件时应注意与单击事件的关系<br></p>
+          							
+		                         		参数:
+		                                
+		                                    <li>
+		                                        object:<b>rowdata</b>
+		                                        当前被点击的一行数据
+		                                    </li>
+		                                
+		                            
+		                            
+	                                
+	                               		示例：
+	                                    
+	                                        <pre>无</pre>
+	                                    
+	                           		 
+	                            
+          						</td>
+          					</tr>
+          				
+          					<tr>
+          						<td><b>beforeLoad</b></td>
+          						<td>function(comp, param)</td>
+          						<td>
+          							<p>异步数据加载前<br/></p>
+          							
+		                         		参数:
+		                                
+		                                    <li>
+		                                        jquery object:<b>comp</b>
+		                                        控件对象
+		                                    </li>
+		                                
+		                                    <li>
+		                                        object:<b>param</b>
+		                                        请求的参数
+		                                    </li>
+		                                
+		                            
+		                            
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        如果返回false则取消请求执行
+		                                    </li>
+										
+									
+	                                
+	                               		示例：
+	                                    
+	                                        <pre></pre>
+	                                    
+	                           		 
+	                            
+          						</td>
+          					</tr>
+          				
+          					<tr>
+          						<td><b>loadSuccess</b></td>
+          						<td>function(comp, resultData)</td>
+          						<td>
+          							<p>异步数据加载成功,且表格初始化后<br/></p>
+          							
+		                         		参数:
+		                                
+		                                    <li>
+		                                        jquery object:<b>comp</b>
+		                                        控件对象
+		                                    </li>
+		                                
+		                                    <li>
+		                                        Array:<b>resultData</b>
+		                                        返回的结果集
+		                                    </li>
+		                                
+		                            
+		                            
+	                                
+	                               		示例：
+	                                    
+	                                        <pre> 无</pre>
+	                                    
+	                           		 
+	                            
+          						</td>
+          					</tr>
+          				
+          					<tr>
+          						<td><b>loadError</b></td>
+          						<td>function(comp, resultData)</td>
+          						<td>
+          							<p>异步数据加载成功，但数据格式错误时（数据为空）逻辑错误，非ajax请求失败触发<br/></p>
+          							
+		                         		参数:
+		                                
+		                                    <li>
+		                                        jquery object:<b>comp</b>
+		                                        控件对象
+		                                    </li>
+		                                
+		                                    <li>
+		                                        Object:<b>resultData</b>
+		                                        返回的结果集
+		                                    </li>
+		                                
+		                            
+		                            
+	                                
+	                               		示例：
+	                                    
+	                                        <pre> 无</pre>
+	                                    
+	                           		 
+	                            
+          						</td>
+          					</tr>
+          				
+          			</tbody>
+          		</table>
+          	  	<!-- doc_events_end -->
+       		
+       		
+       		
+            	<!-- doc_methods_begin -->
+            	<h4>方法</h4>
+            	<table class="doc-table">
+          			<tbody>
+          				<tr>
+          					<th><strong>名称</strong></th>
+							<th><strong>参数</strong></th>
+							<th><strong>描述</strong></th>
+          				</tr>
+          				
+          					<tr>
+								<td>setButtonDisabled</td>
+								<td>(name, disabled)</td>
+								<td>
+									<p>启用/禁用 表格里的按钮栏的某个操作按钮</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        string:<b>name</b>
+		                                        按钮名称，记得按钮的name是唯一
+		                                    </li>
+		                                
+		                                    <li>
+		                                        boolean:<b>disabled</b>
+		                                        true为按钮不可用，false为可用<br>
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        void
+		                                    </li>
+										
+									
+									
+	                               		示例：
+	                                    
+	                                        <pre>#jscode()	Horn.getComp("datagridName").setButtonDisabled("delBtn",true);#end</pre>
+	                                    
+	                           		 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>load</td>
+								<td>(url, params)</td>
+								<td>
+									<p>请求数据。 url不传，则请求url使用组件默认的url属性</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        string:<b>url</b>
+		                                        请求数据的路径
+		                                    </li>
+		                                
+		                                    <li>
+		                                        object:<b>params</b>
+		                                        请求提交的参数<br>
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        void
+		                                    </li>
+										
+									
+									 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>loadData</td>
+								<td>(data)</td>
+								<td>
+									<p>加载数据到表格中</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        object:<b>data</b>
+		                                        加载的数据<br>
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        void
+		                                    </li>
+										
+									
+									 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>getId<br></td>
+								<td>()</td>
+								<td>
+									<p>返回组件id</p>
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        String
+		                                    </li>
+										
+									
+									 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>getSelecteds<br></td>
+								<td>()</td>
+								<td>
+									<p>返回选择的数据</p>
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        Array
+		                                    </li>
+										
+									
+									 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>unSelectAll</td>
+								<td>()</td>
+								<td>
+									<p>取消选中所有行数据，只针对多选模式，单选模式下无效</p>
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        void
+		                                    </li>
+										
+									
+									 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>selectAll</td>
+								<td>()</td>
+								<td>
+									<p>选中所有行数据，只针对多选模式，单选模式下无效</p>
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        void
+		                                    </li>
+										
+									
+									 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>setBaseParams</td>
+								<td>(params)</td>
+								<td>
+									<p>向后台发送请求时的用户自定义参数，被设置的参数会做为基础查询条件，即每次查询是都会传入后台</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        object:<b>params</b>
+		                                        基础参数<br>
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        void
+		                                    </li>
+										
+									
+									 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>setSize</td>
+								<td>(width, height)</td>
+								<td>
+									<p>设置控件的宽度和高度</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        number:<b>width</b>
+		                                        宽度
+		                                    </li>
+		                                
+		                                    <li>
+		                                        number:<b>height</b>
+		                                        高度<br>
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        void
+		                                    </li>
+										
+									
+									 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>setWidth</td>
+								<td>(width)</td>
+								<td>
+									<p>设置控件的宽度</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        number:<b>width</b>
+		                                        宽度<br>
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        void
+		                                    </li>
+										
+									
+									 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>setHeight</td>
+								<td>(height)</td>
+								<td>
+									<p>设置控件的高度</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        number:<b>height</b>
+		                                        高度<br>
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        void
+		                                    </li>
+										
+									
+									 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>select</td>
+								<td>(row)</td>
+								<td>
+									<p>选择一行记录</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        number:<b>row</b>
+		                                        行号<br>
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        void
+		                                    </li>
+										
+									
+									 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>unselect</td>
+								<td>(row)</td>
+								<td>
+									<p>取消选择一行记录</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        number:<b>row</b>
+		                                        行号<br>
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        void
+		                                    </li>
+										
+									
+									 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>setTitle</td>
+								<td>(title)</td>
+								<td>
+									<p>设置表格的标题</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        string:<b>title</b>
+		                                        标题名<br>
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        void
+		                                    </li>
+										
+									
+									 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>getTitle</td>
+								<td>()</td>
+								<td>
+									<p>获取表格的标题</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        :<b></b>
+		                                        
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        string
+		                                    </li>
+										
+									
+									 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>addButton</td>
+								<td>(obj)</td>
+								<td>
+									<p>动态添加标题按钮</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        object:<b>obj</b>
+		                                        button的参数对象，具体的参数有：label 按钮的标签（必填否则无法添加）；name 按钮的name，作为标识按钮；cls 按钮的图标样式(默认提供的图标样式有：新增[fa-plus-circle]，修改[fa-pencil-square-o]，删除[fa-remove]，保存[fa-save],查询[fa-search],刷新[fa-refresh],文件夹[fa-folder-open-o])，默认无图标；event 按钮点击的事件处理函数
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        
+		                                    </li>
+										
+									
+									 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>hideButton</td>
+								<td>(Strng:name, Boolean:hide,为true时隐藏，为false时展示)</td>
+								<td>
+									<p>动态隐藏与显示标题按钮</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        :<b>Strng:name</b>
+		                                        
+		                                    </li>
+		                                
+		                                    <li>
+		                                        :<b>Boolean:hide,为true时隐藏，为false时展示</b>
+		                                        
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        
+		                                    </li>
+										
+									
+									 
+								</td>
+							</tr>
+          				
+          			</tbody>
+          		</table>
+            	<!-- doc_methods_end -->
+            
+        	<br /><i>Defined in: </i> <a href="../symbols/src/E__workspace_JRES-PLUS_Sources_jresplus-2.0_Sources_jresplus-ui_jresplus-ui-web_build_com.hundsun.jresplus.ui.datagrid_public_scripts_DataGrid.js.html">DataGrid.js</a>
+        </div>
+        </div>
+</div>
+</div>
+<!-- ============================== footer ================================= -->
+
+		<div id="footer">
+			<div>Copyright ? 2010-2013 www.hundsun.com</div>
+		</div>
+		<script type="text/javascript">
+			dp.SyntaxHighlighter.HighlightAll('code');
+		</script>
+	</body>
+</html>
+
+

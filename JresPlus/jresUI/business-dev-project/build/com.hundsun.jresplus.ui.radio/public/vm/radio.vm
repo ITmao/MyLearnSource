@@ -1,0 +1,127 @@
+#**   
+ * @author huling   
+ * @class
+ * @name radio
+ * @param cols {String} 跨列数
+ * @param name {String} 名称
+ * @param id {String} 唯一标识
+ * @param disabled {String} 是否禁用
+ * @param alias {String} 别名
+ * @param value {String} 值
+ * @param label {String} 单选框组件显示值
+ * @param check {String} 验证串
+ * @param items {Json} 静态显示值 格式见示例
+ * @param events {Json} 事件，格示见示例
+ * @description radio组件，单选按钮组件
+ * @see The <a href="huling@hundsun.com">huling</a >.   
+ * @example \#radio({"label":"客户类型", "name":"client.organFlag", "items":[{"label":"A","value":"投机"},{"label":"B","value":"套保"},{"label":"C","value":"套利"}], "events":[{"event":"onclick","function":"checkA(this.checked)"}]})
+ * @since version 0.1
+ *#	
+#**
+ * @lends radio
+ *#
+#macro(radiogroup $uiRadiogroupConfig)
+#radio_group($uiRadiogroupConfig)
+#end
+#macro(radio_group $uiRadiogroupConfig)
+	#set($col = 4)
+	#set($cols = "")
+    #if($layoutcolumn) 
+    	#if($layoutcolumn==1)
+			#set($col = 12)
+		#elseif($layoutcolumn==2)
+			#set($col = 6)
+			#if($uiRadiogroupConfig.cols&&$uiRadiogroupConfig.cols=="2")
+				#set($cols = "g-grid-6-row")
+			#end
+		#elseif($layoutcolumn==3)
+			#set($col = 4)
+			#if($uiRadiogroupConfig.cols)
+				#if($uiRadiogroupConfig.cols==3)
+					#set($cols = "g-grid-4-row")
+				#elseif($uiRadiogroupConfig.cols==2)
+					#set($cols = "g-grid-4-8-row")
+				#end
+			#end
+		#elseif($layoutcolumn==4)
+			#set($col = 3)
+			#if($uiRadiogroupConfig.cols)
+				#if($uiRadiogroupConfig.cols==4)
+					#set($cols = "g-grid-3-row")
+				#elseif($uiRadiogroupConfig.cols==3)
+					#set($cols = "g-grid-3-9-row")
+				#elseif($uiRadiogroupConfig.cols==2)
+					#set($cols = "g-grid-3-6-row")
+				#end
+			#end
+		#end
+    #end
+	
+	#set($val = "")
+    #set($val = $uiRadiogroupConfig.value)
+    #if((!$val || $val =="") && $uiRadiogroupConfig.name)
+        #set($val =  "$horn.getValue($!uiRadiogroupConfig.name)")
+    #end
+	##查看模式
+    #if($view)
+	<div class="g-grid-$col #if($cols!="")$cols#end">
+	  	<div class="g-unit-wrap">
+			#if(!$uiRadiogroupConfig.hiddenLabel)
+		    <label #if($layoutcolumn==1)class="g-grid-2 unit-label"#else class="g-grid-4 unit-label"#end><span ref="$!uiRadiogroupConfig.name" title="$!{uiRadiogroupConfig.label}">$!{uiRadiogroupConfig.label}</span></label>
+		    #end
+			<div class="g-grid-8">
+				<div name="$!{uiRadiogroupConfig.name}" class="hc_label"  $horn.paramsCache($uiRadiogroupConfig) 
+        			#if($uiRadiogroupConfig.dictName)
+        				dictName="$!{uiRadiogroupConfig.dictName}"
+        				$horn.addGlobal('componentSelects_s',$!{uiRadiogroupConfig.dictName})
+        			#end	
+        			>
+    				#foreach($item in $uiRadiogroupConfig.items)
+    					#if($val==$item.code) $!item.text
+    					#elseif($val==$item.value) $!item.label #end ## 兼容性冗余
+    				#end
+    			</div>
+			</div>
+	    </div>
+	 </div>
+	 
+	#else
+		<div class="g-grid-$col #if($cols!="")$cols#end">
+		  	<div class="g-unit-wrap">
+		  	 #set($checkStr=$horn.getCheckStr($uiRadiogroupConfig.name,$uiRadiogroupConfig.check))
+			 #set($groupStr=$horn.getGroupStr($uiRadiogroupConfig.name,$uiRadiogroupConfig.group))
+			    #if(!$uiRadiogroupConfig.hiddenLabel)
+				<label #if($layoutcolumn==1)class="g-grid-2 unit-label"#else class="g-grid-4 unit-label"#end title="$!uiRadiogroupConfig.label">#if($checkStr.indexOf("required")>-1)<span class="m-verify-symbol">*</span>#end $!uiRadiogroupConfig.label</label>
+			    #end
+				<div class="g-grid-8">
+					<div class="hc_radio-group u-radio-group" id="$!{uiRadiogroupConfig.id}" $horn.paramsCache($uiRadiogroupConfig)  name="$!uiRadiogroupConfig.name" #if($uiRadiogroupConfig.alias)alias="${uiRadiogroupConfig.alias}"#end>
+						#set($items=[])
+                    	#if($dictManager && $uiRadiogroupConfig.dictName)
+                        	#set($items = $dictManager.getDicts($uiRadiogroupConfig.dictName))
+                        #else
+                        	#set($items = $uiRadiogroupConfig.items)
+                    	#end
+                        #foreach($item in $items)
+        				  #set($radioGroupInputId=$horn.getUUID())
+						  <div class="u-radio">
+							<label>
+						    	<input type="radio" name="$!uiRadiogroupConfig.name" id="$!{radioGroupInputId}" class="radio_input"
+            					#if($uiRadiogroupConfig.alias)
+                                   alias="$!{uiRadiogroupConfig.alias}"
+                                #end
+                                value=#if($uiRadiogroupConfig.dictName) "$!item.label" #else #if($item.value)"$item.value"#else"$!item.code"#end #end
+                                check="$checkStr"
+                    			group="$groupStr"
+                                />
+								#if($uiRadiogroupConfig.dictName)$!item.value#else #if($item.label)$!item.label#else$!item.text#end #end
+						    </label>
+						 </div>
+        				#set($radioGroupInputId="")
+        				#end
+					</div>
+			    </div>
+		    </div>
+		  </div>
+	#end
+	#set($uiRadiogroupConfig = {})
+#end

@@ -1,0 +1,26 @@
+#**   
+ * @author huling   
+ * @class
+ * @name button_panel
+ * @param id {String} 唯一标识
+ * @param buttons {Json} 自定义按钮组 格式如："buttons":[{"name":"查询", "class":"h_btn-cencel", "event":"lhkh.query()"}] 名称 样式名 点击事件
+ * @description button_panel组件，按钮面板组件
+ * @see The <a href="huling@hundsun.com">huling</a >.   
+ * @example \#button_panel({"buttons":[{"name":"查询", "class":"h_btn-cencel", "event":"lhkh.query()"}]}) 注：内含“内提”、“重置”按钮，后面才是自己添加的button
+ * @since version 0.1
+ *#	
+#**
+ * @lends button_panel
+ *#
+#macro(button_panel $uiButtonPanelConfig)
+	<div id="$!{uiButtonPanelConfig.id}" $horn.paramsCache($uiButtonPanelConfig)  class="h_btndiv u-button-group" name="$!{uiButtonPanelConfig.name}">
+		<button type="submit" class="u-btn u-btn-primary" name="button_submit">#if($uiButtonPanelConfig.submitLabel&&"$!uiButtonPanelConfig.submitLabel"!="")$!{uiButtonPanelConfig.submitLabel}#else 提交#end</button>
+		<button type="reset" class="u-btn u-btn-default" name="button_reset">#if($uiButtonPanelConfig.resetLabel&&"$!uiButtonPanelConfig.resetLabel"!="")$!{uiButtonPanelConfig.resetLabel}#else 重置#end</button>
+		#if($uiButtonPanelConfig.buttons)
+			#foreach($button in $uiButtonPanelConfig.buttons)
+				<button #if($button.refmenu)refmenu="$button.refmenu"#end type="button" class="u-btn #if($button.className)$button.className#else u-btn-default#end" name="$!{button.name}" onclick="$!{button.event}">$!{button.label}</button>
+			#end
+		#end
+    </div>
+	#set($uiButtonPanelConfig = {})
+#end

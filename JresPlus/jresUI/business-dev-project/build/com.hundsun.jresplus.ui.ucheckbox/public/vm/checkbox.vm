@@ -1,0 +1,104 @@
+#**   
+ * @author huling   
+ * @class
+ * @name checkbox
+ * @param cols {String} 跨列数
+ * @param name {String} 名称
+ * @param id {String} 唯一标识
+ * @param alias {String} 别名
+ * @param static {String} 静态值
+ * @param value {String} 值
+ * @param label {String} 复选框显示值
+ * @param check {String} 验证串
+ * @param group {String}所属分组名字
+ * @param checked {boolean} 是否选中
+ * @param events {Json} 事件，格示见示例
+ * @description checkbox组件，复选框组件
+ * @see The <a href="huling@hundsun.com">huling</a >.   
+ * @example \#checkbox({"label":"证券6", "name":"age","static":"6","checked":true,"events":[{"event":"onclick","function":"checkA(this.value)"}]})
+ * @since version 0.1
+ *#	
+#**
+ * @lends checkbox
+ *#
+#macro(checkbox $uiCheckboxConfig)
+	#set($col = 4)
+	#set($cols = "")
+    #if($layoutcolumn) 
+    	#if($layoutcolumn==1)
+			#set($col = 12)
+		#elseif($layoutcolumn==2)
+			#set($col = 6)
+			#if($uiCheckboxConfig.cols&&$uiCheckboxConfig.cols=="2")
+				#set($cols = "g-grid-6-row")
+			#end
+		#elseif($layoutcolumn==3)
+			#set($col = 4)
+			#if($uiCheckboxConfig.cols)
+				#if($uiCheckboxConfig.cols==3)
+					#set($cols = "g-grid-4-row")
+				#elseif($uiCheckboxConfig.cols==2)
+					#set($cols = "g-grid-4-8-row")
+				#end
+			#end
+		#elseif($layoutcolumn==4)
+			#set($col = 3)
+			#if($uiCheckboxConfig.cols)
+				#if($uiCheckboxConfig.cols==4)
+					#set($cols = "g-grid-3-row")
+				#elseif($uiCheckboxConfig.cols==3)
+					#set($cols = "g-grid-3-9-row")
+				#elseif($uiCheckboxConfig.cols==2)
+					#set($cols = "g-grid-3-6-row")
+				#end
+			#end
+		#end
+    #end
+	
+    #set($val = "")
+    #set($val = $uiCheckboxConfig.value)
+    #if(!$val || $val =="" && $uiCheckboxConfig.name )
+        #set($val =  "$horn.getValue($!uiCheckboxConfig.name)")
+	#end
+	#if($view)
+	<div class="g-grid-$col #if($cols!="")$cols#end">
+	  	<div class="g-unit-wrap">
+		    <label #if($layoutcolumn==1)class="g-grid-2 unit-label"#else class="g-grid-4 unit-label"#end><span ref="$!uiCheckboxConfig.name" title="$!{uiCheckboxConfig.label}">$!{uiCheckboxConfig.label}</span></label>
+		    <div class="g-grid-8">
+				<div name="$!{uiCheckboxConfig.name}" class="hc_label"  $horn.paramsCache($uiCheckboxConfig) >#if($val) √#end</div>
+			</div>
+	    </div>
+	 </div>
+	#else
+		  <div class="g-grid-$col #if($cols!="")$cols#end">
+		  	<div class="g-unit-wrap">
+		  	 #set($checkStr=$horn.getCheckStr($uiCheckboxConfig.name,$uiCheckboxConfig.check))
+			 #set($groupStr=$horn.getGroupStr($uiCheckboxConfig.name,$uiCheckboxConfig.group))
+			    #if(!$uiCheckboxConfig.hiddenLabel)
+				<label class="g-grid-4 unit-label" title="$!uiCheckboxConfig.label">#if($checkStr.indexOf("required")>-1)<span class="m-verify-symbol">*</span>#end</label>
+			    #end
+				<div class="g-grid-8">
+					<div class="hc_checkbox u-checkbox-group" id="$!{uiCheckboxConfig.id}" $horn.paramsCache($uiCheckboxConfig) >
+						<div class="u-checkbox">
+							<label>
+						    	<input type="checkbox" name="$uiCheckboxConfig.name" #if($uiCheckboxConfig.disabled) disabled="disabled" #end
+                    			#if($uiCheckboxConfig.alias)
+                    				alias="${uiCheckboxConfig.alias}"
+                    			#end
+                    			#if(($uiCheckboxConfig.checked && $uiCheckboxConfig.checked==true) || ($val && $uiCheckboxConfig.static && $val==$uiCheckboxConfig.static))
+                    				checked="checked"
+                    			#end
+                    			value=#if($uiCheckboxConfig.static)"$!{uiCheckboxConfig.static}"#else"$val"#end
+                    			check="$!{checkStr}"
+                    			group="$!{groupStr}"
+                    			/>$!uiCheckboxConfig.label
+						    </label>
+						 </div>
+					</div>
+			    </div>
+		    </div>
+		  </div>
+	#end
+	
+	#set($uiCheckboxConfig = {})
+#end

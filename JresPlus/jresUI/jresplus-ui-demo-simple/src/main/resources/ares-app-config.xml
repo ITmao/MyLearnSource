@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!-- 样例 -->
+<ares>
+	<!--
+		JRES Server的公用配置，必须配置项，目前为了兼容前一版本，如果不配置或者配置错误，name将被设置为"jres_server"
+		name - 当前JRES Server的名字，如果在网络拓扑中有名字相同的，则认为此两者成组
+	 -->
+	<pub nodeName="jres_web" nodeNo="0"/>
+
+	<!-- 插件配置信息 -->
+	<plugins>
+
+		<plugin service-id="jres.logFactory" load-level="1"></plugin>
+		<plugin service-id="jres.configurationHelper" load-level="1"></plugin>
+
+		<!-- CEP核心插件 -->
+		<plugin service-id="jres.cepcore" load-level="3">
+			<plugin-configuration>
+				<!--
+					threadCount : 分发线程池的大小，可不填，默认为3，如果填写非整数，则采用默认值
+					queueSize :  分发线程池中队列的长度，可不填，默认值为30，如果填写非整数，则采用默认值
+					debug : cepcore是否开启调试开关，true表示开启，其他表示不开启，非必填项，默认为不开启
+				 -->
+				<args threadCount="10" queueSize="30" debug="false">
+				</args>
+				<!--
+					本地业务处理插件在CEP中配置处理线程池和服务、优先级等的关系 。
+					bizservice : 本地业务处理插件
+					id : 本地业务处理插件的名字，必须与插件的名字一致，必填
+					debug : 该插件的线程和队列是否开启调试开关，true表示开启，其他不开启，默认为不开启
+				 -->
+				<bizservices>
+					<bizservice id="jres.mproxy" debug="true"/>
+				</bizservices>
+				<routetables>
+					<routetable serviceId="com.hundsun.jres.manage" functionId="8" pluginId="jres.mproxy"/>
+					<routetable  functionId="100*" pluginId="jres_sub_1"/>
+				</routetables>
+				<eventchains>
+					<chain>jres.mproxy;jres.cepcore</chain>
+					<chain>jres.localService;jres.cepcore</chain>
+					<chain>jres.t2channel;jres.cepcore</chain>
+				</eventchains>
+			</plugin-configuration>
+		</plugin>
+		
+		<!-- 本地通道插件 -->
+		<plugin service-id="jres.localService" load-level="3">
+			<plugin-configuration>
+				<args debug="false" />
+				<time timeout="60000" />
+				<!--<custom-timeouts>
+					<timeout serviceId="*DownloadService" 
+      					timeout="60000" />
+					<timeout serviceId="*"
+						timeout="7000" />
+				</custom-timeouts>
+			--></plugin-configuration>
+		</plugin>
+		
+		<!-- t2通道插件 -->
+		<plugin service-id="jres.t2channel" load-level="3">
+			<plugin-configuration>
+				<!--
+					服务器端配置
+
+					address : 多网卡的情况下，选择地址，可不填
+					port : T2服务器端监听的端口号，必填
+					recvPoolSize : T2服务器端接收线程池大小，取值范围1 ~ 64，小于1取1，大于64取64；默认值为 2
+					recvBuffSize : T2服务器端字节缓冲队列大小，单位字节，取值范围512B ~ 16M，小于512取512，大于16M取16M；默认值为 20K
+					sendPoolSize : 发送线程池大小，取值范围0 ~ 64，小于0取0，大于64取64，如果取0 直接使用其他插件的线程；默认值为 2
+					senderQueueLength :  在sendPoolSize不为0的情况下有效，默认为 30。取值范围1 ~ 500，小于1取1，大于500取500
+					maxConnection : 作为服务端，允许接受的最大连接数；默认值为 50。取值范围10 ~ 0x000FFFFF
+					heartbeatTime : 服务端发起心跳的间隔，单位为秒；默认为15；取值范围5 ~ 3600，小于5取5，大于3600取3600
+					acquireConnWaitTime : 在从连接池获取可用连接，最多等待的时间；默认值为 100；取值范围 0 ~ 5000
+					registerTime ： 服务器端接收客户端TCP连接到T2成功注册的最长时间，超过此时间，该连接会被close掉，单位为秒，取值返回 1 ~ 15，默认值为 5
+					reconnInterval : 客户端连接在断开之后，多长时间间隔尝试重新建立连接，单位秒，取值范围 1 ~ 60，默认值为 3
+					safeLevel : 安全级别：包括1、none，通信完全不加密，2、ssl，采用ssl协议进行加密；3、pwd，采用手动加密。目前只支持none
+					licenseDir : 服务器端证书，暂时无用
+					enable : 是否启用，默认为true，只有显示的写明为 false（不区分大小写），才不启用
+				 -->
+				<performance debug="false" recvPoolSize="10" recvBuffSize="20480" 
+					recvProcPoolSize="100" recvProcQueueSize="30" sendPoolSize="20" senderQueueLength="30" 
+					maxConnection="10000" serverHeartbeatTime="15" clientHeartbeatTime="15" acquireConnWaitTime="100"
+					registerTime="5" reconnInterval="3" />
+				<server address="" port="8020" enable="false"/>
+				<!--
+					客户端配置，建立有名客户端连接
+
+					parentName : 本节点主动去连接的T2节点名，与cepcore中配置的节点名一致，必须
+					poolSize : 与该成组节点中的每个节点建立的连接个数，可不填，默认为 2，取值范围1 ~ 64，小于1取1，大于64取64
+					licenseFile ： 客户端证书
+					encrypt : 许可证书加密算法，只有强制指定为 jcc（忽略大小写），才采用jcc的加密算法，否则采用 HSBlowfish 算法
+				 -->
+				<client enable="false">
+					<parents>
+						<parent parentName="jres_sub_1" poolSize="1">
+							<limit licenseFile="classpath:/client-license.dat" encrypt="HSBlowfish"/>
+							<members>
+								<member no="0" address="192.168.94.97" port ="8030" charset="utf-8"/>
+							</members>
+						</parent>
+					</parents>
+				</client>
+			</plugin-configuration>
+		</plugin>
+		
+	</plugins>
+</ares>

@@ -1,0 +1,583 @@
+
+	<!-- ============================== header ================================= -->	
+		<!-- begin static/header.html -->
+		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="keywords" content="jquery,ui,easy,FUI,web framekwork,ajax framekwork,ria,web development">
+		<meta name="description" content="FUI help you build your web page more Fast!!">
+		<title>UI API - JRES UI</title>
+   		<link rel="stylesheet" href="../resource/css/doc.css" type="text/css" />
+    	<link type="text/css" rel="stylesheet" href="../resource/SyntaxHighlighter/Styles/SyntaxHighlighter.css"/>
+		<script src="../resource/SyntaxHighlighter/Scripts/shCore.js"></script>
+		<script src="../resource/SyntaxHighlighter/Scripts/shBrushXml.js"></script>
+		<script src="../resource/SyntaxHighlighter/Scripts/shBrushJava.js"></script>
+		<script type="text/javascript" src="../resource/jquery-1.7.2.min.js"></script>
+		<style type="text/css">
+			.dp-xml .cdata { color: #ff1493; }.dp-xml .tag, .dp-xml .tag-name { color: #069; font-weight: bold; }.dp-xml .attribute { color: red; }.dp-xml .attribute-value { color: blue; }
+		</style>
+		<script>
+			
+		</script>
+	</head>
+	<body>
+		<div id="header">
+						<div id="header-inner">
+				<table cellpadding="0" cellspacing="0" style="width:100%;">
+					<tr>
+						<td rowspan="2" style="width:20px;">
+						</td>
+						<td style="height:52px;">
+							<div style="color:#fff;font-size:22px;font-weight:bold;">
+								<a href="#" style="color:#fff;font-size:22px;font-weight:bold;text-decoration:none">JRES UI</a>
+							</div>
+							<div style="color:#fff">
+								<a href="#" style="color:#fff;text-decoration:none">JRES UI是使用Velocity开发的服务器端UI组件，助力于组件化快速视图开发!</a>
+							</div>
+						</td>
+						<td style="padding-right:5px;text-align:right;vertical-align:bottom;">
+							<div id="topmenu" style="display:none;">
+								<a href="../../index.html">主页</a>
+								<a href="http://rdc.hundsun.com/forum.php?mod=forumdisplay&amp;fid=163" target="_blank">论坛</a>
+								<a href="../../demo/index.htm">示例</a>
+								<a href="../../documentation/index.html">文档</a>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+			
+		</div>
+		<!-- end static/header.html -->
+	<div id="mainwrap" >
+		<div id="content">
+        <!-- ============================== classes index ============================ -->
+        <script type="text/javascript">
+            $(function() {
+            	var bw=$.browser;
+				if(bw.msie&&bw.version<7||(bw.msie&&$.support.boxModel==false)){
+						//ie6
+						$("#plugin_title").hide();
+						$('#plugins').removeClass("plugins");
+						$('#plugins').addClass("plugins2");
+				}else{
+					$('#plugins').stop().animate({'marginLeft':'-285px'},1000);
+	                $('#plugins').hover(
+	                    function () {
+	                        $(this).stop().animate({'marginLeft':'-2px'},200);
+	                    },
+	                    function () {
+	                        $(this).stop().animate({'marginLeft':'-285px'},200);
+	                    }
+	                );
+				}
+                
+            });
+</script>
+	<div id="plugins" class="plugins">
+	<div id="plugin_title" class="plugin_title">控件清单</div>
+	<ul>
+        
+        
+        
+        
+        
+        <li><a href="../symbols/Horn.html">Horn</a></li>
+        
+        <li><a href="../symbols/Horn._Pagebar-pagebar.html">Horn._Pagebar-pagebar</a></li>
+        
+        <li><a href="../symbols/Horn.Base.html">Horn.Base</a></li>
+        
+        <li><a href="../symbols/Horn.ButtonPanel.html">Horn.ButtonPanel</a></li>
+        
+        <li><a href="../symbols/Horn.Calendar.html">Horn.Calendar</a></li>
+        
+        <li><a href="../symbols/Horn.CalendarGroup.html">Horn.CalendarGroup</a></li>
+        
+        <li><a href="../symbols/Horn.Checkbox.html">Horn.Checkbox</a></li>
+        
+        <li><a href="../symbols/Horn.CheckboxGroup.html">Horn.CheckboxGroup</a></li>
+        
+        <li><a href="../symbols/Horn.Combox.html">Horn.Combox</a></li>
+        
+        <li><a href="../symbols/Horn.DataGrid.html">Horn.DataGrid</a></li>
+        
+        <li><a href="../symbols/Horn.Field.html">Horn.Field</a></li>
+        
+        <li><a href="../symbols/Horn.FieldSet.html">Horn.FieldSet</a></li>
+        
+        <li><a href="../symbols/Horn.Form.html">Horn.Form</a></li>
+        
+        <li><a href="../symbols/Horn.Grid.html">Horn.Grid</a></li>
+        
+        <li><a href="../symbols/Horn.HiddenField.html">Horn.HiddenField</a></li>
+        
+        <li><a href="../symbols/Horn.Label.html">Horn.Label</a></li>
+        
+        <li><a href="../symbols/Horn.Menu.html">Horn.Menu</a></li>
+        
+        <li><a href="../symbols/Horn.MessageBox.html">Horn.MessageBox</a></li>
+        
+        <li><a href="../symbols/Horn.PageBar.html">Horn.PageBar</a></li>
+        
+        <li><a href="../symbols/Horn.Panel.html">Horn.Panel</a></li>
+        
+        <li><a href="../symbols/Horn.Password.html">Horn.Password</a></li>
+        
+        <li><a href="../symbols/Horn.PasswordGroup.html">Horn.PasswordGroup</a></li>
+        
+        <li><a href="../symbols/Horn.QueryTable.html">Horn.QueryTable</a></li>
+        
+        <li><a href="../symbols/Horn.RadioGroup.html">Horn.RadioGroup</a></li>
+        
+        <li><a href="../symbols/Horn.Screen.html">Horn.Screen</a></li>
+        
+        <li><a href="../symbols/Horn.SelectTree.html">Horn.SelectTree</a></li>
+        
+        <li><a href="../symbols/Horn.TabPanel.html">Horn.TabPanel</a></li>
+        
+        <li><a href="../symbols/Horn.TargetSelect.html">Horn.TargetSelect</a></li>
+        
+        <li><a href="../symbols/Horn.Textarea.html">Horn.Textarea</a></li>
+        
+        <li><a href="../symbols/Horn.Textfield.html">Horn.Textfield</a></li>
+        
+        <li><a href="../symbols/Horn.Tip.html">Horn.Tip</a></li>
+        
+        <li><a href="../symbols/Horn.TypeField.html">Horn.TypeField</a></li>
+        
+        <li><a href="../symbols/Horn.Util.html">Horn.Util</a></li>
+        
+        <li><a href="../symbols/Horn.Validate.html">Horn.Validate</a></li>
+        
+        <li><a href="../symbols/Horn.Window.html">Horn.Window</a></li>
+        
+        <li><a href="../symbols/Horn.ZtreePanel.html">Horn.ZtreePanel</a></li>
+        
+        
+        
+	</ul>
+</div>
+        <div class="doc">
+        <div style="padding:10px">
+        <div style="text-align:right;"><a href="../index.html">返回控件主页</a>&nbsp;|&nbsp;<a href="../files.html">返回源码主页</a></div>
+        <!-- ============================== class overview ============================ -->
+        
+        
+<h3>目标选择器组件</h3>
+<p>目标选择器组件，点击组件打开目前页面，通过setTargetSelectValue(label,key)方法进行赋值,如图：</p>
+ <img src="../resource/images/targetSelect1.jpg"/><br>
+<h4>依赖组件</h4>
+<ul>
+	<li>无</li>
+</ul>
+
+<h4>适用范围</h4>
+<p>
+适用于需要弹窗口或者跳转到其它页面来赋值给组件的应用场景
+</p>
+<h4>约束</h4>
+<p>
+	<ol>
+		<li>组件默认只读</li>
+		<li>不支持绑定数据词典</li>
+	</ol>
+</p>
+<h4>注意事项</h4>
+<p>
+	<ol>
+		<li>组件必须编写id属性</li>
+	</ol>
+</p>
+
+<h4>使用示例</h4>
+<p>宏用法</p>
+<textarea name="code" class="html" style="display: none;">
+#targetselect({"label": "所属组织：", "name": "org", "id": "orgId", "check":"required","event":"orgSelector('orgId')"})
+</textarea>
+
+<p>通过API给组件赋值</p>
+<textarea name="code" class="html" style="display: none;">
+$("#orgId").setTargetSelectValue("恒生电子股份有限公司","0_000000");
+</textarea>
+<p>静态赋值（注意！如果通过java后台返回的值，就组装成这个格式即可：{"label":"恒生电子股份有限公司","key":"0_000000"}）</p>
+<textarea name="code" class="html" style="display: none;">
+#targetselect({"label": "所属组织：", "name": "org", "id": "orgId","value":{"label":"恒生电子股份有限公司","key":"0_000000"} "check":"required","event":"orgSelector('orgId')"})
+</textarea>
+
+<p>完整的例子代码</p>
+<textarea name="code" class="html" style="display: none;">
+查询页面代码：
+#parse("/screen/test/targetselect/orgSelectorWin.vm")
+#@screen()
+	#@panel({})
+	#form_start({"url":"$appServer.get('/pe/bizframe/user/modify.htm')","name":"modifyForm","id":"modifyForm","events":[{"event":"onSubmit","function":"onSubmitFn()"}]})
+	#panel_start
+			#textfield({"label": "员工号：","name":"extField1","value":"","check":"required;num","maxlength":"32"})
+			#textfield({"label": "用户编号：", "name": "userId","readonly": true, "value": "$!user.userId","check":"required"})
+			#textfield({"label": "用户昵称：", "name": "userName", "value": "$!user.userName","check":"required;checkImproperChar","maxlength":"32"})
+			#targetselect({"label": "所属组织：", "name": "orgId", "id": "orgId", "check":"required","event":"orgSelector('orgId')"})
+			#targetselect({"label": "上级组织：", "name": "orgId", "id": "parentId","check":"required","event":"orgSelector('parentId')"})
+	#panel_end
+	#button_panel
+	#form_end()
+#end
+#end
+
+
+弹窗口代码：
+
+#@window({"title":"组织选择器","name":"orgSelector","width":"500","height":"420"})
+      <table cellpadding="0" cellspacing="0" class="js_list_table"> 
+          <tr id="headId"> 
+            <th class="h_querytable_checkboxcolumn"><input class="h_querytable_select_all" type="checkbox" id="chkAll" value="$!item.dictItemCode"></th> 
+            <th name="dictItemCode" colno="1">组织编号</th> 
+            <th name="dictItemName" colno="2">组织名称</th> 
+          </tr> 
+          <tr class="modify_1"> 
+            <td><input class="h_querytable_select" type="checkbox" name="dictItem" id="dictItem" value="0_0000#研发中心"></td> 
+            <td class="align-left" nowrap="" >0_0000</td> 
+            <td class="align-left" nowrap="">研发中心</td> 
+          </tr> 
+		  <tr class="modify_2"> 
+            <td><input class="h_querytable_select" type="checkbox" name="dictItem" id="dictItem" value="0_0001#银行事业部"></td> 
+            <td class="align-left" nowrap="" >0_0001</td> 
+            <td class="align-left" nowrap="">银行事业部</td> 
+          </tr> 
+		  <tr class="modify_3"> 
+            <td><input class="h_querytable_select" type="checkbox" name="dictItem" id="dictItem" value="0_0002#基财事业部"></td> 
+            <td class="align-left" nowrap="" >0_0002</td> 
+            <td class="align-left" nowrap="">基财事业部</td> 
+          </tr> 
+		  <tr class="modify_4"> 
+            <td><input class="h_querytable_select" type="checkbox" name="dictItem" id="dictItem" value="0_0003#海外事业部"></td> 
+            <td class="align-left" nowrap="" >0_0003</td> 
+            <td class="align-left" nowrap="">海外事业部</td> 
+          </tr> 
+      </table> 
+	<table width="100%"  border="0" cellspacing="0" cellpadding="0">
+	  <tr>
+	    <td align="center">
+		    <div  class="h_btndiv">
+				<button type="button" class="h_btn-submit" name="button_submit" onclick="submitBtn()">确定</button>
+				<button type="button" class="h_btn-cencel" name="button_reset" onclick="closeOrgWindow()">取消</button>
+	    	</div>
+	    </td>
+	  </tr>
+	</table>
+#end
+<input type="hidden" id="targetId" name="targetId" value=""/>
+#jscode()
+	
+	function orgSelector(targetId){
+		Horn.getComp("orgSelector").show();
+		$("#targetId").val(targetId);
+		
+	}
+
+	function submitBtn(){
+		var cn = 0;
+		var ids = "";
+		var names = "";
+		$("input[name=dictItem]").each(function(){
+			
+			if(this.checked){
+				cn++;
+				var tmp = this.value.split("#");
+				var id = tmp[0];
+				var name = tmp[1];
+				ids = ids+id+",";
+				names = names+name+",";
+			}
+		});
+		if(cn>0){
+    		ids = ids.substring(0,ids.length-1);
+    		names = names.substring(0,names.length-1);
+			$("#"+$("#targetId").val()).setTargetSelectValue(names,ids);
+		}else{
+			alert("至少要选中一项");
+		}
+		closeOrgWindow();
+	}
+	
+	function closeOrgWindow(){
+		Horn.getComp("orgSelector").hide();
+	}
+    $("#chkAll").click(function() {// 全选复选框单击事件
+    			if (this.checked) {
+    				$(".js_list_table tr td input[type=checkbox]").attr(
+    						"checked", true);
+    			} else {
+    				$(".js_list_table tr td input[type=checkbox]").attr(
+    						"checked", false);
+    			}
+    	});
+#end
+
+</textarea>
+
+        <p>&nbsp;</p>
+        
+        	
+            	<!-- doc_options_begin -->
+	        	<h4>属性</h4>
+	        	<p style="color:red;">
+	        		注意：组件的id、name属性只能是英文字母开始，由英文字母、数字和下划线组成，命名时应考虑易识别，不要太长，不要和其他组件重复（表单内的组件除外）。
+	        	</p>
+	        	<table class="doc-table">
+	        		<tbody>
+	        			<tr>
+	        				<th><strong>名称</strong></th>
+							<th><strong>类型</strong></th>
+							<th><strong>描述</strong></th>
+							<th><strong>默认值</strong></th>
+	        			</tr>
+	        			
+	        				<tr>
+	        					<td>id</td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>组件唯一标识</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>""</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td>name</td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>表单提交名字</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>""</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td>label</td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>表单组件的标签名，值过长会造成label显示不全，但是可以通过鼠标悬浮看到完整值</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>""</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td>value</td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>表单的初始值，如果没有配置defValue属性，表单重置的时候，将采用value作为重置值</br>传入的值必须是json格式：{"label":"这里输入显示名称",key:"这里输入提交后台的id"},如：{"label":"周智星","key":"1"}</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>""</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td>defValue</td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>组件的重置时的值，如果没有配置此值，将以value属性做为重置值。</br>如果指定了value值，并且defValue设置为空(defValue:"")，则无法重置为空值，请用form组件的clearValue方法清空form内组件的值或调用组件本身的clearValue方法清空值。</br>传入的值必须是json格式：{"label":"这里输入显示名称",key:"这里输入提交后台的id"},如：{"label":"周智星","key":"1"}</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>无</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td>cols</td>
+	        					<td>int</td>
+	        					<td>
+	        						<p>组件的跨列数，取值范围由外容器的panel的cols而定(支持1-4列)</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>1</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td>check</td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>组件的约束检查选项</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>具体见Horn.Validate类的已经支持的正规、函数名"check":"required;"</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>""</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td>afterClear</td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>清空值后需要callback的事件配置</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>#targetselect({"label":"targetselect","name":"targetselect","value":{"label":"周智星","key":"09150"},"event":"showWin()","check": "required","afterClear":"isValid"})#jscode()  function isValid(){		Horn.getComp("clientId22").validate();		alert(Horn.getComp("clientId22").isValid());	  }#end</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>""</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td>onChange</td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>值发生改变时的事件配置</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>#targetselect({"label":"targetselect","name":"targetselect","value":{"label":"周智星","key":"09150"},"event":"showWin()","check": "required","onChange":"change"})#jscode()  function change(){		Horn.getComp("clientId22").validate();		alert(Horn.getComp("clientId22").isValid());	  }#end</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>""</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td>event</td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>组件的事件配置</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>#targetselect({"label":"targetselect","name":"targetselect","value":"","event":"showWin()","check": "required"})</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>""</td>
+	        				</tr>
+	        			
+	        		</tbody>
+	        	</table>
+        	    <!-- doc_options_end -->
+            
+            
+            
+       		
+       		
+            	<!-- doc_methods_begin -->
+            	<h4>方法</h4>
+            	<table class="doc-table">
+          			<tbody>
+          				<tr>
+          					<th><strong>名称</strong></th>
+							<th><strong>参数</strong></th>
+							<th><strong>描述</strong></th>
+          				</tr>
+          				
+          					<tr>
+								<td>getValue</td>
+								<td>()</td>
+								<td>
+									<p>获取值</p>
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        提交到后台的值，也就是{"label":"这里输入显示名称",key:"这里输入提交后台的id"}里的key值。
+		                                    </li>
+										
+									
+									 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>setValue</td>
+								<td>(value)</td>
+								<td>
+									<p>设置值</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        String:<b>value</b>
+		                                        值 传入的值必须是json格式：{"label":"这里输入显示名称",key:"这里输入提交后台的id"},如：{"label":"周智星","key":"1"}
+		                                    </li>
+		                                
+									
+									
+									 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>getText</td>
+								<td>()</td>
+								<td>
+									<p>获取前台显示的值</p>
+									
+									
+										返回值:
+										
+											<li>
+		                                        String:<b></b>
+		                                        label 前台显示的值，也就是{"label":"这里输入显示名称",key:"这里输入提交后台的id"}里的label的值
+		                                    </li>
+										
+									
+									 
+								</td>
+							</tr>
+          				
+          			</tbody>
+          		</table>
+            	<!-- doc_methods_end -->
+            
+        	<br /><i>Defined in: </i> <a href="../symbols/src/E__workspace_JRES-PLUS_Sources_jresplus-2.0_Sources_jresplus-ui_jresplus-ui-web_build_com.hundsun.jresplus.ui.targetselect_public_scripts_TargetSelect.js.html">TargetSelect.js</a>
+        </div>
+        </div>
+</div>
+</div>
+<!-- ============================== footer ================================= -->
+
+		<div id="footer">
+			<div>Copyright ? 2010-2013 www.hundsun.com</div>
+		</div>
+		<script type="text/javascript">
+			dp.SyntaxHighlighter.HighlightAll('code');
+		</script>
+	</body>
+</html>
+
+

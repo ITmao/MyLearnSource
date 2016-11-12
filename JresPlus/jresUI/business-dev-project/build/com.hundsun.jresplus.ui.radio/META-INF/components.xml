@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui-components xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+          xsi:noNamespaceSchemaLocation="components.xsd">
+	<namespace>com.hundsun.jresplus.ui.radio</namespace>
+	<name>单选框组件包</name>
+	<description><![CDATA[组件包的具体描述]]></description>
+	<dependencies>
+		<dependency>
+			<namespace>com.hundsun.jresplus.ui.field</namespace>
+			<description><![CDATA[基础组件包]]></description>
+		</dependency>
+	</dependencies>
+	<components>
+		<component>
+			<category>VM</category>
+			<id>Horn.Radio</id>
+			<name>单选框组件</name>
+			<description><![CDATA[单选框组件的描述信息]]></description>
+			<ideinfo>
+				<label>单选框组件</label>
+				<icon>images/component/radio.png</icon>
+				<template>
+					<![CDATA[
+						#radiogroup({"name":"","label":"","defValue":"", "dictName": "", "cols":3, "check": "","hidden":true})
+					]]>	
+				</template>
+			</ideinfo>
+		</component>
+	</components>
+</ui-components>

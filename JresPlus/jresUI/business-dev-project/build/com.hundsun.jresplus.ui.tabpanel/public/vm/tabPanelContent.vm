@@ -1,0 +1,112 @@
+#**   
+ * @author huling   
+ * @class
+ * @name tab_panel_content_start
+ * @param name ｛String｝ tab页名称
+ * @param id {String} 唯一标识
+ * @param title ｛String｝ tab页标题
+ * @param events {Json} 事件，格示见示例
+ * @description tab_panel_content_start组件，tab_panel_content标签页开始组件需要和tab_panel_content_end组件配合使用
+ * @see The <a href="huling@hundsun.com">huling</a >.   
+ * @example \#tab_panel_content_start({"title":"机构信息","name":"org", "events":[{"event":"onblur","function":"getFundAccount(this)"}]})
+ * @since version 0.1
+ *#	
+#**
+ * @lends tab_panel_content_start
+ *#
+ 
+ #**
+* -----------------------------------------------------------------------
+* 修订记录：                  修改人                   修改原因
+* 2014-4-22       周智星                BUG #6775 【tab_panel】在某种场景下第二个标签页会显示第一个标签页的title
+* 2014-06-24      zhangsu     去掉静态tab创建时tab的title属性文字较长被截断的代码
+* -----------------------------------------------------------------------
+*#
+#macro(tab_panel_content_start $uiTabPanelContentConfig)
+	#set($uiTabContenttitle=$uiTabPanelContentConfig.title )
+	#set($uiTabContentName="")
+	#if($uiTabPanelContentConfig.name)
+		#set($uiTabContentName=$uiTabPanelContentConfig.name)
+	#else
+		#set($uiTabContentName=$horn.getUUID())
+	#end
+	<ul style="display:none" class="u-tab-nav">
+		<li ref="$!{uiTabContentName}" title="$!{uiTabPanelContentConfig.title}" tipMsg="$!{uiTabPanelContentConfig.title}" class="h_tabpanel-wrap-li"
+			#foreach($event in $uiTabPanelContentConfig.events)
+				$event.event = "$event.function" 
+			#end
+			><a href="javascript:void(0)">
+				<span class="h_tab-arrow"></span>
+				<span class="h_tab-icon"></span>
+				<span class="h_tab-title">$!{uiTabContenttitle}</span>
+				</a>
+			</li>
+			
+	</ul>
+	#set($tabPanelContentClass = "h_tabpanel-content")
+	<div ref_target="$!{uiTabContentName}" class="$tabPanelContentClass" style="display:none" id="$!{uiTabPanelContentConfig.id}" $horn.paramsCache($uiTabPanelContentConfig) #if($uiTabPanelContentConfig.lazy)lazyload="${uiTabPanelContentConfig.lazy}"#end>
+		#if(!${uiTabPanelContentConfig.lazy})
+#end
+#**   
+ * @author huling   
+ * @class
+ * @name tab_panel_content
+ * @param name ｛String｝ tab页名称
+ * @param title ｛String｝ tab页标题
+ * @param id {String} 唯一标识
+ * @param events {Json} 事件，格示见示例
+ * @description tab_panel_content_start组件，tab_panel_content标签页开始组件需要和tab_panel_content_end组件配合使用
+ * @see The <a href="huling@hundsun.com">huling</a >.   
+ * @example \#@tab_panel_content({"title":"机构信息","name":"org", "events":[{"event":"onblur","function":"getFundAccount(this)"}]})
+ * @since version 0.1
+ *#	
+#**
+ * @lends tab_panel_content
+ *#
+#macro(tab_panel_content $uiTabPanelContentConfig)
+	#set($uiTabContenttitle=$uiTabPanelContentConfig.title )
+	#set($uiTabContentName="")
+	#if($uiTabPanelContentConfig.name)
+		#set($uiTabContentName=$uiTabPanelContentConfig.name)
+	#else
+		#set($uiTabContentName=$horn.getUUID())
+	#end
+	<ul style="display:none" class="u-tab-nav">
+		<li ref="$!{uiTabContentName}" title="$!{uiTabPanelContentConfig.title}" tipMsg="$!{uiTabPanelContentConfig.title}" class="h_tabpanel-wrap-li"
+			#foreach($event in $uiTabPanelContentConfig.events)
+				$event.event = "$event.function" 
+			#end
+			><a href="javascript:void(0)">
+				<span class="h_tab-arrow"></span>
+				<span class="h_tab-icon"></span>
+				<span class="h_tab-title">$!{uiTabContenttitle}</span>
+				</a>
+			</li>
+			
+	</ul>
+	#set($tabPanelContentClass = "h_tabpanel-content")
+	<div ref_target="$!{uiTabContentName}" class="$tabPanelContentClass" style="display:none" id="$!{uiTabPanelContentConfig.id}" $horn.paramsCache($uiTabPanelContentConfig) #if($uiTabPanelContentConfig.lazy)lazyload="${uiTabPanelContentConfig.lazy}"#end>
+		#if(!${uiTabPanelContentConfig.lazy})
+			$bodyContent
+		#end
+	</div>
+	#set($uiTabPanelContentConfig={})
+#end
+
+#**   
+ * @author huling   
+ * @class
+ * @name tab_panel_content_end
+ * @description tab_panel_content_end组件，tab_panel_content标签页结束组件需要和tab_panel_content_start组件配合使用
+ * @see The <a href="huling@hundsun.com">huling</a >.   
+ * @example \#tab_panel_content_end
+ * @since version 0.1
+ *#	
+#**
+ * @lends tab_panel_content_end
+ *#
+#macro(tab_panel_content_end)
+    	#end
+	</div>
+	#set($uiTabPanelContentConfig={})
+#end

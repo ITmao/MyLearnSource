@@ -1,0 +1,30 @@
+.g-unit-wrap:before,
+.g-unit-wrap:after {
+  display: table;
+  line-height: 0;
+  content: "";
+}
+.g-unit-wrap:after {
+  clear: both;
+}
+.g-unit-wrap .u-label {
+  height: 34px;
+  font-weight: 500;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 10px 5px 5px;
+}
+.g-view .g-unit-wrap .u-label {
+    padding: 0;
+}
+.g-unit-wrap .u-label.no-ellipsis {
+  text-overflow: inherit !important;
+}
+.g-unit-wrap > div {
+  position: relative;
+  padding: 5px;
+}
+.hc_label{
+	/*padding-top: 8px;*/
+}

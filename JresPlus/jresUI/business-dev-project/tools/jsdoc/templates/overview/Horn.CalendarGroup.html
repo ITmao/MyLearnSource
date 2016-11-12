@@ -1,0 +1,39 @@
+
+<h3>calendargroup日期组组件</h3>
+<p>需要成对录入日期时使用,包装日期第三方插件(lhgcalendar)的组件</p>
+ <img src="../resource/images/calendarGroup.png"/>
+
+<h4>依赖组件</h4>
+<ul>
+	<li>lhgcalendar</li>
+</ul>
+
+<h4>适用范围</h4>
+<p>
+</p>
+<h4>约束</h4>
+<p>
+	<ol>
+		<li>minDate,maxDate,format日期格式支持：yyyyMMdd、yyyy-MM-dd、yyyy/MM/dd</li>
+		<li>第二个框的录入日期必须大于第一个框的录入的日期</li>
+	</ol>
+</p>
+<h4>注意事项</h4>
+<p>
+	<ol>
+		<li>需要使用panel组件做为容器</li>
+		<li>请使用 name1获取组件的Horn对象</li>
+		<li>当日期输入框中存在合法日期时，日期列表会默认选中该日期，否则选中当天日期（在最小-最大日期范围时）</li>
+	</ol>
+</p>
+
+<h4>使用示例</h4>
+<p>示例1:</p>
+<textarea name="code" class="html" style="display: none;">
+#calendar_group({"label":"日历","name1":"testCalendar","name2":"testCalendar1"})
+</textarea>
+
+<p>示例2：</p>
+<textarea name="code" class="html" style="display: none;">
+无
+</textarea>

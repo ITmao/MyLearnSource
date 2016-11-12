@@ -1,0 +1,67 @@
+#**   
+ * @author huws   
+ * @class
+ * @name secure_html
+ * @param content ｛String｝ 要进行Html转义的内容
+ * @description secure_html工具宏\使用场景：\1.当在HTML标签中使用输出的变量的时候，需要对变量进行encode，否则容易出现XSS攻击漏洞。比如<div>$var</di>应该写成<div>#secure_html($var)</div>;或者：#textarea({"label":"测试请假原因：","name":"reason1","cols":"2","value":"${reason}" })应该写成：#textarea({"label":"测试请假原因：","name":"reason1","cols":"2","value":"#secure_html(${reason})" })\2.HTML属性中使用到了输出的变量也需要使用这个标签来增强安全性。例如：<div id="xxx" name="$var"></div>,要使用<div id="xxx" name="#secure_html($var)"></div>
+ * @see 
+ * @example \#secure_html($content)
+ * @since version 1.0.21
+ *#	
+#macro(secure_html $content)
+$securityUtil.encodeHtml($content)
+#end
+
+
+#**   
+ * @author huws   
+ * @class
+ * @name secure_js
+ * @param content ｛String｝ 要进行javascript转义的内容
+ * @description secure_js工具宏，对js关键字等进行转义\使用场景:\1.js片段里面如果用到了输出的变量，这些变量可以使用secure_js宏来避免XSS攻击。例如<script> var x="$var";</script>要写成<script> var x="#secure_js($var)";</script>2.在事件中使用输出的变量时，也需要使用这个宏，比如:<a href=# onclick="funXX('$var')" >XXX</a>这种情况要这么写：<a href=# onclick="funXX(#secure_js('$var'))" >XXX</a>
+ * @see 
+ * @example \#secure_js($content)
+ * @since version 1.0.21
+ *#	
+#macro(secure_js $content)
+$securityUtil.encodeJS($content)#end
+
+
+#**   
+ * @author huws   
+ * @class
+ * @name secure_url
+ * @param content ｛String｝ 要进行URL转义的内容
+ * @description secure_url工具宏,对url中的参数进行转义\在RL地址中使用了输出变量，则可以使用这个宏来增强安全性，避免XSS攻击。比如：<a href="xxxx?test=$var">XXX</a>里面应该这么写：<a href="xxxx?test=#secure_url($var)">XXX</a>
+ * @see 
+ * @example \#secure_url($content)
+ * @since version 1.0.21
+ *#	
+#macro(secure_url $content)
+$securityUtil.encodeURL($content)#end
+
+#**   
+ * @author huws   
+ * @class
+ * @name csrf_url_token
+ * @param 没有参数
+ * @description 防csrf攻击的宏，用于保护ajax请求或者连接地址，如果是连接地址，可以这么使用：url: "${appServer}/security/ajaxsubmit.json?#csrf_url_token()&paramxxx=xxx",
+ * @see 
+ * @example \#csrf_url_token)
+ * @since version 1.0.21
+ *#	
+#macro(csrf_url_token)
+csrf_token=${csrf_token}#end
+
+#**   
+ * @author huws   
+ * @class
+ * @name csrf_page_token
+ * @param 没有参数
+ * @description 防csrf攻击的宏，用于保护页面，增加了这个宏，就会默认增加一个token的隐藏域，可以放在form里面，或者放在页面的任何位置
+ * @see 
+ * @example \#csrf_page_token)
+ * @since version 1.0.21
+ *#	
+#macro(csrf_page_token)
+<input type="hidden" name="csrf_token" id="csrf_token" value="$!{csrf_token}"/>#end

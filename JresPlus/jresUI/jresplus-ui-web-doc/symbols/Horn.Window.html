@@ -1,0 +1,574 @@
+
+	<!-- ============================== header ================================= -->	
+		<!-- begin static/header.html -->
+		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="keywords" content="jquery,ui,easy,FUI,web framekwork,ajax framekwork,ria,web development">
+		<meta name="description" content="FUI help you build your web page more Fast!!">
+		<title>UI API - JRES UI</title>
+   		<link rel="stylesheet" href="../resource/css/doc.css" type="text/css" />
+    	<link type="text/css" rel="stylesheet" href="../resource/SyntaxHighlighter/Styles/SyntaxHighlighter.css"/>
+		<script src="../resource/SyntaxHighlighter/Scripts/shCore.js"></script>
+		<script src="../resource/SyntaxHighlighter/Scripts/shBrushXml.js"></script>
+		<script src="../resource/SyntaxHighlighter/Scripts/shBrushJava.js"></script>
+		<script type="text/javascript" src="../resource/jquery-1.7.2.min.js"></script>
+		<style type="text/css">
+			.dp-xml .cdata { color: #ff1493; }.dp-xml .tag, .dp-xml .tag-name { color: #069; font-weight: bold; }.dp-xml .attribute { color: red; }.dp-xml .attribute-value { color: blue; }
+		</style>
+		<script>
+			
+		</script>
+	</head>
+	<body>
+		<div id="header">
+						<div id="header-inner">
+				<table cellpadding="0" cellspacing="0" style="width:100%;">
+					<tr>
+						<td rowspan="2" style="width:20px;">
+						</td>
+						<td style="height:52px;">
+							<div style="color:#fff;font-size:22px;font-weight:bold;">
+								<a href="#" style="color:#fff;font-size:22px;font-weight:bold;text-decoration:none">JRES UI</a>
+							</div>
+							<div style="color:#fff">
+								<a href="#" style="color:#fff;text-decoration:none">JRES UI是使用Velocity开发的服务器端UI组件，助力于组件化快速视图开发!</a>
+							</div>
+						</td>
+						<td style="padding-right:5px;text-align:right;vertical-align:bottom;">
+							<div id="topmenu" style="display:none;">
+								<a href="../../index.html">主页</a>
+								<a href="http://rdc.hundsun.com/forum.php?mod=forumdisplay&amp;fid=163" target="_blank">论坛</a>
+								<a href="../../demo/index.htm">示例</a>
+								<a href="../../documentation/index.html">文档</a>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+			
+		</div>
+		<!-- end static/header.html -->
+	<div id="mainwrap" >
+		<div id="content">
+        <!-- ============================== classes index ============================ -->
+        <script type="text/javascript">
+            $(function() {
+            	var bw=$.browser;
+				if(bw.msie&&bw.version<7||(bw.msie&&$.support.boxModel==false)){
+						//ie6
+						$("#plugin_title").hide();
+						$('#plugins').removeClass("plugins");
+						$('#plugins').addClass("plugins2");
+				}else{
+					$('#plugins').stop().animate({'marginLeft':'-285px'},1000);
+	                $('#plugins').hover(
+	                    function () {
+	                        $(this).stop().animate({'marginLeft':'-2px'},200);
+	                    },
+	                    function () {
+	                        $(this).stop().animate({'marginLeft':'-285px'},200);
+	                    }
+	                );
+				}
+                
+            });
+</script>
+	<div id="plugins" class="plugins">
+	<div id="plugin_title" class="plugin_title">控件清单</div>
+	<ul>
+        
+        
+        
+        
+        
+        <li><a href="../symbols/Horn.html">Horn</a></li>
+        
+        <li><a href="../symbols/Horn._Pagebar-pagebar.html">Horn._Pagebar-pagebar</a></li>
+        
+        <li><a href="../symbols/Horn.Base.html">Horn.Base</a></li>
+        
+        <li><a href="../symbols/Horn.ButtonPanel.html">Horn.ButtonPanel</a></li>
+        
+        <li><a href="../symbols/Horn.Calendar.html">Horn.Calendar</a></li>
+        
+        <li><a href="../symbols/Horn.CalendarGroup.html">Horn.CalendarGroup</a></li>
+        
+        <li><a href="../symbols/Horn.Checkbox.html">Horn.Checkbox</a></li>
+        
+        <li><a href="../symbols/Horn.CheckboxGroup.html">Horn.CheckboxGroup</a></li>
+        
+        <li><a href="../symbols/Horn.Combox.html">Horn.Combox</a></li>
+        
+        <li><a href="../symbols/Horn.DataGrid.html">Horn.DataGrid</a></li>
+        
+        <li><a href="../symbols/Horn.Field.html">Horn.Field</a></li>
+        
+        <li><a href="../symbols/Horn.FieldSet.html">Horn.FieldSet</a></li>
+        
+        <li><a href="../symbols/Horn.Form.html">Horn.Form</a></li>
+        
+        <li><a href="../symbols/Horn.Grid.html">Horn.Grid</a></li>
+        
+        <li><a href="../symbols/Horn.HiddenField.html">Horn.HiddenField</a></li>
+        
+        <li><a href="../symbols/Horn.Label.html">Horn.Label</a></li>
+        
+        <li><a href="../symbols/Horn.Menu.html">Horn.Menu</a></li>
+        
+        <li><a href="../symbols/Horn.MessageBox.html">Horn.MessageBox</a></li>
+        
+        <li><a href="../symbols/Horn.PageBar.html">Horn.PageBar</a></li>
+        
+        <li><a href="../symbols/Horn.Panel.html">Horn.Panel</a></li>
+        
+        <li><a href="../symbols/Horn.Password.html">Horn.Password</a></li>
+        
+        <li><a href="../symbols/Horn.PasswordGroup.html">Horn.PasswordGroup</a></li>
+        
+        <li><a href="../symbols/Horn.QueryTable.html">Horn.QueryTable</a></li>
+        
+        <li><a href="../symbols/Horn.RadioGroup.html">Horn.RadioGroup</a></li>
+        
+        <li><a href="../symbols/Horn.Screen.html">Horn.Screen</a></li>
+        
+        <li><a href="../symbols/Horn.SelectTree.html">Horn.SelectTree</a></li>
+        
+        <li><a href="../symbols/Horn.TabPanel.html">Horn.TabPanel</a></li>
+        
+        <li><a href="../symbols/Horn.TargetSelect.html">Horn.TargetSelect</a></li>
+        
+        <li><a href="../symbols/Horn.Textarea.html">Horn.Textarea</a></li>
+        
+        <li><a href="../symbols/Horn.Textfield.html">Horn.Textfield</a></li>
+        
+        <li><a href="../symbols/Horn.Tip.html">Horn.Tip</a></li>
+        
+        <li><a href="../symbols/Horn.TypeField.html">Horn.TypeField</a></li>
+        
+        <li><a href="../symbols/Horn.Util.html">Horn.Util</a></li>
+        
+        <li><a href="../symbols/Horn.Validate.html">Horn.Validate</a></li>
+        
+        <li><a href="../symbols/Horn.Window.html">Horn.Window</a></li>
+        
+        <li><a href="../symbols/Horn.ZtreePanel.html">Horn.ZtreePanel</a></li>
+        
+        
+        
+	</ul>
+</div>
+        <div class="doc">
+        <div style="padding:10px">
+        <div style="text-align:right;"><a href="../index.html">返回控件主页</a>&nbsp;|&nbsp;<a href="../files.html">返回源码主页</a></div>
+        <!-- ============================== class overview ============================ -->
+        
+        
+<h3>弹窗组件 window</h3>
+<p>用于弹出窗口展示内容，属于容器组件,包含标题以及标题栏部分的关闭按钮，没有具体的内容。</p>
+ <img src="../resource/images/window.png"/>
+
+<h4>依赖组件</h4>
+<ul>
+	<li>无</li>
+</ul>
+
+<h4>适用范围</h4>
+<p>
+	使用于内容较少，且隶属与一个大的页面，在交互上与大页面存在关联，比如“新增一条数据记录以弹出窗口的形式展示，保存后刷新主页面”
+</p>
+<h4>约束</h4>
+<p>
+	<ol>
+		<li>使用window标签时，必须放在screen标签内部</li>
+		<li>不适合展示内容较多的页面，因为窗口太大不符合审美，且可能出现不友好的窗口内滚动条</li>
+	</ol>
+</p>
+<h4>注意事项</h4>
+<p>
+	<ol>
+		<li>窗口中的内容最好在主页面初始时就存在，不建议使用异步方式加载渲染</li>
+		<li>慎用窗口内的iframe,会导致复杂</li>
+		<li>慎用窗口的高度和宽度需要根据实际的展示内容，进行设置，设置时注意最大值和最小值</li>
+	</ol>
+</p>
+
+<h4>使用示例</h4>
+<p>示例1:</p>
+<textarea name="code" class="html" style="display: none;">
+#@window({"title":"窗口1","id":"addWin","width":"500","height":"300"})
+这是窗口的内容
+#end
+</textarea>
+
+<p>示例2：</p>
+<textarea name="code" class="html" style="display: none;">
+#window_start({{"title":"窗口1","id":"addWin","width":"500","height":"300"}})
+这是窗口的内容
+#window_end()
+</textarea>
+
+        <p>&nbsp;</p>
+        
+        	
+            	<!-- doc_options_begin -->
+	        	<h4>属性</h4>
+	        	<p style="color:red;">
+	        		注意：组件的id、name属性只能是英文字母开始，由英文字母、数字和下划线组成，命名时应考虑易识别，不要太长，不要和其他组件重复（表单内的组件除外）。
+	        	</p>
+	        	<table class="doc-table">
+	        		<tbody>
+	        			<tr>
+	        				<th><strong>名称</strong></th>
+							<th><strong>类型</strong></th>
+							<th><strong>描述</strong></th>
+							<th><strong>默认值</strong></th>
+	        			</tr>
+	        			
+	        				<tr>
+	        					<td><b>id</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>组件的唯一标示</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>""</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>name</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>组件的名称</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>""</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>title</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>窗口的标题<br/>标题不宜过长，控制在窗口可展示的范围内，展示一列内容时不要超过8个字符，展示两列时不要超过16个字符，展示三列内容时不要超过25个字符</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>"窗口"</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>width</b></td>
+	        					<td>Number</td>
+	        					<td>
+	        						<p>窗口的宽度<br/>(min:250)小于最小值时使用最小值设置，不设置时使用默认值<br/>如果设置的宽度大于当前视图（html的window），那么会设置窗口的宽度为当前视图减去30的宽度；<br/>提示：用来展示一列内容宽度需要250；两列需要500；三列需要750；</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>500</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>height</b></td>
+	        					<td>Number</td>
+	        					<td>
+	        						<p>窗口的高度<br/>(min:150)小于最小值时使用最小值设置，不设置时使用默认值<br/>如果设置的高度大于当前视图（html的window），那么会设置窗口的高度为当前视图减去30的高度</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>500</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>closeable</b></td>
+	        					<td>boolean</td>
+	        					<td>
+	        						<p>窗口是否可关闭<br/></p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>true</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>scroll</b></td>
+	        					<td>boolean</td>
+	        					<td>
+	        						<p>窗口内容是否支持滚动条<br/>如果设置此属性为true，当内容的尺寸超出用户配置的可展示height范围后，会在窗口内部出现纵向滚动条；</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>false</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>isDrag</b></td>
+	        					<td>boolean</td>
+	        					<td>
+	        						<p>窗口是否支持拖拽<br/>如果设置此属性为true，在窗口的任何地方按住鼠标右键都可以拖拽，默认为true；</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>#@window({"scroll":true,"id":"w0","name":"w0","title":"窗口二","height":300,"width":900,"isDrag":true})#end</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>true</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>buttons</b></td>
+	        					<td>array</td>
+	        					<td>
+	        						<p>窗口的底部按钮栏配置<br/></p>
+		        					
+		        						示例：
+		        						
+		        							<pre>"buttons":[ {"label":"确定","name":"btnOk","event":"todo()","className":"u-btn-primary"}         ,{"label":"取消","name":"btnCancel","event":"todo2()","className":"u-btn-default"} ]</pre>
+		        						
+		        					
+	        					</td>
+	        					<td></td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>isAuto</b></td>
+	        					<td>boolean</td>
+	        					<td>
+	        						<p>增加配置参数isAuto，可配置为true和false，如果为true则自动缩放，反之则不缩放。<br/></p>
+		        					
+	        					</td>
+	        					<td>true</td>
+	        				</tr>
+	        			
+	        		</tbody>
+	        	</table>
+        	    <!-- doc_options_end -->
+            
+            
+            
+          		<!-- doc_events_begin -->
+          		<h4>事件</h4>
+          		<table class="doc-table">
+          			<tbody>
+          				<tr>
+          					<th><strong>名称</strong></th>
+							<th><strong>参数</strong></th>
+							<th><strong>描述</strong></th>
+          				</tr>
+          				
+          					<tr>
+          						<td><b>beforeClose</b></td>
+          						<td>function()</td>
+          						<td>
+          							<p>窗口关闭前回调事件<br/>如果回调函数返回false,则窗口终止关闭动作</p>
+          							
+		                            
+	                                
+	                               		示例：
+	                                    
+	                                        <pre>#@window({"name":"w6","title":"test","beforeClose":"beforeC()"})
+    	
+    #end
+    function beforeC(){
+    	alert("关闭之前");
+    	return true;
+    }</pre>
+	                                    
+	                           		 
+	                            
+          						</td>
+          					</tr>
+          				
+          					<tr>
+          						<td><b>afterClose</b></td>
+          						<td>function()</td>
+          						<td>
+          							<p>窗口关闭后回调事件<br/></p>
+          							
+		                            
+	                                
+	                               		示例：
+	                                    
+	                                        <pre> #@window({"name":"w6","title":"test","afterClose":"afterC()"})
+    	
+    #end
+    function afterC(){
+    	alert("关闭之后");
+    }</pre>
+	                                    
+	                           		 
+	                            
+          						</td>
+          					</tr>
+          				
+          			</tbody>
+          		</table>
+          	  	<!-- doc_events_end -->
+       		
+       		
+       		
+            	<!-- doc_methods_begin -->
+            	<h4>方法</h4>
+            	<table class="doc-table">
+          			<tbody>
+          				<tr>
+          					<th><strong>名称</strong></th>
+							<th><strong>参数</strong></th>
+							<th><strong>描述</strong></th>
+          				</tr>
+          				
+          					<tr>
+								<td>resetSizeWin</td>
+								<td>(w, h)</td>
+								<td>
+									<p>根据所传入的宽度和高度重置窗口</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        int:<b>w</b>
+		                                        
+		                                    </li>
+		                                
+		                                    <li>
+		                                        int:<b>h</b>
+		                                        
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        void
+		                                    </li>
+										
+									
+									
+	                               		示例：
+	                                    
+	                                        <pre>var w = 600;var h = 300;Horn.getComp("w0").resetSizeWin(w,h);</pre>
+	                                    
+	                           		 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>show</td>
+								<td>()</td>
+								<td>
+									<p>显示窗口</p>
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        void
+		                                    </li>
+										
+									
+									 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>hide</td>
+								<td>()</td>
+								<td>
+									<p>隐藏窗口</p>
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        void
+		                                    </li>
+										
+									
+									 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>setTitle</td>
+								<td>(title)</td>
+								<td>
+									<p>设置窗口标题</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        String:<b>title</b>
+		                                        标题
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        void
+		                                    </li>
+										
+									
+									 
+								</td>
+							</tr>
+          				
+          			</tbody>
+          		</table>
+            	<!-- doc_methods_end -->
+            
+        	<br /><i>Defined in: </i> <a href="../symbols/src/E__workspace_JRES-PLUS_Sources_jresplus-2.0_Sources_jresplus-ui_jresplus-ui-web_build_com.hundsun.jresplus.ui.window_public_scripts_Window.js.html">Window.js</a>
+        </div>
+        </div>
+</div>
+</div>
+<!-- ============================== footer ================================= -->
+
+		<div id="footer">
+			<div>Copyright ? 2010-2013 www.hundsun.com</div>
+		</div>
+		<script type="text/javascript">
+			dp.SyntaxHighlighter.HighlightAll('code');
+		</script>
+	</body>
+</html>
+
+

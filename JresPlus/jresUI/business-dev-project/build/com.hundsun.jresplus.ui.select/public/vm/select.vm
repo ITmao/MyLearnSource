@@ -1,0 +1,229 @@
+#**   
+ * @author huling   
+ * @class
+ * @name select
+ * @param cols {String} 跨列数
+ * @param name {String} 名称
+ * @param disabled {String} 是否禁用
+ * @param id {String} 唯一标识
+ * @param alias {String} 别名
+ * @param value {String} 值
+ * @param headItem {Json} 选项头格式如:{"label":"","value":"请选择"}
+ * @param label {String} 单选框组件显示值
+ * @param check {String} 验证串
+ * @param items {Json} 静态显示值 格式："items":[{"label":"男", "pLabel":"0", "value":"1"},{"label":"女", "value":"2", "pLabel":"1"}] pLabel为当前节点的父节点编号
+ * @param dictName {String} 数据字典名
+ * @param refname {String} 关联筛选的组件名
+ * @param multiple {String} 是否多选
+ * @param checkAll {boolean} 是否全选
+ * @param delimiter {String} 多选时的显示分隔符
+ * @param showLabel {Boolean} 是否在渲染列表项目时显示实际值，默认为false
+ * @param events {Json} 事件，格示见示例
+ * @description select组件，下拉选项组件
+ * @see The <a href="huling@hundsun.com">huling</a >.   
+ * @example \#select({"label":"多交易中心","name":"sysNodes", "dictName":"SysNode", "multiple":true, "value":"1,1001", "check":"", "events":[{"event":"onblur","function":"getFundAccount(this)"}]})
+ * @since version 0.1
+ *#	
+#**
+ * @lends select
+ *#
+#macro(select $uiSelectConfig)
+	#set($col = 4)
+	#set($cols = "")
+    #if($layoutcolumn) 
+    	#if($layoutcolumn==1)
+			#set($col = 12)
+		#elseif($layoutcolumn==2)
+			#set($col = 6)
+			#if($uiSelectConfig.cols&&$uiSelectConfig.cols=="2")
+				#set($cols = "g-grid-6-row")
+			#end
+		#elseif($layoutcolumn==3)
+			#set($col = 4)
+			#if($uiSelectConfig.cols)
+				#if($uiSelectConfig.cols==3)
+					#set($cols = "g-grid-4-row")
+				#elseif($uiSelectConfig.cols==2)
+					#set($cols = "g-grid-4-8-row")
+				#end
+			#end
+		#elseif($layoutcolumn==4)
+			#set($col = 3)
+			#if($uiSelectConfig.cols)
+				#if($uiSelectConfig.cols==4)
+					#set($cols = "g-grid-3-row")
+				#elseif($uiSelectConfig.cols==3)
+					#set($cols = "g-grid-3-9-row")
+				#elseif($uiSelectConfig.cols==2)
+					#set($cols = "g-grid-3-6-row")
+				#end
+			#end
+		#end
+    #end
+	##设置是否显示标签
+    #set($showLabel = false)
+    #if($uiSelectConfig.showLabel&&$uiSelectConfig.showLabel == "true")
+    	#set($showLabel = true)
+    #end
+	##查看模式
+    #if($view)
+        #set($val = "")
+        #set($val = $uiSelectConfig.value)
+        #if(!$val || $val =="" && $!{uiSelectConfig.name} )
+            #set($val =  "$horn.getValue($!uiSelectConfig.name)")
+        #end
+		<div class="g-grid-$col #if($cols!="")$cols#end">
+	  	<div class="g-unit-wrap">
+			#if(!$uiSelectConfig.hiddenLabel)
+		    <label #if($layoutcolumn==1)class="g-grid-2 unit-label"#else class="g-grid-4 unit-label"#end><span ref="$!uiSelectConfig.name" title="$!{uiSelectConfig.label}">$!{uiSelectConfig.label}</span></label>
+		    #end
+			<div class="g-grid-8">
+				<div name="$!{uiSelectConfig.name}" $horn.paramsCache($uiSelectConfig)  class="hc_label" #if($uiSelectConfig.multiple) mutiValue="true" #end
+                #if($uiSelectConfig.dictName)
+    				dictName="$!{uiSelectConfig.dictName}"
+    				$horn.addGlobal('componentSelects_s',$!{uiSelectConfig.dictName})
+    			#end
+    			>$!val</div>
+			</div>
+	    </div>
+	 </div>
+	#else
+		<div class="g-grid-$col #if($cols!="")$cols#end">
+		  	<div class="g-unit-wrap">
+		  	 #set($checkStr=$horn.getCheckStr($uiSelectConfig.name,$uiSelectConfig.check))
+			 #set($groupStr=$horn.getGroupStr($uiSelectConfig.name,$uiSelectConfig.group))
+				#if(!$uiSelectConfig.hiddenLabel)
+			    <label #if($layoutcolumn==1)class="g-grid-2 unit-label"#else class="g-grid-4 unit-label"#end title="$!uiSelectConfig.label">#if($checkStr.indexOf("required")>-1)<span class="m-verify-symbol">*</span>#end $!uiSelectConfig.label</label>
+			    #end
+				<div class="g-grid-8">
+					<div id="$!{uiSelectConfig.id}" $horn.paramsCache($uiSelectConfig)  class="hc_select">
+
+                    #if($uiSelectConfig.items)
+                    	#set($uiSelectConfigItems = $uiSelectConfig.items)
+                    #elseif($dictManager && $uiSelectConfig.dictName)
+                        #set($uiSelectConfigItems = $dictManager.getDicts($uiSelectConfig.dictName))
+            		#end
+                	#set($curvalue="")
+                	#if($uiSelectConfig.value)
+                		#set($curvalue=$!{uiSelectConfig.value})
+                	#else
+                		#set($curvalue="$horn.getValue($!uiSelectConfig.name)")
+                	#end
+                    #if($uiSelectConfig.delimiter)
+                        #set($delimiter=$!{uiSelectConfig.delimiter})
+                    #else
+                        #set($delimiter=",")
+                    #end
+                    #set($multipleValue="")
+                	<input type="hidden" name="$!{uiSelectConfig.name}"
+                		#if($uiSelectConfig.alias)
+                			alias="$!{uiSelectConfig.alias}"
+                		#end
+                	#if($uiSelectConfig.refname)
+                		refname="$!{uiSelectConfig.refname}"
+                	#end
+                	#if(!$curvalue.equals(""))
+                		value="$!curvalue"
+                    #else
+                    	#if($uiSelectConfig.multiple != true && $uiSelectConfigItems.size()>0)
+                			#set($item = $uiSelectConfigItems.get(0))
+                            #if($uiSelectConfig.headItem)
+                                value="$uiSelectConfig.headItem.label"
+                            #else
+                                value="$item.label"
+                            #end
+                        #elseif($uiSelectConfig.multiple == true && $uiSelectConfigItems.size()>0 && $uiSelectConfig.checkAll==true)
+                            #foreach($item in $uiSelectConfigItems)
+                                #if($velocityCount == $uiSelectConfigItems.size())
+                                    #set($multipleValue = $multipleValue+$!{item.label})
+                                #else
+                                    #set($multipleValue = $multipleValue+$!{item.label}+$!{delimiter})
+                                #end
+                           #end
+                            value = "$!{multipleValue}"
+                        #end
+                	#end
+                	check="$!{checkStr}"
+                	group="$!{groupStr}"
+                	/>
+                	<input type="text"  class="u-select" 
+                    	#if($uiSelectConfig.dictName && $horn)
+                    		#if($uiSelectConfig.multiple == true)
+                    		 	ref="$!{uiSelectConfig.dictName}_m"
+                    		 #else
+                    		 	ref="$!{uiSelectConfig.dictName}_s"
+                    			#end
+                    	#end
+                        #if(${uiSelectConfig.disabled})
+                            disabled="disabled"
+                        #end
+                        #if(${uiSelectConfig.readonly})
+                            readonly="readonly"
+                        #end
+                    	#if(!$curvalue.equals(""))
+                    		#if($uiSelectConfig.multiple == true)
+                    			value="$!curvalue" 
+                    		#else
+                            	#if($uiSelectConfigItems)
+                					#foreach($item in $uiSelectConfigItems)
+                    	    			#if($item.label == $curvalue)
+                    	    				value="#if($showLabel)$item.label:#end$item.value" 
+                    	    			#end
+                    	    		#end
+                                #elseif($dictManager && $uiSelectConfig.dictName)
+                                    #set($val = $dictManager.getDictEntry($uiSelectConfig.dictName,$curvalue));
+                                    value="$curvalue:$val.getValue()"
+                            	#end
+                    		#end
+                    	#elseif($uiSelectConfig.multiple != true && $uiSelectConfigItems.size()>0)
+                    		#set($item = $uiSelectConfigItems.get(0))
+                            #if($uiSelectConfig.headItem)
+                                value="$uiSelectConfig.headItem.value"
+                            #else
+                                value="#if($showLabel)$item.label:#end$item.value"
+                            #end
+                        #elseif($uiSelectConfig.multiple == true && $uiSelectConfigItems.size()>0 && $uiSelectConfig.checkAll==true)
+                            value = "$!{multipleValue}"
+                    	#else
+                    		value="" 
+                    	#end
+                        delimiter="$!{delimiter}"
+						#if($uiSelectConfig.emptyText) placeholder="$!uiSelectConfig.emptyText"#end
+                	/>
+					<i class="fa fa-caret-down u-select-down"></i>
+                		#if($uiSelectConfig.dictName && $horn)
+                    		#if($uiSelectConfig.multiple == true)
+                    		 	$horn.addGlobal("componentSelects_m",$!{uiSelectConfig.dictName})
+                    		 #else
+                    		 	$horn.addGlobal("componentSelects_s",$!{uiSelectConfig.dictName})
+                			#end
+                		#else
+                			#if($uiSelectConfigItems)
+                				<div class="hc_checkboxdiv"
+                					#if($uiSelectConfig.multiple == true)
+                						multiple_line="true"
+                					#else
+                						multiple_line="false"
+                					#end
+                				>
+                					<ul>
+                						#foreach($pItem in $uiSelectConfigItems)
+                							<li title="$!{pItem.value}" pKey="$!{pItem.pLabel}" key="$!{pItem.label}"><label>
+                								#if($uiSelectConfig.multiple == true)
+                									<input type="checkbox" class="combox_input">
+                								#end
+                								#if($showLabel)$!{pItem.label}:#end$!{pItem.value}
+                							</label></li>
+                						#end
+                					</ul>
+                				</div>
+                			#end
+                		#end	
+                	</div>
+			    </div>
+		    </div>
+		  </div>
+	#end
+	#set($uiSelectConfig = {})
+	#set($uiSelectConfigItems = [])
+#end

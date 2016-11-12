@@ -1,0 +1,385 @@
+
+	<!-- ============================== header ================================= -->	
+		<!-- begin static/header.html -->
+		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="keywords" content="jquery,ui,easy,FUI,web framekwork,ajax framekwork,ria,web development">
+		<meta name="description" content="FUI help you build your web page more Fast!!">
+		<title>UI API - JRES UI</title>
+   		<link rel="stylesheet" href="../resource/css/doc.css" type="text/css" />
+    	<link type="text/css" rel="stylesheet" href="../resource/SyntaxHighlighter/Styles/SyntaxHighlighter.css"/>
+		<script src="../resource/SyntaxHighlighter/Scripts/shCore.js"></script>
+		<script src="../resource/SyntaxHighlighter/Scripts/shBrushXml.js"></script>
+		<script src="../resource/SyntaxHighlighter/Scripts/shBrushJava.js"></script>
+		<script type="text/javascript" src="../resource/jquery-1.7.2.min.js"></script>
+		<style type="text/css">
+			.dp-xml .cdata { color: #ff1493; }.dp-xml .tag, .dp-xml .tag-name { color: #069; font-weight: bold; }.dp-xml .attribute { color: red; }.dp-xml .attribute-value { color: blue; }
+		</style>
+		<script>
+			
+		</script>
+	</head>
+	<body>
+		<div id="header">
+						<div id="header-inner">
+				<table cellpadding="0" cellspacing="0" style="width:100%;">
+					<tr>
+						<td rowspan="2" style="width:20px;">
+						</td>
+						<td style="height:52px;">
+							<div style="color:#fff;font-size:22px;font-weight:bold;">
+								<a href="#" style="color:#fff;font-size:22px;font-weight:bold;text-decoration:none">JRES UI</a>
+							</div>
+							<div style="color:#fff">
+								<a href="#" style="color:#fff;text-decoration:none">JRES UI是使用Velocity开发的服务器端UI组件，助力于组件化快速视图开发!</a>
+							</div>
+						</td>
+						<td style="padding-right:5px;text-align:right;vertical-align:bottom;">
+							<div id="topmenu" style="display:none;">
+								<a href="../../index.html">主页</a>
+								<a href="http://rdc.hundsun.com/forum.php?mod=forumdisplay&amp;fid=163" target="_blank">论坛</a>
+								<a href="../../demo/index.htm">示例</a>
+								<a href="../../documentation/index.html">文档</a>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+			
+		</div>
+		<!-- end static/header.html -->
+	<div id="mainwrap" >
+		<div id="content">
+        <!-- ============================== classes index ============================ -->
+        <script type="text/javascript">
+            $(function() {
+            	var bw=$.browser;
+				if(bw.msie&&bw.version<7||(bw.msie&&$.support.boxModel==false)){
+						//ie6
+						$("#plugin_title").hide();
+						$('#plugins').removeClass("plugins");
+						$('#plugins').addClass("plugins2");
+				}else{
+					$('#plugins').stop().animate({'marginLeft':'-285px'},1000);
+	                $('#plugins').hover(
+	                    function () {
+	                        $(this).stop().animate({'marginLeft':'-2px'},200);
+	                    },
+	                    function () {
+	                        $(this).stop().animate({'marginLeft':'-285px'},200);
+	                    }
+	                );
+				}
+                
+            });
+</script>
+	<div id="plugins" class="plugins">
+	<div id="plugin_title" class="plugin_title">控件清单</div>
+	<ul>
+        
+        
+        
+        
+        
+        <li><a href="../symbols/Horn.html">Horn</a></li>
+        
+        <li><a href="../symbols/Horn._Pagebar-pagebar.html">Horn._Pagebar-pagebar</a></li>
+        
+        <li><a href="../symbols/Horn.Base.html">Horn.Base</a></li>
+        
+        <li><a href="../symbols/Horn.ButtonPanel.html">Horn.ButtonPanel</a></li>
+        
+        <li><a href="../symbols/Horn.Calendar.html">Horn.Calendar</a></li>
+        
+        <li><a href="../symbols/Horn.CalendarGroup.html">Horn.CalendarGroup</a></li>
+        
+        <li><a href="../symbols/Horn.Checkbox.html">Horn.Checkbox</a></li>
+        
+        <li><a href="../symbols/Horn.CheckboxGroup.html">Horn.CheckboxGroup</a></li>
+        
+        <li><a href="../symbols/Horn.Combox.html">Horn.Combox</a></li>
+        
+        <li><a href="../symbols/Horn.DataGrid.html">Horn.DataGrid</a></li>
+        
+        <li><a href="../symbols/Horn.Field.html">Horn.Field</a></li>
+        
+        <li><a href="../symbols/Horn.FieldSet.html">Horn.FieldSet</a></li>
+        
+        <li><a href="../symbols/Horn.Form.html">Horn.Form</a></li>
+        
+        <li><a href="../symbols/Horn.Grid.html">Horn.Grid</a></li>
+        
+        <li><a href="../symbols/Horn.HiddenField.html">Horn.HiddenField</a></li>
+        
+        <li><a href="../symbols/Horn.Label.html">Horn.Label</a></li>
+        
+        <li><a href="../symbols/Horn.Menu.html">Horn.Menu</a></li>
+        
+        <li><a href="../symbols/Horn.MessageBox.html">Horn.MessageBox</a></li>
+        
+        <li><a href="../symbols/Horn.PageBar.html">Horn.PageBar</a></li>
+        
+        <li><a href="../symbols/Horn.Panel.html">Horn.Panel</a></li>
+        
+        <li><a href="../symbols/Horn.Password.html">Horn.Password</a></li>
+        
+        <li><a href="../symbols/Horn.PasswordGroup.html">Horn.PasswordGroup</a></li>
+        
+        <li><a href="../symbols/Horn.QueryTable.html">Horn.QueryTable</a></li>
+        
+        <li><a href="../symbols/Horn.RadioGroup.html">Horn.RadioGroup</a></li>
+        
+        <li><a href="../symbols/Horn.Screen.html">Horn.Screen</a></li>
+        
+        <li><a href="../symbols/Horn.SelectTree.html">Horn.SelectTree</a></li>
+        
+        <li><a href="../symbols/Horn.TabPanel.html">Horn.TabPanel</a></li>
+        
+        <li><a href="../symbols/Horn.TargetSelect.html">Horn.TargetSelect</a></li>
+        
+        <li><a href="../symbols/Horn.Textarea.html">Horn.Textarea</a></li>
+        
+        <li><a href="../symbols/Horn.Textfield.html">Horn.Textfield</a></li>
+        
+        <li><a href="../symbols/Horn.Tip.html">Horn.Tip</a></li>
+        
+        <li><a href="../symbols/Horn.TypeField.html">Horn.TypeField</a></li>
+        
+        <li><a href="../symbols/Horn.Util.html">Horn.Util</a></li>
+        
+        <li><a href="../symbols/Horn.Validate.html">Horn.Validate</a></li>
+        
+        <li><a href="../symbols/Horn.Window.html">Horn.Window</a></li>
+        
+        <li><a href="../symbols/Horn.ZtreePanel.html">Horn.ZtreePanel</a></li>
+        
+        
+        
+	</ul>
+</div>
+        <div class="doc">
+        <div style="padding:10px">
+        <div style="text-align:right;"><a href="../index.html">返回控件主页</a>&nbsp;|&nbsp;<a href="../files.html">返回源码主页</a></div>
+        <!-- ============================== class overview ============================ -->
+        
+        
+<h3>Validate 校验</h3>
+<p>用于表单合法性验证的工具</p>
+ <img src=""/>
+
+<h4>依赖组件</h4>
+<ul>
+	<li>无</li>
+</ul>
+
+<h4>适用范围</h4>
+<p>
+表单输入验证
+</p>
+<h4>约束</h4>
+<p>
+	<ol>
+		<li>无</li>
+	</ol>
+</p>
+<h4>注意事项</h4>
+<p>
+	<ol>
+		<li>无</li>
+	</ol>
+</p>
+
+<h4>使用示例</h4>
+<p>示例1:</p>
+<textarea name="code" class="html" style="display: none;">
+Horn.Validate.isFormValidate(form)
+</textarea>
+
+<p>示例2：</p>
+<textarea name="code" class="html" style="display: none;">
+#textfield({"id":"userName","label":"名称","name":"name","cols":"1","maxlength":"20","check":"required"})
+#textfield({"id":"userAge","label":"年龄","name":"age","cols":"1","check":"required;intege"})
+</textarea>
+<p>示例3：</p>
+<textarea name="code" class="html" style="display: none;">
+#textfield({"id":"userAge","label":"年龄","name":"age","cols":"1","check":"intege;range(10,20)"})
+</textarea>
+<p>示例3：</p>
+<textarea name="code" class="html" style="display: none;">
+#textfield({"id":"userName","label":"名称","name":"name","cols":"1","check":"required;myCheck()"})
+    function myCheck(){
+         var value = Horn.getComp("name").getValue();
+         if(!("hello"==value)){
+            return "内容必需为hello";
+         }else{
+            return true;
+         }
+    }
+</textarea>
+
+
+        <p>&nbsp;</p>
+        
+        	
+            	<!-- doc_options_begin -->
+	        	<h4>属性</h4>
+	        	<p style="color:red;">
+	        		注意：组件的id、name属性只能是英文字母开始，由英文字母、数字和下划线组成，命名时应考虑易识别，不要太长，不要和其他组件重复（表单内的组件除外）。
+	        	</p>
+	        	<table class="doc-table">
+	        		<tbody>
+	        			<tr>
+	        				<th><strong>名称</strong></th>
+							<th><strong>类型</strong></th>
+							<th><strong>描述</strong></th>
+							<th><strong>默认值</strong></th>
+	        			</tr>
+	        			
+	        				<tr>
+	        					<td>regexEnum</td>
+	        					<td></td>
+	        					<td>
+	        						<p>正则校验规则 @ intege 校验规则名称 @ Message 默认返回消息 @ 校验规则+Message 校验规则对应的返回值<br>使用例子1:<br>属性check设置为"required",当textfield失去焦点或表单提交时，如果内容为空，则提示"当前输入不能为空"<br>#textfield({"id":"userName","label":"名称","name":"name","cols":"1","maxlength":"20","check":"required"})<br>使用例子2:<br>属性check设置为"required;intege",多个验证规则之间用";"分割，每个验证规则都通过，此组件才算验证通过。<br>当textfield失去焦点或表单提交时，如果内容为空,则提示验证提示"当前输入不能为空",如果不为空，但内容非整数，则提示"输入的不是整数格式"<br>#textfield({"id":"userAge","label":"年龄","name":"age","cols":"1","check":"required;intege"})<br>----------正则验证名字开始---------<br>intege 整数<br>intege1 正整数<br>intege2 负整数<br>num 数字<br>num1 正数<br>num2 负数<br>decmal 浮点数<br>decmal1 正浮点数<br>decmal2 负浮点数<br>decmal3 浮点数<br>decmal4 非负浮点数<br>decmal5 非正浮点数<br>email 邮件<br>url url<br>chinese 仅中文<br>ascii 仅ACSII字符<br>zipcode 邮编<br>mobile 手机<br>ip4  ip地址<br>picture 图片<br>rar 压缩文件<br>date 日期<br>qq QQ号码<br>tel  电话号码的函数(包括验证国内区号,国际区号,分机号)<br>username  用来用户注册。匹配由数字、26个英文字母或者下划线组成的字符串<br>letter  字母<br>letter_u 大写字母<br>letter_l 小写字母<br>idcard 身份证<br>required  非空<br>----------正则验证名字结束---------<br>Message : "输入格式不正确"<br>-----------------------------------<br>integeMessage : "输入的不是整数格式"<br>intege1Message : "输入的不是正整数格式"<br>intege2Message : "输入的不是负整数格式"<br>requiredMessage : "当前输入不能为空"<br>emailMessage : "邮件地址不正确"<br>zipcodeMessage : "邮编输入格式不正确"<br>dateMessage : "日期格式不正确"<br>qqMessage : "QQ号码格式不正确"<br>telMessage : "电话号码格式不正确"<br>mobileMessage : "移动电话格式不正确"<br>decmalMessage : "只能输入浮点数格式"<br>decmal1Message : "只能输入正浮点数格式"<br>decmal2Message : "只能输入负浮点数格式"<br>decmal3Message : "只能输入浮点数格式"<br>decmal4Message : "只能输入非负浮点数格式"<br>decmal5Message : "只能输入非正浮点数格式"<br>colorMessage : "只能输入颜色格式"<br>urlMessage : "只能输入url格式"<br>chineseMessage : "只能输入中文格式"<br>asciiMessage : "只能输入ACSII字符格式"<br>ip4Message : "只能输入ip4地址格式"<br>pictureMessage : "只能输入图片格式"<br>rarMessage : "只能输入压缩文件格式"<br>numMessage : "只能输入数字格式"<br>num1Message : "只能输入正数数字格式"<br>num2Message : "只能输入负数数字格式"<br>letterMessage : "只能输入字母格式"<br>letter_uMessage : "只能输入大写字母格式"<br>letter_lMessage : "只能输入小写字母格式"<br>usernameMessage :"只能输入由数字、26个英文字母或者下划线组成的字符串"<br>-----------------------------------<br></p>
+		        					
+	        					</td>
+	        					<td>undefined</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td>funcEnum</td>
+	        					<td></td>
+	        					<td>
+	        						<p>方法校验规则 @ range 校验方法名称 @ Message 默认返回消息 @ 校验规则+Message 校验规则对应的返回值<br>使用例子1:<br>属性check设置为"intege;range(10,20)",当textfield失去焦点或表单提交时，如果录入内容为45,不在整数的10~20(10<=x<=20)之间，供示提示"45不在10-20范围内"<br>#textfield({"id":"userAge","label":"年龄","name":"age","cols":"1","check":"intege;range(10,20)"})<br>使用例子2:<br>自定义函数验证,期望值与输入值不相同时，返回错误提示信息，否则返回true<br>#textfield({"id":"userName","label":"名称","name":"name","cols":"1","check":"required;myCheck()"})<br>function myCheck(){<br>   var value = Horn.getComp("name").getValue();<br>   if(!("hello"==value)){<br>      return "内容必需为hello";<br>   }else{<br>      return true;<br>   }<br> }<br>校验参数，min：最小值，max：最大值,value:校验传入的value值<br>range(value, min, max)<br>校验参数，value：值，refname：与value比较的元素名字,如果value与refname指定的元素的值相等返回真，否则返回假<br>compare(value,refname)<br>校验参数，value值，minLen最小长度，maxLen最大长度，如果value的长度在minLen和maxLen之间返回真，否则返回假<br>length(value,minLen,maxLen)<br>校验参数，value值，输入的日期小于当前日期返回真，否则返回假<br>past(value)<br>校验参数，value值，输入的日期大于当前日期返回真，否则返回假<br>future(value)<br>校验参数，value值,身份证号合法时返回真，否则返回假<br>idcard(value)<br></p>
+		        					
+	        					</td>
+	        					<td>undefined</td>
+	        				</tr>
+	        			
+	        		</tbody>
+	        	</table>
+        	    <!-- doc_options_end -->
+            
+            
+            
+       		
+       		
+            	<!-- doc_methods_begin -->
+            	<h4>方法</h4>
+            	<table class="doc-table">
+          			<tbody>
+          				<tr>
+          					<th><strong>名称</strong></th>
+							<th><strong>参数</strong></th>
+							<th><strong>描述</strong></th>
+          				</tr>
+          				
+          					<tr>
+								<td>isFormValidate</td>
+								<td>(v)</td>
+								<td>
+									<p>校验指定form对象的有效性</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        object:<b>v</b>
+		                                        指定form对象(DomElement或Jquery对象)
+		                                    </li>
+		                                
+									
+									
+									 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>addError</td>
+								<td>(field, errorMsg)</td>
+								<td>
+									<p>显示错误消息</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        mix:<b>field</b>
+		                                        为horn组件对象或组件的名字
+		                                    </li>
+		                                
+		                                    <li>
+		                                        String:<b>errorMsg</b>
+		                                        错误消息
+		                                    </li>
+		                                
+									
+									
+									 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>removeError</td>
+								<td>(field)</td>
+								<td>
+									<p>删除错误消息</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        mix:<b>field</b>
+		                                        为horn组件对象或组件的名字
+		                                    </li>
+		                                
+									
+									
+									 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>validateFmt</td>
+								<td>(str, fmt)</td>
+								<td>
+									<p>检验制定的字符串是否符合日期格式</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        :<b>str</b>
+		                                        
+		                                    </li>
+		                                
+		                                    <li>
+		                                        :<b>fmt</b>
+		                                        
+		                                    </li>
+		                                
+									
+									
+									 
+								</td>
+							</tr>
+          				
+          			</tbody>
+          		</table>
+            	<!-- doc_methods_end -->
+            
+        	<br /><i>Defined in: </i> <a href="../symbols/src/E__workspace_JRES-PLUS_Sources_jresplus-2.0_Sources_jresplus-ui_jresplus-ui-web_build_com.hundsun.jresplus.ui.base_public_scripts_Validate.js.html">Validate.js</a>
+        </div>
+        </div>
+</div>
+</div>
+<!-- ============================== footer ================================= -->
+
+		<div id="footer">
+			<div>Copyright ? 2010-2013 www.hundsun.com</div>
+		</div>
+		<script type="text/javascript">
+			dp.SyntaxHighlighter.HighlightAll('code');
+		</script>
+	</body>
+</html>
+
+

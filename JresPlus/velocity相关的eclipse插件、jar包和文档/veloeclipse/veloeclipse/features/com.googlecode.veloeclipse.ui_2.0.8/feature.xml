@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="com.googlecode.veloeclipse.ui"
+      label="Veloeclipse"
+      version="2.0.8"
+      provider-name="Akmal Sarhan"
+      plugin="com.googlecode.veloeclipse.ui">
+
+   <description url="http://code.google.com/p/veloeclipse/">
+      adding templates to the Veloeclipse editor
+   </description>
+
+   <copyright>
+      copyright
+   </copyright>
+
+   <license>
+      license
+   </license>
+
+   <url>
+      <update label="Veloeclipse updates" url="http://veloeclipse.googlecode.com/svn/trunk/update/"/>
+   </url>
+
+   <requires>
+      <import plugin="org.eclipse.ui.views"/>
+      <import plugin="org.eclipse.jface.text"/>
+      <import plugin="org.eclipse.ui.workbench.texteditor"/>
+      <import plugin="org.eclipse.ui.editors"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.compare"/>
+      <import plugin="org.eclipse.jdt.ui"/>
+      <import plugin="org.eclipse.jdt.core"/>
+      <import plugin="org.eclipse.ui.console"/>
+      <import plugin="org.eclipse.debug.ui"/>
+   </requires>
+
+   <plugin
+         id="com.googlecode.veloeclipse.ui"
+         download-size="0"
+         install-size="0"
+         version="2.0.8"/>
+</feature>

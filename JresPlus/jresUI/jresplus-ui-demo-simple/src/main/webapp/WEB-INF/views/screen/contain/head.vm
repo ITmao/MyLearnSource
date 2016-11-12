@@ -1,0 +1,17 @@
+$horn.addGlobal("headStyleLinks", "/components/components.css")
+$horn.addGlobal("headStyleLinks", "/plugins/zTree/zTreeStyle/zTreeStyle.css")
+$horn.addGlobal("headStyleLinks", "/css/${theme}/h_theme.css")
+$horn.addGlobal("headStyleLinks", "/plugins/datetimepicker/datetimepicker.css")
+$horn.addGlobal("headScriptLinks", "/plugins/jquery/jquery-1.11.3.min.js")
+$horn.addGlobal("headScriptLinks", "/plugins/jquery/jquery-migrate-1.2.1.min.js")
+$horn.addGlobal("headScriptLinks", "/plugins/datetimepicker/bootstrap-datetimepicker.js")
+$horn.addGlobal("headScriptLinks", "/plugins/bigpipe.mini.js")
+$horn.addGlobal("headScriptLinks", "/plugins/zTree/jquery.ztree.core-3.5.min.js")
+$horn.addGlobal("headScriptLinks", "/plugins/zTree/jquery.ztree.exhide-3.5.min.js")
+$horn.addGlobal("headScriptLinks", "/plugins/zTree/jquery.ztree.excheck-3.5.min.js")
+#if($devMode)
+	$horn.addGlobal("headScriptLinks", "/components/components-debug.js")
+#else
+	$horn.addGlobal("headScriptLinks", "/components/components.js")
+#end
+$contain.get("/contain/hornhtml.htm")

@@ -1,0 +1,35 @@
+struts2 与velocity1.6及velocity tools1.4的整合 
+2010-03-10 09:46
+
+搜索velocity，资料真是不多，网上很多strust2和velocity的配置是不正确的！搭个环境都费了好久时间，在此记录备忘
+
+开始前加入必要jar，我这里加的有：commons-logging-1.0.4.jar，freemarker-2.3.15.jar，ognl-2.7.3.jar，xwork-core-2.1.6.jar，struts2-core-2.1.8.1.jar，commons-fileupload-1.2.1.jar，commons-collections-3.2.jar，commons-lang-2.3.jar，commons-digester-2.0.jar，commons-beanutils-1.7.0.jar，velocity-tools-1.4.jar，velocity-1.6.3.jar。
+
+首先，web.xml文件，直接从下载的struts2压缩包中的blank项目中复制即可，无需其他多余配置
+
+其次，struts.xml文件，先也从struts2的blank项目中复制一份，放到src目录下
+
+再次，在WEB-INF下新建两个文件，velocity的配置velocity.properties和velocity tools的toolbox.xml（这两个文件的文件名随意）
+
+第四，WEN-INF中新建一个VM_global_library.vm文件，内容为空
+
+第五，在struts配置文件中加入下面两行，注意value的文件路径，就是第三步中新建的
+<constant name="struts.velocity.toolboxlocation" value="WEB-INF/toolbox.xml" /> 
+<constant name="struts.velocity.configfile" value="WEB-INF/velocity.properties" />
+
+加入后：
+<struts>
+   <constant name="struts.velocity.toolboxlocation" value="WEB-INF/toolbox.xml" /> 
+   <constant name="struts.velocity.configfile" value="WEB-INF/velocity.properties" /> 
+   <include file="struts-default.xml" />
+   <package name="default" extends="struts-default">
+    <action name="hello" class="test.Hello" method="execute">
+     <result name="success">hello.vm</result>
+    </action>
+   </package>
+</struts>
+
+第六，编码问题，统一编码，将所有文件的编码都给为同一种，如utf-8，同时在.vm文件中加上<meta http-equiv="content-type" content="text/html;charset=UTF-8" />，还要更改服务器的配置（如tomcat，打开tomcat conf目录下server.xml，找到你使用的Connector，不知道用哪个就改所有的Connector，在这个标签的最后加上URIEncoding="UTF-8"(要跟前面一致)）这样基本可以解决乱码问题
+
+最后，写自己的.vm尝试尝试吧
+

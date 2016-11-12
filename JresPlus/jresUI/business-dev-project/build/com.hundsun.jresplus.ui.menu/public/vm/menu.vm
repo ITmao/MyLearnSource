@@ -1,0 +1,13 @@
+#macro(menu $params)
+	<div name="$!params.name" class="hc_menu" id="$!params.id" $horn.paramsCache($params)>
+	</div>
+	<ul class="h_toolbar-menu u-dropdown-menu"  style="display:none">
+       <li class="h_toolbar-item" base>
+           <a class="h_toolbar-item-a" title="" href="javascript:void(0)">
+               <span class="h_toolbar-item-icon u-menu-icon"></span>
+               <span class="h_toolbar-item-txt u-menu-txt"></span> 
+               <span class="h_toolbar-item-arrow u-menu-arrow"><i class="fa fa-caret-right"></i></span>
+           </a>
+        </li>
+    </ul>
+#end

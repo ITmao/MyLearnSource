@@ -1,0 +1,109 @@
+#**
+* -----------------------------------------------------------------------
+* 修订记录：
+* 2015-10-28    刘龙       STORY #13588 【TS:201510090415-JRESPlus-财富管理事业部-虞凯-新版vm工作的查看模式下样式问题，见附件<br><br>】
+* 2016-3-18  刘龙    bug#17068 typefield控件，value属性设置初始值为超出maxlength位数的值
+* 2016-3-23  刘龙    bug#17218 typefield控件设置value值，maxlength截取后，输入框为分隔符未计入位数，但是焦点移入后移出，分隔符又被计入位数
+*
+* -----------------------------------------------------------------------
+*#
+
+#macro(typefield $uiTextfieldConfig)
+	#set($col = 4)
+	#set($cols = "")
+    #if($layoutcolumn) 
+    	#if($layoutcolumn==1)
+			#set($col = 12)
+		#elseif($layoutcolumn==2)
+			#set($col = 6)
+			#if($uiTextfieldConfig.cols&&$uiTextfieldConfig.cols==2)
+				#set($cols = "g-grid-6-row")
+			#end
+		#elseif($layoutcolumn==3)
+			#set($col = 4)
+			#if($uiTextfieldConfig.cols)
+				#if($uiTextfieldConfig.cols==3)
+					#set($cols = "g-grid-4-row")
+				#elseif($uiTextfieldConfig.cols==2)
+					#set($cols = "g-grid-4-8-row")
+				#end
+			#end
+		#elseif($layoutcolumn==4)
+			#set($col = 3)
+			#if($uiTextfieldConfig.cols)
+				#if($uiTextfieldConfig.cols==4)
+					#set($cols = "g-grid-3-row")
+				#elseif($uiTextfieldConfig.cols==3)
+					#set($cols = "g-grid-3-9-row")
+				#elseif($uiTextfieldConfig.cols==2)
+					#set($cols = "g-grid-3-6-row")
+				#end
+			#end
+		#end
+    #end
+    #set($val = "")
+    #set($val = $uiTextfieldConfig.value)
+    #if((!$val || $val =="") && $uiTextfieldConfig.name )
+        #set($val =  "$horn.getValue($!uiTextfieldConfig.name)")
+    #end
+	#if($view)
+		<div class="g-grid-$col #if($cols!="")$cols#end">
+	  	<div class="g-unit-wrap">
+			#if(!$uiTextfieldConfig.hiddenLabel)
+		    <label #if($layoutcolumn==1)class="g-grid-2 unit-label"#else class="g-grid-4 unit-label"#end><span ref="$!uiTextfieldConfig.name" title="$!{uiTextfieldConfig.label}">$!{uiTextfieldConfig.label}</span></label>
+		    #end
+			<div class="g-grid-8">
+				<div name="$!{uiTextfieldConfig.name}" class="hc_label"  $horn.paramsCache($uiTextfieldConfig) 
+        		#if($uiTextfieldConfig.alias)
+        			alias="$!{uiTextfieldConfig.alias}"
+        		#end
+                #if($uiTextfieldConfig.dictName)
+    				dictName="$!{uiTextfieldConfig.dictName}"
+    				$horn.addGlobal('componentSelects_s',$!{uiTextfieldConfig.dictName})
+
+    			#end	
+    			>#if($moneyUtil)$!moneyUtil.moneyFormat($!val)#else$!val#end</div>
+			</div>
+	    </div>
+	 </div>
+		
+	#else
+		<div class="g-grid-$col #if($cols!="")$cols#end">
+		  	<div class="g-unit-wrap">
+		  	 #set($checkStr=$horn.getCheckStr($!uiTextfieldConfig.name,$!uiTextfieldConfig.check))
+			 #set($groupStr=$horn.getGroupStr($!uiTextfieldConfig.name,$!uiTextfieldConfig.group))
+			    #if(!$uiTextfieldConfig.hiddenLabel)
+				<label #if($layoutcolumn==1)class="g-grid-2 unit-label"#else class="g-grid-4 unit-label"#end title="$!uiTextfieldConfig.label">#if($checkStr.indexOf("required")>-1)<span class="m-verify-symbol">*</span>#end $!uiTextfieldConfig.label</label>
+			    #end
+				<div class="g-grid-8">
+					<div id="$!{uiTextfieldConfig.id}" name="$uiTextfieldConfig.name" class="hc_textfield typefield" $horn.paramsCache($uiTextfieldConfig)>
+                    	<input type="hidden" name="$!{uiTextfieldConfig.name}" alias="$!{uiTextfieldConfig.alias}"
+        					value="$!{uiTextfieldConfig.value}" 
+                            check="$!{checkStr}"
+                            #if(${uiTextfieldConfig.disabled})
+                                disabled="disabled"
+                            #end
+            	            group="$!{groupStr}"/>
+        				<input type="text"  class="u-typefield $!{_sizeClass}"
+                    		value="$!{uiTextfieldConfig.value}" 
+                            #if(${uiTextfieldConfig.disabled})
+                                disabled="disabled"
+                            #end
+                            #if(${uiTextfieldConfig.readonly})
+                                readonly="readonly"
+                            #end
+                    		inputType="$uiTextfieldConfig.inputType"
+							#if($!uiTextfieldConfig.emptyText)placeholder="$!uiTextfieldConfig.emptyText"#end
+                    	/>
+						#if($uiTextfieldConfig.bigTips)
+                        	<div class="u-typefield-capital" style="display: block"></div>
+							<div class="u-typefield-tip" style="display: none"></div>
+        				#end
+            		</div>
+			    </div>
+		    </div>
+		  </div>
+    	
+	#end
+	#set($uiTextfieldConfig = {})
+#end

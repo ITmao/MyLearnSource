@@ -1,0 +1,9 @@
+.h_formtable table tr td.hc_align-left{text-align:left;}
+.h_formtable table tr td.hc_align-center{text-align:center;}
+.h_formtable table tr td.hc_align-right{text-align:right;}
+.h_formtable table tr th.hc_align-left{text-align:left;}
+.h_formtable table tr th.hc_align-center{text-align:center;}
+.h_formtable table tr th.hc_align-right{text-align:right;}
+
+/***文本超出省略隐藏 14-2-27 caomy***/
+.hc_texthide{text-overflow:ellipsis;white-space:nowrap;overflow:hidden;}

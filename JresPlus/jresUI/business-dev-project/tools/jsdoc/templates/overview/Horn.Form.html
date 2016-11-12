@@ -1,0 +1,38 @@
+
+<h3>form</h3>
+<p>表单组件</p>
+ <img src="../resource/images/form.jpg"/>
+
+<h4>依赖组件</h4>
+<ul>
+	<li>无</li>
+</ul>
+
+<h4>适用范围</h4>
+<p>
+用于数据的提交，其本身不具备布局特性，内部需要使用panel做为子容器来管理其他输入组件
+</p>
+<h4>约束</h4>
+<p>
+	<ol>
+		<li>无</li>
+	</ol>
+</p>
+<h4>注意事项</h4>
+<p>
+	<ol>
+		<li>form组件本身不具备布局特性，内部需要使用panel做为子容器来管理其他输入组件</li>
+	</ol>
+</p>
+
+<h4>使用示例</h4>
+<p>示例1:</p>
+<textarea name="code" class="html" style="display: none;">
+#@form({"url":"$appServer.get('/demo/horn-ui/testFormPost.htm')"})
+	#@panel({})
+		#textfield({"label":"用户姓名", "name":"name","defValue":""})
+           #select({"label":"多交易中心","name":"sysNodes","checkAll":false, "multiple":true, "check":"","items":[{"label":"ab","value":"个人账户"},{"label":"ac","value":"机构账户"},{"label":"ef","value":"特殊机构账户"}]})
+       #end
+       #button_panel()
+#end
+</textarea>

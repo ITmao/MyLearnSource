@@ -1,0 +1,64 @@
+#**   
+ * @author zhangchao   
+ * @class
+ * @name button_group
+ * @param name 名称
+ * @param label 标签
+ * @param cols {String} 跨列数
+ * @param buttons {Json} 自定义按钮组 格式如："buttons":[{"name":"查询", "class":"h_btn-cencel", "event":"lhkh.query()"}] 名称 样式名 点击事件
+ * @description 按纽组件组
+ * @see
+ * @example \#button_group({"buttons":[{"name":"查询", "class":"h_btn-cencel", "event":"lhkh.query()"}]}) 注：内含“内提”、“重置”按钮，后面才是自己添加的button
+ * @since version 0.1
+ *#	
+#**
+ * @lends button_group
+ *#
+#macro(button_group $uiButtonGroupConfig)
+	#set($col = 4)
+	#set($cols = "")
+    #if($layoutcolumn) 
+    	#if($layoutcolumn==1)
+			#set($col = 12)
+		#elseif($layoutcolumn==2)
+			#set($col = 6)
+			#if($uiButtonGroupConfig.cols&&$uiButtonGroupConfig.cols=="2")
+				#set($cols = "g-grid-6-row")
+			#end
+		#elseif($layoutcolumn==3)
+			#set($col = 4)
+			#if($uiButtonGroupConfig.cols)
+				#if($uiButtonGroupConfig.cols==3)
+					#set($cols = "g-grid-4-row")
+				#elseif($uiButtonGroupConfig.cols==2)
+					#set($cols = "g-grid-4-8-row")
+				#end
+			#end
+		#elseif($layoutcolumn==4)
+			#set($col = 3)
+			#if($uiButtonGroupConfig.cols)
+				#if($uiButtonGroupConfig.cols==4)
+					#set($cols = "g-grid-3-row")
+				#elseif($uiButtonGroupConfig.cols==3)
+					#set($cols = "g-grid-3-9-row")
+				#elseif($uiButtonGroupConfig.cols==2)
+					#set($cols = "g-grid-3-6-row")
+				#end
+			#end
+		#end
+	#end
+	<div class="g-grid-$col #if($cols!="")$cols#end">
+	  	<div class="g-unit-wrap">
+		    <div class="g-grid-8">
+				<div id="$!{uiButtonGroupConfig.id}" $horn.paramsCache($uiButtonGroupConfig)  name="$!{uiButtonGroupConfig.name}" class="hc_button-group" >
+            		#if($uiButtonGroupConfig.buttons)
+            			#foreach($button in $uiButtonGroupConfig.buttons)
+            				<button type="button" #if($button.refmenu)refmenu="$button.refmenu"#end class="u-btn #if($button.className)$button.className#else u-btn-default#end" name="$!{button.name}" onclick="$!{button.event}">$!{button.label}</button>
+            			#end
+            		#end
+        		</div>
+			</div>
+	    </div>
+	 </div>
+	#set($uiButtonGroupConfig = {})
+#end

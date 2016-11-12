@@ -1,0 +1,100 @@
+#**   
+ * @author zhangchao   
+ * @class
+ * @name window_start
+ * @param name ｛String｝ 名称
+ * @param id {String} 唯一标识
+ * @param title ｛String｝标题
+ * @param height ｛String｝高度
+ * @param width ｛String｝宽度
+ * @param events {Json} 事件，格示见示例
+ * @description window_start组件
+ * @see 
+ * @example \#window_start({"title":"弹出窗口","name":"org"})
+ * @since version 0.1
+ *#	
+#**
+ * @lends window_start
+ *#
+#macro(window_start $uiWindowConfig)
+<div class="h_floatdiv m-message-positon" id="#if($uiWindowConfig.id)$uiWindowConfig.id#else$!{uiWindowConfig.name}#end" $horn.paramsCache($uiWindowConfig)  name="$!{uiWindowConfig.name}" h_height="$!{uiWindowConfig.height}" h_width="$!{uiWindowConfig.width}" scroll="$!{uiWindowConfig.scroll}" isAuto="$!{uiWindowConfig.isAuto}" style="display:none">
+	<div class="m-message-header">
+        <div class="h_floatdiv-title  m-message-btn"><a href="javascript:void(0);" class="m-btn-default m-btn-close"><i class="fa fa-times"></i></a>
+		</div>
+		<h4 class="mod_tt m-message-title" title="$!{uiWindowConfig.title}"><span>$!{uiWindowConfig.title}</span></h4>
+	</div>
+	<div class="h_floatdiv-con g-wrap m-message-body m-brt-none">
+
+#end
+#**   
+ * @author zhangchao   
+ * @class
+ * @name window_start
+ * @param name ｛String｝ 名称
+ * @param id {String} 唯一标识
+ * @param title ｛String｝标题
+ * @param height ｛String｝高度
+ * @param width ｛String｝宽度
+ * @param events {Json} 事件，格示见示例
+ * @description window_start组件
+ * @see 
+ * @example \#window_start({"title":"弹出窗口","name":"org"})
+ * @since version 0.1
+ *#	
+#**
+ * @lends window_start
+ *#
+#macro(window $uiWindowConfig)
+<div class="h_floatdiv m-message-positon" id="#if($uiWindowConfig.id)$uiWindowConfig.id#else$!{uiWindowConfig.name}#end" $horn.paramsCache($uiWindowConfig)  name="$!{uiWindowConfig.name}" h_height="$!{uiWindowConfig.height}" h_width="$!{uiWindowConfig.width}" scroll="$!{uiWindowConfig.scroll}" isAuto="$!{uiWindowConfig.isAuto}" style="display:none">
+	<div class="m-message-header">
+        <div class="h_floatdiv-title  m-message-btn"><a href="javascript:void(0);" class="m-btn-default m-btn-close"><i class="fa fa-times"></i></a>
+		</div>
+		<h4 class="mod_tt m-message-title" title="$!{uiWindowConfig.title}"><span>$!{uiWindowConfig.title}</span></h4>
+	</div>
+	<div class="h_floatdiv-con g-wrap m-message-body m-brt-none">
+		$bodyContent
+	</div>
+	#if($uiWindowConfig.buttons)
+	<div class="m-message-footer" >
+		#if($uiWindowConfig.buttons)
+			#foreach($button in $uiWindowConfig.buttons)
+				<button type="button"
+                name="$!{button.name}"
+				class="u-btn#if($!button.className) $!{button.className}#else u-btn-default#end"
+				onclick="$!{button.event}">$!{button.label}</button>
+			#end
+		#end
+    </div>
+	#end
+</div>
+#set($uiWindowConfig = {})
+#end
+#**   
+ * @author zhangchao   
+ * @class
+ * @name window_end
+ * @description window_end组件
+ * @see
+ * @example \#window_end
+ * @since version 0.1
+ *#	
+#**
+ * @lends window_end
+ *#
+#macro(window_end $uiWindowConfig)
+	</div>
+	#if($uiWindowConfig.buttons)
+	<div class="m-message-footer" >
+		#if($uiWindowConfig.buttons)
+			#foreach($button in $uiWindowConfig.buttons)
+				<button type="button"
+                name="$!{button.name}"
+				class="u-btn #if($!button.className)$!{button.className}#end"
+				onclick="$!{button.event}">$!{button.label}</button>
+			#end
+		#end
+    </div>
+	#end
+</div>
+#set($uiWindowConfig = {})
+#end

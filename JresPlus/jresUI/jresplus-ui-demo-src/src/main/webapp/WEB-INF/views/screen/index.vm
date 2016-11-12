@@ -17,6 +17,7 @@
 	,"navigation":{"items":[
 		{"id":"30","title":"主页","icon":"home"}
 		,{"id":"10","title":"DEMO","icon":"th-large"}
+		,{"id":"20","title":"API","icon":"th-large"}
 	]}
 	,"menu":{"items":[
 		{"id":"30","title":"主页","items":[

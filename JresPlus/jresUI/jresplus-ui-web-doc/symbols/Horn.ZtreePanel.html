@@ -1,0 +1,1519 @@
+
+	<!-- ============================== header ================================= -->	
+		<!-- begin static/header.html -->
+		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="keywords" content="jquery,ui,easy,FUI,web framekwork,ajax framekwork,ria,web development">
+		<meta name="description" content="FUI help you build your web page more Fast!!">
+		<title>UI API - JRES UI</title>
+   		<link rel="stylesheet" href="../resource/css/doc.css" type="text/css" />
+    	<link type="text/css" rel="stylesheet" href="../resource/SyntaxHighlighter/Styles/SyntaxHighlighter.css"/>
+		<script src="../resource/SyntaxHighlighter/Scripts/shCore.js"></script>
+		<script src="../resource/SyntaxHighlighter/Scripts/shBrushXml.js"></script>
+		<script src="../resource/SyntaxHighlighter/Scripts/shBrushJava.js"></script>
+		<script type="text/javascript" src="../resource/jquery-1.7.2.min.js"></script>
+		<style type="text/css">
+			.dp-xml .cdata { color: #ff1493; }.dp-xml .tag, .dp-xml .tag-name { color: #069; font-weight: bold; }.dp-xml .attribute { color: red; }.dp-xml .attribute-value { color: blue; }
+		</style>
+		<script>
+			
+		</script>
+	</head>
+	<body>
+		<div id="header">
+						<div id="header-inner">
+				<table cellpadding="0" cellspacing="0" style="width:100%;">
+					<tr>
+						<td rowspan="2" style="width:20px;">
+						</td>
+						<td style="height:52px;">
+							<div style="color:#fff;font-size:22px;font-weight:bold;">
+								<a href="#" style="color:#fff;font-size:22px;font-weight:bold;text-decoration:none">JRES UI</a>
+							</div>
+							<div style="color:#fff">
+								<a href="#" style="color:#fff;text-decoration:none">JRES UI是使用Velocity开发的服务器端UI组件，助力于组件化快速视图开发!</a>
+							</div>
+						</td>
+						<td style="padding-right:5px;text-align:right;vertical-align:bottom;">
+							<div id="topmenu" style="display:none;">
+								<a href="../../index.html">主页</a>
+								<a href="http://rdc.hundsun.com/forum.php?mod=forumdisplay&amp;fid=163" target="_blank">论坛</a>
+								<a href="../../demo/index.htm">示例</a>
+								<a href="../../documentation/index.html">文档</a>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+			
+		</div>
+		<!-- end static/header.html -->
+	<div id="mainwrap" >
+		<div id="content">
+        <!-- ============================== classes index ============================ -->
+        <script type="text/javascript">
+            $(function() {
+            	var bw=$.browser;
+				if(bw.msie&&bw.version<7||(bw.msie&&$.support.boxModel==false)){
+						//ie6
+						$("#plugin_title").hide();
+						$('#plugins').removeClass("plugins");
+						$('#plugins').addClass("plugins2");
+				}else{
+					$('#plugins').stop().animate({'marginLeft':'-285px'},1000);
+	                $('#plugins').hover(
+	                    function () {
+	                        $(this).stop().animate({'marginLeft':'-2px'},200);
+	                    },
+	                    function () {
+	                        $(this).stop().animate({'marginLeft':'-285px'},200);
+	                    }
+	                );
+				}
+                
+            });
+</script>
+	<div id="plugins" class="plugins">
+	<div id="plugin_title" class="plugin_title">控件清单</div>
+	<ul>
+        
+        
+        
+        
+        
+        <li><a href="../symbols/Horn.html">Horn</a></li>
+        
+        <li><a href="../symbols/Horn._Pagebar-pagebar.html">Horn._Pagebar-pagebar</a></li>
+        
+        <li><a href="../symbols/Horn.Base.html">Horn.Base</a></li>
+        
+        <li><a href="../symbols/Horn.ButtonPanel.html">Horn.ButtonPanel</a></li>
+        
+        <li><a href="../symbols/Horn.Calendar.html">Horn.Calendar</a></li>
+        
+        <li><a href="../symbols/Horn.CalendarGroup.html">Horn.CalendarGroup</a></li>
+        
+        <li><a href="../symbols/Horn.Checkbox.html">Horn.Checkbox</a></li>
+        
+        <li><a href="../symbols/Horn.CheckboxGroup.html">Horn.CheckboxGroup</a></li>
+        
+        <li><a href="../symbols/Horn.Combox.html">Horn.Combox</a></li>
+        
+        <li><a href="../symbols/Horn.DataGrid.html">Horn.DataGrid</a></li>
+        
+        <li><a href="../symbols/Horn.Field.html">Horn.Field</a></li>
+        
+        <li><a href="../symbols/Horn.FieldSet.html">Horn.FieldSet</a></li>
+        
+        <li><a href="../symbols/Horn.Form.html">Horn.Form</a></li>
+        
+        <li><a href="../symbols/Horn.Grid.html">Horn.Grid</a></li>
+        
+        <li><a href="../symbols/Horn.HiddenField.html">Horn.HiddenField</a></li>
+        
+        <li><a href="../symbols/Horn.Label.html">Horn.Label</a></li>
+        
+        <li><a href="../symbols/Horn.Menu.html">Horn.Menu</a></li>
+        
+        <li><a href="../symbols/Horn.MessageBox.html">Horn.MessageBox</a></li>
+        
+        <li><a href="../symbols/Horn.PageBar.html">Horn.PageBar</a></li>
+        
+        <li><a href="../symbols/Horn.Panel.html">Horn.Panel</a></li>
+        
+        <li><a href="../symbols/Horn.Password.html">Horn.Password</a></li>
+        
+        <li><a href="../symbols/Horn.PasswordGroup.html">Horn.PasswordGroup</a></li>
+        
+        <li><a href="../symbols/Horn.QueryTable.html">Horn.QueryTable</a></li>
+        
+        <li><a href="../symbols/Horn.RadioGroup.html">Horn.RadioGroup</a></li>
+        
+        <li><a href="../symbols/Horn.Screen.html">Horn.Screen</a></li>
+        
+        <li><a href="../symbols/Horn.SelectTree.html">Horn.SelectTree</a></li>
+        
+        <li><a href="../symbols/Horn.TabPanel.html">Horn.TabPanel</a></li>
+        
+        <li><a href="../symbols/Horn.TargetSelect.html">Horn.TargetSelect</a></li>
+        
+        <li><a href="../symbols/Horn.Textarea.html">Horn.Textarea</a></li>
+        
+        <li><a href="../symbols/Horn.Textfield.html">Horn.Textfield</a></li>
+        
+        <li><a href="../symbols/Horn.Tip.html">Horn.Tip</a></li>
+        
+        <li><a href="../symbols/Horn.TypeField.html">Horn.TypeField</a></li>
+        
+        <li><a href="../symbols/Horn.Util.html">Horn.Util</a></li>
+        
+        <li><a href="../symbols/Horn.Validate.html">Horn.Validate</a></li>
+        
+        <li><a href="../symbols/Horn.Window.html">Horn.Window</a></li>
+        
+        <li><a href="../symbols/Horn.ZtreePanel.html">Horn.ZtreePanel</a></li>
+        
+        
+        
+	</ul>
+</div>
+        <div class="doc">
+        <div style="padding:10px">
+        <div style="text-align:right;"><a href="../index.html">返回控件主页</a>&nbsp;|&nbsp;<a href="../files.html">返回源码主页</a></div>
+        <!-- ============================== class overview ============================ -->
+        
+        
+<h3>ZTreePanel 封装ztree的树形展示组件</h3>
+<p>基于ztree 3.5版本上进行封装树形展示组件，支持同步和异步树，拥有3.5版本的所有功能,同时拥有展开、收缩、刷新和模糊收缩功能</p>
+ <img src="../resource/images/ztree.png"/>
+
+<h4>依赖组件</h4>
+<ul>
+	<li>第三方ztree 3.5版本组件</li>
+</ul>
+
+<h4>适用范围</h4>
+<p>
+通过静态或动态的数据，以树形结构显示，支持选中某个节点及获取选中的节点
+</p>
+<h4>约束</h4>
+<p>
+	<ol>
+		<li>内部是以ztree封装实现，使用时数据结构需遵从ztree的要求</li>
+		<li>此控件封装了ztree所有的功能</li>
+	</ol>
+</p>
+<h4>注意事项</h4>
+<p>
+	<ol>
+		<li>也可以通过getTreeObj的方式拿到ztree原生对象进行操作</li>
+		<li>此控件的dom结构使用div封装</li>
+	</ol>
+</p>
+
+<h4>使用示例</h4>
+<p>示例:静态数据渲染树形</p>
+<textarea name="code" class="html" style="display: none;">
+#set($dataT='[{"id":"1","name":"root"},{"id":"21","name":"sub11","pId":"1"},{"id":"22","name":"sub12","pId":"1"}]')
+#ztree({
+"id":"tree1",
+"name":"ztree1",
+"data":$dataT})
+</textarea>
+
+<p>示例:数据中包含业务数据，绑定点击事件后获取数据项</p>
+<textarea name="code" class="html" style="display: none;">
+#set($dataT='[{"id":"1","name":"root"},{"id":"21","name":"sub11","pId":"1","url":"/action1"},{"id":"22","name":"sub12","pId":"1","url":"/action2"}]')
+#ztree({
+"id":"tree1",
+"name":"ztree1",
+"data":$dataT,
+"nodeclick":"onNodeClcik",
+"beforenodeclick":"beforeNodeClcik"
+})
+
+#jscode()
+	function onNodeClcik(event, treeId, treeNode, clickFlag){
+		alert(treeNode.id+","+treeNode.name+","+treeNode.url);
+	}
+	function beforeNodeClcik(treeId, treeNode, clickFlag){
+		if(treeNode.id=="21"){
+			//返回 false之后，click绑定的事件将不被执行，如果数据中包含url，那么将跳转到url指向位置
+			return false;
+		}
+	}
+#end
+</textarea>
+
+<p>示例:动态态数据渲染树形</p>
+<textarea name="code" class="html" style="display: none;">
+#ztree({  
+                "id":"tree1",  
+                "name":"ztree1",
+            	"checkMode":"checkbox",
+            	"onClick":"nodeClick",
+            	"async":true,
+                "url":"$appServer.get('/test/ztree/asynTree.htm')"})
+</textarea>
+
+<p>注意：url返回的json格式跟静态的一样</p>
+
+
+        <p>&nbsp;</p>
+        
+        	
+            	<!-- doc_options_begin -->
+	        	<h4>属性</h4>
+	        	<p style="color:red;">
+	        		注意：组件的id、name属性只能是英文字母开始，由英文字母、数字和下划线组成，命名时应考虑易识别，不要太长，不要和其他组件重复（表单内的组件除外）。
+	        	</p>
+	        	<table class="doc-table">
+	        		<tbody>
+	        			<tr>
+	        				<th><strong>名称</strong></th>
+							<th><strong>类型</strong></th>
+							<th><strong>描述</strong></th>
+							<th><strong>默认值</strong></th>
+	        			</tr>
+	        			
+	        				<tr>
+	        					<td><b>id</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>组件的唯一标示</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>""</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>name</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>组件的名称，必填</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>""</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>data</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>同步加载，静态数据</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>'[{"id":"1","name":"root"},{"id":"21","name":"sub11","pId":"1"},{"id":"22","name":"sub12","pId":"1"}]'</pre>
+		        						
+		        					
+	        					</td>
+	        					<td></td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>async</b></td>
+	        					<td>Boolean</td>
+	        					<td>
+	        						<p>是否异步</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>#ztree({   "id":"tree1",   "name":"ztree1",	"checkMode":"checkbox",	"async":true,  "url":"$appServer.get('/test/ztree/asynTree.htm')"})</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>false</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>url</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>异步加载,url返回的数据格式跟静态的data一致(async为true时生效)</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>#ztree({   "id":"tree1",   "name":"ztree1",	"checkMode":"checkbox",	"async":true,  "url":"$appServer.get('/test/ztree/asynTree.htm')"})</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>""</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>checkMode</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>选择模式"checkbox","radio"<br/>注：模式为radio时，勾选子节点，父节点不是勾选状态，灰色标示作用<br/>  模式为checkbox时，勾选子节点，父节点默认勾选状态</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>#ztree({   "id":"tree1",   "name":"ztree1",	"checkMode":"checkbox",	"async":true,  "url":"$appServer.get('/test/ztree/asynTree.htm')"})</pre>
+		        						
+		        					
+	        					</td>
+	        					<td></td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>expandFirst</b></td>
+	        					<td>Boolean</td>
+	        					<td>
+	        						<p>页面加载时，树组件默认是否展开</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>false</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>toolbar</b></td>
+	        					<td>Boolean</td>
+	        					<td>
+	        						<p>是否显示操作按钮栏（包含展开、收缩和刷新）,默认不显示<br/>注：收缩/展开按钮，若有选中节点则展开/收缩选中节点，无选中节点，则展开/收缩整棵树；<br/>  收缩/展开按钮，不会触发树的收缩与展开事件，必须点树节点击前面的加减号，才能触发树的收缩与展开事件；</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>#ztree({        "id":"tree1",        "name":"ztree1",  	"checkMode":"checkbox",  	"onClick":"nodeClick",  	"async":true,		"toolbar":false,     "url":"$appServer.get('/test/ztree/asynTree.htm')"})</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>false</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>search</b></td>
+	        					<td>Boolean</td>
+	        					<td>
+	        						<p>是否使用模糊搜索,默认不使用</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>#ztree({        "id":"tree1",        "name":"ztree1",  	"checkMode":"checkbox",  	"onClick":"nodeClick",  	"async":true,		"toolbar":false,		"search":false,     "url":"$appServer.get('/test/ztree/asynTree.htm')"})</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>false</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>reRenderFn</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>重新渲染的回调函数</p>
+		        					
+		        						示例：
+		        						
+		        							<pre> #ztree({   "id":"tree1",   "name":"ztree1",	"checkMode":"checkbox", "reRenderFn":"reRenderFn",	"async":true,  "url":"$appServer.get('/test/ztree/asynTree.htm')"})#jscode()##srcNode 源树节点##newDom　目标树节点function reRenderFn(srcNode,newDom){	newDom.before("<span>*</span>")} #end</pre>
+		        						
+		        					
+	        					</td>
+	        					<td></td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>nodeclick或onClick</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>用于捕获节点被点击的事件回调函数注：该点击事件只针对节点文本，对于节点前面的单选/复选按钮无效<br/>如果设置了beforeClick 方法，且返回 false，将无法触发 onClick 事件回调函数</p>
+		        					
+		        						示例：
+		        						
+		        							<pre> #ztree({   "id":"tree1",   "name":"ztree1",	"checkMode":"checkbox", "onClick":"nodeClick",	"async":true,  "url":"$appServer.get('/test/ztree/asynTree.htm')"})#jscode()##标准的 js event 对象##对应 zTree 的 treeId，便于用户操控##treeNode被单击的节点 JSON 数据对象  function nodeClick(event, treeId, treeNode){  	alert(treeNode.tId + ", " + treeNode.name);  } #end</pre>
+		        						
+		        					
+	        					</td>
+	        					<td></td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>beforenodeclick或beforeClick</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>节点点击前触发的函数,return false则取消点击事件执行</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>
+  #ztree({   "id":"tree1",   "name":"ztree1",	"checkMode":"checkbox", "beforeClick":"nodeBeforeClick",	"async":true,  "url":"$appServer.get('/test/ztree/asynTree.htm')"})#jscode() ##对应 zTree 的 treeId，便于用户操控 ##treeNode被单击的节点 JSON 数据对象 ## clickFlag 节点被点击后的选中操作类型(0,1,2)  function nodeBeforeClick(treeId, treeNode, clickFlag){  	alert(treeNode.tId + ", " + treeNode.name);  } #end</pre>
+		        						
+		        					
+	        					</td>
+	        					<td></td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>beforeAsync</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>用于捕获异步加载之前的事件回调函数，zTree 根据返回值确定是否允许进行异步加载</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>
+  #ztree({   "id":"tree1",   "name":"ztree1",	"checkMode":"checkbox", "beforeAsync":"beforeAsync",	"async":true,  "url":"$appServer.get('/test/ztree/asynTree.htm')"})#jscode() ##treeId:对应 zTree 的 treeId，便于用户操控 ##treeNode:进行异步加载的父节点 JSON 数据对象，针对根进行异步加载时，treeNode = null  ##禁止 id 为 1 的父节点进行异步加载操作 function beforeAsync(treeId, treeNode) {	return (treeNode.id !== 1);}; #end</pre>
+		        						
+		        					
+	        					</td>
+	        					<td></td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>beforeCheck</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>用于捕获 勾选 或 取消勾选 之前的事件回调函数，并且根据返回值确定是否允许 勾选 或 取消勾选</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>
+  #ztree({   "id":"tree1",   "name":"ztree1",	"checkMode":"checkbox", "beforeCheck":"beforeCheck",	"async":true,  "url":"$appServer.get('/test/ztree/asynTree.htm')"})#jscode() ##对应 zTree 的 treeId，便于用户操控 ##treeNode被单击的节点 JSON 数据对象  function beforeCheck(treeId, treeNode){  	alert(treeNode.tId + ", " + treeNode.name);  } #end</pre>
+		        						
+		        					
+	        					</td>
+	        					<td></td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>onAsyncSuccess</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>用于捕获异步加载正常结束的事件回调函数。如果设置了beforeAsync 事件，且返回 false，将无法触发 onAsyncSuccess / onAsyncError 事件回调函数。</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>
+  #ztree({   "id":"tree1",   "name":"ztree1",	"checkMode":"checkbox", "onAsyncSuccess":"onAsyncSuccess",	"async":true,  "url":"$appServer.get('/test/ztree/asynTree.htm')"})#jscode() ##treeId: 对应 zTree 的 treeId，便于用户操控 ##treeNode: 进行异步加载的父节点 JSON 数据对象,针对根进行异步加载时，treeNode = null ##异步加载成功后，弹出提示信息 function onAsyncSuccess(event, treeId, treeNode, msg) {	 alert(msg); }; #end</pre>
+		        						
+		        					
+	        					</td>
+	        					<td></td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>onAsyncError</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>用于捕获异步加载出现异常错误的事件回调函数。如果设置了beforeAsync 事件，且返回 false，将无法触发 onAsyncSuccess / onAsyncError 事件回调函数。</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>
+  #ztree({   "id":"tree1",   "name":"ztree1",	"checkMode":"checkbox", "onAsyncError":"onAsyncError",	"async":true, "url":"$appServer.get('/test/ztree/asynTree.htm')"})#jscode() ##treeId: 对应 zTree 的 treeId，便于用户操控 ##treeNode: 进行异步加载的父节点 JSON 数据对象,针对根进行异步加载时，treeNode = null ## 异步加载出现异常后，弹出错误信息  function onAsyncError(event, treeId, treeNode, XMLHttpRequest, textStatus, errorThrown) {  	alert(XMLHttpRequest);  } #end</pre>
+		        						
+		        					
+	        					</td>
+	        					<td></td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>beforeCollapse</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>用于捕获父节点折叠之前的事件回调函数，并且根据返回值确定是否允许折叠操作<br/>注：收缩/展开按钮，不会触发该事件，必须点击树节点击前面的减号，才能触发该事件；</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>
+  #ztree({   "id":"tree1",   "name":"ztree1",	"checkMode":"checkbox", "beforeCollapse":"beforeCollapse",	"async":true,  "url":"$appServer.get('/test/ztree/asynTree.htm')"})#jscode() ##对应 zTree 的 treeId，便于用户操控 ##treeNode被单击的节点 JSON 数据对象  function beforeCollapse(treeId, treeNode) {  	alert(treeNode.tId + ", " + treeNode.name);  } #end</pre>
+		        						
+		        					
+	        					</td>
+	        					<td></td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>beforeDblClick</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>用于捕获 zTree 上鼠标双击之前的事件回调函数，并且根据返回值确定触发 onDblClick 事件回调函数</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>
+  #ztree({   "id":"tree1",   "name":"ztree1",	"checkMode":"checkbox", "beforeDblClick":"beforeDblClick",	"async":true,  "url":"$appServer.get('/test/ztree/asynTree.htm')"})#jscode() ##对应 zTree 的 treeId，便于用户操控 ##treeNode被单击的节点 JSON 数据对象  function beforeDblClick(treeId, treeNode) {  	alert(treeNode.tId + ", " + treeNode.name);  } #end</pre>
+		        						
+		        					
+	        					</td>
+	        					<td></td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>beforeExpand</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>用于捕获父节点展开之前的事件回调函数，并且根据返回值确定是否允许展开操作<br/>注：收缩/展开按钮，不会触发该事件，必须点击树节点击前面的加号，才能触发该事件；</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>
+  #ztree({   "id":"tree1",   "name":"ztree1",	"checkMode":"checkbox", "beforeExpand":"beforeExpand",	"async":true, "url":"$appServer.get('/test/ztree/asynTree.htm')"})#jscode() ##对应 zTree 的 treeId，便于用户操控 ##treeNode被单击的节点 JSON 数据对象  function beforeExpand(treeId, treeNode) {  	alert(treeNode.tId + ", " + treeNode.name);  } #end</pre>
+		        						
+		        					
+	        					</td>
+	        					<td></td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>beforeMouseDown</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>用于捕获 zTree 上鼠标按键按下之前的事件回调函数，并且根据返回值确定触发 onMouseDown 事件回调函数</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>
+  #ztree({   "id":"tree1",   "name":"ztree1",	"checkMode":"checkbox", "beforeMouseDown":"beforeMouseDown",	"async":true, "url":"$appServer.get('/test/ztree/asynTree.htm')"})#jscode() ##对应 zTree 的 treeId，便于用户操控 ##treeNode被单击的节点 JSON 数据对象  function beforeMouseDown(treeId, treeNode) {  	alert(treeNode.tId + ", " + treeNode.name);  } #end</pre>
+		        						
+		        					
+	        					</td>
+	        					<td></td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>beforeMouseUp</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>用于捕获 zTree 上鼠标按键松开之前的事件回调函数，并且根据返回值确定触发 onMouseUp 事件回调函数</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>
+  #ztree({   "id":"tree1",   "name":"ztree1",	"checkMode":"checkbox", "beforeMouseUp":"beforeMouseUp",	"async":true, "url":"$appServer.get('/test/ztree/asynTree.htm')"})#jscode() ##对应 zTree 的 treeId，便于用户操控 ##treeNode被单击的节点 JSON 数据对象  function beforeMouseUp(treeId, treeNode) {  	alert(treeNode.tId + ", " + treeNode.name);  } #end</pre>
+		        						
+		        					
+	        					</td>
+	        					<td></td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>beforeRightClick</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>用于捕获 zTree 上鼠标右键点击之前的事件回调函数，并且根据返回值确定触发 onRightClick 事件回调函数</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>
+  #ztree({   "id":"tree1",   "name":"ztree1",	"checkMode":"checkbox", "beforeRightClick":"beforeRightClick",	"async":true, "url":"$appServer.get('/test/ztree/asynTree.htm')"})#jscode() ##对应 zTree 的 treeId，便于用户操控 ##treeNode被单击的节点 JSON 数据对象  function beforeRightClick(treeId, treeNode) {  	alert(treeNode.tId + ", " + treeNode.name);  } #end</pre>
+		        						
+		        					
+	        					</td>
+	        					<td></td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>onCheck</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>用于捕获 checkbox / radio 被勾选 或 取消勾选的事件回调函数。 如果设置了 beforeCheck 方法，且返回 false，将无法触发 onCheck 事件回调函数。</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>
+  #ztree({   "id":"tree1",   "name":"ztree1",	"checkMode":"checkbox", "onCheck":"onCheck",	"async":true, "url":"$appServer.get('/test/ztree/asynTree.htm')"})#jscode() ##对应 zTree 的 treeId，便于用户操控 ##treeNode被单击的节点 JSON 数据对象  function onCheck(event, treeId, treeNode) {  	alert(treeNode.tId + ", " + treeNode.name);  } #end</pre>
+		        						
+		        					
+	        					</td>
+	        					<td></td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>onCollapse</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>用于捕获节点被折叠的事件回调函数。 如果设置了 beforeCollapse 方法，且返回 false，将无法触发 onCollapse 事件回调函数。<br/>注：收缩/展开按钮，不会触发该事件，必须点树节点击前面的减号，才能触发该事件；</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>
+  #ztree({   "id":"tree1",   "name":"ztree1",	"checkMode":"checkbox", "onCollapse":"onCollapse",	"async":true, "url":"$appServer.get('/test/ztree/asynTree.htm')"})#jscode() ##对应 zTree 的 treeId，便于用户操控 ##treeNode被单击的节点 JSON 数据对象  function onCollapse(event, treeId, treeNode) {  	alert(treeNode.tId + ", " + treeNode.name);  } #end</pre>
+		        						
+		        					
+	        					</td>
+	        					<td></td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>onDblClick</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>用于捕获 zTree 上鼠标双击之后的事件回调函数。如果设置了 beforeDblClick 方法，且返回 false，将无法触发 onDblClick 事件回调函数。</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>
+  #ztree({   "id":"tree1",   "name":"ztree1",	"checkMode":"checkbox", "onDblClick":"onDblClick",	"async":true, "url":"$appServer.get('/test/ztree/asynTree.htm')"})#jscode() ##对应 zTree 的 treeId，便于用户操控 ##treeNode被单击的节点 JSON 数据对象  function onDblClick(event, treeId, treeNode) {  	alert(treeNode.tId + ", " + treeNode.name);  } #end</pre>
+		        						
+		        					
+	        					</td>
+	        					<td></td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>onMouseDown</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>用于捕获 zTree 上鼠标双击之后的事件回调函数。如果设置了 beforeMouseDown 方法，且返回 false，将无法触发 onMouseDown 事件回调函数。</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>
+  #ztree({   "id":"tree1",   "name":"ztree1",	"checkMode":"checkbox", "onMouseDown":"onMouseDown",	"async":true, "url":"$appServer.get('/test/ztree/asynTree.htm')"})#jscode() ##对应 zTree 的 treeId，便于用户操控 ##treeNode被单击的节点 JSON 数据对象  function onMouseDown(event, treeId, treeNode) {  	alert(treeNode.tId + ", " + treeNode.name);  } #end</pre>
+		        						
+		        					
+	        					</td>
+	        					<td></td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>onMouseUp</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>用于捕获 zTree 上鼠标双击之后的事件回调函数。如果设置了 beforeMouseUp 方法，且返回 false，将无法触发 onMouseUp 事件回调函数。</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>
+  #ztree({   "id":"tree1",   "name":"ztree1",	"checkMode":"checkbox", "onMouseUp":"onMouseUp",	"async":true, "url":"$appServer.get('/test/ztree/asynTree.htm')"})#jscode() ##对应 zTree 的 treeId，便于用户操控 ##treeNode被单击的节点 JSON 数据对象  function onMouseUp(event, treeId, treeNode) {  	alert(treeNode.tId + ", " + treeNode.name);  } #end</pre>
+		        						
+		        					
+	        					</td>
+	        					<td></td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>onRightClick</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>用于捕获 zTree 上鼠标双击之后的事件回调函数。如果设置了 beforeRightClick 方法，且返回 false，将无法触发 onRightClick 事件回调函数。</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>
+  #ztree({   "id":"tree1",   "name":"ztree1",	"checkMode":"checkbox", "onRightClick":"onRightClick",	"async":true, "url":"$appServer.get('/test/ztree/asynTree.htm')"})#jscode() ##对应 zTree 的 treeId，便于用户操控 ##treeNode被单击的节点 JSON 数据对象  function onRightClick(event, treeId, treeNode) {  	alert(treeNode.tId + ", " + treeNode.name);  } #end</pre>
+		        						
+		        					
+	        					</td>
+	        					<td></td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>onExpand</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>用于捕获节点被展开的事件回调函数 如果设置了beforeExpand 方法，且返回 false，将无法触发 onExpand 事件回调函数。<br/>注：收缩/展开按钮，不会触发该事件，必须点树节点击前面的加号，才能触发该事件；</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>
+  #ztree({   "id":"tree1",   "name":"ztree1",	"checkMode":"checkbox", "onExpand":"onExpand",	"async":true, "url":"$appServer.get('/test/ztree/asynTree.htm')"})#jscode() ##对应 zTree 的 treeId，便于用户操控 ##treeNode被单击的节点 JSON 数据对象  function onExpand(event, treeId, treeNode) {  	alert(treeNode.tId + ", " + treeNode.name);  } #end</pre>
+		        						
+		        					
+	        					</td>
+	        					<td></td>
+	        				</tr>
+	        			
+	        		</tbody>
+	        	</table>
+        	    <!-- doc_options_end -->
+            
+            
+            
+       		
+       		
+            	<!-- doc_methods_begin -->
+            	<h4>方法</h4>
+            	<table class="doc-table">
+          			<tbody>
+          				<tr>
+          					<th><strong>名称</strong></th>
+							<th><strong>参数</strong></th>
+							<th><strong>描述</strong></th>
+          				</tr>
+          				
+          					<tr>
+								<td>getNodes</td>
+								<td>()</td>
+								<td>
+									<p>获取 zTree 的全部节点数据</p>
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        Array(JSON)全部节点数据：1、Array 仅仅是根节点的集合（默认情况子节点都处于 children 属性下）；2、如需遍历全部节点需要利用递归，或利用 transformToArray 方法 将数据变成简单的 Array 集合3、对于异步加载模式下，尚未加载的子节点是无法通过此方法获取的。
+		                                    </li>
+										
+									
+									
+	                               		示例：
+	                                    
+	                                        <pre>##获取全部节点数据Horn.getComp("ztree1").getNodes();例子，请参考ztree官网(http://www.ztree.me/v3/api.php)</pre>
+	                                    
+	                           		 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>addNodes</td>
+								<td>(parentNode, index, newNodes, isSilent)</td>
+								<td>
+									<p>新增节点如果需要获取数据在 zTree 内的对象，请获取此方法的返回值，请通过 zTree 对象执行此方法。</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        :<b>parentNode</b>
+		                                        指定的父节点，如果增加根节点，请设置 parentNode 为 null 即可。
+		                                    </li>
+		                                
+		                                    <li>
+		                                        :<b>index</b>
+		                                        索引值
+		                                    </li>
+		                                
+		                                    <li>
+		                                        :<b>newNodes</b>
+		                                        需要增加的节点数据 JSON 对象集合，数据只需要满足 zTree 的节点数据必需的属性即可
+		                                    </li>
+		                                
+		                                    <li>
+		                                        :<b>isSilent</b>
+		                                        设定增加节点后是否自动展开父节点。isSilent = true 时，不展开父节点，其他值或缺省状态都自动展开。
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        Array(JSON)返回值是 zTree 最终添加的节点数据集合。如果 newNodes 是单个节点数据 JSON，返回值也是将其包在 Array 内，请务必记住：返回值中的数据对象 是 newNodes 被 clone 后的，所以绝对不相等！
+		                                    </li>
+										
+									
+									
+	                               		示例：
+	                                    
+	                                        <pre>##对于 id = "tree" 的 zTree 增加 3 个根节点var newNodes = [{name:"newNode1"}, {name:"newNode2"}, {name:"newNode3"}];Horn.getComp("ztree1").addNodes(null, newNodes);例子，请参考ztree官网(http://www.ztree.me/v3/api.php)	function addNode(){     var zTree = Horn.getComp("ztree1").getTreeObj(),		isParent = true,		nodes = zTree.getSelectedNodes(),		treeNode = nodes[0];		var newCount = 1;		if (treeNode) {			treeNode = Horn.getComp("ztree1").addNodes(treeNode, {id:(100 + newCount), pId:treeNode.id, isParent:isParent, name:"new node" + (newCount++)});		} else {			treeNode = Horn.getComp("ztree1").addNodes(null, {id:(100 + newCount), pId:0, isParent:isParent, name:"new node" + (newCount++)});		}  }</pre>
+	                                    
+	                           		 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>cancelSelectedNode</td>
+								<td>(node)</td>
+								<td>
+									<p>取消节点的选中状态</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        :<b>node</b>
+		                                        需要取消选中状态的节点。
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        无
+		                                    </li>
+										
+									
+									
+	                               		示例：
+	                                    
+	                                        <pre>##取消当前第一个被选中节点的选中状态var nodes = Horn.getComp("ztree1").getSelectedNodes();if (nodes.length>0) { 	Horn.getComp("ztree1").cancelSelectedNode(nodes[0]);}例子，请参考ztree官网(http://www.ztree.me/v3/api.php)</pre>
+	                                    
+	                           		 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>checkAllNodes</td>
+								<td>(checked)</td>
+								<td>
+									<p>勾选 或 取消勾选 全部节点。[checkMode = "checkbox" 时有效]此方法不会触发 beforeCheck / onCheck 事件回调函数。</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        :<b>checked</b>
+		                                        true 表示勾选全部节点,false 表示全部节点取消勾选。
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        无
+		                                    </li>
+										
+									
+									
+	                               		示例：
+	                                    
+	                                        <pre>Horn.getComp("ztree1").checkAllNodes(true);例子，请参考ztree官网(http://www.ztree.me/v3/api.php)</pre>
+	                                    
+	                           		 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>checkNode</td>
+								<td>(node, checked, checkTypeFlag, callbackFlag)</td>
+								<td>
+									<p>勾选 或 取消勾选 单个节点。此方法可以触发 beforeCheck / onCheck 事件回调函数。</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        :<b>node</b>
+		                                        需要勾选 或 取消勾选 的节点数据。
+		                                    </li>
+		                                
+		                                    <li>
+		                                        :<b>checked</b>
+		                                        true 表示勾选节点,false 表示节点取消勾选。
+		                                    </li>
+		                                
+		                                    <li>
+		                                        :<b>checkTypeFlag</b>
+		                                        Boolean：true表示按照 进行父子节点的勾选联动操作；false表示只修改此节点勾选状态，无任何勾选联动操作
+		                                    </li>
+		                                
+		                                    <li>
+		                                        :<b>callbackFlag</b>
+		                                        Boolean： true表示执行此方法时触发 beforeCheck & onCheck 事件回调函数；false表示执行此方法时不触发事件回调函数
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        无
+		                                    </li>
+										
+									
+									
+	                               		示例：
+	                                    
+	                                        <pre>##勾选当前选中的节点var nodes = Horn.getComp("ztree1").getSelectedNodes();	for (var i=0, l=nodes.length; i < l; i++) {		Horn.getComp("ztree1").checkNode(nodes[i], true, true);	}例子，请参考ztree官网(http://www.ztree.me/v3/api.php)</pre>
+	                                    
+	                           		 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>destroy</td>
+								<td>()</td>
+								<td>
+									<p>用此方法可以销毁 zTreeObj 代表的 zTree。</p>
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        无
+		                                    </li>
+										
+									
+									
+	                               		示例：
+	                                    
+	                                        <pre>Horn.getComp("ztree1").destroy();例子，请参考ztree官网(http://www.ztree.me/v3/api.php)</pre>
+	                                    
+	                           		 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>expandAll</td>
+								<td>(expandFlag)</td>
+								<td>
+									<p>展开 / 折叠 全部节点此方法不会触发 beforeExpand / onExpand 和 beforeCollapse / onCollapse 事件回调函数</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        :<b>expandFlag</b>
+		                                        true 表示 展开 全部节点,false 表示 折叠 全部节点。
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        Boolean返回值表示最终实际操作情况；true 表示 展开 全部节点；false 表示 折叠 全部节点；null 表示 不存在任何父节点
+		                                    </li>
+										
+									
+									
+	                               		示例：
+	                                    
+	                                        <pre>Horn.getComp("ztree1").expandAll(true);例子，请参考ztree官网(http://www.ztree.me/v3/api.php)</pre>
+	                                    
+	                           		 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>expandNode</td>
+								<td>(node, expandFlag, sonSign, focus, callbackFlag)</td>
+								<td>
+									<p>展开 / 折叠 指定的节点;注：必须选中节点文本，勾选状态无效；此方法可以触发 beforeExpand / onExpand 或 beforeCollapse / onCollapse 事件回调函数</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        :<b>node</b>
+		                                        需要 展开 / 折叠 的节点 JSON 数据。
+		                                    </li>
+		                                
+		                                    <li>
+		                                        :<b>expandFlag</b>
+		                                        true 表示 展开 节点,false 表示 折叠 节点
+		                                    </li>
+		                                
+		                                    <li>
+		                                        :<b>sonSign</b>
+		                                        true 表示 全部子孙节点 进行与 expandFlag 相同的操作,false 表示 只影响此节点，对于其 子孙节点无任何影响(sonSign = false 且 expandFirst = expandFlag 时，不会触发回调函数，直接返回)。
+		                                    </li>
+		                                
+		                                    <li>
+		                                        :<b>focus</b>
+		                                        true 表示 展开 / 折叠 操作后，通过设置焦点保证此焦点进入可视区域内, false 表示 展开 / 折叠 操作后，不设置任何焦点。
+		                                    </li>
+		                                
+		                                    <li>
+		                                        :<b>callbackFlag</b>
+		                                        true 表示执行此方法时触发 beforeExpand / onExpand 或 beforeCollapse / onCollapse 事件回调函数,callbackFlag = false 表示执行此方法时不触发事件回调函数。
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        Boolean返回值表示最终实际操作情况；true 表示 展开 节点；false 表示 折叠 节点；null 表示 不是父节点
+		                                    </li>
+										
+									
+									
+	                               		示例：
+	                                    
+	                                        <pre>##展开当前选择的第一个节点（包括其全部子节点）var treeObj =  Horn.getComp("ztree1");	var nodes = treeObj.getSelectedNodes();	if (nodes.length>0) {		treeObj.expandNode(nodes[0], true, true, true);	}例子，请参考ztree官网(http://www.ztree.me/v3/api.php)</pre>
+	                                    
+	                           		 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>getCheckedNodes</td>
+								<td>(checked)</td>
+								<td>
+									<p></p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        :<b>checked</b>
+		                                        
+		                                    </li>
+		                                
+									
+									
+									 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>getNodeByParam</td>
+								<td>(key, value, parentNode)</td>
+								<td>
+									<p>根据节点数据的属性搜索，获取条件完全匹配的节点数据 JSON 对象</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        :<b>key</b>
+		                                        需要精确匹配的属性名称。
+		                                    </li>
+		                                
+		                                    <li>
+		                                        :<b>value</b>
+		                                        需要精确匹配的属性值，可以是任何类型，只要保证与 key 指定的属性值保持一致即可。
+		                                    </li>
+		                                
+		                                    <li>
+		                                        :<b>parentNode</b>
+		                                        搜索范围，指定在某个父节点下的子节点中进行搜索。
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        Array(JSON)匹配精确搜索的节点数据集合;如无结果，返回 [ ]
+		                                    </li>
+										
+									
+									
+	                               		示例：
+	                                    
+	                                        <pre>var treeObj =  Horn.getComp("ztree1");var node = treeObj.getNodesByParam("id", 1, null);例子，请参考ztree官网(http://www.ztree.me/v3/api.php)</pre>
+	                                    
+	                           		 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>getNodesByParamFuzzy</td>
+								<td>(key, value, parentNode)</td>
+								<td>
+									<p>根据节点数据的属性搜索，获取条件模糊匹配的节点数据 JSON 对象集合</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        :<b>key</b>
+		                                        需要精确匹配的属性名称。
+		                                    </li>
+		                                
+		                                    <li>
+		                                        :<b>value</b>
+		                                        需要精确匹配的属性值，可以是任何类型，只要保证与 key 指定的属性值保持一致即可。
+		                                    </li>
+		                                
+		                                    <li>
+		                                        :<b>parentNode</b>
+		                                        可以指定在某个父节点下的子节点中搜索。
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        Array(JSON)匹配模糊搜索的节点数据集合;如无结果，返回 [ ]
+		                                    </li>
+										
+									
+									
+	                               		示例：
+	                                    
+	                                        <pre>##查找 name 包含 "test" 的节点数据var treeObj =  Horn.getComp("ztree1");var node = treeObj.getNodesByParamFuzzy("name", "test", null);;例子，请参考ztree官网(http://www.ztree.me/v3/api.php)</pre>
+	                                    
+	                           		 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>getSelectedNodes</td>
+								<td>()</td>
+								<td>
+									<p>获取 zTree 当前被选中的节点数据集合</p>
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        Array(JSON)当前被选中的节点数据集合
+		                                    </li>
+										
+									
+									 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>hideNode</td>
+								<td>(node)</td>
+								<td>
+									<p>隐藏某个节点。</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        :<b>node</b>
+		                                        指定被隐藏的节点 JSON 数据
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        无
+		                                    </li>
+										
+									
+									
+	                               		示例：
+	                                    
+	                                        <pre>##隐藏根节点第一个节点var treeObj =  Horn.getComp("ztree1");var nodes = treeObj.getNodes();treeObj.hideNode(nodes[0]);例子，请参考ztree官网(http://www.ztree.me/v3/api.php)</pre>
+	                                    
+	                           		 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>hideNodes</td>
+								<td>(nodes)</td>
+								<td>
+									<p>隐藏一批节点。</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        :<b>nodes</b>
+		                                        指定被隐藏的节点 JSON 数据
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        无
+		                                    </li>
+										
+									
+									
+	                               		示例：
+	                                    
+	                                        <pre>var treeObj =  Horn.getComp("ztree1");var nodes = treeObj.getNodes();treeObj.hideNodes(nodes[0].children);例子，请参考ztree官网(http://www.ztree.me/v3/api.php)</pre>
+	                                    
+	                           		 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>refresh</td>
+								<td>()</td>
+								<td>
+									<p>刷新 zTree</p>
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        无
+		                                    </li>
+										
+									
+									 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>removeChildNodes</td>
+								<td>(parentNode)</td>
+								<td>
+									<p>清空某父节点的子节点1、清空子节点后，父节点会自动变为叶子节点。2、请勿用此方法清空根节点，如果需要清空根节点，直接初始化 zTree，并且设置初始节点为 null 即可。3、此方法不会触发任何事件回调函数。</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        :<b>parentNode</b>
+		                                        需要清空子节点的父节点数据 JSON 数据
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        Array(JSON)将该父节点的子节点数据返回，如果不存在则返回 null
+		                                    </li>
+										
+									
+									
+	                               		示例：
+	                                    
+	                                        <pre>var treeObj =  Horn.getComp("ztree1");var nodes = treeObj.getSelectedNodes();if (nodes && nodes.length>0) {	treeObj.removeChildNodes(nodes[0]);}例子，请参考ztree官网(http://www.ztree.me/v3/api.php)</pre>
+	                                    
+	                           		 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>removeNode</td>
+								<td>(node)</td>
+								<td>
+									<p>删除节点</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        :<b>node</b>
+		                                        需要被删除的节点数据 JSON 数据
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        无
+		                                    </li>
+										
+									
+									
+	                               		示例：
+	                                    
+	                                        <pre>var treeObj =  Horn.getComp("ztree1");var nodes = treeObj.getSelectedNodes();if (nodes && nodes.length>0) {	for (var i=0, l=nodes.length; i < l; i++) {		treeObj.removeNode(nodes[i]);	}}例子，请参考ztree官网(http://www.ztree.me/v3/api.php)</pre>
+	                                    
+	                           		 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>selectNode</td>
+								<td>(node, addFlag, isSilent)</td>
+								<td>
+									<p>选中指定节点</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        :<b>node</b>
+		                                        需要被选中的节点数据 JSON 数据
+		                                    </li>
+		                                
+		                                    <li>
+		                                        :<b>addFlag</b>
+		                                        true 表示追加选中，会出现多点同时被选中的情况, false 表示单独选中，原先被选中的节点会被取消选中状态
+		                                    </li>
+		                                
+		                                    <li>
+		                                        :<b>isSilent</b>
+		                                        true 选中节点时，不会让节点自动滚到到可视区域内, false （默认）表示选中节点时，会让节点自动滚到到可视区域内
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        无
+		                                    </li>
+										
+									
+									
+	                               		示例：
+	                                    
+	                                        <pre>var treeObj =  Horn.getComp("ztree1");var nodes = treeObj.getNodes();if (nodes && nodes.length>0) {	treeObj.selectNode(nodes[0]);}例子，请参考ztree官网(http://www.ztree.me/v3/api.php)</pre>
+	                                    
+	                           		 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>setChkDisabled</td>
+								<td>(node, disabled)</td>
+								<td>
+									<p>禁用 或 解禁 某个节点的 checkbox / radio 1、节点的 checkbox / radio 被禁用后，无法勾选或取消勾选。2、请不要直接修改已加载节点的 treeNode.chkDisabled 属性。</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        :<b>node</b>
+		                                        需要禁用 或 解禁 checkbox / radio 的节点数据 JSON 数据
+		                                    </li>
+		                                
+		                                    <li>
+		                                        :<b>disabled</b>
+		                                        true  true 表示禁用 checkbox / radio,  false 表示解禁 checkbox / radio
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        无
+		                                    </li>
+										
+									
+									
+	                               		示例：
+	                                    
+	                                        <pre>var treeObj =  Horn.getComp("ztree1");var nodes = treeObj.getSelectedNodes();if (nodes && nodes.length>0) {	for (var i=0, l=nodes.length; i < l; i++) {     treeObj.setChkDisabled(nodes[i], true);  }}例子，请参考ztree官网(http://www.ztree.me/v3/api.php)</pre>
+	                                    
+	                           		 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>showNode</td>
+								<td>(node)</td>
+								<td>
+									<p>显示某个被隐藏的节点。</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        :<b>node</b>
+		                                        指定被显示的节点 JSON 数据
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        无
+		                                    </li>
+										
+									
+									
+	                               		示例：
+	                                    
+	                                        <pre>var treeObj =  Horn.getComp("ztree1");var node = treeObj.getNodeByParam("isHidden", true);if (node) { treeObj.showNode(node);}例子，请参考ztree官网(http://www.ztree.me/v3/api.php)</pre>
+	                                    
+	                           		 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>transformToArray</td>
+								<td>(nodes)</td>
+								<td>
+									<p>将 zTree 使用的标准 JSON 嵌套格式的数据转换为简单 Array 格式。(免去用户自行编写递归遍历全部节点的麻烦)</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        :<b>nodes</b>
+		                                        需要被转换的 zTree 节点数据对象集合 或 某个单独节点的数据对象
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        Array(JSON)转换后的简单 Array 数据格式
+		                                    </li>
+										
+									
+									
+	                               		示例：
+	                                    
+	                                        <pre>var treeObj =  Horn.getComp("ztree1");var nodes = treeObj.transformToArray(treeObj.getNodes());例子，请参考ztree官网(http://www.ztree.me/v3/api.php)</pre>
+	                                    
+	                           		 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>transformTozTreeNodes</td>
+								<td>(nodes)</td>
+								<td>
+									<p>将简单 Array 格式数据转换为 zTree 使用的标准 JSON 嵌套数据格式。</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        :<b>nodes</b>
+		                                        需要被转换的简单 Array 格式数据 或 某个单独的数据对象
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        Array(JSON)zTree 使用的标准数据，子节点都存在于父节点数据的 children 属性中；如果 simpleNodes 是一个 JSON 对象，则被简单封装成长度为 1 的数组。
+		                                    </li>
+										
+									
+									
+	                               		示例：
+	                                    
+	                                        <pre>var simpleNodes = [{"id":1, "pId":0, "name":"test1"},{"id":11, "pId":1, "name":"test11"},{"id":12, "pId":1, "name":"test12"},{"id":111, "pId":11, "name":"test111"}];var treeObj =  Horn.getComp("ztree1");var nodes = treeObj.transformTozTreeNodes(simpleNodes);例子，请参考ztree官网(http://www.ztree.me/v3/api.php)</pre>
+	                                    
+	                           		 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>updateNode</td>
+								<td>(node)</td>
+								<td>
+									<p>更新某节点数据，主要用于该节点显示属性的更新。</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        :<b>node</b>
+		                                        指定需要更新的节点 JSON 数据
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        无
+		                                    </li>
+										
+									
+									
+	                               		示例：
+	                                    
+	                                        <pre>var treeObj =  Horn.getComp("ztree1");var nodes = treeObj.getNodes();	if (nodes.length>0) {		nodes[0].name = "test";		treeObj.updateNode(nodes[0]);	}例子，请参考ztree官网(http://www.ztree.me/v3/api.php)</pre>
+	                                    
+	                           		 
+								</td>
+							</tr>
+          				
+          			</tbody>
+          		</table>
+            	<!-- doc_methods_end -->
+            
+        	<br /><i>Defined in: </i> <a href="../symbols/src/E__workspace_JRES-PLUS_Sources_jresplus-2.0_Sources_jresplus-ui_jresplus-ui-web_build_com.hundsun.jresplus.ui.ztree_public_scripts_Ztree.js.html">Ztree.js</a>
+        </div>
+        </div>
+</div>
+</div>
+<!-- ============================== footer ================================= -->
+
+		<div id="footer">
+			<div>Copyright ? 2010-2013 www.hundsun.com</div>
+		</div>
+		<script type="text/javascript">
+			dp.SyntaxHighlighter.HighlightAll('code');
+		</script>
+	</body>
+</html>
+
+

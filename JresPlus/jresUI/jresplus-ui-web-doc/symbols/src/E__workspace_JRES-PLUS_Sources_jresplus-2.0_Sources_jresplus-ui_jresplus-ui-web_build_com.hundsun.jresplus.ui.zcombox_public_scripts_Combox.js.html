@@ -1,0 +1,936 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/*
+<span class='line'>  2</span>  * 修改日期                        修改人员        修改说明
+<span class='line'>  3</span>  * -----------------------------------------------------------------------
+<span class='line'>  4</span>  * 2014-2-11 		张超		增加默认值保存功能
+<span class='line'>  5</span>  * 2014-3-3 		张超		filterByLabel增加filter之后设置值（或不设置）的功能。
+<span class='line'>  6</span>  * 2014-2-14 		韩寅		修改注释
+<span class='line'>  7</span>  * 2014-4-14        周智星      BUG #6552 【combox】(继承)addRule(rule)(原先无校验规则) 错误提示的位置不正确，偏离的位置相当大
+<span class='line'>  8</span>  * 2014-4-16        周智星     BUG #6738 combo调用setDisabled（true）后应能通过API方式提交
+<span class='line'>  9</span>  * 2014-4-16       	韩寅		BUG #6554 修改注释，描述只读更加准确
+<span class='line'> 10</span>  * 2014-4-28        周智星     BUG #6838 combo_设置为只读的任然可以选择更改 设置为只读的任然可以选中后按退格键清除
+<span class='line'> 11</span>  * 2014-5-4         周智星     修改combox的readonly属性说明文档
+<span class='line'> 12</span>  * 2015-9-25        周智星     window控件中，若是控件占多行，显示有问题
+<span class='line'> 13</span>  * 2016-2-16        刘龙        15930 需求16320--doc文档中，combox的方法changeDict，需要说明只能更换页面中已经调用的数据字典。
+<span class='line'> 14</span>  * 2016-2-17        刘龙         需求16320 【TS:201601070226-JRESPlus-财富管理事业部-陈为-4. combox的changeDict的实现（目前API中】
+<span class='line'> 15</span>  * 2016-3-4         刘龙         需求17376 【TS:201602230422-JRESPlus-资产管理事业部-张翔-【项目名称】非标准化投资管理系统2.0&lt;br>&lt;br>&lt;br】
+<span class='line'> 16</span>  * 2016-03-22       刘龙         bug#17102 combox调用addItems(item)方法后，再获取值，初始设置的值获取不到
+<span class='line'> 17</span>  * 2016-3-23        刘龙        bug#17190 多选框combox设置value值为后续additem添加的值，显示后输入框设置值，调用addItems(item)方法，原先选中的值会被value值覆盖
+<span class='line'> 18</span>  * -----------------------------------------------------------------------
+<span class='line'> 19</span>  */</span><span class="WHIT">
+<span class='line'> 20</span> </span><span class="COMM">/**
+<span class='line'> 21</span>  * @name Horn.Combox
+<span class='line'> 22</span>  * @class
+<span class='line'> 23</span>  * 下拉选项组件&lt;/br>
+<span class='line'> 24</span>  * 替代html的select组件，有更加丰富的交互和功能
+<span class='line'> 25</span>  */</span><span class="WHIT">
+<span class='line'> 26</span> 
+<span class='line'> 27</span> </span><span class="COMM">/**@lends Horn.Combox# */</span><span class="WHIT">
+<span class='line'> 28</span> 
+<span class='line'> 29</span> </span><span class="COMM">/**
+<span class='line'> 30</span>  * 仅在单选模式下生效，选项头格式如:{"label":"","value":"请选择 ..."}，其中label可以不配置，但是配置的值一定不能跟combox下拉的有效值重复
+<span class='line'> 31</span>  * @name Horn.Combox#&lt;b>headItem&lt;/b>
+<span class='line'> 32</span>  * @type obj
+<span class='line'> 33</span>  * @default 无
+<span class='line'> 34</span>  * @example
+<span class='line'> 35</span>  * 无
+<span class='line'> 36</span>  */</span><span class="WHIT">
+<span class='line'> 37</span> </span><span class="COMM">/**
+<span class='line'> 38</span>  * 静态显示值 格式："items":[{"text":"葡萄","code":"0"},{"text":"苹果","code":"1"}]
+<span class='line'> 39</span>  * @name Horn.Combox#&lt;b>items&lt;/b>
+<span class='line'> 40</span>  * @type Array
+<span class='line'> 41</span>  * @default 无
+<span class='line'> 42</span>  * @example
+<span class='line'> 43</span>  * 无
+<span class='line'> 44</span>  */</span><span class="WHIT">
+<span class='line'> 45</span> </span><span class="COMM">/**
+<span class='line'> 46</span>  * 增加配置项filterBy,如果配置了filterBy则自动打开模糊查询，filterBy可以配置为key或者value
+<span class='line'> 47</span>  * @name Horn.Select#&lt;b>filterBy&lt;/b>
+<span class='line'> 48</span>  * @type string
+<span class='line'> 49</span>  * @default value
+<span class='line'> 50</span>  * @example
+<span class='line'> 51</span>  * 无
+<span class='line'> 52</span>  */</span><span class="WHIT">
+<span class='line'> 53</span> </span><span class="COMM">/**
+<span class='line'> 54</span>  * 数据字典名
+<span class='line'> 55</span>  * @name Horn.Combox#&lt;b>dictName&lt;/b>
+<span class='line'> 56</span>  * @type String
+<span class='line'> 57</span>  * @default ""
+<span class='line'> 58</span>  * @example
+<span class='line'> 59</span>  * 无
+<span class='line'> 60</span>  */</span><span class="WHIT">
+<span class='line'> 61</span> </span><span class="COMM">/**
+<span class='line'> 62</span>  * 是否多选，true表示多选，false表示单选
+<span class='line'> 63</span>  * @name Horn.Combox#&lt;b>multiple&lt;/b>
+<span class='line'> 64</span>  * @type Boolean
+<span class='line'> 65</span>  * @default false
+<span class='line'> 66</span>  * @example
+<span class='line'> 67</span>  * 无
+<span class='line'> 68</span>  */</span><span class="WHIT">
+<span class='line'> 69</span> </span><span class="WHIT"> </span><span class="COMM">/**
+<span class='line'> 70</span>  * 是否可编辑，true代表可编辑，false代表不可编辑，输入框是只读的
+<span class='line'> 71</span>  * @name Horn.Combox#&lt;b>editable&lt;/b>
+<span class='line'> 72</span>  * @type Boolean
+<span class='line'> 73</span>  * @default false
+<span class='line'> 74</span>  * @ignore
+<span class='line'> 75</span>  * @example
+<span class='line'> 76</span>  * 无
+<span class='line'> 77</span>  */</span><span class="WHIT">
+<span class='line'> 78</span> </span><span class="COMM">/**
+<span class='line'> 79</span>  * 在初始化的默认就把下拉框中的内容全部选中；如果同时设置了selectAll=true和value属性，那么value属性优先生效
+<span class='line'> 80</span>  * @name Horn.Combox#&lt;b>selectAll&lt;/b>
+<span class='line'> 81</span>  * @type Boolean
+<span class='line'> 82</span>  * @default false
+<span class='line'> 83</span>  * @example
+<span class='line'> 84</span>  * 无
+<span class='line'> 85</span>  */</span><span class="WHIT">
+<span class='line'> 86</span> </span><span class="COMM">/**
+<span class='line'> 87</span>  * 多选时的显示分隔符
+<span class='line'> 88</span>  * @name Horn.Combox#&lt;b>delimiter&lt;/b>
+<span class='line'> 89</span>  * @type String
+<span class='line'> 90</span>  * @default 
+<span class='line'> 91</span>  * @example
+<span class='line'> 92</span>  * 无
+<span class='line'> 93</span>  */</span><span class="WHIT">
+<span class='line'> 94</span> </span><span class="COMM">/**
+<span class='line'> 95</span>  * 用于渲染列表中的显示项目使用的item属性，默认为'pLabel'
+<span class='line'> 96</span>  * @name Horn.Combox#&lt;b>pKeyField&lt;/b>
+<span class='line'> 97</span>  * @type String
+<span class='line'> 98</span>  * @default "pLabel"
+<span class='line'> 99</span>  * @example
+<span class='line'>100</span>  * 无
+<span class='line'>101</span>  * @ignore
+<span class='line'>102</span>  */</span><span class="WHIT">
+<span class='line'>103</span> </span><span class="COMM">/**
+<span class='line'>104</span>  * 用于渲染列表中的显示项目使用的item属性，默认为'label'，非必须，单值不能为空
+<span class='line'>105</span>  * @name Horn.Combox#&lt;b>labelField&lt;/b>
+<span class='line'>106</span>  * @type String
+<span class='line'>107</span>  * @default "label"
+<span class='line'>108</span>  * @ignore
+<span class='line'>109</span>  * @example
+<span class='line'>110</span>  * 无
+<span class='line'>111</span>  */</span><span class="WHIT">
+<span class='line'>112</span> </span><span class="COMM">/**
+<span class='line'>113</span>  * 用于渲染列表中的显示项目使用的item属性，默认为'code'，非必须，单值不能为空
+<span class='line'>114</span>  * @name Horn.Combox#&lt;b>codeField&lt;/b>
+<span class='line'>115</span>  * @type String
+<span class='line'>116</span>  * @default "code"
+<span class='line'>117</span>  * @example
+<span class='line'>118</span>  * 无
+<span class='line'>119</span>  */</span><span class="WHIT">
+<span class='line'>120</span> </span><span class="COMM">/**
+<span class='line'>121</span>  * 用于渲染列表中显示项目的实际值使用的item属性,默认为'value'，非必须，单值不能为空
+<span class='line'>122</span>  * @name Horn.Combox#&lt;b>valueField&lt;/b>
+<span class='line'>123</span>  * @type String
+<span class='line'>124</span>  * @default "value"
+<span class='line'>125</span>  * @ignore
+<span class='line'>126</span>  * @example
+<span class='line'>127</span>  * 无
+<span class='line'>128</span>  */</span><span class="WHIT">
+<span class='line'>129</span> </span><span class="COMM">/**
+<span class='line'>130</span>  * 用于渲染列表中显示项目的实际值使用的item属性,默认为'text'，非必须，单值不能为空
+<span class='line'>131</span>  * @name Horn.Combox#&lt;b>textField&lt;/b>
+<span class='line'>132</span>  * @type String
+<span class='line'>133</span>  * @default "text"
+<span class='line'>134</span>  * @example
+<span class='line'>135</span>  * 无
+<span class='line'>136</span>  */</span><span class="WHIT">
+<span class='line'>137</span> </span><span class="COMM">/**
+<span class='line'>138</span>  * 是否在渲染列表项目时显示实际值，默认为false
+<span class='line'>139</span>  * @name Horn.Combox#&lt;b>showLabel&lt;/b>
+<span class='line'>140</span>  * @type Boolean
+<span class='line'>141</span>  * @default false
+<span class='line'>142</span>  * @example
+<span class='line'>143</span>  * @ignore
+<span class='line'>144</span>  * 无
+<span class='line'>145</span>  */</span><span class="WHIT">
+<span class='line'>146</span> 
+<span class='line'>147</span> </span><span class="COMM">/**
+<span class='line'>148</span>  * @description 更改引用的数据字典(传入的字典参数必须在当前页面已经使用过，例如changeDict("province")，则字典province已经在页面其他combox组件中调用过)
+<span class='line'>149</span>  * @function
+<span class='line'>150</span>  * @name Horn.Combox#changeDict
+<span class='line'>151</span>  * @param {string} name 字典名
+<span class='line'>152</span>  */</span><span class="WHIT">
+<span class='line'>153</span> </span><span class="COMM">/**
+<span class='line'>154</span>      * 设置是否可编辑，下拉框可以下拉
+<span class='line'>155</span>      * @function
+<span class='line'>156</span>      * @name Horn.Combox#setEditable
+<span class='line'>157</span>      * @param {Boolean} editable 不可编辑
+<span class='line'>158</span>      * @ignore
+<span class='line'>159</span> */</span><span class="WHIT">
+<span class='line'>160</span> </span><span class="COMM">/**
+<span class='line'>161</span>  * @description 仅在单选模式下有效，选中第一个非headItem对应的项
+<span class='line'>162</span>  * @function
+<span class='line'>163</span>  * @name Horn.Combox#selectFirst
+<span class='line'>164</span>  * @returns void
+<span class='line'>165</span>  */</span><span class="WHIT">
+<span class='line'>166</span> </span><span class="COMM">/**
+<span class='line'>167</span>  * @description 根据关联项目过滤下拉列表
+<span class='line'>168</span>  * @function
+<span class='line'>169</span>  * @name Horn.Combox#filterByPLabel
+<span class='line'>170</span>  * @param pLabel 父节点值
+<span class='line'>171</span>  * @returns void
+<span class='line'>172</span>  * @ignore
+<span class='line'>173</span>  */</span><span class="WHIT">
+<span class='line'>174</span> </span><span class="COMM">/**
+<span class='line'>175</span>  * @description 根据参数过滤下拉列表，此方法会自动情况清除上一次过滤效果，效果无法叠加
+<span class='line'>176</span>  * @function
+<span class='line'>177</span>  * @name Horn.Combox#filter
+<span class='line'>178</span>  * @param f String、Array、Function，Function参数为item的key
+<span class='line'>179</span>  * @param flag 默认为false，过滤掉包含在f中，或返回为true的项目，否则过滤掉其他项目
+<span class='line'>180</span>  * @param {Boolean} triggerChange 是否触发值更改事件
+<span class='line'>181</span>  * @returns void
+<span class='line'>182</span>  */</span><span class="WHIT">
+<span class='line'>183</span> </span><span class="COMM">/**
+<span class='line'>184</span>  * @description 清空过滤显示所有的下拉项目
+<span class='line'>185</span>  * @function
+<span class='line'>186</span>  * @name Horn.Combox#clearFliter
+<span class='line'>187</span>  * @returns void
+<span class='line'>188</span>  */</span><span class="WHIT">
+<span class='line'>189</span> </span><span class="COMM">/**
+<span class='line'>190</span>  * @description 隐藏下拉列表所有item
+<span class='line'>191</span>  * @function
+<span class='line'>192</span>  * @name Horn.Combox#clearList
+<span class='line'>193</span>  * @returns void
+<span class='line'>194</span>  */</span><span class="WHIT">
+<span class='line'>195</span> </span><span class="COMM">/**
+<span class='line'>196</span>  * @description 动态增加下拉列表项目
+<span class='line'>197</span>  * @function
+<span class='line'>198</span>  * @name Horn.Combox#addDatas
+<span class='line'>199</span>  * @param data {Json or Array} [{label:'3','value':'测试3'},{label:'4','value':'测试4'}]　
+<span class='line'>200</span>  * @param isClear 是否清空原来的列表项
+<span class='line'>201</span>  * @ignore
+<span class='line'>202</span>  */</span><span class="WHIT">
+<span class='line'>203</span> </span><span class="COMM">/**
+<span class='line'>204</span>  * @description 动态增加下拉列表项目；在isClear=true的情况下，如果设置的items无效，下拉框的内容依然会被清空。（注：如果下拉框设置的初始值在新添加的items中存在，则添加items后，会自动选中该初始值）
+<span class='line'>205</span>  * @function
+<span class='line'>206</span>  * @name Horn.Combox#addItems
+<span class='line'>207</span>  * @param items {Json or Array} [{label:'3','value':'测试3'},{label:'4','value':'测试4'}]　
+<span class='line'>208</span>  * @param isClear 是否清空原来的列表项
+<span class='line'>209</span>  */</span><span class="WHIT">
+<span class='line'>210</span> </span><span class="COMM">/**
+<span class='line'>211</span>  * 是否启用模糊查询功能,如果配制为true，则会自动去除readonly的配置并将field转换为可编辑的;&lt;/br>
+<span class='line'>212</span>  * 默认根据key和value进行模糊查询;&lt;/br>
+<span class='line'>213</span>  * 在IE8下进行模糊查询时候，请不要将鼠标放置在下拉列表可能显示在的位置，这样会导致模糊过滤失效（已知BUG）
+<span class='line'>214</span>  * @name Horn.Combox#&lt;b>enableFieldSearch&lt;/b>
+<span class='line'>215</span>  * @type boolean
+<span class='line'>216</span>  * @default false
+<span class='line'>217</span>  * @example
+<span class='line'>218</span>  * 无
+<span class='line'>219</span>  */</span><span class="WHIT">
+<span class='line'>220</span> 
+<span class='line'>221</span> </span><span class="COMM">/*******************************************************************************/</span><span class="WHIT">
+<span class='line'>222</span> 
+<span class='line'>223</span> 
+<span class='line'>224</span> </span><span class="COMM">/**
+<span class='line'>225</span>  * 组件唯一标识
+<span class='line'>226</span>  * @name Horn.Combox#id
+<span class='line'>227</span>  * @type String
+<span class='line'>228</span>  * @default ""
+<span class='line'>229</span>  * @example
+<span class='line'>230</span>  * 无
+<span class='line'>231</span>  */</span><span class="WHIT">
+<span class='line'>232</span> </span><span class="COMM">/**
+<span class='line'>233</span>  * 表单提交名字
+<span class='line'>234</span>  * @name Horn.Combox#name
+<span class='line'>235</span>  * @type String
+<span class='line'>236</span>  * @default ""
+<span class='line'>237</span>  * @example
+<span class='line'>238</span>  * 无
+<span class='line'>239</span>  */</span><span class="WHIT">
+<span class='line'>240</span> </span><span class="COMM">/**
+<span class='line'>241</span>  * 表单组件的标签名，值过长会造成label显示不全，但是可以通过鼠标悬浮看到完整值
+<span class='line'>242</span>  * @name Horn.Combox#label
+<span class='line'>243</span>  * @type String
+<span class='line'>244</span>  * @default ""
+<span class='line'>245</span>  * @example
+<span class='line'>246</span>  * 无
+<span class='line'>247</span>  */</span><span class="WHIT">
+<span class='line'>248</span> </span><span class="COMM">/**
+<span class='line'>249</span>  * 隐藏标签（也就是label属性）。适用场景：单独使用一个组件，但是又不想要label的。不推荐混合适用，否则布局会乱。
+<span class='line'>250</span>  * @name Horn.Combox#hiddenLabel
+<span class='line'>251</span>  * @type Boolean
+<span class='line'>252</span>  * @default false
+<span class='line'>253</span>  * @example
+<span class='line'>254</span>  * 无
+<span class='line'>255</span>  */</span><span class="WHIT">
+<span class='line'>256</span> </span><span class="COMM">/**
+<span class='line'>257</span>  * @ignore
+<span class='line'>258</span>  * 组件的别名，名字相同时，加别名区分
+<span class='line'>259</span>  * @name Horn.Combox#alias
+<span class='line'>260</span>  * @type String
+<span class='line'>261</span>  * @default ""
+<span class='line'>262</span>  * @ignore
+<span class='line'>263</span>  * @example
+<span class='line'>264</span>  * var comp = Horn.getComp("name","alias")
+<span class='line'>265</span>  */</span><span class="WHIT">
+<span class='line'>266</span> 
+<span class='line'>267</span> </span><span class="WHIT"> </span><span class="COMM">/**
+<span class='line'>268</span>   * 表单的初始值，如果没有配置defValue属性，表单重置的时候，将采用value作为重置值
+<span class='line'>269</span>   * @name Horn.Combox#value
+<span class='line'>270</span>   * @type String
+<span class='line'>271</span>   * @default ""
+<span class='line'>272</span>   * @example
+<span class='line'>273</span>   * 无
+<span class='line'>274</span>   */</span><span class="WHIT">
+<span class='line'>275</span> 
+<span class='line'>276</span> </span><span class="WHIT"> </span><span class="COMM">/**
+<span class='line'>277</span>   * 组件的重置时的值，如果没有配置此值，将以value属性做为重置值。
+<span class='line'>278</span>   * 如果指定了value值，并且defValue设置为空(defValue:"")，则无法重置为空值，请用form组件的clearValue方法清空form内组件的值或调用组件本身的clearValue方法清空值。
+<span class='line'>279</span>   * @name Horn.Combox#defValue
+<span class='line'>280</span>   * @type String
+<span class='line'>281</span>   * @default 无
+<span class='line'>282</span>   * @example
+<span class='line'>283</span>   * 无
+<span class='line'>284</span>   */</span><span class="WHIT">
+<span class='line'>285</span> 
+<span class='line'>286</span> </span><span class="WHIT"> </span><span class="COMM">/**
+<span class='line'>287</span>   * 被设置为只读的组件不能通过键盘输入改变表单的值，可以通过下拉选择改变表单的值，可以获得焦点，是可以参与表单校验（校验失败会阻止表单提交），并且可以参与表单提交；&lt;font color=red>(注！readonly属性仅对多选的情况下有效，单选无效)&lt;/font>
+<span class='line'>288</span>   * true表示只读状态，不允许键盘输入，允许通过下拉按钮选择值；false表示正常状态，允许键盘输入，允许通过下拉按钮选择值
+<span class='line'>289</span>   * @name Horn.Combox#readonly
+<span class='line'>290</span>   * @type Boolean
+<span class='line'>291</span>   * @default true
+<span class='line'>292</span>   * @example
+<span class='line'>293</span>   * 无
+<span class='line'>294</span>   */</span><span class="WHIT">
+<span class='line'>295</span> 
+<span class='line'>296</span> </span><span class="WHIT"> </span><span class="COMM">/**
+<span class='line'>297</span>   * 组件的禁用状态，被设置禁用状态的组件，无法获得焦点，不参与表单校验（不会阻止表单提交），不会参与表单提交并且其所有校验状态都会消失，不可编辑，但是可以通过API修改表单的值；
+<span class='line'>298</span>   * true表示禁用，false表示正常状态
+<span class='line'>299</span>   * @name Horn.Combox#disabled
+<span class='line'>300</span>   * @type Boolean
+<span class='line'>301</span>   * @default false
+<span class='line'>302</span>   * @example
+<span class='line'>303</span>   * 无
+<span class='line'>304</span>   */</span><span class="WHIT">
+<span class='line'>305</span> 
+<span class='line'>306</span> </span><span class="COMM">/**
+<span class='line'>307</span>  * 组件的跨列数，取值范围由外容器的面板(panel)的cols而定
+<span class='line'>308</span>  * @name Horn.Combox#cols
+<span class='line'>309</span>  * @type int
+<span class='line'>310</span>  * @default 1
+<span class='line'>311</span>  * @example
+<span class='line'>312</span>  * 无
+<span class='line'>313</span>  */</span><span class="WHIT">
+<span class='line'>314</span> 
+<span class='line'>315</span> </span><span class="COMM">/**
+<span class='line'>316</span>  * 组件的约束检查选项
+<span class='line'>317</span>  * @name Horn.Combox#check
+<span class='line'>318</span>  * @type String
+<span class='line'>319</span>  * @default ""
+<span class='line'>320</span>  * @example
+<span class='line'>321</span>  * 具体见Horn.Validate类的已经支持的正规、函数名
+<span class='line'>322</span>  * "check":"required;"
+<span class='line'>323</span>  */</span><span class="WHIT">
+<span class='line'>324</span> 
+<span class='line'>325</span> </span><span class="COMM">/**
+<span class='line'>326</span>  * 组件的所属组，可以对相同组内的元素进行约束检查
+<span class='line'>327</span>  * @name Horn.Combox#group
+<span class='line'>328</span>  * @type String
+<span class='line'>329</span>  * @default ""
+<span class='line'>330</span>  * @ignore
+<span class='line'>331</span>  * @example
+<span class='line'>332</span>  * 验证指定对象$obj(scope)中组名为groupname的元素有有效性
+<span class='line'>333</span>  * Horn.Validate.validateAreaByGroup($obj,groupname)
+<span class='line'>334</span>  */</span><span class="WHIT">
+<span class='line'>335</span> 
+<span class='line'>336</span> </span><span class="COMM">/**
+<span class='line'>337</span>  * 增加配置项filterBy,如果配置了filterBy则自动打开模糊查询，filterBy可以配置为key或者value
+<span class='line'>338</span>  * key ：根据值过滤，value:根据显示名称过滤
+<span class='line'>339</span>  * @name Horn.Combox#&lt;b>filterBy&lt;/b>
+<span class='line'>340</span>  * @type string
+<span class='line'>341</span>  * @default value
+<span class='line'>342</span>  * @example
+<span class='line'>343</span>  * 无
+<span class='line'>344</span>  */</span><span class="WHIT">
+<span class='line'>345</span> </span><span class="WHIT"> </span><span class="COMM">/**
+<span class='line'>346</span>   * 是否隐藏组件
+<span class='line'>347</span>   * @name Horn.Combox#hidden
+<span class='line'>348</span>   * @type Boolean
+<span class='line'>349</span>   * @default false
+<span class='line'>350</span>   * @example
+<span class='line'>351</span>   * #combox({"selectAll": false,"multiple": true, "name":"test13","label":"combox","value":"3333","defValue":"1", "dictName": "province", "cols":1,"check": "required","multiple":false,"filterBy":"key","hidden":true})
+<span class='line'>352</span>   */</span><span class="WHIT">
+<span class='line'>353</span> </span><span class="COMM">/**
+<span class='line'>354</span>  * 加入一个分组中，可以根据组名进行分组校验，参见validate的validateAreaByGroup(scope, group)方法
+<span class='line'>355</span>  * @function
+<span class='line'>356</span>  * @name Horn.Combox#addGroup
+<span class='line'>357</span>  * @param {String} group 组名
+<span class='line'>358</span>  * @ignore
+<span class='line'>359</span>  */</span><span class="WHIT">
+<span class='line'>360</span> </span><span class="COMM">/**
+<span class='line'>361</span>  * 从一个分组中删除
+<span class='line'>362</span>  * @function
+<span class='line'>363</span>  * @name Horn.Combox#removeGroup
+<span class='line'>364</span>  * @param {String} group 组名
+<span class='line'>365</span>  * @ignore
+<span class='line'>366</span>  */</span><span class="WHIT">
+<span class='line'>367</span> </span><span class="COMM">/**
+<span class='line'>368</span>  * 判断组件上会否在分组中
+<span class='line'>369</span>  * @function
+<span class='line'>370</span>  * @name Horn.Combox#inGroup
+<span class='line'>371</span>  * @param {String} group 组名
+<span class='line'>372</span>  * @ignore
+<span class='line'>373</span>  */</span><span class="WHIT">
+<span class='line'>374</span> 
+<span class='line'>375</span> </span><span class="COMM">/**
+<span class='line'>376</span>  * 增加校验规则
+<span class='line'>377</span>  * @function
+<span class='line'>378</span>  * @name Horn.Combox#addRule
+<span class='line'>379</span>  * @param {String} rule 校验规则字符串
+<span class='line'>380</span>  */</span><span class="WHIT">
+<span class='line'>381</span> </span><span class="COMM">/**
+<span class='line'>382</span>  * 删除校验规则
+<span class='line'>383</span>  * @function
+<span class='line'>384</span>  * @name Horn.Combox#removeRule
+<span class='line'>385</span>  * @param {String} rule 校验规则字符串
+<span class='line'>386</span>  */</span><span class="WHIT">
+<span class='line'>387</span> 
+<span class='line'>388</span> </span><span class="COMM">/**
+<span class='line'>389</span>  * 显示表单，如果表单已经显示，此方法无效果，hide方法与之相对应
+<span class='line'>390</span>  * @function
+<span class='line'>391</span>  * @name Horn.Combox#show
+<span class='line'>392</span>  */</span><span class="WHIT">
+<span class='line'>393</span> </span><span class="COMM">/**
+<span class='line'>394</span>  * 隐藏表单，如果表单已经隐藏，此方法无效果，show方法与之对应
+<span class='line'>395</span>  * @function
+<span class='line'>396</span>  * @name Horn.Combox#hide
+<span class='line'>397</span>  */</span><span class="WHIT">
+<span class='line'>398</span> 
+<span class='line'>399</span> </span><span class="COMM">/**
+<span class='line'>400</span>  * 设置label内容
+<span class='line'>401</span>  * @function
+<span class='line'>402</span>  * @name Horn.Combox#setLabel
+<span class='line'>403</span>  * @param {String} label 标签内容
+<span class='line'>404</span>  * @ignore
+<span class='line'>405</span>  */</span><span class="WHIT">
+<span class='line'>406</span> </span><span class="COMM">/**
+<span class='line'>407</span>  * 获取label内容
+<span class='line'>408</span>  * @function
+<span class='line'>409</span>  * @name Horn.Combox#getLabel
+<span class='line'>410</span>  * @return 标签内容
+<span class='line'>411</span>  * @ignore
+<span class='line'>412</span>  */</span><span class="WHIT">
+<span class='line'>413</span> 
+<span class='line'>414</span> </span><span class="COMM">/**
+<span class='line'>415</span>  * 设置为必填项，同时增加红色的 *
+<span class='line'>416</span>  * @function
+<span class='line'>417</span>  * @name Horn.Combox#setRequired
+<span class='line'>418</span>  * @param {Boolean} required 不传值或者传true表示必选项，传false表示取消必选项
+<span class='line'>419</span>  */</span><span class="WHIT">
+<span class='line'>420</span> </span><span class="COMM">/**
+<span class='line'>421</span>  * 设置字段是否禁用，被设置为禁用的组件，不可以编辑，也不参与表单提交并且其所有校验状态都会消失，但是可以通过API的方式修改表单的值
+<span class='line'>422</span>  * @function
+<span class='line'>423</span>  * @name Horn.Combox#setDisabled
+<span class='line'>424</span>  * @param {Boolean} disabled true表示禁用，false表示正常
+<span class='line'>425</span>  */</span><span class="WHIT">
+<span class='line'>426</span> </span><span class="COMM">/**
+<span class='line'>427</span>  * 设置是否只读，设置为只读方式的组件，不可以编辑，可以通过下拉选择改变值，可以通过setValue、reset等API修改表单的值，并且可以参与表单提交&lt;font color=red>(注！readonly属性仅对多选的情况下有效，单选无效)&lt;/font>
+<span class='line'>428</span>  * @function
+<span class='line'>429</span>  * @name Horn.Combox#setReadonly
+<span class='line'>430</span>  * @param {Boolean} readonly true表示只读，false表示正常
+<span class='line'>431</span>  */</span><span class="WHIT">
+<span class='line'>432</span> 
+<span class='line'>433</span> </span><span class="COMM">/**
+<span class='line'>434</span>  * 设置表单的值
+<span class='line'>435</span>  * @function
+<span class='line'>436</span>  * @name Horn.Combox#setValue
+<span class='line'>437</span>  * @param {String} value 值
+<span class='line'>438</span>  * @param {Boolean} triggerChange 是否触发值更改事件
+<span class='line'>439</span>  */</span><span class="WHIT">
+<span class='line'>440</span> </span><span class="COMM">/**
+<span class='line'>441</span>  * 获取表单的值
+<span class='line'>442</span>  * @function
+<span class='line'>443</span>  * @name Horn.Combox#getValue
+<span class='line'>444</span>  * @return 表单的提交值
+<span class='line'>445</span>  */</span><span class="WHIT">
+<span class='line'>446</span> </span><span class="COMM">/**
+<span class='line'>447</span>  * 如果设置了defValue的值，重置成的defValue值，否则重置成value值
+<span class='line'>448</span>  * @function
+<span class='line'>449</span>  * @name Horn.Combox#reset
+<span class='line'>450</span>  */</span><span class="WHIT">
+<span class='line'>451</span> </span><span class="COMM">/**
+<span class='line'>452</span>  * 清空表单的值，显示值和隐藏值都设置为""
+<span class='line'>453</span>  * @function
+<span class='line'>454</span>  * @name Horn.Combox#clearValue
+<span class='line'>455</span>  */</span><span class="WHIT">
+<span class='line'>456</span> 
+<span class='line'>457</span> </span><span class="COMM">/**
+<span class='line'>458</span>  * 获取由validate方法触发表单校验后的结果，并通过返回值标识校验的结果
+<span class='line'>459</span>  * @function
+<span class='line'>460</span>  * @name Horn.Combox#isValid
+<span class='line'>461</span>  * @return {Boolean} true表示校验通过，false表示校验失败
+<span class='line'>462</span>  */</span><span class="WHIT">
+<span class='line'>463</span> </span><span class="COMM">/**
+<span class='line'>464</span>  * 触发校验表单的内容，然后通过调用isValid方法获取校验的结果
+<span class='line'>465</span>  * @function
+<span class='line'>466</span>  * @name Horn.Combox#validate
+<span class='line'>467</span>  */</span><span class="WHIT">
+<span class='line'>468</span> </span><span class="COMM">/**
+<span class='line'>469</span> 	 *返回下拉框中所有的数据
+<span class='line'>470</span>      * @function
+<span class='line'>471</span>      * @name Horn.Combox#getListData
+<span class='line'>472</span>      * @return object data为所有节点的值,dom为该节点的jquery对象
+<span class='line'>473</span>      */</span><span class="WHIT">
+<span class='line'>474</span> </span><span class="WHIT"> </span><span class="COMM">/**
+<span class='line'>475</span>   * emptyText属性(此属性当值为空时，会在输入框显示提示语)；
+<span class='line'>476</span>   * @name Horn.Combox#emptyText
+<span class='line'>477</span>   * @type String
+<span class='line'>478</span>   * @default ""
+<span class='line'>479</span>   * @ignore
+<span class='line'>480</span>   * @example
+<span class='line'>481</span>   * #combox({"name":"test11f", "label":"combox", "defValue": "", "cols": 3, "check": "required", "disabled":false,"emptyText":"请选择..."})
+<span class='line'>482</span>   */</span><span class="WHIT">
+<span class='line'>483</span> </span><span class="NAME">Horn.Combox</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Horn.extend</span><span class="PUNC">(</span><span class="NAME">Horn.Select</span><span class="PUNC">,</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>484</span> </span><span class="WHIT">	</span><span class="NAME">COMPONENT_CLASS</span><span class="PUNC">:</span><span class="STRN">"Combox"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>485</span> </span><span class="WHIT">	</span><span class="NAME">pLabel</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>486</span> </span><span class="WHIT">	</span><span class="NAME">filterFlag</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>487</span> </span><span class="WHIT">	</span><span class="NAME">displayField</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>488</span> </span><span class="WHIT">	</span><span class="NAME">keyAttr</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"label"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>489</span> </span><span class="WHIT">	</span><span class="NAME">pKeyAttr</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"pkey"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>490</span> </span><span class="WHIT">	</span><span class="NAME">valueAttr</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"value"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>491</span> </span><span class="WHIT">	</span><span class="NAME">defaultValue</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>492</span> </span><span class="WHIT">	</span><span class="NAME">defaultText</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>493</span> </span><span class="WHIT">	</span><span class="NAME">showLabel</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>494</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='line'>495</span> 	 * @ignore
+<span class='line'>496</span> 	 */</span><span class="WHIT">
+<span class='line'>497</span> </span><span class="WHIT">	</span><span class="NAME">init</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">dom</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>498</span> </span><span class="WHIT">		</span><span class="NAME">Horn.Combox.superclass.init.apply</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="NAME">arguments</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>499</span> </span><span class="WHIT">		</span><span class="NAME">this.combInit</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>500</span> </span><span class="WHIT">		</span><span class="COMM">//设置可能的多字典切换功能</span><span class="WHIT">
+<span class='line'>501</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">field</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.el.find</span><span class="PUNC">(</span><span class="STRN">'input[ref]'</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>502</span> </span><span class="WHIT">			</span><span class="NAME">keyAttr</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.el.attr</span><span class="PUNC">(</span><span class="STRN">'keyfield'</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>503</span> </span><span class="WHIT">			</span><span class="NAME">pkeyAttr</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.el.attr</span><span class="PUNC">(</span><span class="STRN">'pkeyfield'</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>504</span> </span><span class="WHIT">			</span><span class="NAME">valueAttr</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.el.attr</span><span class="PUNC">(</span><span class="STRN">'titlefield'</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>505</span> </span><span class="WHIT">			</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>506</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">keyAttr</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">this.keyAttr</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">keyAttr</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="WHIT">
+<span class='line'>507</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">pkeyAttr</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">this.pkeyAttr</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">pkeyAttr</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="WHIT">
+<span class='line'>508</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">valueAttr</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">this.valueAttr</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">valueAttr</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>509</span> 
+<span class='line'>510</span> 
+<span class='line'>511</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">dictName</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.params</span><span class="PUNC">[</span><span class="STRN">'dictName'</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>512</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">dictName</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>513</span> </span><span class="WHIT">			</span><span class="NAME">this.field.attr</span><span class="PUNC">(</span><span class="STRN">'ref'</span><span class="PUNC">,</span><span class="NAME">dictName.split</span><span class="PUNC">(</span><span class="STRN">','</span><span class="PUNC">)</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.multipleline</span><span class="PUNC">?</span><span class="STRN">'_m'</span><span class="PUNC">:</span><span class="STRN">'_s'</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>514</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>515</span> </span><span class="WHIT">		</span><span class="NAME">this.displayField</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">field</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>516</span> </span><span class="WHIT">		</span><span class="NAME">this.defaultValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.params.value</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">this.hidden.val</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>517</span> </span><span class="COMM">//		this.setValue(this.defaultValue,true);</span><span class="WHIT">
+<span class='line'>518</span> </span><span class="WHIT">		</span><span class="WHIT">
+<span class='line'>519</span> </span><span class="WHIT">		</span><span class="COMM">//BUG #6838 combo_设置为只读的任然可以选择更改 设置为只读的任然可以选中后按退格键清除</span><span class="WHIT">
+<span class='line'>520</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.params.readonly</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>521</span> </span><span class="WHIT">        	</span><span class="NAME">this.setReadonly</span><span class="PUNC">(</span><span class="KEYW">true</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>522</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>523</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>524</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='line'>525</span> 	 * @ignore
+<span class='line'>526</span> 	 */</span><span class="WHIT">
+<span class='line'>527</span> </span><span class="WHIT">	</span><span class="NAME">combInit</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>528</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">refname</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.hidden.attr</span><span class="PUNC">(</span><span class="STRN">"refname"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>529</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">refname</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>530</span> </span><span class="WHIT">			</span><span class="NAME">this.field.bind</span><span class="PUNC">(</span><span class="STRN">"change"</span><span class="PUNC">,</span><span class="NAME">Horn.Util.apply</span><span class="PUNC">(</span><span class="NAME">this.onCombChange</span><span class="PUNC">,</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>531</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>532</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>533</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='line'>534</span> 	 * @ignore
+<span class='line'>535</span> 	 */</span><span class="WHIT">
+<span class='line'>536</span> </span><span class="WHIT">	</span><span class="NAME">onCombChange</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">e</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">val</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>537</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">refname</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.hidden.attr</span><span class="PUNC">(</span><span class="STRN">"refname"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>538</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">refnames</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">refname.split</span><span class="PUNC">(</span><span class="STRN">";"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>539</span> </span><span class="WHIT">		</span><span class="KEYW">for</span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">=</span><span class="NUMB">0</span><span class="PUNC">;</span><span class="NAME">i</span><span class="PUNC">&lt;</span><span class="NAME">refnames.length</span><span class="PUNC">;</span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>540</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">rn</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">refnames</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>541</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">rn</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>542</span> </span><span class="WHIT">				</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">rns</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">rn.split</span><span class="PUNC">(</span><span class="STRN">","</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>543</span> </span><span class="WHIT">				</span><span class="NAME">Horn.getComp</span><span class="PUNC">(</span><span class="NAME">rns</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="NAME">rns</span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">filterByPLabel</span><span class="PUNC">(</span><span class="NAME">this.hidden.val</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>544</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>545</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>546</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>547</span> </span><span class="WHIT">	</span><span class="NAME">changeDict</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>548</span> </span><span class="WHIT">   		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">name_copy</span><span class="PUNC">=</span><span class="NAME">name</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>549</span> </span><span class="WHIT">   		</span><span class="NAME">this.clearFliter</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>550</span> </span><span class="WHIT">   		</span><span class="COMM">//16320 【TS:201601070226-JRESPlus-财富管理事业部-陈为-4. combox的changeDict的实现（目前API中】</span><span class="WHIT">
+<span class='line'>551</span> </span><span class="WHIT">   		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">dict</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Horn.getDict</span><span class="PUNC">(</span><span class="NAME">name_copy</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>552</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">$hc_checkboxdiv</span><span class="PUNC">=</span><span class="NAME">$</span><span class="PUNC">(</span><span class="STRN">'&lt;div class="hc_checkboxdiv">'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>553</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">$ul</span><span class="PUNC">=</span><span class="NAME">$</span><span class="PUNC">(</span><span class="STRN">"&lt;ul>&lt;/ul>"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>554</span> </span><span class="WHIT">   		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_this</span><span class="PUNC">=</span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>555</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="PUNC">(</span><span class="NAME">this.field.get</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">getAttribute</span><span class="PUNC">(</span><span class="STRN">"multiple"</span><span class="PUNC">)</span><span class="PUNC">==</span><span class="STRN">"true"</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>556</span> </span><span class="WHIT">			</span><span class="NAME">name</span><span class="PUNC">+</span><span class="PUNC">=</span><span class="STRN">"_m"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>557</span> </span><span class="WHIT">			</span><span class="NAME">$hc_checkboxdiv.attr</span><span class="PUNC">(</span><span class="STRN">"multiple_line"</span><span class="PUNC">,</span><span class="STRN">"true"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>558</span> </span><span class="WHIT">			</span><span class="NAME">$.each</span><span class="PUNC">(</span><span class="NAME">dict</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">n</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>559</span> </span><span class="WHIT">			  </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">_this.params.showLabel</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>560</span> </span><span class="WHIT">			  	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">$li</span><span class="PUNC">=</span><span class="NAME">$</span><span class="PUNC">(</span><span class="STRN">'&lt;li title='</span><span class="PUNC">+</span><span class="NAME">n</span><span class="PUNC">+</span><span class="STRN">' key='</span><span class="PUNC">+</span><span class="NAME">i</span><span class="PUNC">+</span><span class="STRN">'>&lt;label>&lt;input type="checkbox" class="combox_input">&lt;span class="hce_dictlabel" >'</span><span class="PUNC">+</span><span class="NAME">i</span><span class="PUNC">+</span><span class="STRN">':&lt;/span>'</span><span class="PUNC">+</span><span class="NAME">n</span><span class="PUNC">+</span><span class="STRN">'&lt;/label>&lt;/li>'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>561</span> </span><span class="WHIT">			  </span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>562</span> </span><span class="WHIT">			  	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">$li</span><span class="PUNC">=</span><span class="NAME">$</span><span class="PUNC">(</span><span class="STRN">'&lt;li title='</span><span class="PUNC">+</span><span class="NAME">n</span><span class="PUNC">+</span><span class="STRN">' key='</span><span class="PUNC">+</span><span class="NAME">i</span><span class="PUNC">+</span><span class="STRN">'>&lt;label>&lt;input type="checkbox" class="combox_input">'</span><span class="PUNC">+</span><span class="NAME">n</span><span class="PUNC">+</span><span class="STRN">'&lt;/label>&lt;/li>'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>563</span> </span><span class="WHIT">			  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>564</span> </span><span class="WHIT">			  </span><span class="WHIT">
+<span class='line'>565</span> </span><span class="WHIT">			  </span><span class="NAME">$ul.append</span><span class="PUNC">(</span><span class="NAME">$li</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>566</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>567</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>568</span> </span><span class="WHIT">			</span><span class="NAME">name</span><span class="PUNC">+</span><span class="PUNC">=</span><span class="STRN">"_s"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>569</span> </span><span class="WHIT">			</span><span class="NAME">$hc_checkboxdiv.attr</span><span class="PUNC">(</span><span class="STRN">"multiple_line"</span><span class="PUNC">,</span><span class="STRN">"false"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>570</span> </span><span class="WHIT">			</span><span class="NAME">$.each</span><span class="PUNC">(</span><span class="NAME">dict</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">n</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>571</span> </span><span class="WHIT">			  </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">_this.params.showLabel</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>572</span> </span><span class="WHIT">			  	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">$li</span><span class="PUNC">=</span><span class="NAME">$</span><span class="PUNC">(</span><span class="STRN">'&lt;li title='</span><span class="PUNC">+</span><span class="NAME">n</span><span class="PUNC">+</span><span class="STRN">' key='</span><span class="PUNC">+</span><span class="NAME">i</span><span class="PUNC">+</span><span class="STRN">'>&lt;label>&lt;span class="hce_dictlabel" >'</span><span class="PUNC">+</span><span class="NAME">i</span><span class="PUNC">+</span><span class="STRN">':&lt;/span>'</span><span class="PUNC">+</span><span class="NAME">n</span><span class="PUNC">+</span><span class="STRN">'&lt;/label>&lt;/li>'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>573</span> </span><span class="WHIT">			  </span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>574</span> </span><span class="WHIT">			  	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">$li</span><span class="PUNC">=</span><span class="NAME">$</span><span class="PUNC">(</span><span class="STRN">'&lt;li title='</span><span class="PUNC">+</span><span class="NAME">n</span><span class="PUNC">+</span><span class="STRN">' key='</span><span class="PUNC">+</span><span class="NAME">i</span><span class="PUNC">+</span><span class="STRN">'>&lt;label>'</span><span class="PUNC">+</span><span class="NAME">n</span><span class="PUNC">+</span><span class="STRN">'&lt;/label>&lt;/li>'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>575</span> </span><span class="WHIT">			  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>576</span> </span><span class="WHIT">			  </span><span class="WHIT">
+<span class='line'>577</span> </span><span class="WHIT">			  </span><span class="NAME">$ul.append</span><span class="PUNC">(</span><span class="NAME">$li</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>578</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>579</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>580</span> </span><span class="WHIT">		</span><span class="NAME">$hc_checkboxdiv.append</span><span class="PUNC">(</span><span class="NAME">$ul</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>581</span> </span><span class="WHIT">		</span><span class="NAME">this.field.attr</span><span class="PUNC">(</span><span class="STRN">"ref"</span><span class="PUNC">,</span><span class="NAME">name</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>582</span> </span><span class="WHIT">		</span><span class="COMM">/*if($("div.hc_checkboxdiv[ref_target='" + name + "']").length==0){
+<span class='line'>583</span> 			this.listEl = $("div.hc_checkboxdiv[ref_target*='" + name_copy + "']");
+<span class='line'>584</span> 		}else{
+<span class='line'>585</span> 			this.listEl = $("div.hc_checkboxdiv[ref_target='" + name + "']");
+<span class='line'>586</span> 		}*/</span><span class="WHIT">
+<span class='line'>587</span> </span><span class="WHIT">		</span><span class="WHIT">
+<span class='line'>588</span> </span><span class="WHIT">		</span><span class="NAME">this.listEl</span><span class="PUNC">=</span><span class="NAME">$hc_checkboxdiv</span><span class="PUNC">;</span><span class="WHIT">		</span><span class="WHIT">
+<span class='line'>589</span> </span><span class="WHIT">   		</span><span class="NAME">this.multipleline</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.listEl.attr</span><span class="PUNC">(</span><span class="STRN">"multiple_line"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"true"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>590</span> </span><span class="WHIT">   		</span><span class="COMM">//this.setValue("");</span><span class="WHIT">
+<span class='line'>591</span> </span><span class="WHIT">   		</span><span class="COMM">//改变字典后，输入的值清空</span><span class="WHIT">
+<span class='line'>592</span> </span><span class="WHIT">   		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="PUNC">(</span><span class="NAME">this.field.get</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">getAttribute</span><span class="PUNC">(</span><span class="STRN">"multiple"</span><span class="PUNC">)</span><span class="PUNC">==</span><span class="STRN">"true"</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>593</span> </span><span class="WHIT">   			</span><span class="NAME">this.field.val</span><span class="PUNC">(</span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>594</span> </span><span class="WHIT">   		</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>595</span> </span><span class="WHIT">   			</span><span class="NAME">this.field.val</span><span class="PUNC">(</span><span class="STRN">"请选择..."</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>596</span> </span><span class="WHIT">   		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>597</span> </span><span class="WHIT">   		</span><span class="NAME">this.hidden.val</span><span class="PUNC">(</span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>598</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>599</span> </span><span class="WHIT">	</span><span class="NAME">selectFirst</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>600</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.listEl</span><span class="PUNC">&&</span><span class="NAME">this.listEl.length</span><span class="PUNC">==</span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>601</span> </span><span class="WHIT">			</span><span class="NAME">this.listEl</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.field.parent</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">find</span><span class="PUNC">(</span><span class="STRN">"div.hc_checkboxdiv"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>602</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>603</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">lis</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.listEl.children</span><span class="PUNC">(</span><span class="STRN">"ul"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">children</span><span class="PUNC">(</span><span class="STRN">"li[key]"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>604</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">key</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>605</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">text</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">""</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>606</span> </span><span class="WHIT">		</span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="WHIT"> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">lis.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>607</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">$</span><span class="PUNC">(</span><span class="NAME">lis.get</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">css</span><span class="PUNC">(</span><span class="STRN">"display"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"none"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>608</span> </span><span class="WHIT">				</span><span class="NAME">key</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">$</span><span class="PUNC">(</span><span class="NAME">lis.get</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">attr</span><span class="PUNC">(</span><span class="STRN">"key"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>609</span> </span><span class="WHIT">				</span><span class="NAME">text</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">jQuery.trim</span><span class="PUNC">(</span><span class="NAME">$</span><span class="PUNC">(</span><span class="NAME">lis.get</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">text</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>610</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">key</span><span class="PUNC">!=</span><span class="STRN">""</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>611</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>612</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>613</span> </span><span class="WHIT">		</span><span class="NAME">this.setValue</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="STRN">"key"</span><span class="PUNC">:</span><span class="NAME">key</span><span class="PUNC">,</span><span class="STRN">"text"</span><span class="PUNC">:</span><span class="NAME">text</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>614</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>615</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='line'>616</span> 	 * @ignore
+<span class='line'>617</span> 	 */</span><span class="WHIT">
+<span class='line'>618</span> </span><span class="WHIT">	</span><span class="NAME">getPos</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>619</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>620</span> </span><span class="WHIT">			</span><span class="NAME">left</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>621</span> </span><span class="WHIT">			</span><span class="NAME">top</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT">
+<span class='line'>622</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>623</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>624</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='line'>625</span> 	 * @ignore
+<span class='line'>626</span> 	 */</span><span class="WHIT">
+<span class='line'>627</span> </span><span class="WHIT">	</span><span class="NAME">hideAllList</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>628</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">listEl</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.listEl</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>629</span> </span><span class="WHIT">		</span><span class="NAME">$</span><span class="PUNC">(</span><span class="STRN">"div.hc_checkboxdiv"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">o</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>630</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">listEl.get</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NAME">o</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>631</span> </span><span class="WHIT">				</span><span class="NAME">$</span><span class="PUNC">(</span><span class="NAME">o</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">hide</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>632</span> </span><span class="WHIT">				</span><span class="NAME">$</span><span class="PUNC">(</span><span class="NAME">o</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">data</span><span class="PUNC">(</span><span class="STRN">"show_name"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>633</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>634</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>635</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>636</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='line'>637</span> 	 * @ignore
+<span class='line'>638</span> 	 */</span><span class="WHIT">
+<span class='line'>639</span> </span><span class="WHIT">	</span><span class="NAME">showList</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">inputEl</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">listEl</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>640</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hidden</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">inputEl.prev</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>641</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">filter</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">hidden.data</span><span class="PUNC">(</span><span class="STRN">"filter"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>642</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">filter</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>643</span> </span><span class="WHIT">			</span><span class="KEYW">this</span><span class="PUNC">[</span><span class="NAME">filter.name</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">apply</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="NAME">filter.params</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>644</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>645</span> </span><span class="WHIT">		</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>646</span> </span><span class="WHIT">			</span><span class="NAME">this.clearFliter</span><span class="PUNC">(</span><span class="NAME">hidden</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>647</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>648</span> </span><span class="WHIT">		</span><span class="NAME">Horn.Combox.superclass.showList.apply</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="NAME">arguments</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>649</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>650</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='line'>651</span>      * @description 根据关联项目过滤下拉列表
+<span class='line'>652</span>      * @function
+<span class='line'>653</span> 	 * @name Horn.Combox#filterByPLabel
+<span class='line'>654</span> 	 * @param pLabel 父节点值
+<span class='line'>655</span> 	 * @returns void
+<span class='line'>656</span> 	 * @ignore
+<span class='line'>657</span> 	 */</span><span class="WHIT">
+<span class='line'>658</span> </span><span class="WHIT">	</span><span class="NAME">filterByPLabel</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">pLabel</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>659</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.pLabel</span><span class="PUNC">!=</span><span class="NAME">pLabel</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>660</span> </span><span class="WHIT">			</span><span class="NAME">this.reset</span><span class="PUNC">(</span><span class="KEYW">true</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>661</span> </span><span class="WHIT">			</span><span class="NAME">this.pLabel</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">pLabel</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>662</span> </span><span class="WHIT">			</span><span class="NAME">this.hidden.data</span><span class="PUNC">(</span><span class="STRN">"filter"</span><span class="WHIT"> </span><span class="PUNC">,</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>663</span> </span><span class="WHIT">				</span><span class="NAME">name</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'_filterByPLabel'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>664</span> </span><span class="WHIT">				</span><span class="NAME">params</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">arguments</span><span class="WHIT"> </span><span class="WHIT">
+<span class='line'>665</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>666</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>667</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>668</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='line'>669</span> 	 * @ignore
+<span class='line'>670</span> 	 */</span><span class="WHIT">
+<span class='line'>671</span> </span><span class="WHIT">	</span><span class="NAME">_filterByPLabel</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">pLabel</span><span class="PUNC">,</span><span class="NAME">noSelectfirst</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>672</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">pLabel</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>673</span> </span><span class="WHIT">			</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>674</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>675</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">ul</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.listEl.children</span><span class="PUNC">(</span><span class="STRN">"ul"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>676</span> </span><span class="WHIT">		</span><span class="COMM">// 先隐藏所有的li</span><span class="WHIT">
+<span class='line'>677</span> </span><span class="WHIT">		</span><span class="NAME">ul.children</span><span class="PUNC">(</span><span class="STRN">"li[key][pKey!='"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">pLabel</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"']"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">css</span><span class="PUNC">(</span><span class="STRN">"display"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>678</span> </span><span class="WHIT">				</span><span class="STRN">"none"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>679</span> </span><span class="WHIT">		</span><span class="NAME">ul.children</span><span class="PUNC">(</span><span class="STRN">"li[key][pKey='"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">pLabel</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"']"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">css</span><span class="PUNC">(</span><span class="STRN">"display"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>680</span> </span><span class="WHIT">				</span><span class="STRN">"block"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>681</span> </span><span class="WHIT">		</span><span class="COMM">//若是自己设置的value值，那么在此设置为原始值。</span><span class="WHIT">
+<span class='line'>682</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.defaultValue</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>683</span> </span><span class="WHIT">			</span><span class="NAME">this.setValue</span><span class="PUNC">(</span><span class="NAME">this.defaultValue</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>684</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="PUNC">!</span><span class="PUNC">(</span><span class="NAME">noSelectfirst</span><span class="PUNC">===</span><span class="KEYW">false</span><span class="PUNC">)</span><span class="PUNC">&&</span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">this.multipleline</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>685</span> </span><span class="WHIT">			</span><span class="NAME">this.selectFirst</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>686</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>687</span> </span><span class="WHIT">			</span><span class="NAME">this.setValue</span><span class="PUNC">(</span><span class="STRN">''</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>688</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>689</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">	</span><span class="WHIT">
+<span class='line'>690</span> </span><span class="WHIT">	</span><span class="NAME">filter</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">f</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">flag</span><span class="PUNC">,</span><span class="NAME">triggerChange</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>691</span> </span><span class="WHIT">		</span><span class="COMM">//过滤之前，先清空上次过滤的值  2015-11-02 modify by 周智星</span><span class="WHIT">
+<span class='line'>692</span> </span><span class="WHIT">		</span><span class="NAME">this.clearFliter</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>693</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">filter</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>694</span> </span><span class="WHIT">			</span><span class="NAME">name</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"_filter"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>695</span> </span><span class="WHIT">			</span><span class="NAME">params</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">arguments</span><span class="WHIT"> </span><span class="WHIT">
+<span class='line'>696</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>697</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">oldFilter</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.hidden.data</span><span class="PUNC">(</span><span class="STRN">"filter"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>698</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">filter</span><span class="PUNC">!=</span><span class="NAME">oldFilter</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>699</span> </span><span class="WHIT">			</span><span class="NAME">this.hidden.data</span><span class="PUNC">(</span><span class="STRN">"filter"</span><span class="WHIT"> </span><span class="PUNC">,</span><span class="NAME">filter</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>700</span> </span><span class="WHIT">			</span><span class="COMM">//BUG #6840 combo_filter以及setValue不会触发onchange事件</span><span class="WHIT">
+<span class='line'>701</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">triggerChange</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>702</span> </span><span class="WHIT">	            </span><span class="NAME">this.field.trigger</span><span class="PUNC">(</span><span class="STRN">'change'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">filter</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>703</span> </span><span class="WHIT">	        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>704</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>705</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">val</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="NAME">this.hidden.val</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>706</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_comb</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>707</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">val</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>708</span> </span><span class="WHIT">			</span><span class="COMM">//查询是否有这个值的显示li存在</span><span class="WHIT">
+<span class='line'>709</span> </span><span class="WHIT">			</span><span class="NAME">this._filter</span><span class="PUNC">(</span><span class="NAME">f</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">flag</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>710</span> </span><span class="WHIT">			</span><span class="NAME">setTimeout</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>711</span> </span><span class="WHIT">				</span><span class="NAME">$</span><span class="PUNC">(</span><span class="NAME">val.split</span><span class="PUNC">(</span><span class="STRN">','</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">idx</span><span class="PUNC">,</span><span class="NAME">v</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>712</span> </span><span class="WHIT">					</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">_comb.listEl.children</span><span class="PUNC">(</span><span class="STRN">"ul"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">children</span><span class="PUNC">(</span><span class="WHIT">
+<span class='line'>713</span> </span><span class="WHIT">							</span><span class="STRN">"li[key="</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">v</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"]"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">css</span><span class="PUNC">(</span><span class="STRN">'display'</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"none"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>714</span> </span><span class="WHIT">						</span><span class="NAME">_comb.reset</span><span class="PUNC">(</span><span class="KEYW">true</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>715</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>716</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>717</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="NUMB">200</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>718</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>719</span> </span><span class="WHIT">			</span><span class="COMM">//查询是否有这个值的显示li存在</span><span class="WHIT">
+<span class='line'>720</span> </span><span class="WHIT">			</span><span class="NAME">this._filter</span><span class="PUNC">(</span><span class="NAME">f</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">flag</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>721</span> </span><span class="WHIT">			</span><span class="NAME">setTimeout</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>722</span> </span><span class="WHIT">				</span><span class="NAME">_comb.setValue</span><span class="PUNC">(</span><span class="STRN">''</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>723</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="NUMB">200</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>724</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>725</span> </span><span class="WHIT">		</span><span class="WHIT">
+<span class='line'>726</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>727</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='line'>728</span> 	 * @ignore
+<span class='line'>729</span> 	 */</span><span class="WHIT">
+<span class='line'>730</span> </span><span class="WHIT">	</span><span class="NAME">_filter</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">f</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">flag</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>731</span> </span><span class="WHIT">		</span><span class="NAME">flag</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">!</span><span class="PUNC">!</span><span class="NAME">flag</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>732</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">d1</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"block"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">d2</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"none"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>733</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">flag</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>734</span> </span><span class="WHIT">			</span><span class="NAME">d1</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"none"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>735</span> </span><span class="WHIT">			</span><span class="NAME">d2</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"block"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>736</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>737</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.listEl</span><span class="PUNC">&&</span><span class="NAME">this.listEl.length</span><span class="PUNC">==</span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>738</span> </span><span class="WHIT">			</span><span class="NAME">this.listEl</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.field.parent</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">find</span><span class="PUNC">(</span><span class="STRN">"div.hc_checkboxdiv"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>739</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>740</span> </span><span class="WHIT">		</span><span class="COMM">// 先隐藏所有的li</span><span class="WHIT">
+<span class='line'>741</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">liList</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.listEl.children</span><span class="PUNC">(</span><span class="STRN">"ul"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">children</span><span class="PUNC">(</span><span class="STRN">"li[key]"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>742</span> </span><span class="WHIT">		</span><span class="NAME">liList.css</span><span class="PUNC">(</span><span class="STRN">"display"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">d1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>743</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">D</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">","</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>744</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">$.type</span><span class="PUNC">(</span><span class="NAME">f</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"string"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>745</span> </span><span class="WHIT">			</span><span class="NAME">f</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">D</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>746</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>747</span> </span><span class="WHIT">		</span><span class="NAME">liList.each</span><span class="PUNC">(</span><span class="WHIT">
+<span class='line'>748</span> </span><span class="WHIT">			</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">index</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">dom</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>749</span> </span><span class="WHIT">				</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">li</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">$</span><span class="PUNC">(</span><span class="NAME">dom</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>750</span> </span><span class="WHIT">				</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">key</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">li.attr</span><span class="PUNC">(</span><span class="STRN">"key"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>751</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">$.type</span><span class="PUNC">(</span><span class="NAME">f</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"function"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>752</span> </span><span class="WHIT">					</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">f.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">key</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>753</span> </span><span class="WHIT">						</span><span class="NAME">li.css</span><span class="PUNC">(</span><span class="STRN">"display"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">d2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>754</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>755</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">$.type</span><span class="PUNC">(</span><span class="NAME">f</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"array"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>756</span> </span><span class="WHIT">					</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">jQuery.inArray</span><span class="PUNC">(</span><span class="NAME">key</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">f</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">>=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>757</span> </span><span class="WHIT">						</span><span class="NAME">li.css</span><span class="PUNC">(</span><span class="STRN">"display"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">d2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>758</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>759</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">$.type</span><span class="PUNC">(</span><span class="NAME">f</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"string"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>760</span> </span><span class="WHIT">					</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">f.indexOf</span><span class="PUNC">(</span><span class="NAME">key</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">D</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>761</span> </span><span class="WHIT">						</span><span class="NAME">li.css</span><span class="PUNC">(</span><span class="STRN">"display"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">d2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>762</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>763</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>764</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>765</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>766</span> </span><span class="WHIT">	</span><span class="NAME">clearFliter</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>767</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.listEl</span><span class="PUNC">&&</span><span class="NAME">this.listEl.length</span><span class="PUNC">==</span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>768</span> </span><span class="WHIT">			</span><span class="NAME">this.listEl</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.field.parent</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">find</span><span class="PUNC">(</span><span class="STRN">"div.hc_checkboxdiv"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>769</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>770</span> </span><span class="WHIT">		</span><span class="NAME">this.listEl.children</span><span class="PUNC">(</span><span class="STRN">"ul"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">children</span><span class="PUNC">(</span><span class="STRN">"li[key]"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">css</span><span class="PUNC">(</span><span class="STRN">"display"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"block"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>771</span> </span><span class="WHIT">		</span><span class="NAME">this.hidden.data</span><span class="PUNC">(</span><span class="STRN">'filter'</span><span class="PUNC">,</span><span class="KEYW">null</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>772</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>773</span> </span><span class="WHIT">	</span><span class="NAME">clearList</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>774</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.listEl</span><span class="PUNC">&&</span><span class="NAME">this.listEl.length</span><span class="PUNC">==</span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>775</span> </span><span class="WHIT">			</span><span class="NAME">this.listEl</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.field.parent</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">find</span><span class="PUNC">(</span><span class="STRN">"div.hc_checkboxdiv"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>776</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>777</span> </span><span class="WHIT">		</span><span class="NAME">this.reset</span><span class="PUNC">(</span><span class="KEYW">true</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>778</span> </span><span class="WHIT">		</span><span class="NAME">this.listEl.children</span><span class="PUNC">(</span><span class="STRN">"ul"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">children</span><span class="PUNC">(</span><span class="STRN">"li[key]"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">remove</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>779</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>780</span> </span><span class="WHIT">	</span><span class="NAME">addItems</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">data</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">isClear</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>781</span> </span><span class="WHIT">		</span><span class="NAME">this.addDatas</span><span class="PUNC">(</span><span class="NAME">data</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">isClear</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>782</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>783</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='line'>784</span>      * @description 动态增加下拉列表项目
+<span class='line'>785</span>      * @function
+<span class='line'>786</span> 	 * @name Horn.Combox#addDatas
+<span class='line'>787</span>      * @param data {Json or Array} [{"code":"33","text":"测试33"},{"code":"34","text":"测试34"}]　
+<span class='line'>788</span>      * @param isClear 是否清空原来的列表项
+<span class='line'>789</span>      * @ignore
+<span class='line'>790</span> 	 */</span><span class="WHIT">
+<span class='line'>791</span> </span><span class="WHIT">	</span><span class="NAME">addDatas</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">data</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">isClear</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>792</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">list</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">listDiv</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.listEl</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">keyAttr</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.keyAttr</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">valueAttr</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.valueAttr</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">showLabel</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.showLabel</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>793</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hidden</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.hidden</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>794</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">field</span><span class="PUNC">=</span><span class="NAME">this.field</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>795</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_this</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>796</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">listDiv</span><span class="PUNC">&&</span><span class="NAME">listDiv.length</span><span class="PUNC">==</span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>797</span> </span><span class="WHIT">			</span><span class="NAME">listDiv</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.field.parent</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">find</span><span class="PUNC">(</span><span class="STRN">"div.hc_checkboxdiv"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>798</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>799</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">eventData</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>800</span> </span><span class="WHIT">				</span><span class="NAME">inputEl</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.field</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>801</span> </span><span class="WHIT">				</span><span class="NAME">listEl</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">listDiv</span><span class="WHIT">
+<span class='line'>802</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>803</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">jQuery.type</span><span class="PUNC">(</span><span class="NAME">data</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"array"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>804</span> </span><span class="WHIT">			</span><span class="NAME">list</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">data</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>805</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">jQuery.type</span><span class="PUNC">(</span><span class="NAME">data</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"object"</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>806</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">jQuery.isPlainObject</span><span class="PUNC">(</span><span class="NAME">data</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>807</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">jQuery.isEmptyObject</span><span class="PUNC">(</span><span class="NAME">data</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>808</span> </span><span class="WHIT">					</span><span class="KEYW">return</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>809</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>810</span> </span><span class="WHIT">				</span><span class="NAME">list.push</span><span class="PUNC">(</span><span class="NAME">data</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>811</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>812</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>813</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">isClear</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>814</span> </span><span class="WHIT">				</span><span class="NAME">this.clearList</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>815</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>816</span> </span><span class="WHIT">			</span><span class="KEYW">return</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>817</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>818</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">isClear</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>819</span> </span><span class="WHIT">			</span><span class="NAME">this.clearList</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>820</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>821</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">list.length</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>822</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">ul</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">listDiv.children</span><span class="PUNC">(</span><span class="STRN">"ul"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>823</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">multipleline</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">listDiv.attr</span><span class="PUNC">(</span><span class="STRN">"multiple_line"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"true"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>824</span> </span><span class="WHIT">			</span><span class="NAME">$.each</span><span class="PUNC">(</span><span class="NAME">list</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">index</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">obj</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>825</span> </span><span class="WHIT">				</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">key</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">obj</span><span class="PUNC">[</span><span class="NAME">keyAttr</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">val</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">obj</span><span class="PUNC">[</span><span class="NAME">valueAttr</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>826</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">key</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>827</span> </span><span class="WHIT">					</span><span class="NAME">key</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">obj</span><span class="PUNC">[</span><span class="STRN">"code"</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>828</span> </span><span class="WHIT">					</span><span class="NAME">val</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">obj</span><span class="PUNC">[</span><span class="STRN">"text"</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>829</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>830</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">key</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>831</span> </span><span class="WHIT">					</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">li</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ul</span><span class="WHIT">
+<span class='line'>832</span> </span><span class="WHIT">							</span><span class="PUNC">.</span><span class="NAME">children</span><span class="PUNC">(</span><span class="STRN">"li[key='"</span><span class="WHIT">
+<span class='line'>833</span> </span><span class="WHIT">									</span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">key</span><span class="WHIT">
+<span class='line'>834</span> </span><span class="WHIT">									</span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"']"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>835</span> </span><span class="WHIT">					</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">li.length</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>836</span> </span><span class="WHIT">						</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">li</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">$</span><span class="PUNC">(</span><span class="STRN">"&lt;li key='"</span><span class="WHIT">
+<span class='line'>837</span> </span><span class="WHIT">								</span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">key</span><span class="WHIT">
+<span class='line'>838</span> </span><span class="WHIT">								</span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"' title='"</span><span class="WHIT">
+<span class='line'>839</span> </span><span class="WHIT">								</span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">val</span><span class="WHIT">
+<span class='line'>840</span> </span><span class="WHIT">								</span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"'>&lt;/li>"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>841</span> </span><span class="WHIT">						</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">label</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">$</span><span class="PUNC">(</span><span class="STRN">"&lt;label>&lt;/label>"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>842</span> </span><span class="WHIT">						</span><span class="NAME">label</span><span class="WHIT">
+<span class='line'>843</span> </span><span class="WHIT">								</span><span class="PUNC">.</span><span class="NAME">text</span><span class="PUNC">(</span><span class="PUNC">(</span><span class="NAME">showLabel</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">key</span><span class="WHIT">
+<span class='line'>844</span> </span><span class="WHIT">										</span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">":"</span><span class="WHIT">
+<span class='line'>845</span> </span><span class="WHIT">										</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>846</span> </span><span class="WHIT">										</span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">val</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>847</span> </span><span class="WHIT">						</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">multipleline</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>848</span> </span><span class="WHIT">							</span><span class="NAME">label.prepend</span><span class="PUNC">(</span><span class="STRN">'&lt;input type="checkbox" class="combox_input"/>'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>849</span> </span><span class="WHIT">						</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>850</span> </span><span class="WHIT">						</span><span class="NAME">li.append</span><span class="PUNC">(</span><span class="NAME">label</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>851</span> </span><span class="WHIT">						</span><span class="NAME">ul.append</span><span class="PUNC">(</span><span class="NAME">li</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>852</span> </span><span class="WHIT">						</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">listDiv.data</span><span class="PUNC">(</span><span class="STRN">"show_name"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">hidden.attr</span><span class="PUNC">(</span><span class="STRN">"name"</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>853</span> </span><span class="WHIT">							</span><span class="NAME">li.bind</span><span class="PUNC">(</span><span class="STRN">"click.li"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">eventData</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">Horn.Util.apply</span><span class="PUNC">(</span><span class="WHIT">
+<span class='line'>854</span> </span><span class="WHIT">									</span><span class="NAME">_this.listClick</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">_this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>855</span> </span><span class="WHIT">						</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>856</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>857</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>858</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>859</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>860</span> </span><span class="WHIT">		</span><span class="COMM">//17376 【TS:201602230422-JRESPlus-资产管理事业部-张翔-【项目名称】非标准化投资管理系统2.0&lt;br>&lt;br>&lt;br】</span><span class="WHIT">
+<span class='line'>861</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">defValue</span><span class="PUNC">=</span><span class="NAME">_this.params.value</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>862</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">initValue</span><span class="PUNC">=</span><span class="NAME">hidden.attr</span><span class="PUNC">(</span><span class="STRN">"value"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>863</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">initLable</span><span class="PUNC">=</span><span class="NAME">field.val</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>864</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">splitChar</span><span class="PUNC">=</span><span class="STRN">","</span><span class="WHIT">
+<span class='line'>865</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">_this.params.delimiter</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>866</span> </span><span class="WHIT">			</span><span class="NAME">splitChar</span><span class="PUNC">=</span><span class="NAME">_this.params.delimiter</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>867</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>868</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">addItemsValue</span><span class="PUNC">=</span><span class="NAME">initValue</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>869</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">addItemslable</span><span class="PUNC">=</span><span class="NAME">initLable</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>870</span> </span><span class="WHIT">		</span><span class="COMM">//bug 17102 combox调用addItems(item)方法后，再获取值，初始设置的值获取不到</span><span class="WHIT">
+<span class='line'>871</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">defValueArr</span><span class="PUNC">=</span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>872</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">defValue</span><span class="PUNC">&&</span><span class="NAME">defValue</span><span class="PUNC">!=</span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>873</span> </span><span class="WHIT">			</span><span class="NAME">defValueArr</span><span class="PUNC">=</span><span class="NAME">defValue.split</span><span class="PUNC">(</span><span class="STRN">","</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>874</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>875</span> </span><span class="WHIT">		</span><span class="KEYW">for</span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">=</span><span class="NUMB">0</span><span class="PUNC">;</span><span class="NAME">i</span><span class="PUNC">&lt;</span><span class="NAME">defValueArr.length</span><span class="PUNC">;</span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>876</span> </span><span class="WHIT">			</span><span class="NAME">defValue</span><span class="PUNC">=</span><span class="NAME">defValueArr</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>877</span> </span><span class="WHIT">			</span><span class="COMM">//bug#17190 多选框combox设置value值为后续additem添加的值，显示后输入框设置值，调用addItems(item)方法，原先选中的值会被value值覆盖</span><span class="WHIT">
+<span class='line'>878</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">field.attr</span><span class="PUNC">(</span><span class="STRN">"selectMode"</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>879</span> </span><span class="WHIT">				</span><span class="COMM">//多选</span><span class="WHIT">
+<span class='line'>880</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">field.attr</span><span class="PUNC">(</span><span class="STRN">"selectMode"</span><span class="PUNC">)</span><span class="PUNC">==</span><span class="STRN">"true"</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>881</span> </span><span class="WHIT">					</span><span class="NAME">$.each</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">list</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">obj</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>882</span> </span><span class="WHIT">					  </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">addItemslable.indexOf</span><span class="PUNC">(</span><span class="NAME">obj.text</span><span class="PUNC">)</span><span class="PUNC">&lt;</span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="COMM">//不存在该值</span><span class="WHIT">
+<span class='line'>883</span> </span><span class="WHIT">					  	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">obj.code</span><span class="PUNC">==</span><span class="NAME">defValue</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>884</span> </span><span class="WHIT">						  	</span><span class="NAME">addItemsValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="NAME">addItemsValue</span><span class="PUNC">+</span><span class="PUNC">(</span><span class="NAME">addItemsValue</span><span class="PUNC">?</span><span class="STRN">","</span><span class="PUNC">:</span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">+</span><span class="NAME">obj.code</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>885</span> </span><span class="WHIT">						  	</span><span class="NAME">addItemslable</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">addItemslable</span><span class="PUNC">+</span><span class="PUNC">(</span><span class="NAME">addItemslable</span><span class="PUNC">?</span><span class="NAME">splitChar</span><span class="PUNC">:</span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">+</span><span class="NAME">obj.text</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>886</span> </span><span class="WHIT">						  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>887</span> </span><span class="WHIT">					  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>888</span> </span><span class="WHIT">					  </span><span class="WHIT">
+<span class='line'>889</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>890</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>891</span> </span><span class="WHIT">					</span><span class="COMM">//单选</span><span class="WHIT">
+<span class='line'>892</span> </span><span class="WHIT">					</span><span class="NAME">$.each</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">list</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">obj</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>893</span> </span><span class="WHIT">					  </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">obj.code</span><span class="PUNC">==</span><span class="NAME">defValue</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>894</span> </span><span class="WHIT">					  	</span><span class="NAME">addItemsValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">obj.code</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>895</span> </span><span class="WHIT">					  	</span><span class="NAME">addItemslable</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">obj.text</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>896</span> </span><span class="WHIT">					  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>897</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>898</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>899</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>900</span> </span><span class="WHIT">				</span><span class="COMM">//单选</span><span class="WHIT">
+<span class='line'>901</span> </span><span class="WHIT">				</span><span class="NAME">$.each</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">list</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">obj</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>902</span> </span><span class="WHIT">				  </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">obj.code</span><span class="PUNC">==</span><span class="NAME">defValue</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>903</span> </span><span class="WHIT">				  	</span><span class="NAME">addItemsValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">obj.code</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>904</span> </span><span class="WHIT">				  	</span><span class="NAME">addItemslable</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">obj.text</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>905</span> </span><span class="WHIT">				  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>906</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>907</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>908</span> </span><span class="WHIT">			</span><span class="WHIT">
+<span class='line'>909</span> </span><span class="WHIT">		</span><span class="WHIT">
+<span class='line'>910</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>911</span> </span><span class="WHIT">		</span><span class="WHIT">
+<span class='line'>912</span> </span><span class="WHIT">		</span><span class="COMM">//hidden.val(addItemsValue);</span><span class="WHIT">
+<span class='line'>913</span> </span><span class="WHIT">		</span><span class="NAME">this.setValue</span><span class="PUNC">(</span><span class="NAME">addItemsValue</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>914</span> </span><span class="WHIT">		</span><span class="NAME">field.val</span><span class="PUNC">(</span><span class="NAME">addItemslable</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>915</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>916</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>917</span>      * @description 显示错误信息
+<span class='line'>918</span>      * @function
+<span class='line'>919</span>      * @name Horn.Combox#showError
+<span class='line'>920</span>      * @ignore
+<span class='line'>921</span>      */</span><span class="WHIT">
+<span class='line'>922</span> </span><span class="WHIT">	</span><span class="NAME">showError</span><span class="PUNC">:</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>923</span> </span><span class="WHIT">		</span><span class="NAME">Horn.Combox.superclass.showError.apply</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="NAME">arguments</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>924</span> </span><span class="WHIT">		 </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">msg</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.msgDiv</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>925</span> </span><span class="WHIT">		 </span><span class="COMM">//BUG #6552 【combox】(继承)addRule(rule)(原先无校验规则) 错误提示的位置不正确，偏离的位置相当大</span><span class="WHIT">
+<span class='line'>926</span> </span><span class="WHIT">	     </span><span class="COMM">//msg.css('margin-top','-40px');</span><span class="WHIT">
+<span class='line'>927</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>928</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>929</span> </span><span class="NAME">Horn.Field.regFieldType</span><span class="PUNC">(</span><span class="STRN">"div.hc_combox"</span><span class="PUNC">,</span><span class="NAME">Horn.Combox</span><span class="PUNC">)</span><span class="PUNC">;</span></pre></body></html>

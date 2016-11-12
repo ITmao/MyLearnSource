@@ -1,0 +1,81 @@
+
+<h3>DataGrid 可冻结列的数据列表</h3>
+<p>以多行多列的形式展示数据，支持行数据选中、列的格式转换,支持冻结列</p>
+ <img src="../resource/images/datagrid.png"/>
+
+<h4>依赖组件</h4>
+<ul>
+	<li>无</li>
+</ul>
+
+<h4>适用范围</h4>
+<p>
+</p>
+<h4>约束</h4>
+<p>
+	<ol>
+		<li>不支持行列可编辑功能；</li>
+		<li>不支持分组grid和treegrid；</li>
+		<li>不支持多列头；</li>
+		<li>不支持筛选的功能；</li>
+		<li>不支持导出功能</li>
+		<li>不支持列排序</li>
+		<li>不支持翻页记录</li>
+	</ol>
+</p>
+<h4>返回的数据格式</h4>
+<p>
+	<ol>
+		<li>
+		rows:表格当前页展现的数据集合
+		total:数据总条数，用于计算分页
+		{"rows":[{...},{...}],"total":100}</li>
+	</ol>
+</p>
+
+<h4>使用示例</h4>
+<p>示例1:</p>
+<textarea name="code" class="html" style="display: none;">
+#datagrid({
+           "title":"datagrid-title",
+		   "rowSelect":"true",
+		   "numbercolumn":true,
+		   "numberColWidth":30,
+		   "selectModel":"single",
+		   "autoLoad":true,
+		   "url":"/test/datagrid/getData.json",
+		   "buttons":[{"label":"新增","cls":"add","refmenu":"test11","event":"add()"},
+		              {"label":"修改","cls":"edit","refmenu":"test11","event":"edit()"},
+					  {"label":"删除","cls":"del","refmenu":"test11"},
+					  {"label":"保存","cls":"save","refmenu":"test11"},
+					  {"label":"查询","cls":"query","refmenu":"test11"},
+					  {"label":"刷新","cls":"refresh","refmenu":"test11"},
+					    {"label":"打开","cls":"open","refmenu":"test11"}
+					  ],
+		   "pageConfig":{"pageSize":20},
+		   "name":"dyncGrid123",
+		   "events":[{"event":"rowclick","function":"testRowClick"},
+		             {"event":"rowDblclick","function":"testRowDblClick"},
+					 {"event":"beforeLoad","function":"testbeforeLoad"},
+					 {"event":"loadSuccess","function":"testloadSuccess"},
+					 {"event":"loadError","function":"testloadError"}],
+		   "hasPage":true,
+		   "baseParams":{"aa":10},
+		   "frozen":["branchNo1","initDate"],
+		   "autoWidth":true,
+		   "items":[{"name":"initDate","text":"发生日期","hAlign":"left","tAlign":"right","hidden":"false","buttons":[{"label":"设置默认1","event":"edit"}]},
+			        {"name":"taskStatus","text":"静态字典测试","items":[{"label":"杭州总部","value":"0"},{"label":"上海分部1","value":"2"},{"label":"上海分部2","value":"3"}]},
+			        {"name":"branchNo1", "dictName":"country", "text":"（动态字典）","renderer":"domrender"},
+			        {"name":"scanType", "text":"扫描类别","hidden":false,"buttons":[{"label":"设置默认2","event":"edit"}]},
+			        {"name":"scanType2","text":"扫描类别2","renderer":"domrender"},
+			        {"name":"clientId","text":"客户金额"},
+			        {"name":"clientName","text":"客户名称","renderer":"domrender"},
+			        {"name":"clientName", "text":"列1","renderer":"domrender"},
+					{"name":"position_str", "text":"列22324"},
+					{"name":"clientName", "text":"列3"},
+					{"name":"clientName", "text":"列4"},
+					{"name":"clientName", "text":"列5"},
+					{"name":"clientName", "text":"列6"}
+			]
+ })
+</textarea>

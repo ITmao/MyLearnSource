@@ -1,0 +1,23 @@
+.u-checkbox-group {
+  padding: 10px 0 5px;
+  height:34px;
+}
+.u-checkbox {
+  position: relative;
+  display: inline-block;
+  padding-left: 20px;
+  margin: 0 10px 0 0;
+  font-weight: normal;
+  vertical-align: middle;
+  cursor: pointer;
+}
+.u-checkbox label {
+  min-height: 20px;
+  margin-bottom: 0;
+  font-weight: normal;
+  cursor: pointer;
+}
+.u-checkbox input[type="checkbox"] {
+  position: absolute;
+  margin-left: -20px;
+}

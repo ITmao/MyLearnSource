@@ -1,0 +1,104 @@
+#**   
+ * @author huling   
+ * @class
+ * @name panel_start
+ * @description panel_start组件，是面板容器的开始组件，需要配以#panel_end一起使用
+ * @see The <a href="huling@hundsun.com">huling</a >.   
+ * @example \#panel_start({"cols":"2","rows":"2"})
+ * @since version 0.1
+ *#	
+#**
+ * @lends panel_start
+ *#
+#macro(panel_start $uiPanelConfig)
+	#set($panel_expandable = false)	
+	#set($layoutcolumn = 3)
+    #if($uiPanelConfig.cols) 
+    	#set($layoutcolumn = $uiPanelConfig.cols)
+    #end
+	#if($uiPanelConfig.expandable)
+	 #set($panel_expandable = $uiPanelConfig.expandable)	
+		<div id="$!{uiPanelConfig.id}" $horn.paramsCache($uiPanelConfig)   name="$!{uiPanelConfig.name}" class="g-panel #if($view)g-view#end #if("$!uiPanelConfig.title"=="")f-border-none#end">
+		#if($uiPanelConfig.title&&$uiPanelConfig.title!="")
+			<div class="m-panel-header">
+				<h4>$uiPanelConfig.title</h4>
+			</div>
+		#end
+			<div class="g-wrap m-panel-body m-brt-none" #if($uiPanelConfig.isExpand) style="display:block" #else style="display:none"#end>
+	#else
+	<div id="$!{uiPanelConfig.id}" $horn.paramsCache($uiPanelConfig)   name="$!{uiPanelConfig.name}" class="g-panel #if($view)g-view#end #if("$!uiPanelConfig.title"=="")f-border-none#end"">
+		#if($uiPanelConfig.title&&$uiPanelConfig.title!="")
+			<div class="m-panel-header">
+				<h4>$uiPanelConfig.title</h4>
+			</div>
+		#end
+			<div class="g-wrap m-panel-body m-brt-none">
+	#end
+#end
+#**   
+ * @author huling   
+ * @class
+ * @name panel_start
+ * @description panel组件，面板容器组件
+ * @see The <a href="huling@hundsun.com">huling</a >.   
+ * @example #panel({"id":"","expandable":"true","name":"panel"})
+ * @since version 0.1
+ *#	
+#**
+ * @lends panel_start
+ *#
+#macro(panel $uiPanelConfig)
+	#set($layoutcolumn = 3)
+    #if($uiPanelConfig.cols) 
+    	#set($layoutcolumn = $uiPanelConfig.cols)
+    #end
+	#if($uiPanelConfig.expandable)
+		<div id="$!{uiPanelConfig.id}" $horn.paramsCache($uiPanelConfig)   name="$!{uiPanelConfig.name}" class="g-panel #if($view)g-view#end #if("$!uiPanelConfig.title"=="")f-border-none#end">
+		#if($uiPanelConfig.title&&$uiPanelConfig.title!="")
+			<div class="m-panel-header">
+				<h4>$uiPanelConfig.title</h4>
+			</div>
+		#end
+			<div class="g-wrap m-panel-body m-brt-none" #if($uiPanelConfig.isExpand) style="display:block" #else style="display:none"#end>
+				$bodyContent
+			</div>
+			<div class="m-panel-box" title="#if($uiPanelConfig.isExpand)点击收起#else点击展开#end"><a class="m-btn-default" href="javascript:void(0)"><i class="#if($uiPanelConfig.isExpand)fa fa-angle-up #else fa fa-angle-down#end"></i></a></div>
+		</div>
+	#else
+		<div id="$!{uiPanelConfig.id}" $horn.paramsCache($uiPanelConfig)   name="$!{uiPanelConfig.name}" class="g-panel #if($view)g-view#end #if("$!uiPanelConfig.title"=="")f-border-none#end"">
+		#if($uiPanelConfig.title&&$uiPanelConfig.title!="")
+			<div class="m-panel-header">
+				<h4>$uiPanelConfig.title</h4>
+			</div>
+		#end
+			<div class="g-wrap m-panel-body m-brt-none">
+				$bodyContent
+			</div>
+		</div>
+	#end
+	#set($uiPanelConfig = {})
+#end
+
+#**   
+ * @author huling   
+ * @class
+ * @name panel_end
+ * @description panel_end组件，是面板容器的结束组件，需要配以#panel_start一起使用
+ * @see The <a href="huling@hundsun.com">huling</a >.   
+ * @example \#panel_end
+ * @since version 0.1
+ *#	
+#**
+ * @lends panel_end
+ *#
+#macro(panel_end)
+	#if($panel_expandable)
+		</div>
+		<div class="m-panel-box" title="#if($uiPanelConfig.isExpand)点击收起#else点击展开#end"><a class="m-btn-default" href="javascript:void(0)"><i class="#if($uiPanelConfig.isExpand)fa fa-angle-up #else fa fa-angle-down#end"></i></a></div>
+	</div>
+	#else
+    	</div>
+	</div>
+	#end
+	#set($uiPanelConfig = {})
+#end

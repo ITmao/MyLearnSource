@@ -1,0 +1,613 @@
+
+	<!-- ============================== header ================================= -->	
+		<!-- begin static/header.html -->
+		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="keywords" content="jquery,ui,easy,FUI,web framekwork,ajax framekwork,ria,web development">
+		<meta name="description" content="FUI help you build your web page more Fast!!">
+		<title>UI API - JRES UI</title>
+   		<link rel="stylesheet" href="../resource/css/doc.css" type="text/css" />
+    	<link type="text/css" rel="stylesheet" href="../resource/SyntaxHighlighter/Styles/SyntaxHighlighter.css"/>
+		<script src="../resource/SyntaxHighlighter/Scripts/shCore.js"></script>
+		<script src="../resource/SyntaxHighlighter/Scripts/shBrushXml.js"></script>
+		<script src="../resource/SyntaxHighlighter/Scripts/shBrushJava.js"></script>
+		<script type="text/javascript" src="../resource/jquery-1.7.2.min.js"></script>
+		<style type="text/css">
+			.dp-xml .cdata { color: #ff1493; }.dp-xml .tag, .dp-xml .tag-name { color: #069; font-weight: bold; }.dp-xml .attribute { color: red; }.dp-xml .attribute-value { color: blue; }
+		</style>
+		<script>
+			
+		</script>
+	</head>
+	<body>
+		<div id="header">
+						<div id="header-inner">
+				<table cellpadding="0" cellspacing="0" style="width:100%;">
+					<tr>
+						<td rowspan="2" style="width:20px;">
+						</td>
+						<td style="height:52px;">
+							<div style="color:#fff;font-size:22px;font-weight:bold;">
+								<a href="#" style="color:#fff;font-size:22px;font-weight:bold;text-decoration:none">JRES UI</a>
+							</div>
+							<div style="color:#fff">
+								<a href="#" style="color:#fff;text-decoration:none">JRES UI是使用Velocity开发的服务器端UI组件，助力于组件化快速视图开发!</a>
+							</div>
+						</td>
+						<td style="padding-right:5px;text-align:right;vertical-align:bottom;">
+							<div id="topmenu" style="display:none;">
+								<a href="../../index.html">主页</a>
+								<a href="http://rdc.hundsun.com/forum.php?mod=forumdisplay&amp;fid=163" target="_blank">论坛</a>
+								<a href="../../demo/index.htm">示例</a>
+								<a href="../../documentation/index.html">文档</a>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+			
+		</div>
+		<!-- end static/header.html -->
+	<div id="mainwrap" >
+		<div id="content">
+        <!-- ============================== classes index ============================ -->
+        <script type="text/javascript">
+            $(function() {
+            	var bw=$.browser;
+				if(bw.msie&&bw.version<7||(bw.msie&&$.support.boxModel==false)){
+						//ie6
+						$("#plugin_title").hide();
+						$('#plugins').removeClass("plugins");
+						$('#plugins').addClass("plugins2");
+				}else{
+					$('#plugins').stop().animate({'marginLeft':'-285px'},1000);
+	                $('#plugins').hover(
+	                    function () {
+	                        $(this).stop().animate({'marginLeft':'-2px'},200);
+	                    },
+	                    function () {
+	                        $(this).stop().animate({'marginLeft':'-285px'},200);
+	                    }
+	                );
+				}
+                
+            });
+</script>
+	<div id="plugins" class="plugins">
+	<div id="plugin_title" class="plugin_title">控件清单</div>
+	<ul>
+        
+        
+        
+        
+        
+        <li><a href="../symbols/Horn.html">Horn</a></li>
+        
+        <li><a href="../symbols/Horn._Pagebar-pagebar.html">Horn._Pagebar-pagebar</a></li>
+        
+        <li><a href="../symbols/Horn.Base.html">Horn.Base</a></li>
+        
+        <li><a href="../symbols/Horn.ButtonPanel.html">Horn.ButtonPanel</a></li>
+        
+        <li><a href="../symbols/Horn.Calendar.html">Horn.Calendar</a></li>
+        
+        <li><a href="../symbols/Horn.CalendarGroup.html">Horn.CalendarGroup</a></li>
+        
+        <li><a href="../symbols/Horn.Checkbox.html">Horn.Checkbox</a></li>
+        
+        <li><a href="../symbols/Horn.CheckboxGroup.html">Horn.CheckboxGroup</a></li>
+        
+        <li><a href="../symbols/Horn.Combox.html">Horn.Combox</a></li>
+        
+        <li><a href="../symbols/Horn.DataGrid.html">Horn.DataGrid</a></li>
+        
+        <li><a href="../symbols/Horn.Field.html">Horn.Field</a></li>
+        
+        <li><a href="../symbols/Horn.FieldSet.html">Horn.FieldSet</a></li>
+        
+        <li><a href="../symbols/Horn.Form.html">Horn.Form</a></li>
+        
+        <li><a href="../symbols/Horn.Grid.html">Horn.Grid</a></li>
+        
+        <li><a href="../symbols/Horn.HiddenField.html">Horn.HiddenField</a></li>
+        
+        <li><a href="../symbols/Horn.Label.html">Horn.Label</a></li>
+        
+        <li><a href="../symbols/Horn.Menu.html">Horn.Menu</a></li>
+        
+        <li><a href="../symbols/Horn.MessageBox.html">Horn.MessageBox</a></li>
+        
+        <li><a href="../symbols/Horn.PageBar.html">Horn.PageBar</a></li>
+        
+        <li><a href="../symbols/Horn.Panel.html">Horn.Panel</a></li>
+        
+        <li><a href="../symbols/Horn.Password.html">Horn.Password</a></li>
+        
+        <li><a href="../symbols/Horn.PasswordGroup.html">Horn.PasswordGroup</a></li>
+        
+        <li><a href="../symbols/Horn.QueryTable.html">Horn.QueryTable</a></li>
+        
+        <li><a href="../symbols/Horn.RadioGroup.html">Horn.RadioGroup</a></li>
+        
+        <li><a href="../symbols/Horn.Screen.html">Horn.Screen</a></li>
+        
+        <li><a href="../symbols/Horn.SelectTree.html">Horn.SelectTree</a></li>
+        
+        <li><a href="../symbols/Horn.TabPanel.html">Horn.TabPanel</a></li>
+        
+        <li><a href="../symbols/Horn.TargetSelect.html">Horn.TargetSelect</a></li>
+        
+        <li><a href="../symbols/Horn.Textarea.html">Horn.Textarea</a></li>
+        
+        <li><a href="../symbols/Horn.Textfield.html">Horn.Textfield</a></li>
+        
+        <li><a href="../symbols/Horn.Tip.html">Horn.Tip</a></li>
+        
+        <li><a href="../symbols/Horn.TypeField.html">Horn.TypeField</a></li>
+        
+        <li><a href="../symbols/Horn.Util.html">Horn.Util</a></li>
+        
+        <li><a href="../symbols/Horn.Validate.html">Horn.Validate</a></li>
+        
+        <li><a href="../symbols/Horn.Window.html">Horn.Window</a></li>
+        
+        <li><a href="../symbols/Horn.ZtreePanel.html">Horn.ZtreePanel</a></li>
+        
+        
+        
+	</ul>
+</div>
+        <div class="doc">
+        <div style="padding:10px">
+        <div style="text-align:right;"><a href="../index.html">返回控件主页</a>&nbsp;|&nbsp;<a href="../files.html">返回源码主页</a></div>
+        <!-- ============================== class overview ============================ -->
+        
+        
+<h3>calendargroup日期组组件</h3>
+<p>需要成对录入日期时使用,包装日期第三方插件(lhgcalendar)的组件</p>
+ <img src="../resource/images/calendarGroup.png"/>
+
+<h4>依赖组件</h4>
+<ul>
+	<li>lhgcalendar</li>
+</ul>
+
+<h4>适用范围</h4>
+<p>
+</p>
+<h4>约束</h4>
+<p>
+	<ol>
+		<li>minDate,maxDate,format日期格式支持：yyyyMMdd、yyyy-MM-dd、yyyy/MM/dd</li>
+		<li>第二个框的录入日期必须大于第一个框的录入的日期</li>
+	</ol>
+</p>
+<h4>注意事项</h4>
+<p>
+	<ol>
+		<li>需要使用panel组件做为容器</li>
+		<li>请使用 name1获取组件的Horn对象</li>
+		<li>当日期输入框中存在合法日期时，日期列表会默认选中该日期，否则选中当天日期（在最小-最大日期范围时）</li>
+	</ol>
+</p>
+
+<h4>使用示例</h4>
+<p>示例1:</p>
+<textarea name="code" class="html" style="display: none;">
+#calendar_group({"label":"日历","name1":"testCalendar","name2":"testCalendar1"})
+</textarea>
+
+<p>示例2：</p>
+<textarea name="code" class="html" style="display: none;">
+无
+</textarea>
+
+        <p>&nbsp;</p>
+        
+        	
+            	<!-- doc_options_begin -->
+	        	<h4>属性</h4>
+	        	<p style="color:red;">
+	        		注意：组件的id、name属性只能是英文字母开始，由英文字母、数字和下划线组成，命名时应考虑易识别，不要太长，不要和其他组件重复（表单内的组件除外）。
+	        	</p>
+	        	<table class="doc-table">
+	        		<tbody>
+	        			<tr>
+	        				<th><strong>名称</strong></th>
+							<th><strong>类型</strong></th>
+							<th><strong>描述</strong></th>
+							<th><strong>默认值</strong></th>
+	        			</tr>
+	        			
+	        				<tr>
+	        					<td><b>id</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>组件唯一标识</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>""</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>cols</b></td>
+	        					<td>Int</td>
+	        					<td>
+	        						<p>组件的跨列数</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>""</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>name1</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>组件的开始日期名称如果需要获取整个日期组对象也是通过name1属性来获取。例如：name1=test11  Horn.getComp("test11")获取的是整个日期组对象</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>""</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>value1</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>组件的开始日期值</p>
+		        					
+		        						示例：
+		        						
+		        							<pre></pre>
+		        						
+		        					
+	        					</td>
+	        					<td>""</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>defValue1</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>如果设置了defValue1的值，重置成的defValue1值，否则重置成初始值</p>
+		        					
+		        						示例：
+		        						
+		        							<pre></pre>
+		        						
+		        					
+	        					</td>
+	        					<td>""</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>name2</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>组件的结束日期名称</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>""</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>value2</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>组件的结束日期值</p>
+		        					
+		        						示例：
+		        						
+		        							<pre></pre>
+		        						
+		        					
+	        					</td>
+	        					<td>""</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>defValue2</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>如果设置了defValue2的值，重置成的defValue2值，否则重置成初始值</p>
+		        					
+		        						示例：
+		        						
+		        							<pre></pre>
+		        						
+		        					
+	        					</td>
+	        					<td>""</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>label</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>组件的显示标签</p>
+		        					
+		        						示例：
+		        						
+		        							<pre></pre>
+		        						
+		        					
+	        					</td>
+	        					<td>""</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td>hiddenLabel</td>
+	        					<td>Boolean</td>
+	        					<td>
+	        						<p>隐藏标签（也就是label属性）。适用场景：单独使用一个组件，但是又不想要label的。不推荐混合适用，否则布局会乱。</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>false</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>check</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>组件的约束检查选项</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>具体见Horn.Validate类的已经支持的正规、函数名"check":"required;"</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>""</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>config</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>组件的配置选项如:日期格式，如果配置了config属性，会自动根据format格式进行日期校验<br/>(注意！1.如果填写了config，就按config格式来验证，自定义的校验函数不再执行，例如：#calendar({"label":"日期校验", "name": "test5", "value":"中文", "check": "required;date;", "config":"{format:'yyyy-MM-dd'}"})；date和config只能选择一个;<br/>2.如果没有配置"config":"{minDate:'2013-12-23',noToday:true,format:'yyyy/MM/dd'}"属性，也没有配置自定义校验方法，则会自动根据:Horn.Calendar.DEFAULT_FORMAT这个参数来进行日期校验，Horn.Calendar.DEFAULT_FORMAT参数默认格式为yyyy-MM-dd。如果不想要默认格式，可以在layout页面的尾端加上Horn.Calendar.DEFAULT_FORMAT指定格式，如#jscode()  Horn.Calendar.DEFAULT_FORMAT="yyyyMMdd"  #end，(注意!自定义方法里的校验格式必须与Horn.Calendar.DEFAULT_FORMAT的格式一直)</br>3.minDate和maxDate的配置必须为类似2012-12-09的格式;另外由于第三方组件对中文格式化的支持有限config中format不能配置有中文分隔符如yyyy年MM月;yyyyMMddHHmmss,yyyy/MM/dd HH:mm:ss)用户配置的format会自动的识别，如果配置到h就会显示到选择小时的界面，如果配置到m就会显示到选择月份的界面为止另外，用户配置的format和minDate/maxDate的格式必须一致</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>你也可以指定一个符合 ISO-8601 格式的日期时间："config":"{minDate:'2012-12-09', noToday:true, format:'yyyy-MM-dd'}"</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>无</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>readonly</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>组件的是读配置</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>非只读</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>disabled</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>组件的禁用配置</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>非禁用</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td>hidden</td>
+	        					<td>Boolean</td>
+	        					<td>
+	        						<p>是否隐藏组件</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>#calendar_group({"label":"calendargroup","name1": "calendargroup","value1":"","value2":"","name2": "calendargroup2","cols":1,"check": "required;testCheck","events":[{"event":"onkeypress","function":"keypress()"}],"config":{"format":"yyyy-MM-dd"},"hidden":true})</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>false</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>events</b></td>
+	        					<td>Array[Json</td>
+	        					<td>
+	        						<p>组件的事件配置</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>"events":[{"event":"onchange","function":"getValue()"}]</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>""</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td>focusShowCalendar</td>
+	        					<td>Boolean</td>
+	        					<td>
+	        						<p>输入框获得焦点是否弹出日历控件(默认输入框获得焦点自动弹出日历控件)；注：不建议与canEditable同时设置，若是focusShowCalendar为true，canEditable为false，输入框移入焦点，日期框无法弹出。</p>
+		        					
+		        						示例：
+		        						
+		        							<pre></pre>
+		        						
+		        					
+	        					</td>
+	        					<td>true</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td>canEditable</td>
+	        					<td>Boolean</td>
+	        					<td>
+	        						<p>输入框是否可编辑(默认输入框可以手工输入，点击输入框或日期图标都可以弹出日历组件选择日期)。<br/>1.当设置为true时，输入框可以手工输入，点击输入框或日期图标都可以弹出日历组件选择日期；2.当设置为false时，输入框不可以手工输入，点击输入框时不弹出日期选择器，点击图标可以弹出日历组件选择日期；</p>
+		        					
+		        						示例：
+		        						
+		        							<pre></pre>
+		        						
+		        					
+	        					</td>
+	        					<td>true</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td>emptyText</td>
+	        					<td>Array</td>
+	        					<td>
+	        						<p>emptyText属性(此属性当值为空时，会在输入框显示提示语)；(特别说明：emptyText必须是数组，数组的第一个元素是第一个日期输入框，第二个元素是第二个日期输入框,数组必须填写两个元素，如："emptyText":["请输入开始日期","请输入结束日期"])</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>#calendar_group({"label":"calendargroup","name1": "calendargroup","value1":"","value2":"","name2": "calendargroup2","cols":1,"check": "required;testCheck","events":[{"event":"onkeypress","function":"keypress()"}],"config":{"format":"yyyy-MM-dd"},"hidden":true,"emptyText":["请输入开始日期","请输入结束日期"]})</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>[]</td>
+	        				</tr>
+	        			
+	        		</tbody>
+	        	</table>
+        	    <!-- doc_options_end -->
+            
+            
+            
+       		
+       		
+            	<!-- doc_methods_begin -->
+            	<h4>方法</h4>
+            	<table class="doc-table">
+          			<tbody>
+          				<tr>
+          					<th><strong>名称</strong></th>
+							<th><strong>参数</strong></th>
+							<th><strong>描述</strong></th>
+          				</tr>
+          				
+          					<tr>
+								<td>setValue</td>
+								<td>({name1:value1,name2:value2})</td>
+								<td>
+									<p>设置日期对的值</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        json:<b>{name1:value1,name2:value2}</b>
+		                                        日期值
+		                                    </li>
+		                                
+									
+									
+									
+	                               		示例：
+	                                    
+	                                        <pre>function setValue() {		Horn.getComp("test1").setValue({"test1":"20140412","test2":"20140523"});	}</pre>
+	                                    
+	                           		 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>mutiName</td>
+								<td>()</td>
+								<td>
+									<p>返回日期对的名字</p>
+									
+									
+										返回值:
+										
+											<li>
+		                                        Array:<b></b>
+		                                        [name1,name2]
+		                                    </li>
+										
+									
+									 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>reset</td>
+								<td>()</td>
+								<td>
+									<p>如果设置了defValue的值，重置成的defValue值，否则重置成初始值</p>
+									
+									
+									 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>clearValue</td>
+								<td>()</td>
+								<td>
+									<p>清空值</p>
+									
+									
+									 
+								</td>
+							</tr>
+          				
+          			</tbody>
+          		</table>
+            	<!-- doc_methods_end -->
+            
+        	<br /><i>Defined in: </i> <a href="../symbols/src/E__workspace_JRES-PLUS_Sources_jresplus-2.0_Sources_jresplus-ui_jresplus-ui-web_build_com.hundsun.jresplus.ui.ucalendargroup_public_scripts_CalendarGroup.js.html">CalendarGroup.js</a>
+        </div>
+        </div>
+</div>
+</div>
+<!-- ============================== footer ================================= -->
+
+		<div id="footer">
+			<div>Copyright ? 2010-2013 www.hundsun.com</div>
+		</div>
+		<script type="text/javascript">
+			dp.SyntaxHighlighter.HighlightAll('code');
+		</script>
+	</body>
+</html>
+
+

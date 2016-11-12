@@ -1,0 +1,43 @@
+
+<h3>下拉选项组件</h3>
+<p>替代html的select组件，有更加丰富的交互和功能</p>
+ <img src="../resource/images/combox.png"/>
+
+<h4>依赖组件</h4>
+<ul>
+	<li>无</li>
+</ul>
+
+<h4>适用范围</h4>
+<p>
+替代原生html的实现，支持单选和多选，也可以绑定数据词典，但是不支持筛选
+</p>
+<h4>约束</h4>
+<p>
+	<ol>
+		<li>不支持数据筛选</li>
+		<li>支持绑定数据词典和静态数据，但是不支持url方式加载</li>
+	</ol>
+</p>
+<h4>注意事项</h4>
+<p>
+	<ol>
+		<li>需要使用panel组件做为容器</li>
+	</ol>
+</p>
+
+<h4>使用示例</h4>
+<p>单选绑定数据词典</p>
+<textarea name="code" class="html" style="display: none;">
+#select({"label":"省份字典","name":"provinceItems","dictName":"ProvinceCode","check":""})
+</textarea>
+
+<p>多选并含有提示行</p>
+<textarea name="code" class="html" style="display: none;">
+#select({"label":"省份字典","multiple":"true","headItem":{"label":"","value":"请选择"},"name":"provinceItems","dictName":"ProvinceCode","check":""})
+</textarea>
+
+<p>绑定静态数据</p>
+<textarea name="code" class="html" style="display: none;">
+#select({"label":"静态字典", "multiple":"true","checkAll":"true","headItem":{"label":"","value":"请选择"},"name":"testSelect1", "items":[{"label":"0","value":"个人账户"},{"label":"1","value":"机构账户"},{"label":"3","value":"特殊机构账户"}], "events":[{"event":"onchange","function":"alert(1)"}], "check":""})
+</textarea>

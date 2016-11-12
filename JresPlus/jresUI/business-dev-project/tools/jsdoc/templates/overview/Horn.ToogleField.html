@@ -1,0 +1,39 @@
+
+<h3>开关组件</h3>
+<p>组件具有两种状态，根据值为0还是1，显示不同的状态</p>
+ <img src="../resource/images/toogle_field.jpg"/>
+
+
+<h4>适用范围</h4>
+<p>
+具有0和1的两种状态，且必须是两种状态之一的场景下，可以使用该组件展示
+</p>
+<h4>注意事项</h4>
+<p>
+	<ol>
+		<li>该组件的值只能是1或者0，且不会为空</li>
+		<li>初始时没有设置值，则值为0</li>
+		<li>需要使用panel组件做为容器</li>
+	</ol>
+</p>
+
+<h4>使用示例</h4>
+<p>初始值开</p>
+<textarea name="code" class="html" style="display: none;">
+#tooglefield({"label":"初始值开","value":1})
+</textarea>
+
+<p>初始值关</p>
+<textarea name="code" class="html" style="display: none;">
+#tooglefield({"label":"初始值关","value":0})
+</textarea>
+
+<p>初始值无</p>
+<textarea name="code" class="html" style="display: none;">
+#tooglefield({"label":"初始值无"})
+</textarea>
+
+<p>禁止点击</p>
+<textarea name="code" class="html" style="display: none;">
+#tooglefield({"label":"禁止点击","disabled":"true"})
+</textarea>

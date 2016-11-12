@@ -1,0 +1,246 @@
+#*
+ * @class
+ * @name  datagrid
+ * @param name {String} 名称
+ * @param id {String} 唯一标识
+ * @param data {Json}　数据
+*#
+#** 
+ * 修改记录:
+ * 修改日期                          修改人员                              修改说明                 
+ * -----------------------------------------------------------------------
+ * *2014-08-13    wangyb10555         STORY #9387和STORY #9387添加对表格头的支持
+ * *2014-08-18    wangyb10555         添加toolbar
+ *	2014-10-14    wangyb10555		  修复当model中存在data变量的值，而组件参数配置的时候配置非法data的属性的时候导致的依然以model中数值进行展示的问题
+ *	2014-10-22    wangyb10555 		STORY #10063 [研发中心/内部需求]JRESPlus-ui-分组菜单式按钮的组件的菜单可以绑定到datagrid组件当中的buttons中的button上 
+ * 	2015-2-28	  wangyb10555		STORY #10955 [财富管理事业部-吴丰辉][TS:201502150030]-JRESPlus--datagrid支持多列冻结某些场景单列冻结不够用】
+ *  2015-09-28   周智星                                   STORY #12660 【TS:201508240145-JRESPlus-财富管理事业部-王瑞明-若在查询框中通过 tab_panel 控件设置多个 Tab,分页则除第一次选择的TAB页外的其他全选按钮会失效 】
+ *  2016-3-9      刘龙                               需求#17378 【TS:201602230423-JRESPlus-资产管理事业部-张翔-【项目名称】非标准化投资管理系统2.0<br><br><br】
+ *  2016-3-28    刘龙                                   需求18070 【TS:201603240534-JRESPlus-财富管理事业部-江志伟-【项目名称】恒生信托综合管理平台（TCMP）<br>【产品及】
+ * -----------------------------------------------------------------------
+*#
+#macro(datagrid $params)
+#if($params.id&&$params.id!="")
+	#set($id = ${params.id})
+#else
+	#set($id = "dyncGrid")    ##id默认值
+#end	
+	
+#set($numberColumn = $params.numbercolumn)	##是否展现序号列标识
+#if($params.numberColWidth&&$params.numberColWidth!="")
+  #set($numberColumnWidth = $params.numberColWidth)	##序号列宽度
+#else
+  #set($numberColumnWidth = 20)	
+#end  
+#set($colItems = $params.items)             ##列数据模型对象
+#set($frozenColName = "")
+#if($params.frozen[0])
+	#set($frozenColName = $params.frozen[0])
+#else
+	#set($frozenColName = $params.frozen)
+#end
+#set($frozenItem = "")
+#if($frozenColName&&$frozenColName!="")
+	#foreach($col in $colItems)
+		#if($col.name==$frozenColName)
+			#set($frozenItem = $col)
+			#break
+		#end	
+	#end	
+#end
+#set($selectModel = $params.selectModel)   ##单选 多选模式
+#set($_data = $!params.data)                 ##静态加载的数据，数据由后台服务返回
+#set($size =$!{colItems.size()} ) 
+                					#if($numbercolumn&&$numbercolumn==true)
+                                        #set($size = $size+1 )
+                        			#end
+                        			#if($selectModel&&$selectModel=="multi")
+                                        #set($size = $size+1 )
+									#elseif($selectModel&&$selectModel=="single")	
+										#set($size = $size+1 )
+            						#end
+<div id='wrap_$id' class="xdatagrid g-datagrid-wrap" 
+	#if ($params.name) name="$!{params.name}"#else name="$id" #end   $horn.paramsCache($params) >
+	            #if ($params.title&&"$!params.title"!="")
+	            <!-- *****************  title区域 ***********************-->   
+            	<div class="u-datagrid-header">
+					<h4 class="u-datagrid-title">$!{params.title}</h4>
+				</div>
+                #end
+	            
+	            <!-- *****************  toolbar区域 ***********************-->   
+				#if ($params.buttons&&"$!params.buttons"!=""&&$params.buttons.size()>0)
+				<div class="u-datagrid-toolbar">
+					<ul class="u-datagrid-btn">
+						#foreach($button in $params.buttons )
+    			     	<li><a name="$!{button.name}" href="JavaScript:void(0)" class="hc-datagrid-a hc_datagrid-alink #if($button.disabled)f-disabled#end" #if($button.refmenu&&!$button.disabled)refmenu="${button.refmenu}"#end onClick="$!{button.event}" event = "$!{button.event}"><i class="fa #if($button.cls=="add")fa-plus-circle#elseif($button.cls=="edit")fa-pencil-square-o#elseif($button.cls=="del")fa-remove#elseif($button.cls=="confirm")fa-save#elseif($button.cls=="save")fa-save#elseif($button.cls=="query")fa-search#elseif($button.cls=="open")fa-folder-open-o#elseif($button.cls=="refresh")fa-refresh #else $!{button.cls} #end"></i>$!{button.label}</a></li>
+						#end
+					</ul>
+    			</div>
+				#end
+			    <!-- *****************DataGrid  header区域 ***********************--> 
+				<div style="WIDTH: 100%;" class="hc-datagrid-header">
+					<!--     冻结列头区域         -->
+				  #if($!{frozenItem}!="")	
+					<table id='freez_head_$id' class="hc-datagrid-fixed-table" style="position: absolute;"  border="0" cellSpacing="0"
+						cellPadding="0">
+						<tbody>
+							<tr>
+							  #if($numberColumn&&$numberColumn==true)
+								<td style="width:36px;">
+									<div style="TEXT-aLIGN: center; " class="u-table-number" style="width:36px;">
+									</div>
+								</td>	
+							  #end	
+							  ##单选多选列的逻辑
+							  #if($selectModel&&$selectModel=="multi")
+        						  <td style="width:36px;">
+        								<div class="hc-datagrid-cell-check u-table-check" style="width:36px;">
+        									<input id="allcb_datagrid_id" type="checkbox" class="h_datagrid_select_all"/>
+        								</div>
+        						  </td>
+							  #elseif($selectModel&&$selectModel=="single")	  
+								  <td style="width:36px;">
+        								<div class="hc-datagrid-cell-check u-table-check" style="width:36px;">
+        								</div>
+        						  </td>
+							  #end	  
+							  ##冻结列逻辑
+							  #if($!{frozenItem}!="")	
+								#if($frozenItem.hidden&&$frozenItem.hidden==true)
+									#set($hide="display:none")
+								#else
+									#set($hide="")
+								#end	
+								<td style="WIDTH: #nt(${frozenItem.width} 100)px;$!{hide}" name="$frozenItem.name">  
+									<div style="TEXT-aLIGN:$!{frozenItem.hAlign}; WIDTH: #nt(${frozenItem.width} 100)px; CURSOR: default"
+										class="hc-datagrid-cell" name="$!{frozenItem.name}" dictName="$!{frozenItem.dictName}"
+										buttons="$!{frozenItem.buttons}" renderer="$!{frozenItem.renderer}">$!{frozenItem.text}</div>
+								</td>
+							  #end	
+							</tr>
+						</tbody>
+					</table>
+					#end
+					<!--     DataGrid   表格表头区域 (包含冻结列)        -->
+					<table id='head_$id' border="0" cellSpacing="0" cellPadding="0" style="width:100%">
+						<tbody>
+							<tr>
+							 #if($numberColumn&&$numberColumn==true)
+								<td style="width:36px;">
+									<div style="TEXT-aLIGN: center; "  class="h_numbercolumn u-table-number" style="width:36px;">
+									</div>
+								</td>	
+							  #end
+							  #if($selectModel&&$selectModel=="multi")
+        						  <td style="width:36px;">
+        								<div class="hc-datagrid-cell-check u-table-check" style="margin: 0 5; padding: 0 5;width:36px;">
+										  <input id="allcb_datagrid_id" type="checkbox" class="h_datagrid_select_all"/>
+										</div>
+        						  </td>
+							  #elseif($selectModel&&$selectModel=="single")	  
+								  <td style="width:36px;">
+        								<div class="hc-datagrid-cell-check u-table-check" style="width:36px;">
+        								</div>
+        						  </td>
+							  #end
+							  
+							  ##冻结列逻辑
+							  #if($!{frozenItem}!="")	
+								#if($frozenItem.hidden&&$frozenItem.hidden==true)
+									#set($hide="display:none")
+								#else	
+									#set($hide="")
+								#end	
+								<td style="WIDTH: #nt(${frozenItem.width} 100)px;$!{hide}" flag="frozen" name="$frozenItem.name"> 
+									<div style="TEXT-aLIGN:$!{frozenItem.hAlign};WIDTH: #nt(${frozenItem.width} 100)px; CURSOR: default"
+										class="hc-datagrid-cell" name="$!{frozenItem.name}" dictName="$!{frozenItem.dictName}"
+										buttons="$!{frozenItem.buttons}" renderer="$!{frozenItem.renderer}">$!{frozenItem.text}</div>
+								</td>
+							  #end	
+							 
+							  ##所有列头(如果有冻结列则排除)
+							  #foreach($colitem in $colItems)
+								 #if($colitem.dictName&&$colitem.dictName!="")
+							        $horn.addGlobal('componentSelects_s',$!{colitem.dictName})
+								 #end
+								 #if($colitem.name!=$frozenItem.name)
+    							    #if($colitem.hidden&&$colitem.hidden==true)
+									   #set($hide="display:none")
+									#else
+									   #set($hide="")   
+								    #end	
+								<td style="WIDTH: #nt(${colitem.width} 100)px;$!{hide}" name="$colitem.name">
+									<div style="TEXT-aLIGN:$!{colitem.hAlign};WIDTH: #nt(${colitem.width} 100)px; CURSOR: default"
+    										class="hc-datagrid-cell" name="$!{colitem.name}" dictName="$!{colitem.dictName}"
+											buttons="$!{colitem.buttons}" renderer="$!{colitem.renderer}">$!{colitem.text}</div>
+    								</td>
+								#end	
+							  #end 	
+							</tr>
+						</tbody>
+					</table>
+					
+				</div>
+				<!-- ********************** DataGrid  冻结数据区域 *******************-->
+			 #if($!{frozenItem}!="")		
+				<div id='freeze_data_$id' style="position: absolute;overflow: hidden;"
+					class="hc-datagrid-body">
+					<table id="freez_body_$id" style="background-color:#fff;" border="0" cellSpacing="0" cellPadding="0"  class="hc-datagrid-fixed-table datagrid-table">
+						<tbody id="freez_tbody_$id">
+							
+							#if($_data&&$_data.size()>0&&$_data!="")
+								
+							#else
+							<tr><td colspan="$size" style="border-right:0px;padding:15px;"><p>暂时无数据</p></td></tr>
+							#end	
+							
+						</tbody>
+					</table>
+				</div>
+			 #end	
+				<!-- *****************DataGrid  数据区域 ***********************--> 
+				<div id='data_$id' style="WIDTH: 100%;"
+					class="hc-datagrid-body">
+					<table id="data_table_$id" border="0" cellSpacing="0" cellPadding="0" class="hc-datagrid-fixed-table datagrid-table">
+						<tbody id="body_$id">
+						 
+						 #if($_data&&$_data.size()>0&&$_data!="")	
+						 	
+						 #else
+								<tr>
+            											
+						        <td colspan="$size" style="border-right:0px;padding:15px;"><p>暂时无数据</p></td>
+					           </tr>
+						  #end	
+
+						</tbody>
+					</table>
+				</div>
+               <!-- *******************　　pagebar区域　********************** -->
+			   #if($params.hasPage&&$params.hasPage==true)
+               <div class="u-datagrid-page" >
+    				<div class="g-pagebar-wrap">
+        		      <ul class="m-pagebar" id='page_$id'>
+        		        <li>
+        		          <a href="javascript:void(0)" class="first_page_btn" title="首页"><i class="fa fa-step-backward"></i></a>
+        		        </li>
+        		        <li>
+        		          <a href="javascript:void(0)" class="pre_page_btn" title="上一页"><i class="fa fa-caret-left"></i></a>
+        		        </li>
+        		        <li><span>第</span></li>
+        		        <li><input id='toPage_$id' class="hc-pagination-num" value="0" size="2" type="text" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')"/></li>
+        		        <li><span>页</span></li>
+        		        <li><span>每页</span></li>
+        		        <li><input id='pageSize_$id' class="hc-pagination-num" style="width: 30px;" value="20" size="20" type="text" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')"/></li>
+        		        <li><span>条</span></li>
+        		        <li><a href="javascript:void(0)" class="next_page_btn" title="下一页"><i class="fa fa-caret-right"></i></a></li>
+        		        <li><a href="javascript:void(0)" class="last_page_btn" title="尾页"><i class="fa fa-step-forward"></i></a></li>
+        		        <li><a href="javascript:void(0)" class="refresh_btn" title="刷新"><i class="fa fa-refresh"></i></a></li>
+        		      </ul>
+    				  <div class="m-pagebar-all">共<span id='totalPages_$id' style="">0</span>页，<span id='pageInfo_$id' class="hc-pagination-info">当前显示0到0，共0条记录</span></div>
+    				</div>
+    			</div>
+				#end
+			</div>
+#end	

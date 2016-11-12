@@ -1,0 +1,718 @@
+
+	<!-- ============================== header ================================= -->	
+		<!-- begin static/header.html -->
+		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="keywords" content="jquery,ui,easy,FUI,web framekwork,ajax framekwork,ria,web development">
+		<meta name="description" content="FUI help you build your web page more Fast!!">
+		<title>UI API - JRES UI</title>
+   		<link rel="stylesheet" href="../resource/css/doc.css" type="text/css" />
+    	<link type="text/css" rel="stylesheet" href="../resource/SyntaxHighlighter/Styles/SyntaxHighlighter.css"/>
+		<script src="../resource/SyntaxHighlighter/Scripts/shCore.js"></script>
+		<script src="../resource/SyntaxHighlighter/Scripts/shBrushXml.js"></script>
+		<script src="../resource/SyntaxHighlighter/Scripts/shBrushJava.js"></script>
+		<script type="text/javascript" src="../resource/jquery-1.7.2.min.js"></script>
+		<style type="text/css">
+			.dp-xml .cdata { color: #ff1493; }.dp-xml .tag, .dp-xml .tag-name { color: #069; font-weight: bold; }.dp-xml .attribute { color: red; }.dp-xml .attribute-value { color: blue; }
+		</style>
+		<script>
+			
+		</script>
+	</head>
+	<body>
+		<div id="header">
+						<div id="header-inner">
+				<table cellpadding="0" cellspacing="0" style="width:100%;">
+					<tr>
+						<td rowspan="2" style="width:20px;">
+						</td>
+						<td style="height:52px;">
+							<div style="color:#fff;font-size:22px;font-weight:bold;">
+								<a href="#" style="color:#fff;font-size:22px;font-weight:bold;text-decoration:none">JRES UI</a>
+							</div>
+							<div style="color:#fff">
+								<a href="#" style="color:#fff;text-decoration:none">JRES UI是使用Velocity开发的服务器端UI组件，助力于组件化快速视图开发!</a>
+							</div>
+						</td>
+						<td style="padding-right:5px;text-align:right;vertical-align:bottom;">
+							<div id="topmenu" style="display:none;">
+								<a href="../../index.html">主页</a>
+								<a href="http://rdc.hundsun.com/forum.php?mod=forumdisplay&amp;fid=163" target="_blank">论坛</a>
+								<a href="../../demo/index.htm">示例</a>
+								<a href="../../documentation/index.html">文档</a>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+			
+		</div>
+		<!-- end static/header.html -->
+	<div id="mainwrap" >
+		<div id="content">
+        <!-- ============================== classes index ============================ -->
+        <script type="text/javascript">
+            $(function() {
+            	var bw=$.browser;
+				if(bw.msie&&bw.version<7||(bw.msie&&$.support.boxModel==false)){
+						//ie6
+						$("#plugin_title").hide();
+						$('#plugins').removeClass("plugins");
+						$('#plugins').addClass("plugins2");
+				}else{
+					$('#plugins').stop().animate({'marginLeft':'-285px'},1000);
+	                $('#plugins').hover(
+	                    function () {
+	                        $(this).stop().animate({'marginLeft':'-2px'},200);
+	                    },
+	                    function () {
+	                        $(this).stop().animate({'marginLeft':'-285px'},200);
+	                    }
+	                );
+				}
+                
+            });
+</script>
+	<div id="plugins" class="plugins">
+	<div id="plugin_title" class="plugin_title">控件清单</div>
+	<ul>
+        
+        
+        
+        
+        
+        <li><a href="../symbols/Horn.html">Horn</a></li>
+        
+        <li><a href="../symbols/Horn._Pagebar-pagebar.html">Horn._Pagebar-pagebar</a></li>
+        
+        <li><a href="../symbols/Horn.Base.html">Horn.Base</a></li>
+        
+        <li><a href="../symbols/Horn.ButtonPanel.html">Horn.ButtonPanel</a></li>
+        
+        <li><a href="../symbols/Horn.Calendar.html">Horn.Calendar</a></li>
+        
+        <li><a href="../symbols/Horn.CalendarGroup.html">Horn.CalendarGroup</a></li>
+        
+        <li><a href="../symbols/Horn.Checkbox.html">Horn.Checkbox</a></li>
+        
+        <li><a href="../symbols/Horn.CheckboxGroup.html">Horn.CheckboxGroup</a></li>
+        
+        <li><a href="../symbols/Horn.Combox.html">Horn.Combox</a></li>
+        
+        <li><a href="../symbols/Horn.DataGrid.html">Horn.DataGrid</a></li>
+        
+        <li><a href="../symbols/Horn.Field.html">Horn.Field</a></li>
+        
+        <li><a href="../symbols/Horn.FieldSet.html">Horn.FieldSet</a></li>
+        
+        <li><a href="../symbols/Horn.Form.html">Horn.Form</a></li>
+        
+        <li><a href="../symbols/Horn.Grid.html">Horn.Grid</a></li>
+        
+        <li><a href="../symbols/Horn.HiddenField.html">Horn.HiddenField</a></li>
+        
+        <li><a href="../symbols/Horn.Label.html">Horn.Label</a></li>
+        
+        <li><a href="../symbols/Horn.Menu.html">Horn.Menu</a></li>
+        
+        <li><a href="../symbols/Horn.MessageBox.html">Horn.MessageBox</a></li>
+        
+        <li><a href="../symbols/Horn.PageBar.html">Horn.PageBar</a></li>
+        
+        <li><a href="../symbols/Horn.Panel.html">Horn.Panel</a></li>
+        
+        <li><a href="../symbols/Horn.Password.html">Horn.Password</a></li>
+        
+        <li><a href="../symbols/Horn.PasswordGroup.html">Horn.PasswordGroup</a></li>
+        
+        <li><a href="../symbols/Horn.QueryTable.html">Horn.QueryTable</a></li>
+        
+        <li><a href="../symbols/Horn.RadioGroup.html">Horn.RadioGroup</a></li>
+        
+        <li><a href="../symbols/Horn.Screen.html">Horn.Screen</a></li>
+        
+        <li><a href="../symbols/Horn.SelectTree.html">Horn.SelectTree</a></li>
+        
+        <li><a href="../symbols/Horn.TabPanel.html">Horn.TabPanel</a></li>
+        
+        <li><a href="../symbols/Horn.TargetSelect.html">Horn.TargetSelect</a></li>
+        
+        <li><a href="../symbols/Horn.Textarea.html">Horn.Textarea</a></li>
+        
+        <li><a href="../symbols/Horn.Textfield.html">Horn.Textfield</a></li>
+        
+        <li><a href="../symbols/Horn.Tip.html">Horn.Tip</a></li>
+        
+        <li><a href="../symbols/Horn.TypeField.html">Horn.TypeField</a></li>
+        
+        <li><a href="../symbols/Horn.Util.html">Horn.Util</a></li>
+        
+        <li><a href="../symbols/Horn.Validate.html">Horn.Validate</a></li>
+        
+        <li><a href="../symbols/Horn.Window.html">Horn.Window</a></li>
+        
+        <li><a href="../symbols/Horn.ZtreePanel.html">Horn.ZtreePanel</a></li>
+        
+        
+        
+	</ul>
+</div>
+        <div class="doc">
+        <div style="padding:10px">
+        <div style="text-align:right;"><a href="../index.html">返回控件主页</a>&nbsp;|&nbsp;<a href="../files.html">返回源码主页</a></div>
+        <!-- ============================== class overview ============================ -->
+        
+        
+<h3>树形下拉选择组件</h3>
+<p>集成了ztree作为下拉树实现，通过点击输入框下拉树选择</p>
+ <img src="../resource/images/select_tree.png"/>
+
+<h4>依赖组件</h4>
+<ul>
+	<li>第三方ztree 3.5版本组件</li>
+</ul>
+
+<h4>适用范围</h4>
+<p>
+适用于下拉控件展示形态为树形结构的应用场景<span style="color:red;">除非您非常了解此组件的使用场景，否则不建议使用此组件</span>
+</p>
+
+<h4>树形JSON格式</h4>
+<p>
+<ol>
+	<li>id: 树节点的唯一标示</li>
+	<li>pId: 父亲节点的id</li>
+	<li>name: 树节点显示的名字</li>
+</ol>
+<textarea name="code" class="html" style="display: none;">
+[
+	{"id":"1","name":"root","pId":""},
+	{"id":"21","name":"sub11","pId":"1"},
+	{"id":"22","name":"sub12","pId":"1"},
+	{"id":"212","name":"sub111","pId":"21"},
+	{"id":"221","name":"sub211","pId":"22"},
+	{"id":"212","name":"sub11sas","pId":"21"}
+]
+</textarea>
+</p>
+
+<h4>使用示例</h4>
+<p>示例1:数据源为静态数据</p>
+<textarea name="code" class="html" style="display: none;">
+#set($dataT='[{"id":"1","name":"root","pId":""},{"id":"21","name":"sub11","pId":"1","checked":true},{"id":"22","name":"sub12","pId":"1"},{"id":"212","name":"sub111","pId":"21"},{"id":"221","name":"sub211","pId":"22"},{"id":"212","name":"sub11sas","pId":"21"}]') 
+#select_tree({"name":"select_tree","label":"select_tree","data":$dataT,"expandFirst":true,"checkMode":"checkbox","value":"1","search":true})
+</textarea>
+
+<p>示例2：数据源为URL，异步请求</p>
+<textarea name="code" class="html" style="display: none;">
+#select_tree({"name":"select_tree","label":"select_tree","url":"$appServer.get('/zhou/2016-1-14ztree.json')","expandFirst":true,"checkMode":"checkbox","value":"1","search":true})
+</textarea>
+
+        <p>&nbsp;</p>
+        
+        	
+            	<!-- doc_options_begin -->
+	        	<h4>属性</h4>
+	        	<p style="color:red;">
+	        		注意：组件的id、name属性只能是英文字母开始，由英文字母、数字和下划线组成，命名时应考虑易识别，不要太长，不要和其他组件重复（表单内的组件除外）。
+	        	</p>
+	        	<table class="doc-table">
+	        		<tbody>
+	        			<tr>
+	        				<th><strong>名称</strong></th>
+							<th><strong>类型</strong></th>
+							<th><strong>描述</strong></th>
+							<th><strong>默认值</strong></th>
+	        			</tr>
+	        			
+	        				<tr>
+	        					<td><b>id</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>组件的唯一标示</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>""</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>name</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>表单提交时的名称</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>""</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>cols</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>表单组件跨列数，默认为1</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>"1"</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td>hiddenLabel</td>
+	        					<td>Boolean</td>
+	        					<td>
+	        						<p>隐藏标签（也就是label属性）。适用场景：单独使用一个组件，但是又不想要label的。不推荐混合适用，否则布局会乱。</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>false</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>label</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>表单组件的名称</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>""</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td>afterClear</td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>清空值后需要callback的事件配置</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>#select_tree({   "id":"select_tree",   "name":"select_tree",	 "checkMode":"checkbox", "afterClear":"afterClearFn", "url":"$appServer.get('/test/ztree/asynTree.htm')"}) #jscode() 	function afterClearFn(){ 	} #end</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>""</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td>disabled</td>
+	        					<td>Boolean</td>
+	        					<td>
+	        						<p>组件的禁用状态，被设置禁用状态的组件，无法获得焦点，不参与表单校验（不会阻止表单提交），不会参与表单提交并且其所有校验状态都会消失，不可编辑，但是可以通过setValue、reset等API修改表单的值；true表示禁用，false表示正常状态</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>false</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>data</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>同步加载，静态数据</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>'[{"id":"1","name":"root"},{"id":"21","name":"sub11","pId":"1"},{"id":"22","name":"sub12","pId":"1"}]'</pre>
+		        						
+		        					
+	        					</td>
+	        					<td></td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>url</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>组件异步请求的数据地址，默认不需要此项，使用框架提供的地址。<br/>注：若果同时配置了url属性以及data属性，则根据url进行异步请求，data属性无效。</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>#select_tree({   "id":"select_tree",   "name":"select_tree", "url":"$appServer.get('/test/ztree/asynTree.htm')"})</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>""</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>checkMode</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>选择模式"checkbox","radio"<br/>注：1.配置该属性时，点击文本节点选择模式失效；2.不配置该属性时，点击文本节点进行选择，同时按住Ctrl键可多选；<br/>  3.模式为radio时，勾选子节点，父节点不是勾选状态，灰色标示作用;4.模式为radio时，同级节点不能同时勾选，父子节点可以同时勾选;<br/>  5.模式为checkbox时，勾选子节点，父节点不是勾选状态，灰色标示作用;</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>#select_tree({   "id":"select_tree",   "name":"select_tree",	"checkMode":"checkbox",  "url":"$appServer.get('/test/ztree/asynTree.htm')"})</pre>
+		        						
+		        					
+	        					</td>
+	        					<td></td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>search</b></td>
+	        					<td>Boolean</td>
+	        					<td>
+	        						<p>是否使用模糊搜索,默认不使用，搜索出来的树节点高亮显示</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>#select_tree({   "id":"select_tree",   "name":"select_tree",	"checkMode":"checkbox",  "url":"$appServer.get('/test/ztree/asynTree.htm')", "search":true})</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>false</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>filterBy</b></td>
+	        					<td>string</td>
+	        					<td>
+	        						<p>根据特定属性进行模糊搜索,如果配置了filterBy则自动打开模糊查询，filterBy可以配置为节点name或者id。name ：根据树节点名称，id:根据树节点id过滤</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>无</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>name</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td><b>onCheck</b></td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>下拉树选中时，回调函数方法</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>#set($dataT='[{"id":"1","name":"根","pId":""},{"id":"21","name":"sub11","pId":"1"},{"id":"22","name":"sub12","pId":"1"},{"id":"212","name":"sub111","pId":"21"},{"id":"221","name":"sub211","pId":"22"},{"id":"212","name":"sub11sas","pId":"21"}]') 
+	#select_tree({
+	        "id":"select_tree",
+	        "name":"select_tree",
+			"label":"select_tree",
+			"disabled":false,			
+			"data":$dataT,
+			"expandFirst":false,
+			"filterBy":"id",
+			"check":"required",
+			"onCheck":"onCheck"
+			})
+	#jscode()
+		function onCheck(){
+			console.info(Horn.getComp("select_tree2").getSelectedNodes());
+		}
+	#end</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>""</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td>emptyText</td>
+	        					<td>String</td>
+	        					<td>
+	        						<p>emptyText属性(此属性当值为空时，会在输入框显示提示语)；</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>#select_tree({
+	        "id":"select_tree",
+	        "name":"select_tree",
+			"label":"select_tree",
+			"disabled":false,			
+			"data":$dataT,
+			"expandFirst":false,
+			"filterBy":"id",
+			"check":"required",
+			"onCheck":"onCheck",
+			"emptyText":"请选择"
+			})</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>""</td>
+	        				</tr>
+	        			
+	        				<tr>
+	        					<td>confirm</td>
+	        					<td>boolean</td>
+	        					<td>
+	        						<p>点击X按钮清空值时是否需要确认提示，默认为false；</p>
+		        					
+		        						示例：
+		        						
+		        							<pre>#select_tree({
+	        "id":"select_tree",
+	        "name":"select_tree",
+			"label":"select_tree",
+			"disabled":false,			
+			"data":$dataT,
+			"expandFirst":false,
+			"filterBy":"id",
+			"check":"required",
+			"onCheck":"onCheck",
+			"confirm":true
+			})</pre>
+		        						
+		        					
+	        					</td>
+	        					<td>false</td>
+	        				</tr>
+	        			
+	        		</tbody>
+	        	</table>
+        	    <!-- doc_options_end -->
+            
+            
+            
+       		
+       		
+            	<!-- doc_methods_begin -->
+            	<h4>方法</h4>
+            	<table class="doc-table">
+          			<tbody>
+          				<tr>
+          					<th><strong>名称</strong></th>
+							<th><strong>参数</strong></th>
+							<th><strong>描述</strong></th>
+          				</tr>
+          				
+          					<tr>
+								<td>setEnable</td>
+								<td>(enable)</td>
+								<td>
+									<p>设置表单是否可用</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        :<b>enable</b>
+		                                        true表示启用，false表示禁用
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        void
+		                                    </li>
+										
+									
+									
+	                               		示例：
+	                                    
+	                                        <pre></pre>
+	                                    
+	                           		 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>setValue</td>
+								<td>(value)</td>
+								<td>
+									<p>设置下拉树的值，必须传递树节点的id值，如果id值不存在则设置为空(注：只能设置单个节点)。</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        String:<b>value</b>
+		                                        值
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        void
+		                                    </li>
+										
+									
+									
+	                               		示例：
+	                                    
+	                                        <pre>##设置默认值为根节点Horn.getComp("select_tree").setValue("1");</pre>
+	                                    
+	                           		 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>getSelectedNodes</td>
+								<td>()</td>
+								<td>
+									<p>获取 selectTree 当前被选中的节点数据集合</p>
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        Array(JSON)当前被选中的节点数据集合
+		                                    </li>
+										
+									
+									
+	                               		示例：
+	                                    
+	                                        <pre>#set($dataT='[{"id":"1","name":"根","pId":""},{"id":"21","name":"sub11","pId":"1"},{"id":"22","name":"sub12","pId":"1"},{"id":"212","name":"sub111","pId":"21"},{"id":"221","name":"sub211","pId":"22"},{"id":"212","name":"sub11sas","pId":"21"}]') 
+		#select_tree({
+	        "id":"select_tree",
+	        "name":"select_tree",
+			"label":"select_tree",
+			"disabled":false,			
+			"data":$dataT,
+			"expandFirst":false,
+			"filterBy":"id",
+			"checkMode":"radio",
+			"check":"required",
+			"onCheck":"onCheck"
+			})
+      	#jscode()
+		function getSelectedNodes(){
+			Horn.getComp("select_tree").getSelectedNodes();
+		}
+		#end</pre>
+	                                    
+	                           		 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>getValue</td>
+								<td>()</td>
+								<td>
+									<p>获取下拉树的值列表</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        :<b></b>
+		                                        
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        String:<b></b>
+		                                        返回树节点的id值
+		                                    </li>
+										
+									
+									 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>getText</td>
+								<td>()</td>
+								<td>
+									<p>获取节点名称值</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        :<b></b>
+		                                        
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        String:<b></b>
+		                                        返回树节点的名称值
+		                                    </li>
+										
+									
+									 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>getPid</td>
+								<td>()</td>
+								<td>
+									<p>获取节点的父id值</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        :<b></b>
+		                                        
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        String:<b></b>
+		                                        返回树节点的pId值
+		                                    </li>
+										
+									
+									 
+								</td>
+							</tr>
+          				
+          			</tbody>
+          		</table>
+            	<!-- doc_methods_end -->
+            
+        	<br /><i>Defined in: </i> <a href="../symbols/src/E__workspace_JRES-PLUS_Sources_jresplus-2.0_Sources_jresplus-ui_jresplus-ui-web_build_com.hundsun.jresplus.ui.selecttree_public_scripts_SelectTree.js.html">SelectTree.js</a>
+        </div>
+        </div>
+</div>
+</div>
+<!-- ============================== footer ================================= -->
+
+		<div id="footer">
+			<div>Copyright ? 2010-2013 www.hundsun.com</div>
+		</div>
+		<script type="text/javascript">
+			dp.SyntaxHighlighter.HighlightAll('code');
+		</script>
+	</body>
+</html>
+
+

@@ -1,0 +1,20 @@
+#**
+ * @class
+ * @name fieldset
+ * @param id {String} 唯一标识
+ * @param title {String} 标题
+ * @description 分组组件
+ * @see
+ * @example
+ * \#@fieldset({"title":"详细信息"})
+ *       \#textfield({"title":"详细信息","id":"fieldsetId"})
+ *   \#end
+ * @since version 0.1
+ *#
+#macro(fieldset $uiFieldSetConfig)
+	<fieldset class="h_fieldset" id="$!{uiFieldSetConfig.id}" name="$!{uiFieldSetConfig.name}" $horn.paramsCache($uiFieldSetConfig)  >
+		<legend>$!uiFieldSetConfig.title</legend>
+		$bodyContent
+	</fieldset>
+	#set($uiFieldSetConfig = {})
+#end

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui-components xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+          xsi:noNamespaceSchemaLocation="components.xsd">
+	<namespace>com.hundsun.jresplus.ui.textfield</namespace>
+	<name>文本输入框基础组件包</name>
+	<description><![CDATA[组件包的具体描述]]></description>
+	<dependencies>
+		<dependency>
+			<namespace>com.hundsun.jresplus.ui.field</namespace>
+			<description><![CDATA[基础组件包]]></description>
+		</dependency>
+	</dependencies>
+	<components>
+		<component>
+			<category>VM</category>
+			<id>Horn.textfield</id>
+			<name>文本输入框基础组件</name>
+			<description><![CDATA[测试组件的描述信息]]></description>
+			<ideinfo>
+				<label>测试组件</label>
+				<icon>images/component/textfield.png</icon>
+				<template>
+					<![CDATA[
+						#textfield({"name":"","id":"", "label":"","value":"", "defValue": "", "maxlength": "", "cols": "", "check": "","hidden":""})
+					]]>	
+				</template>
+			</ideinfo>
+		</component>
+	</components>
+</ui-components>

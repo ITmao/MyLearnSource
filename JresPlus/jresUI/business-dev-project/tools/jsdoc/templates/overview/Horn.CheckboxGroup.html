@@ -1,0 +1,46 @@
+
+<h3>checkbox_group复选框组</h3>
+<p>用于多个选择值的复选框</p>
+ <img src="../resource/images/checkboxGroup.png"/>
+
+<h4>继承组件</h4>
+<ul>
+	<li><a href="../symbols/Horn.Field.html">Horn.Field</a></li>
+</ul>
+
+<h4>适用范围</h4>
+<p>
+以复选框的形式展示多选，功能和复选的combox功能类似，当复选选项较多的情况下，酌情增加cols（最多为3）之后仍然影响展示，此时不建议使用此组件，而要使用combox替代。
+</p>
+<h4>约束</h4>
+<p>
+	<ol>
+		<li>无</li>
+	</ol>
+</p>
+<h4>注意事项</h4>
+<p>
+	<ol>
+		<li>通过setValue或者getValue设置或者获取的都是使用逗号","分隔的字符串；但是表单提交到后台的是数组</li>
+		<li>需要使用panel组件做为容器</li>
+		<li>数据项不易过多（一行内可以完整显示），否则会导致换行显示影响美观，如果需要显示更多的项，可以考虑使用多选模式的combox组件</li>
+	</ol>
+</p>
+
+<h4>使用示例</h4>
+<p>示例1:</p>
+<textarea name="code" class="html" style="display: none;">
+#@screen({"title":"测试checkbox组"})
+	#@form({"name":"prope"})
+    	#@panel({"name":"aa"})
+			#checkbox_group({"id":"test1","cols":1, "value": "0", "name":"test1","label":"checkboxGroup","defValue":"1,3","items":[
+			    {"text":"葡萄1","code":"0"},
+				{"text":"苹果2","code":"1"},
+			    {"text":"香蕉3","code":"2"},
+			    {"text":"桔子4","code":"3"}
+			]})
+    	#end
+        #button_panel
+	#end
+#end
+</textarea>

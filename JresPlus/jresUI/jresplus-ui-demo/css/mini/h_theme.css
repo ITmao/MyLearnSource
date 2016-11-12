@@ -1,0 +1,326 @@
+.h-logo a:hover{
+	color:#fff;
+}
+
+body{
+	background: #d9e0e7;
+}
+
+/*fieldset*/
+fieldset {
+  border: 1px solid #fff;
+  background: #fff;
+  margin-bottom: 5px; 
+}
+/* 2.3 @Panel */
+.g-panel {
+  margin-bottom: 10px;
+}
+.datetimepicker-days{
+	padding-left: 15px;
+}
+
+/*
+ * Template Name: Mini JresUI - Simple Frame For JresUI
+ * Version: 0.9.0
+ * Author: Leon Cui
+ * Email: cuiyu@hundsun.com
+ *
+ * 1.0 @Frame
+ *   1.1 @Main
+ *   1.2 @Header
+ *   1.3 @Nav
+ *   1.4 @Nav-mini 
+ *   1.5 @Content
+ * 2.0 @VM
+ *   2.1 @Base
+ *   2.2 @Screen
+ *   2.3 @Panel
+ * 3.0 @Components
+ *   3.1 @textfield
+ *   3.2 @textarea
+ *   3.3 @password
+ *   3.4 @password-group
+ *   3.5 @radio
+ *   3.6 @checkbox
+ *   3.7 @typefield
+ *   3.8 @select
+ *   3.9 @button
+ *   3.10 @menu
+ *   3.11 @message
+ *   3.12 @tip
+ *   3.13 @pagebar
+ *   3.14 @tab
+ *   3.15 @calendar
+ *   3.16 @calendar-group
+ *   3.17 @datagrid
+ *   3.18 @ztree
+ *   3.19 @verify
+ *        
+ */
+
+/* 1.0 @Frame */
+/* 1.1 @Main */
+/* 1.2 @Header */
+/* 1.3 @Nav */
+/* 1.4 @Nav-mini */
+/* 1.5 @Content */
+/* 2.0 @VM */
+/* 2.1 @Base */
+.g-unit-wrap .unit-label {
+  padding: 11px 0 5px;
+}
+/* 2.2 @Screen */
+.g-screen {
+  padding: 10px 5px 0 5px;
+}
+.g-screen > .g-grid-1, 
+.g-screen > .g-grid-2,
+.g-screen > .g-grid-3,
+.g-screen > .g-grid-4,
+.g-screen > .g-grid-5,
+.g-screen > .g-grid-6,
+.g-screen > .g-grid-7,
+.g-screen > .g-grid-8,
+.g-screen > .g-grid-9,
+.g-screen > .g-grid-10,
+.g-screen > .g-grid-11,
+.g-screen > .g-grid-12,
+.g-row > .g-grid-1, 
+.g-row > .g-grid-2,
+.g-row > .g-grid-3,
+.g-row > .g-grid-4,
+.g-row > .g-grid-5,
+.g-row > .g-grid-6,
+.g-row > .g-grid-7,
+.g-row > .g-grid-8,
+.g-row > .g-grid-9,
+.g-row > .g-grid-10,
+.g-row > .g-grid-11,
+.g-row > .g-grid-12 {
+  padding: 0 5px;
+}
+/* 2.3 @Panel */
+.g-panel {
+  margin-bottom: 10px;
+}
+/* View Model begin */
+.g-view .g-unit-wrap .unit-label {
+  padding: 5px;
+  height: 28px;
+}
+.g-view .g-unit-wrap > div {
+  padding: 5px;
+  height: 28px;
+}
+/* View Model end */
+.m-panel-header {
+  padding: 5px 10px;
+}
+
+/* 3.0 @Components */
+/* 3.1 @textfield */
+.u-textfield {
+  height: 28px;
+  padding: 0 5px;
+}
+/* 3.2 @textarea */
+/* 3.3 @password */
+.u-password {
+  height: 28px;
+  padding: 0 5px;
+}
+/* 3.4 @password-group */
+.u-password-group {
+  height: 28px;
+  padding: 0 5px;
+}
+/* 3.5 @radio */
+.u-radio-group {
+  padding: 5px 0;
+}
+.u-radio {
+  margin: 0 5px;
+}
+/* 3.6 @checkbox */
+.u-checkbox-group {
+  padding: 5px 0;
+}
+.u-checkbox {
+  margin: 0 5px;
+}
+/* 3.7 @typefield */
+.u-typefield {
+  height: 28px;
+  padding: 0 5px;
+}
+.u-typefield-capital {
+  padding: 2px 5px 0 5px;
+}
+.u-typefield-tip {
+  position: absolute;
+  top: 32px;
+  padding: 2px 5px;
+}
+/* 3.8 @select */
+.u-select-box {
+  height: 28px;
+  padding: 2px 20px 0 5px;
+  background-position: right -4px;
+}
+.u-select-box.disabled {
+  background-position: right -4px;
+}
+/* 3.9 @button */
+.u-button-group {
+  padding: 4px;
+}
+.u-btn {
+  padding: 2px 10px;
+  margin-bottom: 5px;
+  font-size: 12px;
+}
+/* 3.10 @menu */
+.u-menu-btn {
+  padding: 2px 6px;
+  font-size: 12px;
+}
+.u-dropdown-menu .u-menu-txt {
+  height: 24px;
+}
+.u-dropdown-menu .u-menu-arrow {
+  top: 6px;
+}
+.u-dropdown-menu > li > a {
+  line-height: 24px;
+}
+/* 3.11 @message */
+.m-message-header {
+  padding: 5px 10px;
+}
+.m-message-header .m-message-btn > a {
+  margin-top: 2px;
+}
+.m-message-header .m-btn-default {
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+  font-size: 11px;
+}
+.m-message-header .m-btn-default i {
+  line-height: 16px;
+}
+.m-message-footer {
+  padding: 4px;
+}
+.m-message-footer .u-btn {
+  padding: 2px 10px;
+  margin-left: 5px;
+  font-size: 12px;
+}
+/* 3.12 @tip */
+.m-tip-box {
+  padding: 5px 8px;
+  margin-bottom: 10px;
+}
+/* 3.13 @pagebar */
+.m-pagebar > li > a {
+  padding: 4px 8px;
+}
+.m-pagebar > li > span {
+  padding: 2px;
+}
+.m-pagebar > li > input {
+  width: 24px;
+  padding: 2px;
+}
+.m-pagebar-all {
+  padding-top: 2px;
+}
+/* 3.14 @tab */
+.u-tab-left,
+.u-tab-right {
+  height: 30px;
+}
+.u-tab-left i,
+.u-tab-right i {
+  line-height: 30px;
+}
+.u-tab-nav {
+  height: 31px;
+}
+.u-tab-nav > li > a {
+  padding: 5px 10px;
+}
+/* 3.15 @calendar */
+.u-calendar {
+  height: 28px;
+  padding: 0 28px 0 5px;
+}
+.u-calendar-down {
+  width: 28px;
+  height: 28px;
+  line-height: 28px;
+}
+/* 3.16 @calendar-group */
+.u-calendar-group {
+  height: 28px;
+  padding: 0 28px 0 5px;
+}
+.u-calendar-group-down {
+  width: 28px;
+  height: 28px;
+  line-height: 28px;
+}
+/* 3.17 @datagrid */
+.u-datagrid-header {
+  padding: 5px 10px;
+}
+.u-datagrid-toolbar {
+  padding: 8px 10px;
+}
+.u-datagrid-btn > li > a {
+  padding: 2px 6px;
+  margin-right: 8px;
+}
+.table > tbody > tr > th,
+.table > tbody > tr > td {
+  padding: 5px 8px;
+}
+.u-datagrid {
+  height: 328px;
+}
+/* 3.18 @ztree */
+.u-ztree-toolbar {
+  padding: 8px 5px;
+}
+.u-ztree-btn > li > a {
+  padding: 2px 6px;
+  margin-right: 8px;
+}
+.u-ztree-search:before {
+  right: 15px;
+  top: 15px;
+}
+.u-ztree-search {
+  padding: 8px 5px;
+}
+.u-ztree-search > a {
+  right: 35px;
+  top: 15px;
+}
+.u-ztree-search .u-ztree-search-input {
+  height: 28px;
+  padding: 0 5px;
+}
+.u-ztree {
+  padding: 0 5px;
+}
+/* 3.19 @verify */
+.m-verify-tip.bottom {
+  margin-top: 1px;
+}
+.m-verify-tip .verify-tip-inner {
+  border-radius: 3px;
+  padding: 1px 5px;
+}

@@ -1,0 +1,1 @@
+Horn.Password=Horn.extend(Horn.Field,{COMPONENT_CLASS:"Password",init:function(a){Horn.Password.superclass.init.apply(this,arguments)}});Horn.Field.regFieldType("div.hc_password",Horn.Password);

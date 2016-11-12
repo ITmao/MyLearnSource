@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui-components xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+          xsi:noNamespaceSchemaLocation="components.xsd">
+	<namespace>com.hundsun.jresplus.ui.zverify</namespace>
+	<name>验证样式组件包</name>
+	<description><![CDATA[表单组件验证样式组件包]]></description>
+	<dependencies>
+		
+	</dependencies>
+	<components>
+		<component>
+			<category>css</category>
+			<id>Horn.Verify</id>
+			<name>表单组件验证样式</name>
+			<description><![CDATA[表单组件验证样式]]></description>
+			
+		</component>
+	</components>
+</ui-components>

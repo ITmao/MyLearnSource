@@ -1,0 +1,124 @@
+#**   
+ * @author huling   
+ * @class
+ * @name select_tree
+ * @param cols {String} 跨列数
+ * @param name {String} 名称
+ * @param id {String} 唯一标识
+ * @param value {String} 值
+ * @param label {String} 日历组组件显示值
+ * @param check {String} 验证串
+ * @param dictName {String} 数据字典名称
+ * @param checkbox {String} 是否有复选框 可选值"checkbox"、"radio"或""
+ * @param isLevelSelect {String} 同级是否能选择多次 可选值"true"、"false"，默认"false"
+ * @param root_id {String} 根节点的key 默认为"0"表示全部展示，如果不为"0"则表示要展示的单一树
+ * @param url {String} 组件请求的数据地址，默认不需要此项，使用框架提供的地址"/dict/getDictEntries.htm?format=json"
+ * @param events {Json} 事件，格示见示例
+ * @description select_tree组件，树形下拉组件
+ * @see The <a href="huling@hundsun.com">huling</a >.   
+ * @example \#select_tree({"label":"行业分类","name":"industryRange", "dictName":"IndustryCode", "check":"", "value":"", "checkbox":"","root_id":"0","events":[{"event":"onchange","function":"return chgIndustryCode.apply(this,arguments)"}]})
+ * @since version 0.1
+ *#	
+#**
+ * @lends select_tree
+ *#
+#macro(select_tree $params)
+	#set($col = 4)
+	#set($cols = "")
+    #if($layoutcolumn) 
+    	#if($layoutcolumn==1)
+			#set($col = 12)
+		#elseif($layoutcolumn==2)
+			#set($col = 6)
+			#if($params.cols&&$params.cols=="2")
+				#set($cols = "g-grid-6-row")
+			#end
+		#elseif($layoutcolumn==3)
+			#set($col = 4)
+			#if($params.cols)
+				#if($params.cols==3)
+					#set($cols = "g-grid-4-row")
+				#elseif($params.cols==2)
+					#set($cols = "g-grid-4-8-row")
+				#end
+			#end
+		#elseif($layoutcolumn==4)
+			#set($col = 3)
+			#if($params.cols)
+				#if($params.cols==4)
+					#set($cols = "g-grid-3-row")
+				#elseif($params.cols==3)
+					#set($cols = "g-grid-3-9-row")
+				#elseif($params.cols==2)
+					#set($cols = "g-grid-3-6-row")
+				#end
+			#end
+		#end
+    #end
+    #set($val = "")
+    #set($val = $params.value)
+    #if(!$val || $val =="" && $params.name )
+        #set($val =  "$horn.getValue($!params.name)")
+    #end
+	##查看模式
+    #if($view)
+        #set($val = "")
+        #set($val = $params.value)
+        #if(!$val || $val =="" && $params.name )
+            #set($val =  "$horn.getValue($!params.name)")
+        #end
+		<div class="g-grid-$col #if($cols!="")$cols#end">
+	  	<div class="g-unit-wrap">
+			#if(!$params.hiddenLabel)
+		    <label #if($layoutcolumn==1)class="g-grid-2 unit-label"#else class="g-grid-4 unit-label"#end><span ref="$!params.name" title="$!{params.label}">$!{params.label}</span></label>
+		    #end
+			<div class="g-grid-8">
+				<div name="$!{params.name}" $horn.paramsCache($params)  class="hc_label" 
+    			>$!val</div>
+			</div>
+	    </div>
+	 </div>
+	#else
+		<div class="g-grid-$col #if($cols!="")$cols#end">
+		  	<div class="g-unit-wrap">
+		  	 #set($checkStr=$horn.getCheckStr($params.name,$params.check))
+			 #set($groupStr=$horn.getGroupStr($params.name,$params.group))
+				#if(!$params.hiddenLabel)
+			    <label #if($layoutcolumn==1)class="g-grid-2 unit-label"#else class="g-grid-4 unit-label"#end title="$!params.label">#if($checkStr.indexOf("required")>-1)<span class="m-verify-symbol">*</span>#end $!params.label</label>
+			    #end
+				<div class="g-grid-8">
+					<div class="hc_select-tree" id="$!{params.id}" title="$!{params.value}" $horn.paramsCache($params) >
+                    	<input type="hidden" name="$params.name" 
+                    	value=#if($params.value)"$!{params.value}"#else "" #end
+                    	dictName="$!{params.dictName}" 
+                    	checkMode="$!{params.checkMode}"
+                    	isLevelSelect="$!{params.isLevelSelect}"  
+                    	check="$checkStr"
+                    	group="$groupStr"
+                    	 root_id="$!{params.root_id}"
+                    	#if($params.data) data-data=$!{params.data} #end
+                    	expandFirst="$!{params.expandFirst}"
+                    	#if($params.search) search="$!{params.search}" #end 
+                    	#if($params.filterBy) filterBy="$!{params.filterBy}" #end 
+                    	#if($params.disabled) disabled="disabled" #end >
+                    	<input type="text" class="u-select hc_select-tree" #if($params.emptyText)placeholder="$!params.emptyText"#end
+                    		#foreach($event in $params.events)
+                    			$event.event = "$event.function" 
+                    		#end
+                            readonly="readonly"
+                            #if($params.disabled)
+                                disabled="disabled"
+                            #end
+                        	value=#if($params.value)"$!{params.value}"#else"$val"#end
+                        	ref="ztree_$params.name.replaceAll('\.', '_')" 
+                    		url="$!{params.url}" 
+                    	/>
+						<a href="javascript:void(0)"><i class="fa fa-close u-select-colse"></i></a>
+						##<i class="fa fa-caret-down u-select-down"></i>
+                    	$horn.addGlobal("componentSelect_trees",$params.name.replaceAll("\.", "_"))
+                    	</div>
+			    </div>
+		    </div>
+		  </div>
+	#end
+#end

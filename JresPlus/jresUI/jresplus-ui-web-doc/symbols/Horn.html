@@ -1,0 +1,428 @@
+
+	<!-- ============================== header ================================= -->	
+		<!-- begin static/header.html -->
+		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="keywords" content="jquery,ui,easy,FUI,web framekwork,ajax framekwork,ria,web development">
+		<meta name="description" content="FUI help you build your web page more Fast!!">
+		<title>UI API - JRES UI</title>
+   		<link rel="stylesheet" href="../resource/css/doc.css" type="text/css" />
+    	<link type="text/css" rel="stylesheet" href="../resource/SyntaxHighlighter/Styles/SyntaxHighlighter.css"/>
+		<script src="../resource/SyntaxHighlighter/Scripts/shCore.js"></script>
+		<script src="../resource/SyntaxHighlighter/Scripts/shBrushXml.js"></script>
+		<script src="../resource/SyntaxHighlighter/Scripts/shBrushJava.js"></script>
+		<script type="text/javascript" src="../resource/jquery-1.7.2.min.js"></script>
+		<style type="text/css">
+			.dp-xml .cdata { color: #ff1493; }.dp-xml .tag, .dp-xml .tag-name { color: #069; font-weight: bold; }.dp-xml .attribute { color: red; }.dp-xml .attribute-value { color: blue; }
+		</style>
+		<script>
+			
+		</script>
+	</head>
+	<body>
+		<div id="header">
+						<div id="header-inner">
+				<table cellpadding="0" cellspacing="0" style="width:100%;">
+					<tr>
+						<td rowspan="2" style="width:20px;">
+						</td>
+						<td style="height:52px;">
+							<div style="color:#fff;font-size:22px;font-weight:bold;">
+								<a href="#" style="color:#fff;font-size:22px;font-weight:bold;text-decoration:none">JRES UI</a>
+							</div>
+							<div style="color:#fff">
+								<a href="#" style="color:#fff;text-decoration:none">JRES UI是使用Velocity开发的服务器端UI组件，助力于组件化快速视图开发!</a>
+							</div>
+						</td>
+						<td style="padding-right:5px;text-align:right;vertical-align:bottom;">
+							<div id="topmenu" style="display:none;">
+								<a href="../../index.html">主页</a>
+								<a href="http://rdc.hundsun.com/forum.php?mod=forumdisplay&amp;fid=163" target="_blank">论坛</a>
+								<a href="../../demo/index.htm">示例</a>
+								<a href="../../documentation/index.html">文档</a>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+			
+		</div>
+		<!-- end static/header.html -->
+	<div id="mainwrap" >
+		<div id="content">
+        <!-- ============================== classes index ============================ -->
+        <script type="text/javascript">
+            $(function() {
+            	var bw=$.browser;
+				if(bw.msie&&bw.version<7||(bw.msie&&$.support.boxModel==false)){
+						//ie6
+						$("#plugin_title").hide();
+						$('#plugins').removeClass("plugins");
+						$('#plugins').addClass("plugins2");
+				}else{
+					$('#plugins').stop().animate({'marginLeft':'-285px'},1000);
+	                $('#plugins').hover(
+	                    function () {
+	                        $(this).stop().animate({'marginLeft':'-2px'},200);
+	                    },
+	                    function () {
+	                        $(this).stop().animate({'marginLeft':'-285px'},200);
+	                    }
+	                );
+				}
+                
+            });
+</script>
+	<div id="plugins" class="plugins">
+	<div id="plugin_title" class="plugin_title">控件清单</div>
+	<ul>
+        
+        
+        
+        
+        
+        <li><a href="../symbols/Horn.html">Horn</a></li>
+        
+        <li><a href="../symbols/Horn._Pagebar-pagebar.html">Horn._Pagebar-pagebar</a></li>
+        
+        <li><a href="../symbols/Horn.Base.html">Horn.Base</a></li>
+        
+        <li><a href="../symbols/Horn.ButtonPanel.html">Horn.ButtonPanel</a></li>
+        
+        <li><a href="../symbols/Horn.Calendar.html">Horn.Calendar</a></li>
+        
+        <li><a href="../symbols/Horn.CalendarGroup.html">Horn.CalendarGroup</a></li>
+        
+        <li><a href="../symbols/Horn.Checkbox.html">Horn.Checkbox</a></li>
+        
+        <li><a href="../symbols/Horn.CheckboxGroup.html">Horn.CheckboxGroup</a></li>
+        
+        <li><a href="../symbols/Horn.Combox.html">Horn.Combox</a></li>
+        
+        <li><a href="../symbols/Horn.DataGrid.html">Horn.DataGrid</a></li>
+        
+        <li><a href="../symbols/Horn.Field.html">Horn.Field</a></li>
+        
+        <li><a href="../symbols/Horn.FieldSet.html">Horn.FieldSet</a></li>
+        
+        <li><a href="../symbols/Horn.Form.html">Horn.Form</a></li>
+        
+        <li><a href="../symbols/Horn.Grid.html">Horn.Grid</a></li>
+        
+        <li><a href="../symbols/Horn.HiddenField.html">Horn.HiddenField</a></li>
+        
+        <li><a href="../symbols/Horn.Label.html">Horn.Label</a></li>
+        
+        <li><a href="../symbols/Horn.Menu.html">Horn.Menu</a></li>
+        
+        <li><a href="../symbols/Horn.MessageBox.html">Horn.MessageBox</a></li>
+        
+        <li><a href="../symbols/Horn.PageBar.html">Horn.PageBar</a></li>
+        
+        <li><a href="../symbols/Horn.Panel.html">Horn.Panel</a></li>
+        
+        <li><a href="../symbols/Horn.Password.html">Horn.Password</a></li>
+        
+        <li><a href="../symbols/Horn.PasswordGroup.html">Horn.PasswordGroup</a></li>
+        
+        <li><a href="../symbols/Horn.QueryTable.html">Horn.QueryTable</a></li>
+        
+        <li><a href="../symbols/Horn.RadioGroup.html">Horn.RadioGroup</a></li>
+        
+        <li><a href="../symbols/Horn.Screen.html">Horn.Screen</a></li>
+        
+        <li><a href="../symbols/Horn.SelectTree.html">Horn.SelectTree</a></li>
+        
+        <li><a href="../symbols/Horn.TabPanel.html">Horn.TabPanel</a></li>
+        
+        <li><a href="../symbols/Horn.TargetSelect.html">Horn.TargetSelect</a></li>
+        
+        <li><a href="../symbols/Horn.Textarea.html">Horn.Textarea</a></li>
+        
+        <li><a href="../symbols/Horn.Textfield.html">Horn.Textfield</a></li>
+        
+        <li><a href="../symbols/Horn.Tip.html">Horn.Tip</a></li>
+        
+        <li><a href="../symbols/Horn.TypeField.html">Horn.TypeField</a></li>
+        
+        <li><a href="../symbols/Horn.Util.html">Horn.Util</a></li>
+        
+        <li><a href="../symbols/Horn.Validate.html">Horn.Validate</a></li>
+        
+        <li><a href="../symbols/Horn.Window.html">Horn.Window</a></li>
+        
+        <li><a href="../symbols/Horn.ZtreePanel.html">Horn.ZtreePanel</a></li>
+        
+        
+        
+	</ul>
+</div>
+        <div class="doc">
+        <div style="padding:10px">
+        <div style="text-align:right;"><a href="../index.html">返回控件主页</a>&nbsp;|&nbsp;<a href="../files.html">返回源码主页</a></div>
+        <!-- ============================== class overview ============================ -->
+        
+        
+<h3>Horn UI基础对象</h3>
+<p>Horn的js对象，提供获取UI组件的功能</p>
+
+<h4>适用范围</h4>
+<p>
+	Horn本身并不提供宏组件，只是javascript对象，但提供的获取UI组件的方法。
+</p>
+
+<h4>注意事项</h4>
+<p>
+	<ol>
+		<li>使用Horn.ready注册初始函数，需要注意执行顺序：<br/>
+		 head资源引入的顺序，如果是在components的js加载之前加载，则之前的jquery.ready会先被执行；<br/>
+		 在components的js加载之后的脚本以及代码中的片段代码遵守以下规则：<br>
+		 Horn.ready的执行顺序优先于jquery.ready<br>
+		 多个Horn.ready按照代码顺序执行</li>
+		 <li>所有组件的名称（name）不能重名，否则使用名称取组件时只能获取到最后一个</li>
+		 <li>所有组件的ID（id）不能重名，否则使用id 取组件时只能获取到第一个</li>
+	</ol>
+</p>
+<h4>使用示例</h4>
+<p>通过组件名称获取组件:</p>
+<textarea name="code" class="html" style="display: none;">
+#textfield({"label":"用户姓名", "name":"userName"})
+#jscode()
+	Horn.getComp("userName").setValue("zhangsan");
+#end
+</textarea>
+<p>通过组件ID获取组件:</p>
+<textarea name="code" class="html" style="display: none;">
+#textfield({"label":"用户姓名","id":"userNameField", "name":"userName"})
+#jscode()
+	Horn.getCompById("userNameField").setValue("zhangsan");
+#end
+</textarea>
+<p>使用Horn.ready与jquery的ready的执行顺序</p>
+<textarea name="code" class="java" style="display:none;">
+#jscode()
+	console.log("执行顺序---1");
+	$(function() {
+		console.log("执行顺序---13");
+	});
+	Horn.ready(function () {
+		console.log("执行顺序---7");
+	});
+	$(function() {
+		console.log("执行顺序---14");
+	});
+	Horn.ready(function () {
+		console.log("执行顺序---8");
+	});
+	console.log("执行顺序---2");
+
+#end
+#@screen()
+#jscode()
+	console.log("执行顺序---3");
+	Horn.ready(function () {
+		console.log("执行顺序---9");
+	});
+	$(function() {
+		console.log("执行顺序---15");
+	});
+	Horn.ready(function () {
+		console.log("执行顺序---10");
+	});
+	$(function() {
+		console.log("执行顺序---16");
+	});
+	console.log("执行顺序---4");
+#end
+#end
+#jscode()
+	console.log("执行顺序---5");
+	Horn.ready(function () {
+		console.log("执行顺序---11");
+	});
+	$(function() {
+		console.log("执行顺序---17");
+	});
+	Horn.ready(function () {
+		console.log("执行顺序---12");
+	});
+	$(function() {
+		console.log("执行顺序---18");
+	});
+	console.log("执行顺序---6");
+#end
+</textarea>
+        <p>&nbsp;</p>
+        
+        	
+            
+            
+       		
+       		
+            	<!-- doc_methods_begin -->
+            	<h4>方法</h4>
+            	<table class="doc-table">
+          			<tbody>
+          				<tr>
+          					<th><strong>名称</strong></th>
+							<th><strong>参数</strong></th>
+							<th><strong>描述</strong></th>
+          				</tr>
+          				
+          					<tr>
+								<td>getComp</td>
+								<td>(name)</td>
+								<td>
+									<p><b>静态方法</b>工具组件的名称获取组件，此方法为静态方法</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        String:<b>name</b>
+		                                        组件名称<b>所有组件的名称不能重复，否则只能取到最后一个</b>
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        Object:<b></b>
+		                                        comp 组件对象
+		                                    </li>
+										
+									
+									
+	                               		示例：
+	                                    
+	                                        <pre>Horn.getComp("compName")</pre>
+	                                    
+	                           		 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>ready</td>
+								<td>(fun)</td>
+								<td>
+									<p><b>静态方法</b>在页面渲染完成后执行的方法，可注册多次，使用先进先出的执行顺序。<br/>执行顺序如下：<br/>head资源引入的顺序，如果是在components的js加载之前加载，则之前的jquery.ready会先被执行；<br/>在components的js加载之后的脚本以及代码中的片段代码遵守以下规则：<br>Horn.ready的执行顺序优先于jquery.ready<br>多个Horn.ready按照代码顺序执行</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        Function:<b>fun</b>
+		                                        函数
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        void:<b></b>
+		                                        
+		                                    </li>
+										
+									
+									
+	                               		示例：
+	                                    
+	                                        <pre>Horn.ready(function(){  //TODO});</pre>
+	                                    
+	                           		 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>getCompById</td>
+								<td>(id)</td>
+								<td>
+									<p><b>静态方法</b>根据组件id获取组件，此方法为静态方法</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        String:<b>id</b>
+		                                        <b>所有组件的ID不能重复，否则只能取到第一个</b>
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        :<b></b>
+		                                        
+		                                    </li>
+										
+											<li>
+		                                        Object:<b></b>
+		                                        comp 组件对象
+		                                    </li>
+										
+									
+									
+	                               		示例：
+	                                    
+	                                        <pre>Horn.getCompById("compId");</pre>
+	                                    
+	                           		 
+								</td>
+							</tr>
+          				
+          					<tr>
+								<td>getDict</td>
+								<td>(dictName, keys)</td>
+								<td>
+									<p>根据字典名及key获取value（建议使用Horn.Util.getDicts）</p>
+									
+										参数:
+		                                
+		                                    <li>
+		                                        string:<b>dictName</b>
+		                                        字典名
+		                                    </li>
+		                                
+		                                    <li>
+		                                        boolean:<b>keys</b>
+		                                        字典key，可以为单个或多个，多个key以逗号分隔
+		                                    </li>
+		                                
+									
+									
+										返回值:
+										
+											<li>
+		                                        String:<b></b>
+		                                        values 字典value，单个或多个，多个value以逗号分隔（当key未定义时返回整个字典）
+		                                    </li>
+										
+									
+									 
+								</td>
+							</tr>
+          				
+          			</tbody>
+          		</table>
+            	<!-- doc_methods_end -->
+            
+        	<br /><i>Defined in: </i> <a href="../symbols/src/E__workspace_JRES-PLUS_Sources_jresplus-2.0_Sources_jresplus-ui_jresplus-ui-web_build_com.hundsun.jresplus.ui.base_public_scripts_horn.Base.js.html">horn.Base.js</a>
+        </div>
+        </div>
+</div>
+</div>
+<!-- ============================== footer ================================= -->
+
+		<div id="footer">
+			<div>Copyright ? 2010-2013 www.hundsun.com</div>
+		</div>
+		<script type="text/javascript">
+			dp.SyntaxHighlighter.HighlightAll('code');
+		</script>
+	</body>
+</html>
+
+

@@ -1,0 +1,33 @@
+
+<h3>calendar</h3>
+<p>包装日期第三方插件(lhgcalendar)的组件</p>
+ <img src="../resource/images/calendar.png"/>
+
+<h4>继承组件</h4>
+<ul>
+	<li><a href="../symbols/Horn.Field.html">Horn.Field</a></li>
+</ul>
+
+<h4>适用范围</h4>
+<p>
+	简单的日期录入需求
+</p>
+<h4>约束</h4>
+<p>
+	<ol>
+		<li>calendar的dom使用li,所以必须放在panel中使用</li>
+		<li>minDate,maxDate指定的日期格式必须为yyyy-MM-dd</li>
+	</ol>
+</p>
+<h4>注意事项</h4>
+<p>
+	<ol>
+		<li>config中配置的format同时设置显示值和提交值的格式，在配置此属性之前请务必清楚他的影响范围</li>
+	</ol>
+</p>
+
+<h4>使用示例</h4>
+<p>示例1:</p>
+<textarea name="code" class="html" style="display: none;">
+#calendar({"label":"出生日期", "name":"birthday","check":"required","config":"{minDate:'2013-12-23', noToday:true, format:'yyyyMMdd'}"})
+</textarea>

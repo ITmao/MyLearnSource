@@ -1,0 +1,56 @@
+
+<h3>树形下拉选择组件</h3>
+<p>集成了ztree作为下拉树实现，通过点击输入框下拉树选择</p>
+ <img src="../resource/images/select_tree.png"/>
+
+<h4>依赖组件</h4>
+<ul>
+	<li>无</li>
+</ul>
+
+<h4>适用范围</h4>
+<p>
+适用于下拉控件展示形态为树形结构的应用场景<span style="color:red;">除非您非常了解此组件的使用场景，否则不建议使用此组件</span>
+</p>
+<h4>约束</h4>
+<p>
+	<ol>
+		<li>无</li>
+	</ol>
+</p>
+<h4>注意事项</h4>
+<p>
+	<ol>
+		<li>不建议使用此组件，可以考虑使用弹出框结合ztree组件方式</li>
+	</ol>
+</p>
+<h4>树形JSON格式</h4>
+<p>
+<ol>
+	<li>id: 树节点的唯一标示</li>
+	<li>pId: 父亲节点的id</li>
+	<li>name: 树节点显示的名字</li>
+</ol>
+<textarea name="code" class="html" style="display: none;">
+[
+	{"id":"1","name":"root","pId":""},
+	{"id":"21","name":"sub11","pId":"1"},
+	{"id":"22","name":"sub12","pId":"1"},
+	{"id":"212","name":"sub111","pId":"21"},
+	{"id":"221","name":"sub211","pId":"22"},
+	{"id":"212","name":"sub11sas","pId":"21"}
+]
+</textarea>
+</p>
+
+<h4>使用示例</h4>
+<p>示例1:数据源为静态数据</p>
+<textarea name="code" class="html" style="display: none;">
+#set($dataT='[{"id":"1","name":"root","pId":""},{"id":"21","name":"sub11","pId":"1","checked":true},{"id":"22","name":"sub12","pId":"1"},{"id":"212","name":"sub111","pId":"21"},{"id":"221","name":"sub211","pId":"22"},{"id":"212","name":"sub11sas","pId":"21"}]') 
+#select_tree({"name":"select_tree","label":"select_tree","data":$dataT,"expandFirst":true,"checkMode":"checkbox","value":"1","search":true})
+</textarea>
+
+<p>示例2：数据源为URL，异步请求</p>
+<textarea name="code" class="html" style="display: none;">
+#select_tree({"name":"select_tree","label":"select_tree","url":"$appServer.get('/zhou/2016-1-14ztree.json')","expandFirst":true,"checkMode":"checkbox","value":"1","search":true})
+</textarea>

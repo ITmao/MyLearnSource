@@ -1,0 +1,41 @@
+
+<h3>Tip 信息提示</h3>
+<p>从界面的上方显示的消息提示，提示后较短时间后自动隐藏，如果有条信息，新的信息会在最上方展示</p>
+ <img src=""/>
+
+<h4>适用范围</h4>
+<p>
+	适用于，不需要进行操作和处理的消息提示，提示后在较短的时间里会自动隐藏或通过点击提示框马上隐藏,用来提示的信息应该是一句简短的文字，不宜过长（建议在20个字符以内）
+</p>
+<h4>注意事项</h4>
+<p>
+	<ol>
+		<li>无</li>
+	</ol>
+</p>
+
+<h4>使用示例</h4>
+<p>页面示例:普通信息</p>
+<textarea name="code" class="html" style="display: none;">
+Horn.Tip.info("提示");
+</textarea>
+
+<p>页面示例:警告信息</p>
+<textarea name="code" class="html" style="display: none;">
+Horn.Tip.warn("警告信息");
+</textarea>
+
+<p>页面示例:成功信息</p>
+<textarea name="code" class="html" style="display: none;">
+Horn.Tip.success("成功信息");
+</textarea>
+<p>后台示例：</p>
+<textarea name="code" class="java" style="display: none;">
+	@RequestMapping(value = "bindMessage.htm", method = RequestMethod.POST)
+	public String get_testcase001(String username,Model model,TipMessages tips) {
+		tips.addInfo("普通提示!");
+		tips.addSuccess("交易成功！");
+		tips.addWarning("这是警告信息");
+		return "forward:/test/tip/tip_show_bind_message.htm";
+	}
+</textarea>

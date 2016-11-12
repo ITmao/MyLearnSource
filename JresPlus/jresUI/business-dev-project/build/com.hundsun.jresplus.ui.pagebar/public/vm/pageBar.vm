@@ -1,0 +1,104 @@
+#**   
+ * @author zhangc   
+ * @class
+ * @name page_bar
+ * @param id {String} 唯一标识
+ * @param name {String} 名称
+ * @param pageNo {int} 当前页码，一般由分页组件Page提供。
+ * @param url {String} 默认为当前页面地址，可提供其他页面的分页跳转。
+ * @param pages {int} 总页码数
+ * @param pageSize {int} 页面大小，每页显示条目数
+ * @param count {int} 总条目数
+ * @param bindFormName {String} 绑定的查询表单名称,用于分页时将查询条件的参数传入
+ * @description 用于分页的组件。
+ * @see 
+ * @example
+ * \#page_bar($page)
+ * \#page_bar({"pageNo":1,"pageSize":20,"pages":})
+ *  
+ * @since version 0.1
+ *#	
+#**
+ * @lends page_bar
+ *#
+#**
+*  -----------------------------------------------------------------------
+*  修订记录:
+*  2014-01-28    zhangsu    Grid的分页栏支持展示当前显示条数，总条数信息
+*  2014-01-28    zhangsu    Grid分页支持动态设置每页显示条数
+*  2014-02-10    zhangsu    Grid分页增加分页页数判断
+*  2014-02-13    zhangsu    Grid分页时pageNo<=0时,将$pageNo置为1,
+*  2014-02-14    zhangsu    如果总条数为0，将动态设置跳转页和页码input框disabled，跳转按钮disabled	
+*  2014-02-17    zhangsu    如果表格无数据，不显示分页栏
+*  2014-03-12    zhangsu    STORY #7836 grid分页grid的查询条件带不过去
+*  2014-06-19    zhangsu    STORY #8436 [研发中心/内部需求][jresplus][ui]-pagebar的dom结构和样式建议优化调整
+*  2014-10-08    wangyb10555 STORY #9853 [财富管理事业部/陈为][TS:201409260084]-JRESPlus-ui-1. Grid组件中的分页栏：当只有单页数据的时，首页、末页】
+*  2016-1-27     刘龙                                STORY16308 【TS:201601070241-JRESPlus-财富管理事业部-陈为-10.对于导航栏，希望研发中心给出统一标准的导航工具栏风格，】
+*  2016--3-28    刘龙                            需求18070 【TS:201603240534-JRESPlus-财富管理事业部-江志伟-【项目名称】恒生信托综合管理平台（TCMP）<br>【产品及】
+*  -----------------------------------------------------------------------
+*#
+#macro(page_bar $params $pagebarparams)
+	#if($pagebarparams.align=="left"||$pagebarparams.align=="right"||$pagebarparams.align=="center")
+		#set($align = "h_pages-"+$pagebarparams.align)
+	#else
+		#set($align = "")
+	#end
+	
+	#if($params.id&&$params.id!="")
+	#set($id = ${params.id})
+	#else
+		#set($id = "dyncGrid")    ##id默认值
+	#end
+      <div class="u-datagrid-page">
+		<div class="h_pages g-pagebar-wrap"
+			#if($params.url) url="$!params.url" #end
+            id="$!{params.id}" $horn.paramsCache($params) 
+        	target="$!params.targetName"
+        	pageNo="$params.pageNo"               ##当前页
+        	pageSize="$params.pageSize"           ##每页显示条目数
+        	pageCount="$params.count"             ##总条数
+        	pages="$params.pages"                 ##总页数
+    		bindFormName = "$!{pagebarparams.bindFormName}"          ##绑定的查询表单名称  STORY7836
+		>
+		 #if($params.pageNo <=0)   
+		    #set($pageNo=1) ##当前页码
+		 #else
+		    #set($pageNo=$params.pageNo) ##当前页码
+		 #end 
+		    
+	     #set($pageSum=$params.pages) ##总页数 
+	     #set($pagePrev=$pageNo+1) ##上一页    
+	     #set($pageNext=$pageNo-+1) ##下一页
+		
+
+		
+		<ul class="m-pagebar">
+    		<li>
+    			<a href="javascript:void(0)"  class="h_pagebtn-index #if($params.count<=0||$pageSum<=0||$pageNo==1)disabled #end first_page_btn" title="首页"><i class="fa fa-step-backward"></i></a>
+    		</li>
+    		<li>
+    			<a href="javascript:void(0)" class="h_pagebtn-prev #if(1==$pageNo||$params.count<=0||$pageSum<=0)disabled #end pre_page_btn" title="上一页"><i class="fa fa-caret-left"></i></a>
+    		</li>
+    		 <li><span>第</span></li>
+    		 <li>
+    			<input name="pageNo" type="text" id="$!{pagebarparams.bindFormName}_topageid" size="1" value="$params.pageNo" class="h_page-num #if($params.count<=0||$pageSum<=0)disabled #end hc-pagination-num" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')"/>
+    		 </li>
+    		 <li><span>页</span></li>
+    		<li><span>每页</span></li>
+    		<li>
+    			<input name="pageSize_show" type="text" id="$!{pagebarparams.bindFormName}_topageSize_show" size="5" value="$params.pageSize" class="h_page-num #if($params.count<=0||$pageSum<=0)disabled #end hc-pagination-num" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')"/>
+    			<input type="hidden" name="pageSize"  value="$params.pageSize"  id="$!{pagebarparams.bindFormName}_topagesize">
+    		</li>
+    		<li><span>条</span></li>
+    		<li>
+    			<a href="javascript:void(0)" class="h_pagebtn-next #if($params.count<=0||$pageSum==$pageNo||$pageSum<=0)disabled #end next_page_btn" title="下一页"><i class="fa fa-caret-right"></i></a>
+        	</li>
+    		<li>
+    			<a href="javascript:void(0)"  class="h_pagebtn-end #if($params.count<=0||$pageSum<=0||$pageSum==$pageNo)disabled #end last_page_btn" title="尾页"><i class="fa fa-step-forward"></i></a>
+    		</li>
+		</ul>
+		<div id='pageInfo_$id' class="m-pagebar-all">共$!params.pages页,共$!params.count条记录</div>
+
+	</div>
+  </div>
+#end

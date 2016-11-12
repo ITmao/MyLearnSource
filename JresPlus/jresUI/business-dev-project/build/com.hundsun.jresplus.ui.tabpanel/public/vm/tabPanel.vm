@@ -1,0 +1,100 @@
+#**   
+ * @author huling   
+ * @class
+ * @name tab_panel_start
+ * @param name {String} 名称
+ * @param id {String} 唯一标识
+ * @param liWidth {String} 自定义标签宽度
+ * @param maxTabCn {String} 标签最大个数
+ * @description tab_panel_start组件，tab_panel开始组件需要和tab_panel_end组件配合使用
+ * @see The <a href="huling@hundsun.com">huling</a >.   
+ * @example \#tab_panel_content_start({"name":"openAccount","cols":"3","rows":"10"})
+ * @since version 0.1
+ *#	
+#**
+ * @lends tab_panel_start
+ *#
+#macro(tab_panel_start $uiTabPanelConfig)
+	#set($tabPanelClass = "h_tabpanel")
+	#if($uiTabPanelConfig.position)
+		#set($tabPanelClass = "$tabPanelClass h_tabs-pos-${uiTabPanelConfig.position}")
+	#else
+		#set($tabPanelClass = "$tabPanelClass h_tabs-pos-top")
+	#end
+	#if($uiTabPanelConfig.themes && $uiTabPanelConfig.themes != "gray")
+		#set($tabPanelClass = "$tabPanelClass h_tabpanel-themes-${uiTabPanelConfig.themes}")
+	#end
+	<div class="$tabPanelClass" id="$!{uiTabPanelConfig.id}" name="$!{uiTabPanelConfig.name}" $horn.paramsCache($uiTabPanelConfig) maxTabCn="$!{uiTabPanelConfig.maxTabCn}">
+		<div class="h_tabpanel-tabs">
+			#if($uiTabPanelConfig.position == "left" || $uiTabPanelConfig.position == "right")
+				<div class="h_tabscroller-top u-tab-top"><i class="fa fa-caret-up"></i></div>
+				<div class="h_tabscroller-bottom u-tab-bottom"><i class="fa fa-caret-down"></i></div>
+			#else
+				<div class="h_tabscroller-left u-tab-left"><i class="fa fa-caret-left"></i></div>
+				<div class="h_tabscroller-right u-tab-right"><i class="fa fa-caret-right"></i></div>
+			#end
+			<div class="h_tabpanel-wrap">	
+				<ul class="h_tabpanel-wrap-ul u-tab-nav"></ul>
+			</div>
+		</div>
+		<div class="h_tabpanel-contents u-tab-cnt"></div>
+		#set($uiTabPanelConfig = {})
+#end
+#**   
+ * @author huling   
+ * @class
+ * @name tab_panel
+ * @param name {String} 名称
+ * @param id {String} 唯一标识
+ * @description tab_panel_start组件，tab_panel开始组件需要和tab_panel_end组件配合使用
+ * @see The <a href="huling@hundsun.com">huling</a >.   
+ * @example \#@tab_panel({"name":"openAccount","cols":"3","rows":"10"})
+ * @since version 0.1
+ *#	
+#**
+ * @lends tab_panel
+ *#
+#macro(tab_panel $uiTabPanelConfig)
+	#set($tabPanelClass = "h_tabpanel")
+	#if($uiTabPanelConfig.position)
+		#set($tabPanelClass = "$tabPanelClass h_tabs-pos-${uiTabPanelConfig.position}")
+	#else
+		#set($tabPanelClass = "$tabPanelClass h_tabs-pos-top")
+	#end
+	#if($uiTabPanelConfig.themes && $uiTabPanelConfig.themes != "gray")
+		#set($tabPanelClass = "$tabPanelClass h_tabpanel-themes-${uiTabPanelConfig.themes}")
+	#end
+	<div class="$tabPanelClass" id="$!{uiTabPanelConfig.id}" name="$!{uiTabPanelConfig.name}" $horn.paramsCache($uiTabPanelConfig) maxTabCn="$!{uiTabPanelConfig.maxTabCn}">
+		<div class="h_tabpanel-tabs">
+			#if($uiTabPanelConfig.position == "left" || $uiTabPanelConfig.position == "right")
+				<div class="h_tabscroller-top u-tab-top"><i class="fa fa-caret-up"></i></div>
+				<div class="h_tabscroller-bottom u-tab-bottom"><i class="fa fa-caret-down"></i></div>
+			#else
+				<div class="h_tabscroller-left u-tab-left"><i class="fa fa-caret-left"></i></div>
+				<div class="h_tabscroller-right u-tab-right"><i class="fa fa-caret-right"></i></div>
+			#end
+			<div class="h_tabpanel-wrap">	
+				<ul class="h_tabpanel-wrap-ul u-tab-nav"></ul>
+			</div>
+		</div>
+		<div class="h_tabpanel-contents u-tab-cnt"></div>
+		#set($uiTabPanelConfig = {})
+		$bodyContent
+	</div>
+#end
+
+#**   
+ * @author huling   
+ * @class
+ * @name tab_panel_end
+ * @description tab_panel_end组件，tab_panel结束组件需要和tab_panel_start组件配合使用
+ * @see The <a href="huling@hundsun.com">huling</a >.   
+ * @example \#tab_panel_end
+ * @since version 0.1
+ *#	
+#**
+ * @lends tab_panel_end
+ *#
+#macro(tab_panel_end)
+	</div>
+#end

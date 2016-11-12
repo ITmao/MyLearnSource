@@ -1,0 +1,228 @@
+#**   
+ * @author huling   
+ * @class
+ * @name query_table
+ * @param cols {String} 跨列数
+ * @param rows {String} 跨行数
+ * @param name {String} 名称
+ * @param url {String} 请求地址
+ * @param title {String} 标题
+ * @param id {String} 表单ID
+ * @param bindformname {String} 绑定的表单name
+ * @param request_num {String} 请求的条数
+ * @param data {Array} 展示的数据源
+ * @param hasPage {Boolean} 是否有分页
+ * @param callback {String} 回调函数
+ * @param position_str {String} 定位串
+ * @param baseparams {Json} 用户自定义基本参数
+ * @param items {Array} 列表条目 格式如{"name":"organFlag","text":"机构类型","dealFun":"lhkh.organFlagFn"}
+ * @param events {Array}
+ * @param numbercolumn {Boolean} 是否启用数字序列
+ * @param selectModel {String} single/multi 启用单选/多选选择框
+ * @param simpleRequest {Boolean} 是否使用普通参数模式（发送index到后台）
+ * @param titleButtons {Array} 工具栏　格式如[{"label":"添加","cls":"add","event":"add()"}]
+ * @description query_table组件，查询列表组件
+ * @see The <a href="huling@hundsun.com">huling</a >.   
+ * @example
+ *	<pre>\#query_table({"cols":"2","rows":"10","name":"queryTable","url":"callback/getCallBack.json", "request_num":"2","position_str":"positionStr",
+ *		"hasPage":true, "items":[{"name":"clientId","text":"客户号","width":"100px"},
+ *		{"name":"clientName","text":"客户姓名"},{"name":"fundAccount","text":"资产账号"},
+ *		{"name":"operatorNo","text":"操作员编号"},{"name":"phone","text":"移动电话"},
+ *		{"name":"contact","text":"联系方式"},{"name":"organFlag","text":"机构类型","dealFun":"lhkh.organFlagFn"}],
+ *		"events":[{"event":"onclick","function":"lhkh.tableClick()"},
+ *		{"event":"rowclick","function":"lhkh.tableRowClick()"},
+ *		{"event":"rowdblclick","function":"lhkh.tableRowDblClick()"}]})
+ *	</pre>
+ * @since version 0.1
+ *#	
+#**
+ * @lends query_table
+ *#
+#**
+* -----------------------------------------------------------------------
+* 修订记录：
+* 2014-01-22    zhangsu        列支持hidden属性
+* 2014-01-22    zhangsu        新增rowSelect属性，使grid支持点击行选中该行
+* 2014-01-24    zhangsu        新增rowclick和rowdbclick事件
+* 2014-03-31    zhangsu        BUG #6530 目前titleButtons全部居左，和grid中默认居右不一致
+* 2014-04-04    zhangsu        BUG #6574 [queryTable]:单选模式最好选择列是圆圈 
+* 2014-04-09    zhangsu        BUG #6548 [query_table]设置cols无效
+* 2014-04-14    zhangsu        BUG #6728 query_table属性hasPage不配置时，未使用默认值
+* 2014-04-15    zhangsu        BUG #6492 selectModel：“ 行数据选择模式（single/muti 启用单选/多选选择框） ”，这里是“multi”误拼居“muti”了吗？它的默认值是什么？
+* 2014-04-16    zhangsu        STORY #8089 添加save/query/confirm/refresh/open几种样式
+* 2014-04-28    周智星                         BUG #6884 【query_table】设置非法selectModel；BUG #6883 【query_table】设置非法numbercolumn，都会显示索引
+* 2014-04-28    周智星                         BUG #6882 【query_table】title设置为空、不设置、设置有值表现出现的结果出人意料
+* 2014-05-22    zhangsu        STORY #8368 [研发中心/内部需求][jresplus][ui]-queryTable组件当分页属性hasPage设置为false时，dom结构还是会生成分页的结构
+* 2014-06-13    zhangsu        STORY #8487 querytalbe 未设置selectModel 的情况下，出现多选，无法实现无选择框的情况 
+* 2014-06-16    zhangsu        STORY #8487 querytalbe 未设置hasPage 的情况下出现分页栏，不配置，不分页
+* 2014-10-22 	wangyb10555	   STORY #10064 [研发中心/内部需求]JRESPlus-ui-分组菜单式按钮的组件的菜单可以绑定到Querytable组件当中的titleButtons中的button上 
+* 2015-9-24 	周智星		   STORY   #13314 【TS:201509230319-JRESPlus-内部客户-张星-一、QueryTable的title部显示的问题
+* 2015-10-09    周智星                                 BUG   #11940 需求13314，querytable中"titleButtons":""时，按钮栏会显示，建议与title一致，不显示
+* 2016-1-20      刘龙                                     STORY 16444 【TS:201601130123-JRESPlus-经纪业务事业部-张小攀-【项目名称】UF3.0<br>【产品及版本信息】jrespl】
+* 2016-1-22      刘龙                                     STORY  16542 【TS:201601150495-JRESPlus-经纪业务事业部-张小攀-5.query_table和datagrid数据格式化不统一】
+* -----------------------------------------------------------------------
+*# 
+#macro(query_table $params) 
+    #if($params.cols)
+    	#set($cols = $params.cols)
+	#else
+        #set($cols = 3)
+	#end
+    <div class="g-datagrid-wrap">
+		#if($params.title&&$params.title!="")
+			<div class="u-datagrid-header">
+				<h4 class="u-datagrid-title">$!{params.title}</h4>
+			</div>
+		#end
+		#if($params.titleButtons&&$params.titleButtons!="")
+			<div class="u-datagrid-toolbar">
+				<ul class="u-datagrid-btn">
+					#foreach($button in $params.titleButtons )
+			     	<li><a name="$!{button.name}" href="JavaScript:void(0)" class="hc-datagrid-a hc_datagrid-alink #if($button.disabled)f-disabled#end" #if($button.refmenu&&!$button.disabled)refmenu="${button.refmenu}"#end #if($button.disabled)onClick="javascript:return false;" #else onClick="$!{button.event}" #end><i class="fa #if($button.cls=="add")fa-plus-circle#elseif($button.cls=="edit")fa-pencil-square-o#elseif($button.cls=="del")fa-remove#elseif($button.cls=="confirm")fa-save#elseif($button.cls=="save")fa-save#elseif($button.cls=="query")fa-search#elseif($button.cls=="open")fa-folder-open-o#elseif($button.cls=="refresh")fa-refresh #else $!{button.cls} #end"></i>$!{button.label}</a></li>
+					#end
+				</ul>
+    		</div>
+		#end
+		
+        <div class="h_listtable u-datagrid" style="overflow:auto;">
+          <table class="h_table h_querytable table table-bordered table-stripe $!params.name"  id="$!params.name"
+			  ##foreach($event in $params.events)
+              ##	  $event.event = "$event.function"
+              ##end
+              #if($params.id)
+                  id="$!{params.id}"  
+			  #end
+			  $horn.paramsCache($params)
+              #if ($params.name)
+              	name="$!{params.name}" 
+              #end  
+              #if ($params.bindformname )
+              	bindformname="$!{params.bindformname}" 
+              #end
+              url="$!{params.url}" 
+              #if ($params.request_num)
+              	request_num="$!{params.request_num}" 
+              #end
+              #if ($params.position_str )
+              	position_str="$!{params.position_str}" 
+              #end
+            
+              #if ($params.hasPage&&($params.hasPage==true||$params.hasPage==false))
+              	hasPage="$!{params.hasPage}" 
+              #end
+              #if ($params.autoLoad&&$params.autoLoad==true)
+                autoLoad="$!{params.autoLoad}"
+              #end
+              #if ($params.requestMethod )
+                requestMethod="$!{params.requestMethod}"
+              #end
+              ##foreach($event in $params.events)
+              ##  $event.event = "$event.function"
+              ##end
+              #if($params.numbercolumn&&$params.numbercolumn==true)
+                numbercolumn="$params.numbercolumn"
+			  #end
+			  #if($params.selectModel=="multi" || $params.selectModel=="muti" || $params.selectModel=="single")
+				#set($selectModel = $params.selectModel)
+			  #elseif($params.selectModel=="" || !$params.selectModel)
+				#set($selectModel = "null")
+			  #end	
+              #if($selectModel=="single"||$selectModel=="multi"||$selectModel=="muti")
+                selectModel="$selectModel"
+              #end
+              #if($params.simpleRequest)
+                simpleRequest="$!{params.simpleRequest}"
+			  #end
+			  #if($params.callback)
+				callback="$params.callback"
+			  #end
+			  #if($params.rowSelect)
+				rowSelect = "$params.rowSelect"
+			#end
+          >
+		  <thead>
+        		#if($params.items)
+					#if($params.numbercolumn&&$params.numbercolumn==true)
+                        <th class="h_numbercolumn h_numbercolumn-width u-table-number"></th>
+					#end
+					#if($selectModel=="multi"||$selectModel=="muti") ##bug6492
+                        <th class="h_querytable_checkboxcolumn h_checkcolumn-width u-table-check"><center><input type="checkbox" class="h_querytable_select_all"/></center></th>
+					#elseif($selectModel == "single")
+						<th class="h_querytable_radioboxcolumn h_checkcolumn-width u-table-check"></th>
+					#end
+        			#foreach($pItem in $params.items)
+        				<th name="$!{pItem.name}"
+                            colno="$velocityCount"
+                        #if($pItem.dictName)
+							dictName="$!{pItem.dictName}"
+							$horn.addGlobal('componentSelects_s',$!{pItem.dictName})
+            			#end
+        				#if ($pItem.dealFun)
+        					dealFun="$!{pItem.dealFun}" 
+        				#end
+        				#if ($pItem.renderer)
+        					renderer="$!{pItem.renderer}" 
+						#end
+						#if($pItem.hidden)
+							hidden = "$!{pItem.hidden}"
+						#end	
+						#if($pItem.width)
+							width = "$!{pItem.width}"
+							style="width:$!{pItem.width};"
+						#end
+						#if($pItem.dataType)
+							dataType = "$!{pItem.dataType}"
+						#end
+						#if($pItem.format)
+							format = "$!{pItem.format}"
+						#end
+        				>$!{pItem.text}</th>
+					#end
+				#end
+		  </thead>
+            <tbody>
+                #if($params.data)
+                    #foreach($mdata in $params.data)
+                        #set($rowNumber = $velocityCount % 2)
+                        <tr #if($rowNumber==0) class="u-table-bg" #end>
+							#if($params.numbercolumn&&$params.numbercolumn==true)
+                                <td>$velocityCount</td>
+        					#end
+        					#if($selectModel=="muti"||$selectModel=="multi")
+                                <td><input type="checkbox" class="h_querytable_select"/></td>
+							#elseif($selectModel=="single")
+								<td><input type="radio" class="h_querytable_select"/></td>
+        					#end
+                            #foreach($pItem in $params.items)
+                                #set($evalval = "$"+"!" + "{mdata." + "$!{pItem.name}" + "}" )
+                                <td>#evaluate($evalval)</td>
+                            #end
+                        </tr>
+					#end
+				#else
+					<tr>
+						#set($size =$!{params.items.size()} ) 
+    					#if($params.numbercolumn&&$params.numbercolumn==true)
+                            #set($size = $size+1 )
+            			#end
+            			#if($params.selectModel&&$selectModel!="null")
+                            #set($size = $size+1 )
+						#end						
+						<td colspan="$size" class="h_table-nodata"><p>暂时无数据</p></td>
+					</tr>
+                #end
+            </tbody>
+          </table>
+		  
+        </div>
+        ##添加了表格高度属性，分页栏dom结构不在div.h_listtable内|16444 【TS:201601130123-JRESPlus-经纪业务事业部-张小攀-【项目名称】UF3.0<br>【产品及版本信息】jrespl】
+        #if($params.hasPage ==true || $params.hasPage == false)   ##BUG #6728 query_table属性hasPage不配置时，未使用默认值
+    	    #set($hasPage = $params.hasPage)
+	      #else
+            #set($hasPage = false)
+	      #end
+		  <div class="u-datagrid-page">
+          	<div class="h_querytable_pages g-pagebar-wrap" $hasPage></div>
+		  </div>
+    </div>
+#end

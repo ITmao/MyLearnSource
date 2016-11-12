@@ -1,0 +1,34 @@
+
+<h3>Menu 可绑定至按钮的多级菜单</h3>
+<p>可绑定至按钮的多级菜，支持菜单分组，支持自由绑定</p>
+ <img src="../resource/images/menu.png"/>
+
+<h4>依赖组件</h4>
+<ul>
+	<li>无</li>
+</ul>
+
+<h4>适用范围</h4>
+<p>
+</p>
+<h4>约束</h4>
+<ul>
+	<li>Menu通过id属性和button、a元素进行绑定</li>
+	<li>Menu的id属性唯一，不允许重复</li>
+	<li></li>
+</ul>
+<h4>注意事项</h4>
+<p>
+	<ol>
+		<li>Menu的层级尽量不要超过3层，大于3层的菜单，展开方向将不做自动适应</li>
+	</ol>
+</p>
+
+<h4>使用示例</h4>
+<p>示例1:</p>
+<textarea name="code" class="html" style="display: none;">
+#menu({"id":"text11","opendir":"R","items":[{"label":"test","hasLine":true,"icon":"http://www.baidu.com/img/bdlogo.png","items":[{"label":"test"},{"label":"test","items":[{"label":"test"},{"label":"test"},{"label":"test"}]},{"label":"test"}]},{"label":"test"},{"label":"test"}]})
+<div style="position:absolute;top:0;left:0">
+<button refmenu="text11">绑定菜单</button>
+</div>
+</textarea>

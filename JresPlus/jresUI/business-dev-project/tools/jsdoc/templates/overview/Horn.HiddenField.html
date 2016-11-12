@@ -1,0 +1,52 @@
+
+<h3>隐藏域表单组件</h3>
+<p>用于隐藏表单元素数据的提交</p>
+ <img src="../resource/images/hiddenField.jpg"/>
+
+<h4>继承组件</h4>
+<ul>
+	<li><a href="../symbols/Horn.Field.html">Horn.Field</a></li>
+</ul>
+
+<h4>适用范围</h4>
+<p>
+</p>
+<h4>约束</h4>
+<p>
+	<ol>
+		<li>无</li>
+	</ol>
+</p>
+<h4>注意事项</h4>
+<p>
+	<ol>
+		<li>无</li>
+	</ol>
+</p>
+
+<h4>使用示例</h4>
+<p>示例1:</p>
+<textarea name="code" class="html" style="display: none;">
+#@screen({"title":"测试"})
+	#@form({})
+    	#@panel({})
+            #hidden({"id":"abc","name":"testHidden","value":"1111","alias":"cnt1"})
+            #hidden({"id":"def","name":"testHidden","value":"3333","alias":"cnt2"})
+    	#end
+	#end
+	#button_panel_ex({"buttons":[{"label":"设置值","event":"setValue()"},{"label":"查看值","event":"alertValue()"}]})
+#end
+#jscode()
+	function setValue(){
+		Horn.getComp('testHidden','cnt2').setValue(" 222222 ");
+	}
+	function alertValue(){
+		alert(Horn.getComp('testHidden','cnt2').getValue());
+	}
+#end
+</textarea>
+
+<p>示例2：</p>
+<textarea name="code" class="html" style="display: none;">
+无
+</textarea>

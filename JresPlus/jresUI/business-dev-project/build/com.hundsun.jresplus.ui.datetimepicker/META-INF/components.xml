@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui-components xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+          xsi:noNamespaceSchemaLocation="components.xsd">
+	<namespace>com.hundsun.jresplus.ui.datetimepicker</namespace>
+	<name>datetimepicker第三方组件包</name>
+	<description><![CDATA[组件包的具体描述]]></description>
+	<third>true</third>
+	
+</ui-components>

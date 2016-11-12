@@ -1,0 +1,816 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/*
+<span class='line'>  2</span>  * 修改日期                        修改人员        修改说明
+<span class='line'>  3</span>  * -----------------------------------------------------------------------
+<span class='line'>  4</span>  * 2014-10-11		wangyb	STORY #10009 【TS:201410110004-JRESPlus-海外发展部-胡琦-根据patch20140930_2(jresui1.0.6)】 ,在空参的时候初始化参数
+<span class='line'>  5</span>  * -----------------------------------------------------------------------
+<span class='line'>  6</span>  */</span><span class="WHIT">
+<span class='line'>  7</span> </span><span class="COMM">/**
+<span class='line'>  8</span>  * @fileOverview 定义核心对象
+<span class='line'>  9</span>  * @version 0.1
+<span class='line'> 10</span>  */</span><span class="WHIT">
+<span class='line'> 11</span> 
+<span class='line'> 12</span> </span><span class="COMM">/**
+<span class='line'> 13</span>  * @name Horn
+<span class='line'> 14</span>  * @class Horn
+<span class='line'> 15</span>  * Horn对象&lt;br/>
+<span class='line'> 16</span>  * Horn UI 的基类对象
+<span class='line'> 17</span>  */</span><span class="WHIT">
+<span class='line'> 18</span> </span><span class="COMM">/** @lends Horn# */</span><span class="WHIT">
+<span class='line'> 19</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">Horn</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Horn</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 20</span> </span><span class="WHIT">	</span><span class="NAME">debug_</span><span class="PUNC">:</span><span class="KEYW">false</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 21</span> </span><span class="WHIT">	</span><span class="NAME">fixed_</span><span class="PUNC">:</span><span class="KEYW">true</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 22</span> </span><span class="WHIT">    </span><span class="NAME">debug</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">funcName</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">data</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 23</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">Horn.debug_</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">console</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">'undefined'</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">console.log</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">'undefined'</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 24</span> </span><span class="WHIT">			</span><span class="NAME">console.log</span><span class="PUNC">(</span><span class="NAME">funcName</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">data</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 25</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 26</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 27</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 28</span> </span><span class="PUNC">;</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">H</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 29</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_current</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="NAME">_cache</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 30</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_uuid</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 31</span> </span><span class="WHIT">    </span><span class="WHIT">
+<span class='line'> 32</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">readyFun</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="NAME">registerFun</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 33</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='line'> 34</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">registerUI</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 35</span> </span><span class="WHIT">    </span><span class="WHIT">
+<span class='line'> 36</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">cachedDicts</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 37</span> </span><span class="WHIT">    </span><span class="WHIT">
+<span class='line'> 38</span> </span><span class="WHIT">    </span><span class="NAME">H.cachedDicts</span><span class="PUNC">=</span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 39</span> </span><span class="WHIT">    </span><span class="WHIT">
+<span class='line'> 40</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='line'> 41</span> 	 * @description 继承属性和方法
+<span class='line'> 42</span> 	 * @function
+<span class='line'> 43</span> 	 * @name Horn#apply
+<span class='line'> 44</span> 	 * @param {Object} o 继承对象
+<span class='line'> 45</span> 	 * @param {Object} c 被继承对象
+<span class='line'> 46</span> 	 * @ignore
+<span class='line'> 47</span> 	 */</span><span class="WHIT">
+<span class='line'> 48</span> </span><span class="WHIT">	</span><span class="NAME">H.apply</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">o</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">c</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">defaults</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 49</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">defaults</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 50</span> </span><span class="WHIT">            </span><span class="NAME">H.apply</span><span class="PUNC">(</span><span class="NAME">o</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">defaults</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 51</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 52</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">o</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">c</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">c</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">'object'</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 53</span> </span><span class="WHIT">            </span><span class="KEYW">for</span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">p</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">c</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 54</span> </span><span class="WHIT">                </span><span class="NAME">o</span><span class="PUNC">[</span><span class="NAME">p</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">c</span><span class="PUNC">[</span><span class="NAME">p</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 55</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 56</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 57</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">o</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 58</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 59</span> </span><span class="WHIT">    </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">supportFixed</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 60</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_div</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">$</span><span class="PUNC">(</span><span class="STRN">'&lt;div style="display:none;position:fixed;z-index:100;">&lt;/div>'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 61</span> </span><span class="WHIT">		</span><span class="NAME">$</span><span class="PUNC">(</span><span class="STRN">"body"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">append</span><span class="PUNC">(</span><span class="NAME">_div</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 62</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">_div.css</span><span class="PUNC">(</span><span class="STRN">"position"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">'fixed'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 63</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='line'> 64</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 65</span> </span><span class="WHIT">    </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">init</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 66</span> </span><span class="WHIT">    	</span><span class="NAME">Horn.fixed_</span><span class="PUNC">=</span><span class="NAME">supportFixed</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 67</span> </span><span class="WHIT">    	</span><span class="NAME">Horn.debug</span><span class="PUNC">(</span><span class="STRN">"Horn.init"</span><span class="PUNC">,</span><span class="STRN">"regist..."</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 68</span> </span><span class="WHIT">		</span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="WHIT"> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">registerFun.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 69</span> </span><span class="WHIT">			</span><span class="NAME">registerFun</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 70</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 71</span> </span><span class="WHIT">		</span><span class="NAME">Horn.debug</span><span class="PUNC">(</span><span class="STRN">"Horn.init"</span><span class="PUNC">,</span><span class="STRN">"ready..."</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 72</span> </span><span class="WHIT">		</span><span class="KEYW">while</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">readyFun.length</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 73</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">fun</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">readyFun.shift</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 74</span> </span><span class="WHIT">			</span><span class="NAME">fun</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 75</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 76</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 77</span> </span><span class="WHIT">    </span><span class="NAME">H.apply</span><span class="PUNC">(</span><span class="NAME">H</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 78</span> </span><span class="WHIT">    	</span><span class="COMM">/**
+<span class='line'> 79</span> 		 * @description 获取唯一ID
+<span class='line'> 80</span> 		 * @function
+<span class='line'> 81</span> 		 * @static
+<span class='line'> 82</span> 		 * @name Horn#id
+<span class='line'> 83</span> 		 * @param {Object} prefix 返回ID的前缀
+<span class='line'> 84</span> 		 * @ignore
+<span class='line'> 85</span> 		 */</span><span class="WHIT">
+<span class='line'> 86</span> </span><span class="WHIT">    	</span><span class="NAME">id</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">prefix</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 87</span> </span><span class="WHIT">    		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">prefix</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 88</span> </span><span class="WHIT">    			</span><span class="NAME">prefix</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"horn-comp-"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 89</span> </span><span class="WHIT">    		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 90</span> </span><span class="WHIT">    		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">prefix</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">_uuid</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 91</span> </span><span class="WHIT">    	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 92</span> </span><span class="WHIT">    	</span><span class="COMM">/**
+<span class='line'> 93</span> 		 * @description 实现继承
+<span class='line'> 94</span> 		 * @function
+<span class='line'> 95</span> 		 * @static
+<span class='line'> 96</span> 		 * @name Horn#extend
+<span class='line'> 97</span> 		 * @param {Object} sb 子类类
+<span class='line'> 98</span> 		 * @param {Object} sp 父类
+<span class='line'> 99</span> 		 * @param {Object} overrides 需要被重写的类
+<span class='line'>100</span> 		 * @ignore
+<span class='line'>101</span> 		 */</span><span class="WHIT">
+<span class='line'>102</span> </span><span class="WHIT">        </span><span class="NAME">extend</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>103</span> </span><span class="WHIT">            </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">io</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">o</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>104</span> </span><span class="WHIT">                </span><span class="KEYW">for</span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">m</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">o</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>105</span> </span><span class="WHIT">                    </span><span class="KEYW">this</span><span class="PUNC">[</span><span class="NAME">m</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">o</span><span class="PUNC">[</span><span class="NAME">m</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>106</span> </span><span class="WHIT">                </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>107</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>108</span> </span><span class="WHIT">            </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">oc</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Object.prototype.constructor</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>109</span> 
+<span class='line'>110</span> </span><span class="WHIT">            </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">sb</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">sp</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">overrides</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>111</span> </span><span class="WHIT">                </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">sp</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">'object'</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>112</span> </span><span class="WHIT">                    </span><span class="NAME">overrides</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">sp</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>113</span> </span><span class="WHIT">                    </span><span class="NAME">sp</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">sb</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>114</span> </span><span class="WHIT">                    </span><span class="NAME">sb</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">overrides.constructor</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NAME">oc</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">overrides.constructor</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="NAME">sp.apply</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">arguments</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>115</span> </span><span class="WHIT">                </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>116</span> </span><span class="WHIT">                </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">F</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>117</span> </span><span class="WHIT">                    </span><span class="NAME">sbp</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>118</span> </span><span class="WHIT">                    </span><span class="NAME">spp</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">sp.prototype</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>119</span> 
+<span class='line'>120</span> </span><span class="WHIT">                </span><span class="NAME">F.prototype</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">spp</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>121</span> </span><span class="WHIT">                </span><span class="NAME">sbp</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">sb.prototype</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">F</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>122</span> </span><span class="WHIT">                </span><span class="NAME">sbp.constructor</span><span class="PUNC">=</span><span class="NAME">sb</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>123</span> </span><span class="WHIT">                </span><span class="NAME">sb.superclass</span><span class="PUNC">=</span><span class="NAME">spp</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>124</span> </span><span class="WHIT">                </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">spp.constructor</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">oc</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>125</span> </span><span class="WHIT">                    </span><span class="NAME">spp.constructor</span><span class="PUNC">=</span><span class="NAME">sp</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>126</span> </span><span class="WHIT">                </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>127</span> </span><span class="WHIT">                </span><span class="NAME">sb.override</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">o</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>128</span> </span><span class="WHIT">                    </span><span class="NAME">H.override</span><span class="PUNC">(</span><span class="NAME">sb</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">o</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>129</span> </span><span class="WHIT">                </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>130</span> </span><span class="WHIT">                </span><span class="NAME">sbp.superclass</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">sbp.supr</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>131</span> </span><span class="WHIT">                    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">spp</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>132</span> </span><span class="WHIT">                </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>133</span> </span><span class="WHIT">                </span><span class="NAME">sbp.override</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">io</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>134</span> </span><span class="WHIT">                </span><span class="NAME">H.override</span><span class="PUNC">(</span><span class="NAME">sb</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">overrides</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>135</span> </span><span class="WHIT">                </span><span class="NAME">sb.extend</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">o</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">H.extend</span><span class="PUNC">(</span><span class="NAME">sb</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">o</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>136</span> </span><span class="WHIT">                </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">sb</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>137</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>138</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>139</span> </span><span class="WHIT">        </span><span class="COMM">/**
+<span class='line'>140</span> 		 * @description 实现重载
+<span class='line'>141</span> 		 * @function
+<span class='line'>142</span> 		 * @static 
+<span class='line'>143</span> 		 * @name Horn#override
+<span class='line'>144</span> 		 * @param {Object} origclass 原始类
+<span class='line'>145</span> 		 * @param {Object} overrides 重载对象
+<span class='line'>146</span> 		 * @ignore
+<span class='line'>147</span> 		 */</span><span class="WHIT">
+<span class='line'>148</span> </span><span class="WHIT">        </span><span class="NAME">override</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">origclass</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">overrides</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>149</span> </span><span class="WHIT">            </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">overrides</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>150</span> </span><span class="WHIT">                </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">p</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">origclass.prototype</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>151</span> </span><span class="WHIT">                </span><span class="NAME">H.apply</span><span class="PUNC">(</span><span class="NAME">p</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">overrides</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>152</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>153</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>154</span> </span><span class="WHIT">        </span><span class="COMM">/**
+<span class='line'>155</span> 		 * @description 获取当前Screen
+<span class='line'>156</span> 		 * 
+<span class='line'>157</span> 		 * @function
+<span class='line'>158</span> 		 * @static 
+<span class='line'>159</span> 		 * @name Horn#getCurrent
+<span class='line'>160</span> 		 * @ignore
+<span class='line'>161</span> 		 */</span><span class="WHIT">
+<span class='line'>162</span> </span><span class="WHIT">        </span><span class="NAME">getCurrent</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>163</span> </span><span class="COMM">//			//以前的current是放在screen或者是form上，不科学，现在去除了tabforjs，可以不需要这个了。</span><span class="WHIT">
+<span class='line'>164</span> </span><span class="COMM">//        	if(!_current){</span><span class="WHIT">
+<span class='line'>165</span> </span><span class="COMM">//	        	if ($("div.h_tab-screen").children("ul").children("li").size() > 0) {</span><span class="WHIT">
+<span class='line'>166</span> </span><span class="COMM">//					_current = $("div.h_tab-screen").nextAll("div").first();</span><span class="WHIT">
+<span class='line'>167</span> </span><span class="COMM">//				} else {</span><span class="WHIT">
+<span class='line'>168</span> </span><span class="COMM">//					_current = $("div.h_screen");</span><span class="WHIT">
+<span class='line'>169</span> </span><span class="COMM">//				}</span><span class="WHIT">
+<span class='line'>170</span> </span><span class="COMM">//        	}</span><span class="WHIT">
+<span class='line'>171</span> </span><span class="WHIT">        	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">_current</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>172</span> </span><span class="WHIT">        		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">_current</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>173</span> </span><span class="WHIT">        	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>174</span> </span><span class="WHIT">        	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">$</span><span class="PUNC">(</span><span class="NAME">document.body</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>175</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>176</span> </span><span class="WHIT">        </span><span class="COMM">/**
+<span class='line'>177</span>          * @description 设置当前Screen
+<span class='line'>178</span>          * @function
+<span class='line'>179</span>          * @static
+<span class='line'>180</span>          * @name Horn#setCurrent
+<span class='line'>181</span>          * @param {Object} curr
+<span class='line'>182</span>          * @ignore
+<span class='line'>183</span>          */</span><span class="WHIT">
+<span class='line'>184</span> </span><span class="WHIT">        </span><span class="NAME">setCurrent</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">curr</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>185</span> </span><span class="WHIT">        	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">curr</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>186</span> </span><span class="WHIT">        		</span><span class="NAME">_current</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">curr</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>187</span> </span><span class="WHIT">        	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>188</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>189</span> </span><span class="WHIT">        </span><span class="COMM">/**
+<span class='line'>190</span> 		 * @description 创建组件
+<span class='line'>191</span> 		 * @function
+<span class='line'>192</span> 		 * @static 
+<span class='line'>193</span> 		 * @name Horn#createComp
+<span class='line'>194</span> 		 * @param clazz {Function} 类型
+<span class='line'>195</span> 		 * @param args {Object} 参数
+<span class='line'>196</span> 		 * @ignore
+<span class='line'>197</span> 		 */</span><span class="WHIT">
+<span class='line'>198</span> </span><span class="WHIT">        </span><span class="NAME">createComp</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">clazz</span><span class="PUNC">,</span><span class="NAME">args</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>199</span> </span><span class="WHIT">        	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">clazz</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"function"</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>200</span> </span><span class="WHIT">        		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">cmp</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">clazz</span><span class="PUNC">(</span><span class="NAME">args</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>201</span> </span><span class="WHIT">        		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">cmp</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">H.Base</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>202</span> </span><span class="WHIT">        			</span><span class="NAME">this.data</span><span class="PUNC">(</span><span class="NAME">cmp</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>203</span> </span><span class="WHIT">        			</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">cmp</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>204</span> </span><span class="WHIT">        		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>205</span> </span><span class="WHIT">        	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>206</span> </span><span class="WHIT">        	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>207</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>208</span> </span><span class="WHIT">        </span><span class="NAME">_guid</span><span class="PUNC">:</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>209</span> </span><span class="WHIT">            </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'</span><span class="PUNC">.</span><span class="NAME">replace</span><span class="PUNC">(</span><span class="REGX">/[xy]/g</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">c</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>210</span> </span><span class="WHIT">                </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">r</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Math.random</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">*</span><span class="NUMB">16</span><span class="PUNC">|</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">v</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">c</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">'x'</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">r</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">r</span><span class="PUNC">&</span><span class="NUMB">0x3</span><span class="PUNC">|</span><span class="NUMB">0x8</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>211</span> </span><span class="WHIT">                </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">v.toString</span><span class="PUNC">(</span><span class="NUMB">16</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>212</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>213</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>214</span> </span><span class="WHIT">        </span><span class="COMM">/**
+<span class='line'>215</span> 		 * @description 存储/获取组件
+<span class='line'>216</span> 		 * @function
+<span class='line'>217</span> 		 * @static 
+<span class='line'>218</span> 		 * @name Horn#data
+<span class='line'>219</span> 		 * @param arg1 {String/Object}
+<span class='line'>220</span> 		 * @param arg2 {String} 参数
+<span class='line'>221</span> 		 * @ignore
+<span class='line'>222</span> 		 */</span><span class="WHIT">
+<span class='line'>223</span> </span><span class="WHIT">        </span><span class="NAME">data</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">arg1</span><span class="PUNC">,</span><span class="NAME">arg2</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>224</span> </span><span class="WHIT">        	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">_cache</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>225</span> </span><span class="WHIT">        		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">tempForm</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getCurrent</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">find</span><span class="PUNC">(</span><span class="STRN">"form"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>226</span> </span><span class="WHIT">        		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">tempForm.length</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>227</span> </span><span class="WHIT">        			</span><span class="NAME">_cache</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">tempForm.first</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="WHIT">
+<span class='line'>228</span> </span><span class="WHIT">        		</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>229</span> </span><span class="WHIT">        			</span><span class="NAME">_cache</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getCurrent</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>230</span> </span><span class="WHIT">        		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>231</span> </span><span class="WHIT">        	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>232</span> </span><span class="WHIT">        	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">$.type</span><span class="PUNC">(</span><span class="NAME">arg1</span><span class="PUNC">)</span><span class="PUNC">==</span><span class="STRN">"object"</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="COMM">//修改当页面中存在重名组件的时候，取重名组件当中配置了id项的那个组件作为返回值。modify by 王玉豹</span><span class="WHIT">
+<span class='line'>233</span> </span><span class="WHIT">        		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">_cache.data</span><span class="PUNC">(</span><span class="STRN">"_id_comp_cache"</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="COMM">//修改getCompById为正确的按照id取得组件的方式，这个cache是保存了idComp</span><span class="WHIT">
+<span class='line'>234</span> </span><span class="WHIT">        			</span><span class="NAME">_cache.data</span><span class="PUNC">(</span><span class="STRN">"_id_comp_cache"</span><span class="PUNC">,</span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>235</span> </span><span class="WHIT">        		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>236</span> </span><span class="WHIT">        		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">_cache.data</span><span class="PUNC">(</span><span class="STRN">"_el_comp_cache"</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="COMM">//修改getCompById为正确的按照id取得组件的方式，这个cache是保存了idComp</span><span class="WHIT">
+<span class='line'>237</span> </span><span class="WHIT">        			</span><span class="NAME">_cache.data</span><span class="PUNC">(</span><span class="STRN">"_el_comp_cache"</span><span class="PUNC">,</span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>238</span> </span><span class="WHIT">        		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>239</span> </span><span class="WHIT">        		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">compArr</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_cache.data</span><span class="PUNC">(</span><span class="NAME">arg1.getQID</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>240</span> </span><span class="WHIT">        		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">compArr</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>241</span> </span><span class="WHIT">        			</span><span class="NAME">compArr</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Array</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>242</span> </span><span class="WHIT">        		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>243</span> </span><span class="WHIT">        		</span><span class="NAME">compArr.push</span><span class="PUNC">(</span><span class="NAME">arg1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>244</span> </span><span class="WHIT">        		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">compArr.length</span><span class="WHIT"> </span><span class="PUNC">></span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>245</span> </span><span class="WHIT">        			</span><span class="NAME">Horn.debug</span><span class="PUNC">(</span><span class="STRN">"出现重复组件名："</span><span class="PUNC">,</span><span class="NAME">arg1.getQID</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>246</span> </span><span class="WHIT">        		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>247</span> </span><span class="WHIT">        		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">arg1.params</span><span class="PUNC">&&</span><span class="NAME">arg1.params</span><span class="PUNC">[</span><span class="STRN">"id"</span><span class="PUNC">]</span><span class="PUNC">&&</span><span class="NAME">arg1.params</span><span class="PUNC">[</span><span class="STRN">"id"</span><span class="PUNC">]</span><span class="PUNC">!=</span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>248</span> </span><span class="WHIT">        			</span><span class="NAME">_cache.data</span><span class="PUNC">(</span><span class="STRN">"_id_comp_cache"</span><span class="PUNC">)</span><span class="PUNC">[</span><span class="NAME">arg1.params</span><span class="PUNC">[</span><span class="STRN">"id"</span><span class="PUNC">]</span><span class="PUNC">]</span><span class="PUNC">=</span><span class="NAME">arg1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>249</span> </span><span class="WHIT">        		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>250</span> </span><span class="WHIT">        		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">arg1.el</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>251</span> </span><span class="WHIT">        			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">guid</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._guid</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>252</span> </span><span class="WHIT">        			</span><span class="NAME">arg1.el.data</span><span class="PUNC">(</span><span class="STRN">"comp_el_id"</span><span class="PUNC">,</span><span class="NAME">guid</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>253</span> </span><span class="WHIT">        			</span><span class="NAME">_cache.data</span><span class="PUNC">(</span><span class="STRN">"_el_comp_cache"</span><span class="PUNC">)</span><span class="PUNC">[</span><span class="NAME">guid</span><span class="PUNC">]</span><span class="PUNC">=</span><span class="NAME">arg1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>254</span> </span><span class="WHIT">        		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>255</span> </span><span class="WHIT">    			</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">_cache.data</span><span class="PUNC">(</span><span class="NAME">arg1.getQID</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="NAME">compArr</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>256</span> </span><span class="WHIT">    		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>257</span> </span><span class="WHIT">    		</span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">$.type</span><span class="PUNC">(</span><span class="NAME">arg1</span><span class="PUNC">)</span><span class="PUNC">==</span><span class="STRN">"string"</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">arg2</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>258</span> </span><span class="WHIT">    			</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">_cache.data</span><span class="PUNC">(</span><span class="NAME">arg1</span><span class="PUNC">,</span><span class="NAME">arg2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>259</span> </span><span class="WHIT">    		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>260</span> </span><span class="WHIT">    		</span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">$.type</span><span class="PUNC">(</span><span class="NAME">arg1</span><span class="PUNC">)</span><span class="PUNC">==</span><span class="STRN">"string"</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="PUNC">!</span><span class="NAME">arg2</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>261</span> </span><span class="WHIT">    			</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">_cache.data</span><span class="PUNC">(</span><span class="NAME">arg1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>262</span> </span><span class="WHIT">    		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>263</span> </span><span class="WHIT">    		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">_cache.data</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>264</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>265</span> </span><span class="WHIT">        </span><span class="COMM">/**
+<span class='line'>266</span> 		 * @description 获取组件名称
+<span class='line'>267</span> 		 * @function
+<span class='line'>268</span> 		 * @static 
+<span class='line'>269</span> 		 * @name Horn#getQID
+<span class='line'>270</span> 		 * @param arg1 {String} 组件名
+<span class='line'>271</span> 		 * @param arg2 {String} 组件别名
+<span class='line'>272</span> 		 * @ignore
+<span class='line'>273</span> 		 */</span><span class="WHIT">
+<span class='line'>274</span> </span><span class="WHIT">        </span><span class="NAME">getQID</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">,</span><span class="NAME">alias</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>275</span> </span><span class="WHIT">			</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">name</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"$"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">alias</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="STRN">"_"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>276</span> </span><span class="WHIT">    	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>277</span> </span><span class="WHIT">    	</span><span class="COMM">/**
+<span class='line'>278</span>     	 * &lt;b>静态方法&lt;/b>
+<span class='line'>279</span> 		 * 工具组件的名称获取组件，此方法为静态方法
+<span class='line'>280</span> 		 * @function
+<span class='line'>281</span> 		 * @static 
+<span class='line'>282</span> 		 * @name Horn#getComp
+<span class='line'>283</span> 		 * @param  {String} name 组件名称&lt;b>所有组件的名称不能重复，否则只能取到最后一个&lt;/b>
+<span class='line'>284</span> 		 * @return  {Object} comp 组件对象
+<span class='line'>285</span> 		 * @example
+<span class='line'>286</span> 		 * Horn.getComp("compName")
+<span class='line'>287</span> 		 */</span><span class="WHIT">
+<span class='line'>288</span> </span><span class="WHIT">        </span><span class="NAME">getComp</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">arg1</span><span class="PUNC">,</span><span class="NAME">arg2</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>289</span> </span><span class="WHIT">        	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">compArr</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.data</span><span class="PUNC">(</span><span class="NAME">this.getQID</span><span class="PUNC">(</span><span class="NAME">arg1</span><span class="PUNC">,</span><span class="NAME">arg2</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>290</span> </span><span class="WHIT">        	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">compArr</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>291</span> </span><span class="WHIT">        		</span><span class="KEYW">return</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>292</span> </span><span class="WHIT">        	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>293</span> </span><span class="WHIT">        	</span><span class="KEYW">for</span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">=</span><span class="NUMB">0</span><span class="PUNC">;</span><span class="NAME">i</span><span class="PUNC">&lt;</span><span class="NAME">compArr.length</span><span class="PUNC">;</span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>294</span> </span><span class="WHIT">        		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">compArr</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">params.id</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">compArr</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">params.id</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="COMM">//修改当页面中存在重名组件的时候，取重名组件当中配置了id项的那个组件作为返回值。modify by 王玉豹</span><span class="WHIT">
+<span class='line'>295</span> </span><span class="WHIT">        			</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">compArr</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>296</span> </span><span class="WHIT">        		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>297</span> </span><span class="WHIT">        	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>298</span> </span><span class="WHIT">    		</span><span class="KEYW">return</span><span class="WHIT">  </span><span class="NAME">compArr</span><span class="PUNC">[</span><span class="NAME">compArr.length</span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="COMM">//修改为返回重名组件的最后一个</span><span class="WHIT">
+<span class='line'>299</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>300</span> </span><span class="WHIT">        </span><span class="COMM">/**
+<span class='line'>301</span>          * @description 根据获取到的el对象来获取对应的组件。
+<span class='line'>302</span>          * 				注意：由于某些组件的el并非是组件化的el，因此可能会导致根据el获取不到对应的组件,
+<span class='line'>303</span>          * 				除非你确定获取到的el是Horn内组件的el，否则不推荐使用。
+<span class='line'>304</span>          * 				。
+<span class='line'>305</span>          * @function
+<span class='line'>306</span>          * @static
+<span class='line'>307</span>          * @name Horn#getCompByEl
+<span class='line'>308</span>          * @param el {JQuery} 使用JQuery获取到的对象
+<span class='line'>309</span>          * @ignore
+<span class='line'>310</span>          */</span><span class="WHIT">
+<span class='line'>311</span> </span><span class="WHIT">        </span><span class="NAME">getCompByEl</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">el</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>312</span> </span><span class="WHIT">        	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">H.Base.getCompByEl</span><span class="PUNC">(</span><span class="NAME">el</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>313</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>314</span> </span><span class="WHIT">        </span><span class="COMM">/**
+<span class='line'>315</span> 		 * @description 
+<span class='line'>316</span> 		 * 		注册初始化方法，创建/扩展框架组件使用
+<span class='line'>317</span> 		 * 		框架组件应继承Horn.Base，否则有些特性将无法使用
+<span class='line'>318</span> 		 * @function
+<span class='line'>319</span> 		 * @static 
+<span class='line'>320</span> 		 * @name Horn#register
+<span class='line'>321</span> 		 * @param fun {Function} function
+<span class='line'>322</span> 		 * @ignore
+<span class='line'>323</span> 		 */</span><span class="WHIT">
+<span class='line'>324</span> </span><span class="WHIT">        </span><span class="NAME">register</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">fun</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>325</span> </span><span class="WHIT">			</span><span class="NAME">registerFun.push</span><span class="PUNC">(</span><span class="NAME">fun</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>326</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>327</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'>328</span> 		 * &lt;b>静态方法&lt;/b>
+<span class='line'>329</span> 		 * 在页面渲染完成后执行的方法，可注册多次，使用先进先出的执行顺序。&lt;br/>
+<span class='line'>330</span> 		 * 执行顺序如下：&lt;br/>
+<span class='line'>331</span> 		 * head资源引入的顺序，如果是在components的js加载之前加载，则之前的jquery.ready会先被执行；&lt;br/>
+<span class='line'>332</span> 		 * 在components的js加载之后的脚本以及代码中的片段代码遵守以下规则：&lt;br>
+<span class='line'>333</span> 		 * Horn.ready的执行顺序优先于jquery.ready&lt;br>
+<span class='line'>334</span> 		 * 多个Horn.ready按照代码顺序执行
+<span class='line'>335</span> 		 * @function
+<span class='line'>336</span> 		 * @static 
+<span class='line'>337</span> 		 * @name Horn#ready
+<span class='line'>338</span> 		 * @param  {Function} fun 函数
+<span class='line'>339</span> 		 * @return {void}
+<span class='line'>340</span> 		 * @example
+<span class='line'>341</span> 		 * Horn.ready(function(){
+<span class='line'>342</span>     	 *   //TODO
+<span class='line'>343</span>     	 * });
+<span class='line'>344</span> 		 */</span><span class="WHIT">
+<span class='line'>345</span> </span><span class="WHIT">		</span><span class="NAME">ready</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">fun</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>346</span> </span><span class="WHIT">			</span><span class="NAME">readyFun.push</span><span class="PUNC">(</span><span class="NAME">fun</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>347</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>348</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'>349</span> 		 * &lt;b>静态方法&lt;/b>
+<span class='line'>350</span> 		 * 根据组件id获取组件，此方法为静态方法
+<span class='line'>351</span> 		 * @param {String} id &lt;b>所有组件的ID不能重复，否则只能取到第一个&lt;/b>
+<span class='line'>352</span> 		 * @name Horn#getCompById
+<span class='line'>353</span> 		 * @return 
+<span class='line'>354</span> 		 * @function
+<span class='line'>355</span> 		 * @return  {Object} comp 组件对象
+<span class='line'>356</span> 		 * @example
+<span class='line'>357</span> 		 * Horn.getCompById("compId");
+<span class='line'>358</span> 		 */</span><span class="WHIT">
+<span class='line'>359</span> </span><span class="WHIT">	    </span><span class="NAME">getCompById</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">id</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>360</span> </span><span class="WHIT">	    	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">Horn.Base.getCompById</span><span class="PUNC">(</span><span class="NAME">id</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>361</span> </span><span class="WHIT">	    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>362</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'>363</span> 		 * @description 
+<span class='line'>364</span> 		 * 		注册提交事件，返回false将阻止form提交
+<span class='line'>365</span> 		 * @function
+<span class='line'>366</span> 		 * @static 
+<span class='line'>367</span> 		 * @deprecated 
+<span class='line'>368</span> 		 * 		本方案不安全，因此不推荐使用
+<span class='line'>369</span> 		 * @name Horn.submitHandler
+<span class='line'>370</span> 		 * @param fun {Function} function
+<span class='line'>371</span> 		 * @ignore
+<span class='line'>372</span> 		 */</span><span class="WHIT">
+<span class='line'>373</span> </span><span class="WHIT">		</span><span class="NAME">submitHandler</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">fn</span><span class="PUNC">,</span><span class="NAME">_form</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>374</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">form</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">$.type</span><span class="PUNC">(</span><span class="NAME">_form</span><span class="PUNC">)</span><span class="PUNC">==</span><span class="STRN">'string'</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">this.getComp</span><span class="PUNC">(</span><span class="NAME">_form</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">_form</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>375</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">form</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">form</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">H.Base</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>376</span> </span><span class="WHIT">				</span><span class="NAME">form.on</span><span class="PUNC">(</span><span class="STRN">'beforesubmit'</span><span class="PUNC">,</span><span class="NAME">fn</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>377</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>378</span> </span><span class="WHIT">					</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">forms</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">H.getCurrent</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">find</span><span class="PUNC">(</span><span class="STRN">"form"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>379</span> </span><span class="WHIT">					</span><span class="NAME">forms.each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">idx</span><span class="PUNC">,</span><span class="NAME">formitem</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>380</span> </span><span class="WHIT">						</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">formComp</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">H.getCompByEl</span><span class="PUNC">(</span><span class="NAME">formitem</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>381</span> </span><span class="WHIT">						</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">formComp</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>382</span> </span><span class="WHIT">							</span><span class="NAME">H.ready</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>383</span> </span><span class="WHIT">								</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">formComp</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">H.getCompByEl</span><span class="PUNC">(</span><span class="NAME">formitem</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>384</span> </span><span class="WHIT">								</span><span class="NAME">formComp.on</span><span class="PUNC">(</span><span class="STRN">'beforesubmit'</span><span class="PUNC">,</span><span class="NAME">fn</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>385</span> </span><span class="WHIT">							</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>386</span> </span><span class="WHIT">						</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>387</span> </span><span class="WHIT">							</span><span class="NAME">formComp.on</span><span class="PUNC">(</span><span class="STRN">'beforesubmit'</span><span class="PUNC">,</span><span class="NAME">fn</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>388</span> </span><span class="WHIT">						</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>389</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>390</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>391</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>392</span> </span><span class="WHIT">        </span><span class="COMM">/**
+<span class='line'>393</span>          * @description 在指定元素下面增加html字符串所表示的元素或页面跳转(html以Redirect:打头)
+<span class='line'>394</span>          * @function
+<span class='line'>395</span>          * @static
+<span class='line'>396</span>          * @name Horn#render
+<span class='line'>397</span>          * @param {string} pageletId 所指定元素的id
+<span class='line'>398</span>          * @param {string} html 所要增加的html字符串
+<span class='line'>399</span>          * @ignore
+<span class='line'>400</span>          */</span><span class="WHIT">
+<span class='line'>401</span> </span><span class="WHIT">		</span><span class="NAME">render</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">pageletId</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">html</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>402</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">html.indexOf</span><span class="PUNC">(</span><span class="STRN">"Redirect:"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>403</span> </span><span class="WHIT">				</span><span class="NAME">window.location</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">html.substr</span><span class="PUNC">(</span><span class="NUMB">9</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>404</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>405</span> </span><span class="WHIT">				</span><span class="NAME">$</span><span class="PUNC">(</span><span class="STRN">"#"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">pageletId</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">append</span><span class="PUNC">(</span><span class="NAME">html</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>406</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>407</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>408</span> </span><span class="WHIT">        </span><span class="COMM">/**
+<span class='line'>409</span>          * @description 初始化页面元素
+<span class='line'>410</span>          * @function
+<span class='line'>411</span>          * @static
+<span class='line'>412</span>          * @name Horn#init
+<span class='line'>413</span>          * @ignore
+<span class='line'>414</span>          */</span><span class="WHIT">
+<span class='line'>415</span> </span><span class="WHIT">		</span><span class="NAME">init</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>416</span> </span><span class="WHIT">			</span><span class="NAME">init</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>417</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>418</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'>419</span> 		 * @description 注册需要初始化的UI
+<span class='line'>420</span> 		 * @function
+<span class='line'>421</span> 		 * @static 
+<span class='line'>422</span> 		 * @name Horn#regUI
+<span class='line'>423</span> 		 * @param selector {String} 选择器
+<span class='line'>424</span> 		 * @param type {Function} 类型
+<span class='line'>425</span> 		 * @ignore
+<span class='line'>426</span> 		 */</span><span class="WHIT">
+<span class='line'>427</span> </span><span class="WHIT">		</span><span class="NAME">regUI</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">selector</span><span class="PUNC">,</span><span class="NAME">type</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>428</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">ui</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>429</span> </span><span class="WHIT">			</span><span class="NAME">ui.selector</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">selector</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>430</span> </span><span class="WHIT">			</span><span class="NAME">ui.type</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">type</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>431</span> </span><span class="WHIT">			</span><span class="NAME">registerUI.push</span><span class="PUNC">(</span><span class="NAME">ui</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>432</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>433</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'>434</span> 		 * @description 执行所有初始化方法
+<span class='line'>435</span> 		 * @function
+<span class='line'>436</span> 		 * @static 
+<span class='line'>437</span> 		 * @name Horn#getUIReady
+<span class='line'>438</span> 		 * @ignore
+<span class='line'>439</span> 		 */</span><span class="WHIT">
+<span class='line'>440</span> </span><span class="WHIT">		</span><span class="NAME">getUIReady</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>441</span> </span><span class="WHIT">			</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">current</span><span class="PUNC">,</span><span class="NAME">sub</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>442</span> </span><span class="WHIT">				</span><span class="NAME">current</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">current</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">H.getCurrent</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>443</span> </span><span class="WHIT">				</span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">create</span><span class="PUNC">(</span><span class="NAME">list</span><span class="PUNC">,</span><span class="NAME">Class</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>444</span> </span><span class="WHIT">					</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">arr</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Array</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>445</span> </span><span class="WHIT">					</span><span class="NAME">list.each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">o</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>446</span> </span><span class="WHIT">						</span><span class="NAME">arr.push</span><span class="PUNC">(</span><span class="NAME">H.createComp</span><span class="PUNC">(</span><span class="NAME">Class</span><span class="PUNC">,</span><span class="NAME">o</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>447</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>448</span> </span><span class="WHIT">					</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">Class.DATANAME</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>449</span> </span><span class="WHIT">						</span><span class="NAME">H.data</span><span class="PUNC">(</span><span class="NAME">Class.DATANAME</span><span class="PUNC">,</span><span class="NAME">sub</span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">arr.concat</span><span class="PUNC">(</span><span class="NAME">H.data</span><span class="PUNC">(</span><span class="NAME">Class.DATANAME</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">arr</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>450</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>451</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>452</span> </span><span class="WHIT">				</span><span class="KEYW">for</span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">=</span><span class="NUMB">0</span><span class="PUNC">;</span><span class="NAME">i</span><span class="PUNC">&lt;</span><span class="NAME">registerUI.length</span><span class="PUNC">;</span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>453</span> </span><span class="WHIT">					</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">ui</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">registerUI</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>454</span> </span><span class="WHIT">					</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">selects</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">current.find</span><span class="PUNC">(</span><span class="NAME">ui.selector</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>455</span> </span><span class="WHIT">					</span><span class="NAME">create</span><span class="PUNC">(</span><span class="NAME">selects</span><span class="PUNC">,</span><span class="NAME">ui.type</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>456</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>457</span> </span><span class="WHIT">				</span><span class="NAME">Horn.enterToTab</span><span class="PUNC">(</span><span class="NAME">current</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>458</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>459</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>460</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'>461</span> 		 * @description 将enter事件注册为焦点切换
+<span class='line'>462</span> 		 * @function
+<span class='line'>463</span> 		 * @static 
+<span class='line'>464</span> 		 * @name Horn#enterToTab
+<span class='line'>465</span> 		 * @ignore
+<span class='line'>466</span> 		 */</span><span class="WHIT">
+<span class='line'>467</span> </span><span class="WHIT">		</span><span class="NAME">enterToTab</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">scope</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>468</span> </span><span class="WHIT">	         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">inp</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">scope.find</span><span class="PUNC">(</span><span class="STRN">'input:text:visible,input:password:visible'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>469</span> </span><span class="WHIT">	         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">bindfunc</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">e</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>470</span> </span><span class="WHIT">	             </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">key</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">e.which</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>471</span> </span><span class="WHIT">	             </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">key</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">13</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>472</span> </span><span class="WHIT">	                 </span><span class="NAME">e.preventDefault</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>473</span> </span><span class="WHIT">	                 </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">nxtIdx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">inp.index</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>474</span> </span><span class="WHIT">	                 </span><span class="NAME">inp.eq</span><span class="PUNC">(</span><span class="NAME">nxtIdx</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">focus</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>475</span> </span><span class="WHIT">	             </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>476</span> </span><span class="WHIT">	         </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>477</span> </span><span class="WHIT">	         </span><span class="NAME">inp.unbind</span><span class="PUNC">(</span><span class="STRN">'keydown'</span><span class="PUNC">,</span><span class="NAME">bindfunc</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>478</span> </span><span class="WHIT">	         </span><span class="NAME">inp.bind</span><span class="PUNC">(</span><span class="STRN">'keydown'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">bindfunc</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>479</span> </span><span class="WHIT">			</span><span class="WHIT">
+<span class='line'>480</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>481</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'>482</span> 		 * @description 从字典缓存中获取字典（js）
+<span class='line'>483</span> 		 * @function
+<span class='line'>484</span> 		 * @static 
+<span class='line'>485</span> 		 * @name Horn#getDict
+<span class='line'>486</span> 		 * @param {String} 字典名
+<span class='line'>487</span> 		 * @ignore
+<span class='line'>488</span> 		 */</span><span class="WHIT">
+<span class='line'>489</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'>490</span>          * @description 根据字典名及key获取value（建议使用Horn.Util.getDicts）
+<span class='line'>491</span>          * @function
+<span class='line'>492</span>          * @static 
+<span class='line'>493</span>          * @name Horn#getDict
+<span class='line'>494</span>          * @param {string} dictName 字典名
+<span class='line'>495</span>          * @param {boolean} keys 字典key，可以为单个或多个，多个key以逗号分隔
+<span class='line'>496</span>          * @returns {String} values 字典value，单个或多个，多个value以逗号分隔（当key未定义时返回整个字典）
+<span class='line'>497</span>          */</span><span class="WHIT">
+<span class='line'>498</span> </span><span class="WHIT">		</span><span class="NAME">getDict</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">dictName</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">keys</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>499</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">H.cachedDicts</span><span class="PUNC">[</span><span class="NAME">dictName</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>500</span> </span><span class="WHIT">				</span><span class="COMM">//先把dict解析出来，避免重复查找dom</span><span class="WHIT">
+<span class='line'>501</span> </span><span class="WHIT">				</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">dictUl</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">$</span><span class="PUNC">(</span><span class="STRN">'.hc_checkboxdiv[ref_target='</span><span class="PUNC">+</span><span class="NAME">dictName</span><span class="PUNC">+</span><span class="STRN">'_s]'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>502</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">dictUl.get</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>503</span> </span><span class="WHIT">					</span><span class="NAME">dictUl</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">$</span><span class="PUNC">(</span><span class="STRN">'.hc_checkboxdiv[ref_target='</span><span class="PUNC">+</span><span class="NAME">dictName</span><span class="PUNC">+</span><span class="STRN">'_m]'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>504</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>505</span> </span><span class="WHIT">				</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">lis</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">dictUl.find</span><span class="PUNC">(</span><span class="STRN">"li"</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>506</span> </span><span class="WHIT">					</span><span class="NAME">staticDict</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>507</span> </span><span class="WHIT">					</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>508</span> </span><span class="WHIT">				</span><span class="NAME">lis.each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">idx</span><span class="PUNC">,</span><span class="NAME">li</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>509</span> </span><span class="WHIT">					</span><span class="NAME">li</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">$</span><span class="PUNC">(</span><span class="NAME">li</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>510</span> </span><span class="WHIT">					</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">label</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">li.attr</span><span class="PUNC">(</span><span class="STRN">'title'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>511</span> </span><span class="WHIT">					</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">key</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">li.attr</span><span class="PUNC">(</span><span class="STRN">'value'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>512</span> </span><span class="WHIT">					</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">key</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>513</span> </span><span class="WHIT">						</span><span class="NAME">key</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">li.attr</span><span class="PUNC">(</span><span class="STRN">'key'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>514</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>515</span> </span><span class="WHIT">					</span><span class="NAME">staticDict</span><span class="PUNC">[</span><span class="NAME">key</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">label</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>516</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>517</span> </span><span class="WHIT">				</span><span class="NAME">cachedDicts</span><span class="PUNC">[</span><span class="NAME">dictName</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">staticDict</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>518</span> </span><span class="WHIT">				</span><span class="NAME">H.cachedDicts</span><span class="PUNC">[</span><span class="NAME">dictName</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">staticDict</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>519</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>520</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">keys</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>521</span> </span><span class="WHIT">				</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">H.Util.getDicts</span><span class="PUNC">(</span><span class="NAME">dictName</span><span class="PUNC">,</span><span class="NAME">keys</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>522</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>523</span> </span><span class="WHIT">			</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">cachedDicts</span><span class="PUNC">[</span><span class="NAME">dictName</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>524</span> </span><span class="WHIT">			</span><span class="WHIT">
+<span class='line'>525</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>526</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>527</span> </span><span class="WHIT">    </span><span class="WHIT">
+<span class='line'>528</span> </span><span class="WHIT">    </span><span class="NAME">H.register</span><span class="PUNC">(</span><span class="NAME">H.getUIReady</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>529</span> </span><span class="WHIT">    </span><span class="NAME">$</span><span class="PUNC">(</span><span class="NAME">document</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">ready</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>530</span> </span><span class="WHIT">		</span><span class="NAME">init</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>531</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>532</span> 
+<span class='line'>533</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='line'>534</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='line'>535</span> 	 * @name Horn.Base
+<span class='line'>536</span> 	 * @class Horn.Base
+<span class='line'>537</span> 	 * Horn.base对象&lt;br/>
+<span class='line'>538</span> 	 * Horn UI 的base对象
+<span class='line'>539</span> 	 */</span><span class="WHIT">
+<span class='line'>540</span> </span><span class="WHIT">	</span><span class="COMM">/** @lends Horn.Base# */</span><span class="WHIT">
+<span class='line'>541</span> </span><span class="WHIT">	</span><span class="NAME">H.Base</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>542</span> </span><span class="WHIT">	    </span><span class="NAME">this.init.apply</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">arguments</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>543</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>544</span> </span><span class="WHIT">	</span><span class="NAME">H.Base</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">H.extend</span><span class="PUNC">(</span><span class="NAME">H.Base</span><span class="PUNC">,</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>545</span> </span><span class="WHIT">		</span><span class="NAME">COMPONENT_CLASS</span><span class="PUNC">:</span><span class="STRN">"Base"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>546</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'>547</span> 		 * @description 组件的name
+<span class='line'>548</span> 		 * @field
+<span class='line'>549</span> 		 * @type String
+<span class='line'>550</span> 		 * @ignore
+<span class='line'>551</span> 		 */</span><span class="WHIT">
+<span class='line'>552</span> </span><span class="WHIT">		</span><span class="NAME">name</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>553</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'>554</span> 		 * @description 组件的别名
+<span class='line'>555</span> 		 * @field
+<span class='line'>556</span> 		 * @type String
+<span class='line'>557</span> 		 * @ignore
+<span class='line'>558</span> 		 */</span><span class="WHIT">
+<span class='line'>559</span> </span><span class="WHIT">		</span><span class="NAME">alias</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>560</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'>561</span> 		 * @description 组件所对应的DomElement
+<span class='line'>562</span> 		 * @field
+<span class='line'>563</span> 		 * @type DomElement
+<span class='line'>564</span> 		 * @ignore
+<span class='line'>565</span> 		 */</span><span class="WHIT">
+<span class='line'>566</span> </span><span class="WHIT">		</span><span class="NAME">el</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>567</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'>568</span> 		 * 从页面进入的参数
+<span class='line'>569</span> 		 * @field
+<span class='line'>570</span> 		 * @private
+<span class='line'>571</span> 		 * @type {Object}
+<span class='line'>572</span> 		 * @ignore
+<span class='line'>573</span> 		 */</span><span class="WHIT">
+<span class='line'>574</span> </span><span class="WHIT">		</span><span class="NAME">params</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>575</span> </span><span class="WHIT">		</span><span class="NAME">REG_FUNCTION_NAME</span><span class="PUNC">:</span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>576</span> </span><span class="WHIT">		</span><span class="NAME">regFuncs</span><span class="PUNC">:</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">arr</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>577</span> </span><span class="WHIT">			</span><span class="NAME">this.REG_FUNCTION_NAME</span><span class="PUNC">=</span><span class="NAME">this.REG_FUNCTION_NAME.concat</span><span class="PUNC">(</span><span class="NAME">arr</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>578</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_base</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">el</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.el</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>579</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">this.REG_FUNCTION_NAME.length</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>580</span> </span><span class="WHIT">				</span><span class="KEYW">for</span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">=</span><span class="NUMB">0</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">&lt;</span><span class="NAME">this.REG_FUNCTION_NAME.length</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>581</span> </span><span class="WHIT">					</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">funcname</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.REG_FUNCTION_NAME</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>582</span> </span><span class="WHIT">					</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">funcname</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">'string'</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>583</span> </span><span class="WHIT">						</span><span class="NAME">el</span><span class="PUNC">[</span><span class="NAME">funcname</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>584</span> </span><span class="WHIT">							</span><span class="NAME">_base</span><span class="PUNC">[</span><span class="NAME">funcname</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">apply</span><span class="PUNC">(</span><span class="NAME">_base</span><span class="PUNC">,</span><span class="NAME">arguments</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>585</span> </span><span class="WHIT">						</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>586</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>587</span> </span><span class="WHIT">						</span><span class="NAME">el</span><span class="PUNC">[</span><span class="NAME">funcname</span><span class="PUNC">[</span><span class="STRN">'src'</span><span class="PUNC">]</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>588</span> </span><span class="WHIT">							</span><span class="NAME">_base</span><span class="PUNC">[</span><span class="NAME">funcname</span><span class="PUNC">[</span><span class="STRN">'tgt'</span><span class="PUNC">]</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">apply</span><span class="PUNC">(</span><span class="NAME">_base</span><span class="PUNC">,</span><span class="NAME">arguments</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>589</span> </span><span class="WHIT">						</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>590</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>591</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>592</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>593</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>594</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'>595</span> 		 * @ignore
+<span class='line'>596</span> 		 */</span><span class="WHIT">
+<span class='line'>597</span> </span><span class="WHIT">		</span><span class="NAME">regEvents</span><span class="PUNC">:</span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>598</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'>599</span> 		 * @ignore
+<span class='line'>600</span> 		 * @function
+<span class='line'>601</span> 		 */</span><span class="WHIT">
+<span class='line'>602</span> </span><span class="WHIT">		</span><span class="NAME">init</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>603</span> </span><span class="WHIT">			</span><span class="NAME">this.el</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">$</span><span class="PUNC">(</span><span class="NAME">arguments</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>604</span> </span><span class="WHIT">			</span><span class="COMM">//this.el.data(H.Base.COMPMENTOBJECT,this);</span><span class="WHIT">
+<span class='line'>605</span> </span><span class="WHIT">			</span><span class="NAME">this.alias</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.alias</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">this.el.attr</span><span class="PUNC">(</span><span class="STRN">"alias"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>606</span> </span><span class="WHIT">			</span><span class="NAME">this.name</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.name</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">this.el.attr</span><span class="PUNC">(</span><span class="STRN">"name"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>607</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.el</span><span class="PUNC">&&</span><span class="NAME">this.el.attr</span><span class="PUNC">(</span><span class="STRN">"paramcacheid"</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>608</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">Horn.paramCaches</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>609</span> </span><span class="WHIT">					</span><span class="NAME">this.params</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Horn.paramCaches</span><span class="PUNC">[</span><span class="NAME">this.el.attr</span><span class="PUNC">(</span><span class="STRN">"paramcacheid"</span><span class="PUNC">)</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>610</span> </span><span class="WHIT">					</span><span class="WHIT">
+<span class='line'>611</span> </span><span class="WHIT">					</span><span class="COMM">//STORY #10009 【TS:201410110004-JRESPlus-海外发展部-胡琦-根据patch20140930_2(jresui1.0.6)】 ,在空参的时候初始化参数</span><span class="WHIT">
+<span class='line'>612</span> </span><span class="WHIT">					</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="PUNC">!</span><span class="PUNC">(</span><span class="NAME">this.params</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>613</span> </span><span class="WHIT">						</span><span class="NAME">this.params</span><span class="WHIT">  </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>614</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>615</span> </span><span class="WHIT">					</span><span class="NAME">Horn.debug</span><span class="PUNC">(</span><span class="STRN">"Horn.UI["</span><span class="PUNC">+</span><span class="NAME">this.COMPONENT_CLASS</span><span class="PUNC">+</span><span class="STRN">"]:params"</span><span class="PUNC">,</span><span class="NAME">this.params</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>616</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>617</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>618</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">this.name</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">this.params</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">this.params.name</span><span class="WHIT">
+<span class='line'>619</span> </span><span class="WHIT">					</span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="PUNC">!</span><span class="NAME">this.el.attr</span><span class="PUNC">(</span><span class="STRN">'nonamebyparams'</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>620</span> </span><span class="WHIT">				</span><span class="NAME">this.name</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.params.name</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>621</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>622</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">this.alias</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">this.params</span><span class="WHIT">
+<span class='line'>623</span> </span><span class="WHIT">					</span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">this.params.alias</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>624</span> </span><span class="WHIT">				</span><span class="NAME">this.alias</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.params.alias</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>625</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>626</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">name1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>627</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.params</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">this.params.name1</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>628</span> </span><span class="WHIT">				</span><span class="NAME">name1</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.params.name1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>629</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>630</span> </span><span class="WHIT">			</span><span class="NAME">this.name</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.name</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">name1</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">H.id</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>631</span> </span><span class="WHIT">			</span><span class="NAME">this.initCompEvnets</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>632</span> </span><span class="WHIT">			</span><span class="NAME">this.initStandardEvents</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>633</span> </span><span class="WHIT">			</span><span class="NAME">this.el.data</span><span class="PUNC">(</span><span class="STRN">"QID"</span><span class="PUNC">,</span><span class="NAME">this.getQID</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>634</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>635</span> </span><span class="WHIT">		</span><span class="NAME">customEvents</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>636</span> </span><span class="WHIT">		</span><span class="NAME">initStandardEvents</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>637</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">eventTarget</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getEventTarget</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">this.getEventTarget</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>638</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">events</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.params</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">this.params.events</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>639</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">events</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="PUNC">!</span><span class="NAME">eventTarget</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="PUNC">!</span><span class="NAME">eventTarget.length</span><span class="PUNC">)</span><span class="KEYW">return</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>640</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_this</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>641</span> </span><span class="WHIT">			</span><span class="NAME">$.each</span><span class="PUNC">(</span><span class="NAME">events</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">o</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>642</span> </span><span class="WHIT">				</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">eventName</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">o.event.toLowerCase</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>643</span> </span><span class="WHIT">	    		</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">_this.customEvents</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">""</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">_this.customEvents.indexOf</span><span class="PUNC">(</span><span class="NAME">eventName</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>644</span> </span><span class="WHIT">	    			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">fn</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">o</span><span class="PUNC">[</span><span class="STRN">"function"</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>645</span> </span><span class="WHIT">	    			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">params</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>646</span> </span><span class="WHIT">	    			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">$.type</span><span class="PUNC">(</span><span class="NAME">fn</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">"string"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>647</span> </span><span class="WHIT">	    				</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">eventObj</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Horn.Util.getFunObj</span><span class="PUNC">(</span><span class="NAME">fn</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>648</span> </span><span class="WHIT">	    				</span><span class="NAME">fn</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">eventObj.fn</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>649</span> </span><span class="WHIT">	    				</span><span class="NAME">params</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">eventObj.params</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>650</span> </span><span class="WHIT">	    			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>651</span> </span><span class="WHIT">	    			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">eventName.indexOf</span><span class="PUNC">(</span><span class="STRN">"on"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">$.type</span><span class="PUNC">(</span><span class="NAME">fn</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">"function"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>652</span> </span><span class="WHIT">    					</span><span class="NAME">eventTarget.bind</span><span class="PUNC">(</span><span class="NAME">eventName.substring</span><span class="PUNC">(</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">params</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">e</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>653</span> </span><span class="WHIT">    						</span><span class="COMM">//防止指针死循环</span><span class="WHIT">
+<span class='line'>654</span> </span><span class="WHIT">    						</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_params</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>655</span> </span><span class="WHIT">    						</span><span class="NAME">$.each</span><span class="PUNC">(</span><span class="NAME">params</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">p</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>656</span> </span><span class="WHIT">    							</span><span class="NAME">_params.push</span><span class="PUNC">(</span><span class="NAME">p</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>657</span> </span><span class="WHIT">    						</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>658</span> </span><span class="WHIT">    						</span><span class="COMM">//e.comp 上注册horn对象   9520 </span><span class="WHIT">
+<span class='line'>659</span> </span><span class="WHIT">    						</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hornObj</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>660</span> </span><span class="WHIT">    						</span><span class="NAME">e.comp</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">hornObj</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>661</span> </span><span class="WHIT">    						</span><span class="NAME">_params.push</span><span class="PUNC">(</span><span class="NAME">e</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>662</span> </span><span class="WHIT">    						</span><span class="COMM">//return fn.apply(_this, _params); 还原为dom 9520 </span><span class="WHIT">
+<span class='line'>663</span> </span><span class="WHIT">    						</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">fn.apply</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">_params</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>664</span> </span><span class="WHIT">    					</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>665</span> </span><span class="WHIT">    				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>666</span> </span><span class="WHIT">	    		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>667</span> </span><span class="WHIT">	    	</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>668</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>669</span> </span><span class="WHIT">		</span><span class="NAME">initCompEvnets</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>670</span> </span><span class="WHIT">			</span><span class="NAME">this.events</span><span class="PUNC">=</span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>671</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.params</span><span class="PUNC">&&</span><span class="NAME">this.params.events</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>672</span> </span><span class="WHIT">				</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">events</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.params.events</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>673</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">$.isPlainObject</span><span class="PUNC">(</span><span class="NAME">this.params.events</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="KEYW">return</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>674</span> </span><span class="WHIT">				</span><span class="KEYW">for</span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">key</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">events</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>675</span> </span><span class="WHIT">					</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Horn.Util.getFunObj</span><span class="PUNC">(</span><span class="NAME">events</span><span class="PUNC">[</span><span class="NAME">key</span><span class="PUNC">]</span><span class="PUNC">||</span><span class="STRN">''</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>676</span> </span><span class="WHIT">					</span><span class="NAME">this.on</span><span class="PUNC">(</span><span class="NAME">key</span><span class="PUNC">,</span><span class="NAME">a.fn</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>677</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>678</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>679</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>680</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'>681</span> 		 * @description 获取唯一标识
+<span class='line'>682</span>          * @function
+<span class='line'>683</span> 		 * @return String
+<span class='line'>684</span> 		 * @ignore
+<span class='line'>685</span> 		 */</span><span class="WHIT">
+<span class='line'>686</span> </span><span class="WHIT">		</span><span class="NAME">getQID</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>687</span> </span><span class="WHIT">			</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">H.getQID</span><span class="PUNC">(</span><span class="NAME">this.name</span><span class="PUNC">,</span><span class="NAME">this.alias</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>688</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>689</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'>690</span> 		 * 所有事件函数
+<span class='line'>691</span> 		 * @type {Map}
+<span class='line'>692</span> 		 * @ignore
+<span class='line'>693</span> 		 */</span><span class="WHIT">
+<span class='line'>694</span> </span><span class="WHIT">		</span><span class="NAME">events</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>695</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'>696</span> 		 * 注册一个事件
+<span class='line'>697</span> 		 * @param {String} event 事件名称
+<span class='line'>698</span> 		 * @param {Function} fn 对应函数
+<span class='line'>699</span> 		 * @function
+<span class='line'>700</span> 		 * @ignore
+<span class='line'>701</span> 		 */</span><span class="WHIT">
+<span class='line'>702</span> </span><span class="WHIT">		</span><span class="NAME">on</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">event</span><span class="PUNC">,</span><span class="NAME">fn</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>703</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">this.events</span><span class="PUNC">[</span><span class="NAME">event</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>704</span> </span><span class="WHIT">				</span><span class="NAME">this.events</span><span class="PUNC">[</span><span class="NAME">event</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>705</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>706</span> </span><span class="WHIT">			</span><span class="NAME">this.events</span><span class="PUNC">[</span><span class="NAME">event</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">push</span><span class="PUNC">(</span><span class="NAME">fn</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>707</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>708</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'>709</span> 		 * 取消事件
+<span class='line'>710</span> 		 * @param {String} event 事件名称
+<span class='line'>711</span> 		 * @param {Function} fn 对应函数
+<span class='line'>712</span> 		 * @function
+<span class='line'>713</span> 		 * @ignore
+<span class='line'>714</span> 		 */</span><span class="WHIT">
+<span class='line'>715</span> </span><span class="WHIT">		</span><span class="NAME">un</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">event</span><span class="PUNC">,</span><span class="NAME">fn</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>716</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">events</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.events</span><span class="PUNC">[</span><span class="NAME">event</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>717</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">events</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>718</span> </span><span class="WHIT">				</span><span class="KEYW">return</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>719</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>720</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">del</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>721</span> </span><span class="WHIT">			</span><span class="KEYW">for</span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="NUMB">0</span><span class="PUNC">;</span><span class="NAME">i</span><span class="PUNC">&lt;</span><span class="NAME">events.length</span><span class="PUNC">;</span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>722</span> </span><span class="WHIT">				</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">eventfn</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">events</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>723</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">eventfn</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">fn</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>724</span> </span><span class="WHIT">					</span><span class="NAME">del</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>725</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>726</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">del</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">&lt;</span><span class="NAME">events.length</span><span class="PUNC">-</span><span class="NUMB">1</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>727</span> </span><span class="WHIT">					</span><span class="NAME">events</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">events</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">+</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>728</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>729</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>730</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">del</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>731</span> </span><span class="WHIT">				</span><span class="NAME">events.length</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="PUNC">=</span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>732</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>733</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>734</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'>735</span> 		 * 执行事件
+<span class='line'>736</span> 		 * @param {String} event 事件名称
+<span class='line'>737</span> 		 * @param {Object...}  args 执行事件函数时的参数
+<span class='line'>738</span> 		 * @return Boolean 执行中断返回false，否则返回true
+<span class='line'>739</span> 		 * @function
+<span class='line'>740</span> 		 * @ignore
+<span class='line'>741</span> 		 */</span><span class="WHIT">
+<span class='line'>742</span> </span><span class="WHIT">		</span><span class="NAME">fire</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">event</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>743</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">events</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.events</span><span class="PUNC">[</span><span class="NAME">event</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>744</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">events</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>745</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">args</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>746</span> </span><span class="WHIT">			</span><span class="NAME">$</span><span class="PUNC">(</span><span class="NAME">arguments</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">idx</span><span class="PUNC">,</span><span class="NAME">arg</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>747</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">idx</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">args.push</span><span class="PUNC">(</span><span class="NAME">arg</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>748</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>749</span> </span><span class="WHIT">			</span><span class="KEYW">for</span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">&lt;</span><span class="NAME">events.length</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>750</span> </span><span class="WHIT">				</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">fn</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">events</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>751</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">fn.apply</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="NAME">args</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>752</span> </span><span class="WHIT">					</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>753</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>754</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>755</span> </span><span class="WHIT">			</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>756</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>757</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>758</span> </span><span class="WHIT">	</span><span class="NAME">$.extend</span><span class="PUNC">(</span><span class="NAME">H.Base</span><span class="PUNC">,</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>759</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'>760</span> 		 * el.data中存储的HornCompment名称
+<span class='line'>761</span> 		 * @type String
+<span class='line'>762</span> 		 * @final
+<span class='line'>763</span> 		 * @field
+<span class='line'>764</span> 		 * @ignore
+<span class='line'>765</span> 		 */</span><span class="WHIT">
+<span class='line'>766</span> </span><span class="WHIT">		</span><span class="NAME">COMPMENTOBJECT</span><span class="PUNC">:</span><span class="STRN">'COMPMENTOBJECT'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>767</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'>768</span> 		 * 从dom对象上获取到element
+<span class='line'>769</span> 		 * @param {DomElement} el
+<span class='line'>770</span> 		 * @return {Horn.Base}
+<span class='line'>771</span> 		 * @function
+<span class='line'>772</span> 		 */</span><span class="WHIT">
+<span class='line'>773</span> </span><span class="WHIT">	    </span><span class="NAME">getCompByEl</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">_el</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>774</span> </span><span class="WHIT">	    	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">_el</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">Horn.Base</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>775</span> </span><span class="WHIT">	    		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">_el</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>776</span> </span><span class="WHIT">	    	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>777</span> </span><span class="WHIT">	    	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">el</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">$</span><span class="PUNC">(</span><span class="NAME">_el</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>778</span> </span><span class="WHIT">	    	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">guid</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">el.data</span><span class="PUNC">(</span><span class="STRN">"comp_el_id"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>779</span> </span><span class="WHIT">	    	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">comp</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="NAME">_cache.data</span><span class="PUNC">(</span><span class="STRN">"_el_comp_cache"</span><span class="PUNC">)</span><span class="PUNC">[</span><span class="NAME">guid</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>780</span> </span><span class="WHIT">	    	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">comp</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>781</span> </span><span class="WHIT">	    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>782</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'>783</span> 		 * 根据id获取到组件对象
+<span class='line'>784</span> 		 * @param {String} id
+<span class='line'>785</span> 		 * @return {Horn.Base}
+<span class='line'>786</span> 		 * @function
+<span class='line'>787</span> 		 * @ignore
+<span class='line'>788</span> 		 */</span><span class="WHIT">
+<span class='line'>789</span> </span><span class="WHIT">	    </span><span class="NAME">getCompById</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">id</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>790</span> </span><span class="COMM">//	    	var el = $('#' + id);</span><span class="WHIT">
+<span class='line'>791</span> </span><span class="WHIT">	    	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">comp</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="NAME">_cache.data</span><span class="PUNC">(</span><span class="STRN">"_id_comp_cache"</span><span class="PUNC">)</span><span class="PUNC">[</span><span class="NAME">id</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="COMM">//修改为正确的按照id取值的方式</span><span class="WHIT">
+<span class='line'>792</span> </span><span class="WHIT">	    	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">comp</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>793</span> </span><span class="WHIT">	    		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">comp</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>794</span> </span><span class="WHIT">	    	</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>795</span> </span><span class="WHIT">	    		</span><span class="KEYW">return</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>796</span> </span><span class="WHIT">	    	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>797</span> </span><span class="WHIT">	    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>798</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>799</span> 
+<span class='line'>800</span> </span><span class="WHIT">	</span><span class="NAME">jQuery.fn.comp</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>801</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">Horn.Base.getCompByEl</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>802</span> </span><span class="COMM">//		return Horn.data(this.data("QID"));</span><span class="WHIT">
+<span class='line'>803</span> </span><span class="WHIT">		</span><span class="COMM">//return this.data(H.Base.COMPMENTOBJECT);</span><span class="WHIT">
+<span class='line'>804</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>805</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">(</span><span class="NAME">Horn</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>806</span> 
+<span class='line'>807</span> 
+<span class='line'>808</span> 
+<span class='line'>809</span> </span></pre></body></html>

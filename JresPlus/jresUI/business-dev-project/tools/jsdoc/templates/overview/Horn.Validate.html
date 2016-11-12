@@ -1,0 +1,55 @@
+
+<h3>Validate 校验</h3>
+<p>用于表单合法性验证的工具</p>
+ <img src=""/>
+
+<h4>依赖组件</h4>
+<ul>
+	<li>无</li>
+</ul>
+
+<h4>适用范围</h4>
+<p>
+表单输入验证
+</p>
+<h4>约束</h4>
+<p>
+	<ol>
+		<li>无</li>
+	</ol>
+</p>
+<h4>注意事项</h4>
+<p>
+	<ol>
+		<li>无</li>
+	</ol>
+</p>
+
+<h4>使用示例</h4>
+<p>示例1:</p>
+<textarea name="code" class="html" style="display: none;">
+Horn.Validate.isFormValidate(form)
+</textarea>
+
+<p>示例2：</p>
+<textarea name="code" class="html" style="display: none;">
+#textfield({"id":"userName","label":"名称","name":"name","cols":"1","maxlength":"20","check":"required"})
+#textfield({"id":"userAge","label":"年龄","name":"age","cols":"1","check":"required;intege"})
+</textarea>
+<p>示例3：</p>
+<textarea name="code" class="html" style="display: none;">
+#textfield({"id":"userAge","label":"年龄","name":"age","cols":"1","check":"intege;range(10,20)"})
+</textarea>
+<p>示例3：</p>
+<textarea name="code" class="html" style="display: none;">
+#textfield({"id":"userName","label":"名称","name":"name","cols":"1","check":"required;myCheck()"})
+    function myCheck(){
+         var value = Horn.getComp("name").getValue();
+         if(!("hello"==value)){
+            return "内容必需为hello";
+         }else{
+            return true;
+         }
+    }
+</textarea>
+

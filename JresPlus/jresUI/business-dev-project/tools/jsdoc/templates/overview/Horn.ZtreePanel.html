@@ -1,0 +1,76 @@
+
+<h3>ZTreePanel 封装ztree的树形展示组件</h3>
+<p>基于ztree 3.5版本上进行封装树形展示组件，支持同步和异步树，拥有3.5版本的所有功能,同时拥有展开、收缩、刷新和模糊收缩功能</p>
+ <img src="../resource/images/ztree.png"/>
+
+<h4>依赖组件</h4>
+<ul>
+	<li>无</li>
+</ul>
+
+<h4>适用范围</h4>
+<p>
+通过静态或动态的数据，以树形结构显示，支持选中某个节点及获取选中的节点
+</p>
+<h4>约束</h4>
+<p>
+	<ol>
+		<li>内部是以ztree封装实现，使用时数据结构需遵从ztree的要求</li>
+		<li>此控件封装了ztree所有的功能</li>
+	</ol>
+</p>
+<h4>注意事项</h4>
+<p>
+	<ol>
+		<li>也可以通过getTreeObj的方式拿到ztree原生对象进行操作</li>
+		<li>此控件的dom结构使用div封装</li>
+	</ol>
+</p>
+
+<h4>使用示例</h4>
+<p>示例:静态数据渲染树形</p>
+<textarea name="code" class="html" style="display: none;">
+#set($dataT='[{"id":"1","name":"root"},{"id":"21","name":"sub11","pId":"1"},{"id":"22","name":"sub12","pId":"1"}]')
+#ztree({
+"id":"tree1",
+"name":"ztree1",
+"data":$dataT})
+</textarea>
+
+<p>示例:数据中包含业务数据，绑定点击事件后获取数据项</p>
+<textarea name="code" class="html" style="display: none;">
+#set($dataT='[{"id":"1","name":"root"},{"id":"21","name":"sub11","pId":"1","url":"/action1"},{"id":"22","name":"sub12","pId":"1","url":"/action2"}]')
+#ztree({
+"id":"tree1",
+"name":"ztree1",
+"data":$dataT,
+"nodeclick":"onNodeClcik",
+"beforenodeclick":"beforeNodeClcik"
+})
+
+#jscode()
+	function onNodeClcik(event, treeId, treeNode, clickFlag){
+		alert(treeNode.id+","+treeNode.name+","+treeNode.url);
+	}
+	function beforeNodeClcik(treeId, treeNode, clickFlag){
+		if(treeNode.id=="21"){
+			//返回 false之后，click绑定的事件将不被执行，如果数据中包含url，那么将跳转到url指向位置
+			return false;
+		}
+	}
+#end
+</textarea>
+
+<p>示例:动态态数据渲染树形</p>
+<textarea name="code" class="html" style="display: none;">
+#ztree({  
+                "id":"tree1",  
+                "name":"ztree1",
+            	"checkMode":"checkbox",
+            	"onClick":"nodeClick",
+            	"async":true,
+                "url":"$appServer.get('/test/ztree/asynTree.htm')"})
+</textarea>
+
+<p>注意：url返回的json格式跟静态的一样</p>
+

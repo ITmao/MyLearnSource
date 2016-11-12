@@ -1,0 +1,52 @@
+.u-targetselect-search {
+  position: relative;
+  padding: 0px;
+}
+.u-targetselect-search > a {
+  position: absolute;
+  right: 40px;
+  top: 11px;
+}
+.u-targetselect-search:before {
+  content: "\f002"; 
+  font-family: FontAwesome;
+  font-size: 14px;
+  position: absolute;
+  right: 20px;
+  top: 11px;
+  color: #A7A8AA;
+}
+.u-targetselect-search .u-targetselect-search-input {
+  display: block;
+  width: 100%;
+  height: 34px;
+  padding: 6px 10px;
+  outline: 0;
+  font-size: 12px;
+  line-height: 1.42857143;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+  -webkit-border-radius: 3px;
+     -moz-border-radius: 3px;
+          border-radius: 3px;
+  -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+       -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+          transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  color: #555;
+  background-image: none;
+  border: 1px solid #D9E0E7;
+}
+.u-targetselect-search .u-targetselect-search-input::-moz-placeholder {
+  opacity: 1;
+  color: #999;
+}
+.u-targetselect-search .u-targetselect-search-input:-ms-input-placeholder {
+  color: #999;
+}
+.u-targetselect-search .u-targetselect-search-input::-webkit-input-placeholder {
+  color: #999;
+}
+.u-targetselect-search .u-targetselect-search-input:focus {
+  outline: 0;
+  border-color: #9fa2a5;
+}

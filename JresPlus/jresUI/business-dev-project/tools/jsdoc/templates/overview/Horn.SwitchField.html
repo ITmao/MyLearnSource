@@ -1,0 +1,45 @@
+
+<h3>可选文本框扩展组件</h3>
+<p>赋予同一个数据框多种值特性，但是同一时间只能代表一个，功能类似于级联双combo</p>
+ <img src="../resource/images/switch_field.jpg"/>
+
+<h4>依赖组件</h4>
+<ul>
+	<li>无</li>
+</ul>
+
+<h4>适用范围</h4>
+<p>
+需要级联两种下拉单选框的场景，但是提交的时候只包含一个表单，<span style="color: red;">除非您非常了解此组件的使用场景，否则不建议使用此组件</span>
+</p>
+<h4>约束</h4>
+<p>
+	<ol>
+		<li>无</li>
+	</ol>
+</p>
+<h4>注意事项</h4>
+<p>
+	<ol>
+		<li>此组件的使用场景非常受限，不建议使用此组件，建议使用combo级联来替代实现</li>
+		<li>需要使用panel组件做为容器</li>
+	</ol>
+</p>
+
+<h4>使用示例</h4>
+<p>示例1: 常规使用</p>
+<textarea name="code" class="html" style="display: none;">
+#switch_field({"label":"label无意义属性","name":"client.branchNo","labelName":"type", "value":"", "check":"required","url":"callback/getCallBack.json",
+	"labelitems":[
+		{"label":"0","value":"客户号"},
+		{"label":"1","value":"资产账号"},
+		{"label":"3","value":"身份证号码"},
+		{"label":"4","value":"股东帐号"},
+		{"label":"5","value":"资金卡"}],
+	"events":[{"event":"beforeSend","function":"lhkh.sfBeforeSend()"},
+			  {"event":"complete","function":"lhkh.sfComplete()"},
+			  {"event":"success","function":"lhkh.sfSuccess()"},
+			  {"event":"error","function":"lhkh.sfError()"},
+	          {"event":"labelChange","function":"lhkh.sfLabelChange()"}]
+})	
+</textarea>

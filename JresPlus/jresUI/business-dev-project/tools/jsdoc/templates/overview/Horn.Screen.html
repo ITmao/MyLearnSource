@@ -1,0 +1,47 @@
+
+<h3>Screen 布局组件</h3>
+<p>属于容器组件，做为UI组件的容器使用</p>
+ <img src=""/>
+
+<h4>依赖组件</h4>
+<ul>
+	<li>无</li>
+</ul>
+
+<h4>适用范围</h4>
+<p>
+	适用于JRESPLUS UI组件
+</p>
+<h4>约束</h4>
+<p>
+</p>
+<h4>注意事项</h4>
+<p>
+	<ol>
+		<li>Screen组件一个页面只能允许有一个存在，表单组件的布局必须结合panel组件一起使用</li>
+	</ol>
+</p>
+
+<h4>使用示例</h4>
+<p>示例:</p>
+<textarea name="code" class="html" style="display: none;">
+	#@screen({"columns":3})  
+	    #@panel({"name":"mainPanel"})
+	          #textfield({"label":"客户编号","name":"clientId","value":"", "check": "required"})
+	          #textfield({"label":"客户名称","name":"clientName","value":""})
+			  #textfield({"label":"客户编号","name":"clientId1","value":""})
+	          #textfield({"label":"客户名称","name":"clientName1","value":""})
+			  #textfield({"label":"客户编号","name":"clientId2","value":""})
+	          #textfield({"label":"客户名称","name":"clientName2","value":""})
+			  #textfield({"label":"客户编号","name":"clientId3","value":""})
+	          #textfield({"label":"客户名称","name":"clientName3","value":""})
+			  #textfield({"label":"客户编号","name":"clientId4","value":""})
+			  #select({"name":"select","multiple": true,"label":"静态单选","items":[{"label":"1","value":"上海"},{"label":"2","value":"广州"},{"label":"3","value":"重庆"},{"label":"11","value":"杭州"}], "cols":1,  "check": "required","showLabel":"true","filterBy":"key"})
+			  #combox({"name":"combox","multiple": true,"label":"静态单选","items":[{"label":"1","value":"上海"},{"label":"2","value":"广州"},{"label":"3","value":"重庆"},{"label":"11","value":"杭州"}], "cols":1,  "check": "required","showLabel":"true","filterBy":"key"})
+			  #password({"name":"test111", "label":"password","value":"123456", "defValue": "1111111" ,"check": "required","hidden":false})
+			  #passwordgroup({"name":"passwordgroup", "label":"passwordgroup" ,"check": "required","hidden":false})
+			   #textarea({"label":"客户名称","name":"textarea","value":""})
+	    #end
+	#end
+</textarea>
+

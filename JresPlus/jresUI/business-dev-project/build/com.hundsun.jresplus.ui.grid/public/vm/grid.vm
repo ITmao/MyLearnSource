@@ -1,0 +1,203 @@
+#**   
+ * @author zhangchao   
+ * @class
+ * @name grid
+ * @param name {String} 名称
+ * @param id {String} 唯一标识
+ * @param data {Json}　数据
+ * @param items {Json} 列表条目 格式如{"name":"organFlag","text":"机构类型","renderer":"renderer"}<br>
+ * items中的列表条目属性：
+ *               @param  hidden   {Boolean}  列是否隐藏
+ *               @param  width    {String}   列宽度
+ *               @param  dataType {String}   列格式化的类型，目前只支持日期和金额两种类型，日期：dataType="DATE",金额dataType="AMOUNT"
+ *               @param  format   {String}   列格式化时的格式
+ * @param titleButtons {Array} 工具栏　格式如[{"label":"添加","cls":"add","event":"add()"}]<br>
+	按钮属性：
+ *	     @param  label   {String}  按钮文本
+ *	     @param  cls     {String}  按钮css样式
+ *	     @param  event   {String}  按钮点击事件
+ *	     @param  disabled {Boolean} 是否禁用/启用按钮
+ * @param events {Json}
+ * @param numbercolumn {Boolean} 是否启用数字序列
+ * @param selectModel {String} single/muti 启用单选/多选选择框
+ * @param rowSelect  是否启用点击行选中行
+ * @param textOverHidden  列内容超出列宽时是否隐藏并加"..."，默认不隐藏，表格会根据内容自适应，如需隐藏，请设置为true
+ * @description grid组件，列表组件
+ * @see 
+ * @example
+ *	<pre>\	#grid({"name":"flowTable","title":"有数据的grid"
+    	    ,"numbercolumn":"true","selectModel":"muti"
+    		,"items":[{"name":"initDate","text":"发生日期","renderer":"domrender"},
+    			{"name":"branchNo", "text":"分支名称（静态字典）","items":[{"label":"杭州总部","value":"8888"},{"label":"b","value":"b1"},{"label":"c","value":"c1"}]},
+    			{"name":"branchNo", "dictName":"Branch", "text":"分支名称（动态字典）"},
+    			{"name":"scanType", "dictName":"ScanType", "text":"扫描类别"},
+    			{"name":"clientId","text":"客户编号"},
+    			{"name":"clientName","text":"客户名称"},
+    			{"name":"branchNo", "text":"操作","showwhenover":"true","buttons":[{"label":"设置默认","event":"edit"},{"label":"设置默认","event":"edit"}]},
+    			{"name":"taskStatus","text":"任务状态"}
+    			]
+    		,"data":$data
+    	})
+ *	</pre>
+ * @since version 0.1
+ *#	
+#**
+ * @lends grid
+ *#
+#**
+* -----------------------------------------------------------------------
+* 修订记录：
+* 2014-01-20    zhangsu        <table>标签中增加样式"h_table",使grid的数据以间隔行的形式展现
+* 2014-01-21    zhangsu        新增rowSelect属性，使grid支持点击行选中该行
+* 2014-01-22    zhangsu        Grid列需要支持常规类型的格式化配置（日期、金额）
+* 2014-01-22    zhangsu        Grid列支持hidden属性
+* 2014-02-12    zhangsu        td内容限制不换行 “nowrap”
+* 2014-02-12    zhangsu        去掉样式h_table
+* 2014-02-14    zhangsu        新增列属性width，可设置列宽度
+* 2014-02-21    zhangsu        表格的表头能够设置居左、居中、居右,新增属性headerAlign 
+* 2014-03-03    zhangsu        表格的选择列在设置了selectModel=single后，显示的仍旧是checkbox复选框 
+* 2014-03-06    zhangsu        增加配置项textOverHidden，用于配置列内容超出列宽时是否隐藏并加"..." 
+* 2014-04-11    周智星                         BUG #6610 【grid】"selectModel":"multi"之后会造成复选框变成input输入框，并且应该设置的muti是拼写错误 （已经做了兼容处理，muti或者multi都可以）
+* 2014-04-16    zhangsu        STORY #8089 添加save/query/confirm/refresh/open几种样式
+* 2014-06-13    zhangsu        STORY #8487 grid未设置selectModel 的情况下，不生成选择列
+* -----------------------------------------------------------------------
+*#
+#macro(grid $params)
+	<div class="h_formtable g-datagrid-wrap" #if ($params.name) name="$!{params.name}" #end  id="$!{params.id}" $horn.paramsCache($params) 
+            ##foreach($event in $params.events)
+            ##	$event.event = "$event.function"
+            ##end
+            #if($params.numbercolumn)
+            	numbercolumn="$params.numbercolumn"
+			#end
+			#if($params.numberColWidth&&$params.numberColWidth!="")
+              #set($numberColumnWidth = $params.numberColWidth)	##序号列宽度
+            #else
+              #set($numberColumnWidth = 20)	
+            #end  
+            #if($params.selectModel=="multi" || $params.selectModel=="muti" || $params.selectModel=="single")
+				#set($selectModel = $params.selectModel)
+			#elseif($params.selectModel=="" || !$params.selectModel)
+				#set($selectModel = "null")
+			#end	
+            #if($selectModel=="single"||$selectModel=="multi"||$selectModel=="muti")
+                selectModel="$selectModel"
+            #end
+			#if($params.rowSelect)
+				rowSelect = "$params.rowSelect"
+			#end	
+			#if(${params.textOverHidden})
+				textOverHidden = "$!{params.textOverHidden}"
+			#end
+			>
+		#if($params.title&&$params.title!="")
+			<div class="u-datagrid-header">
+				<h4 class="u-datagrid-title">$!{params.title}</h4>
+			</div>
+		#end
+		#if($params.titleButtons&&$params.titleButtons!=""&&$params.titleButtons.size()>0)
+			<div class="u-datagrid-toolbar">
+				<ul class="u-datagrid-btn">
+					#foreach($button in $params.titleButtons )
+			     	<li><a name="$!{button.name}" href="JavaScript:void(0)" class="hc-datagrid-a hc_datagrid-alink #if($button.disabled)f-disabled#end" #if($button.refmenu&&!$button.disabled)refmenu="${button.refmenu}"#end onClick="$!{button.event}" event = "$!{button.event}"><i class="fa #if($button.cls=="add")fa-plus-circle#elseif($button.cls=="edit")fa-pencil-square-o#elseif($button.cls=="del")fa-remove#elseif($button.cls=="confirm")fa-save#elseif($button.cls=="save")fa-save#elseif($button.cls=="query")fa-search#elseif($button.cls=="open")fa-folder-open-o#elseif($button.cls=="refresh")fa-refresh #else $!{button.cls} #end"></i>$!{button.label}</a></li>
+					#end
+				</ul>
+    		</div>
+		#end
+		<div  class="u-datagrid">
+		<table  cellpadding="0" cellspacing="0"  class="table table-bordered table-stripe $!params.name" id="$!params.name">
+			<thead>
+				<tr>
+					#if($params.numbercolumn)
+                        <th class="u-table-number"><div style="width: 40px;"></div></th>
+        			#end
+        			#if($selectModel=="multi"||$selectModel=="muti")
+                        <th class="u-table-check">
+							<div style="width: 40px;"><center><input type="checkbox" class="h_querytable_select_all"/></center></div>
+						</th>
+        			#elseif($selectModel == "single")
+						<th class="h_querytable_radioboxcolumn u-table-check"><div style="width: 40px;;align:center;"></div></th>
+					#end
+					#foreach($pItem in $params.items)
+        				<th name="$!{pItem.name}"  #if($pItem.hidden)style="display:none"#end
+                            colno="$velocityCount"
+                        #if($pItem.dictName)
+							dictName="$!{pItem.dictName}"
+							$horn.addGlobal('componentSelects_s',$!{pItem.dictName})
+            			#end
+						#if($pItem.showwhenover)
+							showwhenover = '$pItem.showwhenover'
+						#end
+						#if ($pItem.renderer)
+        					renderer="$!{pItem.renderer}" 
+						#end
+						
+						#if($pItem.dataType)
+							dataType = "$!{pItem.dataType}"   
+						#end
+						#if($pItem.format)
+							format = "$!{pItem.format}" 
+						#end
+						#if($pItem.hidden)
+							hidden = "$!{pItem.hidden}"
+						#end	
+						#if($pItem.width)
+							width = "$!{pItem.width}"
+						#end	
+        				>
+						#set($headerAlign="center")
+						#if($pItem.headerAlign)
+							#set($headerAlign=$pItem.headerAlign)
+						#end
+						<div #if($params.textOverHidden)style="TEXT-aLIGN:$headerAlign;WIDTH: #nt(${pItem.width} 110)px; CURSOR: default" #else style="TEXT-aLIGN:$headerAlign;CURSOR: default" #end>$!{pItem.text}</div>
+						</th>
+					#end
+				</tr>
+			</thead>
+			<tbody>
+                #if($params.data&&$params.data.size()>0&&$params.data!="")
+                    #foreach($mdata in $params.data)
+                        #set($rowNumber = $velocityCount % 2)
+                        <tr line="$velocityCount" class="#if($rowNumber==0)u-table-bg #end #if($mdata.isSign()) u-table-selected #end " >
+							#if($params.numbercolumn)
+                                <td><div style="width: 40px;">$velocityCount</div></td>
+        					#end
+        					#if($selectModel=="muti"||$selectModel=="multi")
+								## 表格的选择列在设置了selectModel=single后，显示的仍旧是checkbox复选框 
+                                <td><input type="checkbox" class="h_querytable_select" #if($mdata.isSign()) checked=true #end /></td>
+        					#elseif($selectModel=="single")
+								<td><input type="radio" class="h_querytable_select" name="_grid_row_checker"/></td>
+							#end
+                            #foreach($pItem in $params.items)
+                                #set($evalval = "$"+"!" + "{mdata." + "$!{pItem.name}" + "}" )
+                                <td  title='#evaluate($evalval)' #if($pItem.hidden)style="display:none"#end>
+								#set($align = "center")
+								#if($pItem.align)
+									#set($align = $pItem.align)
+								#end
+								#if($params.textOverHidden)
+									<div style="TEXT-aLIGN:$align;WIDTH: #nt(${pItem.width} 110)px; CURSOR: default" >#evaluate($evalval)</div>
+								#else
+									<div style="overflow: visible;white-space: normal;word-wrap:break-word; word-break:break-allTEXT-aLIGN:$align;#if($pItem.width)WIDTH: ${pItem.width}px;#end CURSOR: default" style="TEXT-aLIGN:$align; CURSOR: default">#evaluate($evalval)</div>
+								#end
+								</td>
+							#end
+                        </tr>
+					#end
+				#else
+					<tr>
+						#set($size =$!{params.items.size()} ) 
+    					#if($params.numbercolumn)
+                            #set($size = $size+1 )
+            			#end
+            			#if($params.selectModel)
+                            #set($size = $size+1 )
+						#end						
+						<td colspan="$size" class="hc_formtable-nodata"><p>暂时无数据</p></td>
+					</tr>
+                #end
+            </tbody>
+		</table>
+		</div>
+	</div>
+#end

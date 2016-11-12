@@ -1,0 +1,192 @@
+#**   
+ * @author huling   
+ * @class
+ * @name calendargroup
+ * @param cols {String} 跨列数
+ * @param id {String} 唯一标识
+ * @param name1 {String} 开始日期名称
+ * @param value1 {String} 开始日期值
+ * @param defValue1 {String} 如果设置了defValue1的值，重置成的defValue1值，否则重置成初始值
+ * @param name2 {String} 结束日期名称
+ * @param value2 {String} 结束日期值
+ * @param defValue2 {String} 如果设置了defValue2的值，重置成的defValue2值，否则重置成初始值
+ * @param label {String} 日历组组件显示值
+ * @param check {String} 验证串
+ * @param config {String} 日历自定义配置项 示例： "config":"{minDate:'%y-%M-%d', noToday:true, format:'yyyyMMdd'}"} 具体接口详见lhgcalendar接口文档<a href=""></a>
+ * @param events {Json} 事件，格示见示例
+ * @description calendargroup组件，日期组组件
+ * @see The <a href="huling@hundsun.com">huling</a >.   
+ * @example \#calendargroup({"label":"证件有效期", "name1":"client.idBeginDate", "name2":"client.idEndDate", "check":""})
+ * @since version 0.1
+  * -----------------------------------------------------------------------
+* 修订记录：
+* 2016-3-2    刘龙                                     STORY  17380 【TS:201602230426-JRESPlus-资产管理事业部-张翔-【项目名称】非标准化投资管理系统2.0<br>【产品及版本信】
+* 2016-3-11   刘龙                                     需求#17814 【TS:201603110065-JRESPlus-财富管理事业部-江志伟-【项目名称】恒生信托综合管理平台（TCMP）【产品及版本信息】
+* 2016-3-15   刘龙                                     需求#17788 【TS:201603100065-JRESPlus-财富管理事业部-江志伟-项目名称】恒生信托综合管理平台（TCMP）<br>【产品及版】
+* -----------------------------------------------------------------------
+ *#	
+#**
+ * @lends calendargroup
+ *# 
+#macro(calendargroup $uiCalendarGroupConfig)
+ #calendar_group($uiCalendarGroupConfig)
+#end
+#macro(calendar_group $uiCalendarGroupConfig)
+	#set($col = 4)
+	#set($cols = "")
+    #if($layoutcolumn) 
+    	#if($layoutcolumn==1)
+			#set($col = 12)
+		#elseif($layoutcolumn==2)
+			#set($col = 6)
+			#if($uiCalendarGroupConfig.cols&&$uiCalendarGroupConfig.cols=="2")
+				#set($cols = "g-grid-6-row")
+			#end
+		#elseif($layoutcolumn==3)
+			#set($col = 4)
+			#if($uiCalendarGroupConfig.cols)
+				#if($uiCalendarGroupConfig.cols==3)
+					#set($cols = "g-grid-4-row")
+				#elseif($uiCalendarGroupConfig.cols==2)
+					#set($cols = "g-grid-4-8-row")
+				#end
+			#end
+		#elseif($layoutcolumn==4)
+			#set($col = 3)
+			#if($uiCalendarGroupConfig.cols)
+				#if($uiCalendarGroupConfig.cols==4)
+					#set($cols = "g-grid-3-row")
+				#elseif($uiCalendarGroupConfig.cols==3)
+					#set($cols = "g-grid-3-9-row")
+				#elseif($uiCalendarGroupConfig.cols==2)
+					#set($cols = "g-grid-3-6-row")
+				#end
+			#end
+		#end
+	#end
+	
+	#set($val1 = "")
+    #set($val1 = $uiCalendarGroupConfig.value1)
+    #if(!$val1 || $val1 =="" && $uiCalendarGroupConfig.name1 )
+        #set($val1 =  "$horn.getValue($!uiCalendarGroupConfig.name1)")
+    #end
+    #set($val2 = "")
+    #set($val2 = $uiCalendarGroupConfig.value2)
+    #if(!$val2 || $val2 =="" && $uiCalendarGroupConfig.name2 )
+        #set($val2 =  "$horn.getValue($!uiCalendarGroupConfig.name2)")
+    #end
+	##查看模式
+    #if($view)
+		<div class="g-grid-$col #if($cols!="")$cols#end">
+	  	<div class="g-unit-wrap">
+			#if(!$uiCalendarGroupConfig.hiddenLabel)
+		    <label #if($layoutcolumn==1)class="g-grid-2 unit-label"#else class="g-grid-4 unit-label"#end><span ref="$!uiCalendarGroupConfig.name" title="$!{uiCalendarGroupConfig.label}">$!{uiCalendarGroupConfig.label}</span></label>
+		    #end
+			<div class="g-grid-8">
+				<div name="$!{uiCalendarGroupConfig.name}" class="hc_label"  $horn.paramsCache($uiCalendarGroupConfig)>
+					$!val1
+					#if(($val1&&$val1!="")&&($val2&&$val2!=""))<lable class="hc_hyphen">~</lable>#end
+					$!val2
+				</div>
+			</div>
+	    </div>
+	 </div>
+		
+	#else
+		<div class="g-grid-$col #if($cols!="")$cols#end">
+		  	<div class="g-unit-wrap">
+		  	 #set($checkStr=$horn.getCheckStr($uiCalendarGroupConfig.name1,$uiCalendarGroupConfig.check))
+			 #set($groupStr=$horn.getGroupStr($uiCalendarGroupConfig.name,$uiCalendarGroupConfig.group))
+			  #set($flag = true )
+        		#if("$!checkStr"!="")
+        			#set($checkSplit =$checkStr.split(";") )
+        			#if($checkSplit&&$checkSplit.size()>1&&$checkStr.indexOf("required")>-1)
+        				#set($flag = false )
+        			#else
+        				#if($checkStr.indexOf("required")==-1)
+                    		#set($flag = false )
+                    	#end
+        			#end
+				#end
+				#set($emptyText1="")
+				#set($emptyText2="")
+				#if($uiCalendarGroupConfig.emptyText)
+					#set($emptyText1=$uiCalendarGroupConfig.emptyText[0])
+					#set($emptyText2=$uiCalendarGroupConfig.emptyText[1])
+				#end
+				#if(!$uiCalendarGroupConfig.hiddenLabel)
+				<label #if($layoutcolumn==1)class="g-grid-2 unit-label"#else class="g-grid-4 unit-label"#end title="$!uiCalendarGroupConfig.label">#if($checkStr.indexOf("required")>-1)<span class="m-verify-symbol">*</span>#end $!uiCalendarGroupConfig.label</label>
+			    #end
+				<div class="g-grid-8">
+					<div class="hc_calendargroup g-row-wrap" config="$!{uiCalendarGroupConfig.config}" $horn.paramsCache($uiCalendarGroupConfig)>
+				    	<div class="g-grid-6">
+					    	<div class="hc_calendar2">
+						    	<input type="hidden" name="$uiCalendarGroupConfig.name1" value="$!val1"
+                            		#if($uiCalendarGroupConfig.alias)
+                            			alias="${uiCalendarGroupConfig.alias}"
+                            		#end
+                            	/>
+								<input type="text" class="u-calendar-group" placeholder="$!emptyText1"
+                                    #if($uiCalendarGroupConfig.readonly)
+                                        readonly="readonly"
+									#end
+									#if("$!uiCalendarGroupConfig.disabled"=="true")
+									disabled="disabled"
+									#end
+                            		check="$checkStr#if("$!{uiCalendarGroupConfig.config}"==""&&$flag)Horn.Validate.validateFmt;#end"
+                            		group="$groupStr"
+                    				value="$!val1"
+                    				#if("$!uiCalendarGroupConfig.focusShowCalendar"=="false")
+        								focusShowCalendar="false"
+        								inputNotShow="false"
+        							#else
+        								focusShowCalendar="true"
+        							#end
+                        			#if("$!uiCalendarGroupConfig.canEditable"=="false")
+        								inputNotShow="false" 
+                				    	canEditable="false" 
+                				    	onkeydown="return false;" 
+        							#else
+        								canEditable="true"
+                				    #end
+                    			/>
+						      	<i class="fa fa-calendar u-calendar-group-down"></i>
+					      	</div>
+						</div>
+						<div class="g-grid-6">
+					    	<div class="hc_calendar2" >
+						    	<input type="hidden" name="$uiCalendarGroupConfig.name2" value="$!val2"/>
+								<input type="text" class="u-calendar-group" placeholder="$!emptyText2"
+                                #if($uiCalendarGroupConfig.readonly)
+                                    readonly="readonly"
+								#end
+								#if("$!uiCalendarGroupConfig.disabled"=="true")
+									disabled="disabled"
+								#end
+                        		check="$checkStr#if("$!{uiCalendarGroupConfig.config}"==""&&$flag)Horn.Validate.validateFmt;#end"
+                        		group="$groupStr"
+                				value="$!val2" 
+								#if("$!uiCalendarGroupConfig.focusShowCalendar"=="false")
+    								focusShowCalendar="false"
+    								inputNotShow="false"
+    							#else
+    								focusShowCalendar="true"
+    							#end
+                    			#if("$!uiCalendarGroupConfig.canEditable"=="false")
+    								inputNotShow="false" 
+            				    	canEditable="false" 
+            				    	onkeydown="return false;" 
+    							#else
+    								canEditable="true"
+            				    #end
+                				/>
+						      	<i class="fa fa-calendar u-calendar-group-down"></i>
+					      	</div>
+						</div>
+					</div>
+			    </div>
+		    </div>
+		  </div>
+	#end
+	#set($uiCalendarGroupConfig = {})
+#end

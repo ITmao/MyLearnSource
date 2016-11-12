@@ -1,0 +1,122 @@
+#**   
+ * @author zhouzx   
+ * @class
+ * @name textfield
+ * @param cols {String} 跨列数
+ * @param name {String} 名称
+ * @param id {String} 唯一标识
+ * @param alias {String} 别名
+ * @param value {String} 值
+ * @param defValue {String} 如果设置了defValue的值，重置成的defValue值，否则重置成初始值
+ * @param label {String} 单选框组件显示值
+ * @param check {String} 验证串
+ * @param disabled {String} 是否禁用
+ * @param readonly {String} 是否只读
+ * @param maxlength {String} 最大长度
+ * @param events {[Json]} 事件，json数组
+ * @description textfield组件，文本框组件
+ * @see The <a href="zhouzx@hundsun.com">huling</a >.   
+ * @example \#textfield({"id":"userName","label":"名称","name":"name","cols":"1","maxlength":"20","check":"required","events":[{"event":"onclick","function":"getDom(this)"},{"event":"onblur","function":"getName(this.name)"}]})
+ * @since version 0.1
+ *#	
+#**
+ * @lends textfield
+ *#
+
+
+#macro(biz_targetselect $uiSelectConfig)
+	#targetselect($uiSelectConfig)
+#end
+#macro(targetselect $uiSelectConfig)
+	#set($col = 4)
+	#set($cols = "")
+    #if($layoutcolumn) 
+    	#if($layoutcolumn==1)
+			#set($col = 12)
+		#elseif($layoutcolumn==2)
+			#set($col = 6)
+			#if($uiSelectConfig.cols&&$uiSelectConfig.cols=="2")
+				#set($cols = "g-grid-6-row")
+			#end
+		#elseif($layoutcolumn==3)
+			#set($col = 4)
+			#if($uiSelectConfig.cols)
+				#if($uiSelectConfig.cols==3)
+					#set($cols = "g-grid-4-row")
+				#elseif($uiSelectConfig.cols==2)
+					#set($cols = "g-grid-4-8-row")
+				#end
+			#end
+		#elseif($layoutcolumn==4)
+			#set($col = 3)
+			#if($uiSelectConfig.cols)
+				#if($uiSelectConfig.cols=="4")
+					#set($cols = "g-grid-3-row")
+				#elseif($uiSelectConfig.cols=="3")
+					#set($cols = "g-grid-3-9-row")
+				#elseif($uiSelectConfig.cols=="2")
+					#set($cols = "g-grid-3-6-row")
+				#end
+			#end
+		#end
+    #end
+	#set($label = "")
+	#set($key = "")
+	#set($val = $uiSelectConfig.value)
+    #if($val&&"$!val"!="")
+        #if($val.label)
+			#set($label = $val.label)
+		#end
+		#if($val.key)
+			#set($key = $val.key)
+		#end
+    #end
+	##查看模式
+    #if($view)
+       
+        <div class="g-grid-$col #if($cols!="")$cols#end">
+	  	<div class="g-unit-wrap">
+		    <label #if($layoutcolumn==1)class="g-grid-2 unit-label"#else class="g-grid-4 unit-label"#end><span ref="$!uiSelectConfig.name" title="$!{uiSelectConfig.label}">$!{uiSelectConfig.label}</span></label>
+		    <div class="g-grid-8">
+				<div name="$!{uiSelectConfig.name}" $horn.paramsCache($uiSelectConfig)  class="hc_label" #if($uiSelectConfig.multiple) mutiValue="true" #end
+    			>$!label</div>
+			</div>
+	    </div>
+	 </div>
+	 
+	#else
+		<div class="g-grid-$col #if($cols!="")$cols#end">
+		  	<div class="g-unit-wrap">
+		  	 #set($checkStr=$horn.getCheckStr($uiSelectConfig.name,$uiSelectConfig.check))
+			 #set($groupStr=$horn.getGroupStr($uiSelectConfig.name,$uiSelectConfig.group))
+			    <label #if($layoutcolumn==1)class="g-grid-2 unit-label"#else class="g-grid-4 unit-label"#end title="$!uiSelectConfig.label">#if($checkStr.indexOf("required")>-1)<span class="m-verify-symbol">*</span>#end $!uiSelectConfig.label</label>
+			    <div class="g-grid-8">
+					<div id="div_$!{uiSelectConfig.id}" $horn.paramsCache($uiSelectConfig)  class="hc_inputsearch u-targetselect-search">
+                	<input type="hidden" name="$!{uiSelectConfig.name}" id="$!{uiSelectConfig.id}" 
+                		#if($uiSelectConfig.alias)
+                			alias="$!{uiSelectConfig.alias}"
+                		#end
+                	value="$!key"
+                	check="$!{checkStr}"
+                	group="$!{groupStr}"
+                	#if($uiSelectConfig.onChange)
+                	onChange="$!{uiSelectConfig.onChange}"
+                	#else
+                	onChange=""
+                	#end
+                	/>
+                	<input type="text" name="view_$!uiSelectConfig.name" id="view_$!uiSelectConfig.id" maxlength="$!{uiSelectConfig.maxlength}" value="$!label" class="u-targetselect-search-input" 
+                        #if(${uiSelectConfig.disabled})
+                            disabled="disabled"
+                        #end
+                        readonly="readonly"
+                    	onclick="$!uiSelectConfig.event"
+                	/>
+					<a href="javascript:void(0)"><i class="fa fa-close"></i></a>
+                	</div>
+			    </div>
+		    </div>
+		  </div>
+	#end
+	#set($uiSelectConfig = {})
+#end

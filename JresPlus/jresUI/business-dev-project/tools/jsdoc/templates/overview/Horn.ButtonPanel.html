@@ -1,0 +1,124 @@
+
+<h3>按钮组件button</h3>
+<p>可用的宏组件有<br/>
+button_panel:用于表单的提交按钮面板，布局上独占一行，内置提交和重置，可修改名称；<br/>
+button_panel_ex:用于表单中的按钮面板，布局上独占一行，没有内置按钮；<br/>
+button_group:用于表单中的按钮，布局上和不同的输入组件一致，可使用cols属性配置所占列数，没有内置按钮；</p>
+ <img src="../resource/images/ButtonPanel.png"/>
+
+<h4>适用范围</h4>
+<p>
+	用于表单数据的提交,和表单中的按钮
+</p>
+<h4>约束</h4>
+<p>
+	<ol>
+		<li>无</li>
+	</ol>
+</p>
+<h4>注意事项</h4>
+<p>
+	<ol>
+		<li>button_group只能用于panel内部</li>
+		<li>button_panel和button_panel_ex不能放在panel内部使用，使用方式和panel类似</li>
+		<li>button_panel默认包含“提交”和“重置”按钮，用于表单的提交</li>
+		<li>button_panel_ex不包含“提交”和“重置”按钮</li>
+	</ol>
+</p>
+
+<h4>使用示例</h4>
+<p>使用button_panel:</p>
+<textarea name="code" class="html" style="display: none;">
+#@form({"url":"$appServer.get('/demo/horn-ui/testFormPost.htm')"})
+       #@panel()
+           #textfield({"label":"用户姓名", "name":"name","defValue":""})
+           #calendar({"label":"出生日期", "name":"birthday","check":"","value":"20141212","defValue":"20120912"})
+       #end
+       #@panel({})
+			#button_panel({"submitLabel":"查询","resetLabel":"清空",
+            	"buttons" : [{"label":"新增","event":"testSelectAll()","className":"add"},
+            		{"label":"修改","event":"testSetTitle()","className":"edit"} ,
+            		{"label":"删除","event":"testunSelectAll()","className":"del"},
+            		{"label":"保存","event":"testgetSelecteds()","className":"save"},
+            		{"label":"重置","event":"testgetSelecteds()","className":"reset"},
+            		{"label":"查询","event":"testselect()","className":"query"},
+            		{"label":"刷新","event":"testunselect()","className":"refresh"},
+            		{"label":"打开","event":"loadData()","refmenu":"test11","className":"open"},
+            		{"label":"关闭","event":"loadDataNull()","className":"close"},
+            		{"label":"导入","event":"setSize()","refmenu":"test11","className":"import"},
+            		{"label":"导出","event":"setBaseParams()","refmenu":"test11","className":"export"}
+            	]
+            })
+    	#end
+#end
+#jscode()
+    var myNamespace = {
+        query:function(){
+            alert("query")
+        }
+    };
+#end
+</textarea>
+
+<p>使用button_panel_ex：</p>
+<textarea name="code" class="html" style="display: none;">
+#@form({"url":"$appServer.get('/demo/horn-ui/testFormPost.htm')"})
+       #@panel()
+           #textfield({"label":"用户姓名", "name":"name","defValue":""})
+           #calendar({"label":"出生日期", "name":"birthday","check":"","value":"20141212","defValue":"20120912"})
+       #end
+       #button_panel_ex({
+			"buttons" : [{"label":"新增","event":"testSelectAll()","className":"add"},
+				{"label":"修改","event":"testSetTitle()","className":"edit"} ,
+				{"label":"删除","event":"testunSelectAll()","className":"del"},
+				{"label":"保存","event":"testgetSelecteds()","className":"save"},
+				{"label":"重置","event":"testgetSelecteds()","className":"reset"},
+				{"label":"查询","event":"testselect()","className":"query"},
+				{"label":"刷新","event":"testunselect()","className":"refresh"},
+				{"label":"打开","event":"loadData()","refmenu":"test11","className":"open"},
+				{"label":"关闭","event":"loadDataNull()","className":"close"},
+				{"label":"导入","event":"setSize()","refmenu":"test11","className":"import"},
+				{"label":"导出","event":"setBaseParams()","refmenu":"test11","className":"export"}
+			]
+		})
+#end
+#jscode()
+    function query(){
+            alert("query")
+        }
+    
+#ends
+</textarea>
+<p>使用button_group：</p>
+<textarea name="code" class="html" style="display: none;">
+#@form({"url":"$appServer.get('/demo/horn-ui/testFormPost.htm')"})
+       #@panel()
+           #textfield({"label":"用户姓名", "name":"name","defValue":""})
+           #calendar({"label":"出生日期", "name":"birthday","check":"","value":"20141212","defValue":"20120912"})
+           #button_group({
+				"buttons" : [{"label":"新增","event":"testSelectAll()","className":"add"},
+					{"label":"修改","event":"testSetTitle()","className":"edit"} ,
+					{"label":"删除","event":"testunSelectAll()","className":"del"},
+					{"label":"保存","event":"testgetSelecteds()","className":"save"},
+					{"label":"重置","event":"testgetSelecteds()","className":"reset"},
+					{"label":"查询","event":"testselect()","className":"query"},
+					{"label":"刷新","event":"testunselect()","className":"refresh"},
+					{"label":"打开","event":"loadData()","refmenu":"test11","className":"open"},
+					{"label":"关闭","event":"loadDataNull()","className":"close"},
+					{"label":"导入","event":"setSize()","refmenu":"test11","className":"import"},
+					{"label":"导出","event":"setBaseParams()","refmenu":"test11","className":"export"}
+				]
+			})
+       #end
+#end
+#jscode()
+    var myNamespace = {
+        query1:function(){
+            alert("query1")
+        },
+        query2:function(){
+            alert("query2")
+        }
+    };
+#end
+</textarea>

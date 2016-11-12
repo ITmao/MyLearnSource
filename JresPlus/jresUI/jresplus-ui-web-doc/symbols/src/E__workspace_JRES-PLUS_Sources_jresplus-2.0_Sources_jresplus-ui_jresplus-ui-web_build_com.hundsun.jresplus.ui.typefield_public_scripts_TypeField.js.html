@@ -1,0 +1,865 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/**
+<span class='line'>  2</span>  * 修改记录
+<span class='line'>  3</span>  * 2015-09-09               zhangsu        STORY #12305 TS:201507290161-JRESPlus-资产管理事业部-张翔-Typefield组件的验证会错位
+<span class='line'>  4</span>  * 2015-10-30               周智星         STORY #14592 【TS:201510300234-JRESPlus-财富管理事业部-虞凯 添加支持负数金额
+<span class='line'>  5</span>  * 2015-12-04               周智星         需求 #15026 【TS:201511240583-JRESPlus-资产管理事业部-张翔-1.typefield金额类型的，小数点目前只保留两位数，希望可以根据配置来决定保留几位数
+<span class='line'>  6</span>  * 2015-12-23               周智星         STORY #15410 【TS:201512040007-JRESPlus-财富管理事业部-王瑞明 当typefield控制为金额类型时录入1.00 会自动把.00去掉 请修复该问题
+<span class='line'>  7</span>  * 2016-1-14                刘龙             需求15324 金额控件suffixNum&quot;:3，保留3为小数，此时输入框中输入1.0000，tip显示为1元零，需要优化
+<span class='line'>  8</span>  * 2016-1-14                刘龙             bug 13928 typefield控件inputType属性设置为cardNo后，建议不能输入小数点
+<span class='line'>  9</span>  * 2016-3-7                 刘龙             需求#17546 【TS:201603010010-JRESPlus-财富管理事业部-王一俊-【项目名称】HUNDSUN另类投资管理系统软件V4.0&lt;br】
+<span class='line'> 10</span>  * 2016-3-11                刘龙             需求#17802 【TS:201603100429-JRESPlus-财富管理事业部-虞凯-&lt;br>&lt;br>&lt;br>&lt;br>【项目名称】HUNDSUN
+<span class='line'> 11</span>  */</span><span class="WHIT">
+<span class='line'> 12</span> </span><span class="COMM">/**
+<span class='line'> 13</span>  * @name Horn.TypeField
+<span class='line'> 14</span>  * @class
+<span class='line'> 15</span>  * 支持金额、卡号输入类型的input组件
+<span class='line'> 16</span>  */</span><span class="WHIT">
+<span class='line'> 17</span> </span><span class="COMM">/**
+<span class='line'> 18</span>  * @lends Horn.Textfield#
+<span class='line'> 19</span>  */</span><span class="WHIT">
+<span class='line'> 20</span> </span><span class="WHIT">	 </span><span class="WHIT">
+<span class='line'> 21</span> </span><span class="COMM">/**
+<span class='line'> 22</span>  * 组件唯一标识
+<span class='line'> 23</span>  * @name Horn.TypeField#id
+<span class='line'> 24</span>  * @type String
+<span class='line'> 25</span>  * @default ""
+<span class='line'> 26</span>  * @example
+<span class='line'> 27</span>  * 无
+<span class='line'> 28</span>  */</span><span class="WHIT">
+<span class='line'> 29</span> </span><span class="COMM">/**
+<span class='line'> 30</span>  * 表单提交名字
+<span class='line'> 31</span>  * @name Horn.TypeField#name
+<span class='line'> 32</span>  * @type String
+<span class='line'> 33</span>  * @default ""
+<span class='line'> 34</span>  * @example
+<span class='line'> 35</span>  * 无
+<span class='line'> 36</span>  */</span><span class="WHIT">
+<span class='line'> 37</span> </span><span class="COMM">/**
+<span class='line'> 38</span>  * 表单组件的标签名，值过长会造成label显示不全，但是可以通过鼠标悬浮看到完整值
+<span class='line'> 39</span>  * @name Horn.TypeField#label
+<span class='line'> 40</span>  * @type String
+<span class='line'> 41</span>  * @default ""
+<span class='line'> 42</span>  * @example
+<span class='line'> 43</span>  * 无
+<span class='line'> 44</span>  */</span><span class="WHIT">
+<span class='line'> 45</span> </span><span class="COMM">/**
+<span class='line'> 46</span>  * 隐藏标签（也就是label属性）。适用场景：单独使用一个组件，但是又不想要label的。不推荐混合适用，否则布局会乱。
+<span class='line'> 47</span>  * @name Horn.TypeField#hiddenLabel
+<span class='line'> 48</span>  * @type Boolean
+<span class='line'> 49</span>  * @default false
+<span class='line'> 50</span>  * @example
+<span class='line'> 51</span>  * 无
+<span class='line'> 52</span>  */</span><span class="WHIT">	 </span><span class="WHIT">
+<span class='line'> 53</span> </span><span class="COMM">/**
+<span class='line'> 54</span>  * @ignore
+<span class='line'> 55</span>  * 组件的别名，名字相同时，加别名区分
+<span class='line'> 56</span>  * @name Horn.TypeField#alias
+<span class='line'> 57</span>  * @type String
+<span class='line'> 58</span>  * @default ""
+<span class='line'> 59</span>  * @ignore
+<span class='line'> 60</span>  * @example
+<span class='line'> 61</span>  * var comp = Horn.getComp("name","alias")
+<span class='line'> 62</span>  */</span><span class="WHIT">
+<span class='line'> 63</span> 
+<span class='line'> 64</span> </span><span class="WHIT"> </span><span class="COMM">/**
+<span class='line'> 65</span>   * 表单的初始值，如果没有配置defValue属性，表单重置的时候，将采用value作为重置值
+<span class='line'> 66</span>   * @name Horn.TypeField#value
+<span class='line'> 67</span>   * @type String
+<span class='line'> 68</span>   * @default ""
+<span class='line'> 69</span>   * @example
+<span class='line'> 70</span>   * 无
+<span class='line'> 71</span>   */</span><span class="WHIT">
+<span class='line'> 72</span> 
+<span class='line'> 73</span> </span><span class="WHIT"> </span><span class="COMM">/**
+<span class='line'> 74</span>   * 组件的重置时的值，如果没有配置此值，将以value属性做为重置值。
+<span class='line'> 75</span>   * 如果指定了value值，并且defValue设置为空(defValue:"")，则无法重置为空值，请用form组件的clearValue方法清空form内组件的值或调用组件本身的clearValue方法清空值。
+<span class='line'> 76</span>   * @name Horn.TypeField#defValue
+<span class='line'> 77</span>   * @type String
+<span class='line'> 78</span>   * @default 无
+<span class='line'> 79</span>   * @example
+<span class='line'> 80</span>   * 无
+<span class='line'> 81</span>   */</span><span class="WHIT">
+<span class='line'> 82</span> 
+<span class='line'> 83</span> </span><span class="WHIT"> </span><span class="COMM">/**
+<span class='line'> 84</span>   * 组件的是读配置，被设置为只读的组件只能通过API的方式修改表单的值，可以获得焦点，参与表单校验（校验失败会阻止表单提交），并且可以参与表单提交；
+<span class='line'> 85</span>   * true表示只读状态，false表示正常状态
+<span class='line'> 86</span>   * @name Horn.TypeField#readonly
+<span class='line'> 87</span>   * @type Boolean
+<span class='line'> 88</span>   * @default false
+<span class='line'> 89</span>   * @example
+<span class='line'> 90</span>   * 无
+<span class='line'> 91</span>   */</span><span class="WHIT">
+<span class='line'> 92</span> 
+<span class='line'> 93</span> </span><span class="WHIT"> </span><span class="COMM">/**
+<span class='line'> 94</span>   * 组件的禁用状态，被设置禁用状态的组件，无法获得焦点，不参与表单校验（不会阻止表单提交），不会参与表单提交并且其所有校验状态都会消失，不可编辑，但是可以通过API修改表单的值；
+<span class='line'> 95</span>   * true表示禁用，false表示正常状态
+<span class='line'> 96</span>   * @name Horn.TypeField#disabled
+<span class='line'> 97</span>   * @type Boolean
+<span class='line'> 98</span>   * @default false
+<span class='line'> 99</span>   * @example
+<span class='line'>100</span>   * 无
+<span class='line'>101</span>   */</span><span class="WHIT">
+<span class='line'>102</span> 
+<span class='line'>103</span> </span><span class="COMM">/**
+<span class='line'>104</span>  * 组件的跨列数，取值范围由外容器的panel的cols而定(支持1-4列)
+<span class='line'>105</span>  * @name Horn.TypeField#cols
+<span class='line'>106</span>  * @type int
+<span class='line'>107</span>  * @default 1
+<span class='line'>108</span>  * @example
+<span class='line'>109</span>  * 无
+<span class='line'>110</span>  */</span><span class="WHIT">
+<span class='line'>111</span> 
+<span class='line'>112</span> </span><span class="COMM">/**
+<span class='line'>113</span>  * 组件的约束检查选项
+<span class='line'>114</span>  * @name Horn.TypeField#check
+<span class='line'>115</span>  * @type String
+<span class='line'>116</span>  * @default ""
+<span class='line'>117</span>  * @example
+<span class='line'>118</span>  * 具体见Horn.Validate类的已经支持的正规、函数名
+<span class='line'>119</span>  * "check":"required;"
+<span class='line'>120</span>  */</span><span class="WHIT">
+<span class='line'>121</span> 
+<span class='line'>122</span> </span><span class="COMM">/**
+<span class='line'>123</span>  * 组件的所属组，可以对相同组内的元素进行约束检查
+<span class='line'>124</span>  * @name Horn.TypeField#group
+<span class='line'>125</span>  * @type String
+<span class='line'>126</span>  * @default ""
+<span class='line'>127</span>  * @ignore
+<span class='line'>128</span>  * @example
+<span class='line'>129</span>  * 验证指定对象$obj(scope)中组名为groupname的元素有有效性
+<span class='line'>130</span>  * Horn.Validate.validateAreaByGroup($obj,groupname)
+<span class='line'>131</span>  */</span><span class="WHIT">
+<span class='line'>132</span> 
+<span class='line'>133</span> </span><span class="COMM">/**
+<span class='line'>134</span>  * 内容最大长度，超过长度的文字无法输入，一个汉字相当于两个字符。比如“中文abc”，总共的文字数为7
+<span class='line'>135</span>  * 但是需要特别注意，maxlength属性只能限制键盘输入，或者粘贴等操作，无法限制api设置操作。
+<span class='line'>136</span>  * 组件失去焦点时，会自动加上显示分隔符，分隔符不进行字符计数，只统计数字长度。
+<span class='line'>137</span>  * @name Horn.TypeField#maxlength
+<span class='line'>138</span>  * @type Number
+<span class='line'>139</span>  * @ignore
+<span class='line'>140</span>  * @default 
+<span class='line'>141</span>  * @example
+<span class='line'>142</span>  * 无
+<span class='line'>143</span>  */</span><span class="WHIT">
+<span class='line'>144</span> 
+<span class='line'>145</span> </span><span class="WHIT"> </span><span class="COMM">/**
+<span class='line'>146</span>   * 组件的事件配置
+<span class='line'>147</span>   * @name Horn.TypeField#events
+<span class='line'>148</span>   * @type Array
+<span class='line'>149</span>   * @default ""
+<span class='line'>150</span>   * @example
+<span class='line'>151</span>   * "events":[{"event":"onchange","function":"getValue()"}]
+<span class='line'>152</span>   */</span><span class="WHIT">
+<span class='line'>153</span> 
+<span class='line'>154</span> </span><span class="COMM">/**
+<span class='line'>155</span>  * 加入一个分组中，可以根据组名进行分组校验，参见validate的validateAreaByGroup(scope, group)方法
+<span class='line'>156</span>  * @function
+<span class='line'>157</span>  * @name Horn.TypeField#addGroup
+<span class='line'>158</span>  * @param {String} group 组名
+<span class='line'>159</span>  * @ignore
+<span class='line'>160</span>  */</span><span class="WHIT">
+<span class='line'>161</span> </span><span class="COMM">/**
+<span class='line'>162</span>  * 从一个分组中删除
+<span class='line'>163</span>  * @function
+<span class='line'>164</span>  * @name Horn.TypeField#removeGroup
+<span class='line'>165</span>  * @param {String} group 组名
+<span class='line'>166</span>  * @ignore
+<span class='line'>167</span>  */</span><span class="WHIT">
+<span class='line'>168</span> </span><span class="COMM">/**
+<span class='line'>169</span>  * 判断组件上会否在分组中
+<span class='line'>170</span>  * @function
+<span class='line'>171</span>  * @name Horn.TypeField#inGroup
+<span class='line'>172</span>  * @param {String} group 组名
+<span class='line'>173</span>  * @ignore
+<span class='line'>174</span>  */</span><span class="WHIT">
+<span class='line'>175</span> 
+<span class='line'>176</span> </span><span class="COMM">/**
+<span class='line'>177</span>  * 增加校验规则
+<span class='line'>178</span>  * @function
+<span class='line'>179</span>  * @name Horn.TypeField#addRule
+<span class='line'>180</span>  * @param {String} rule 校验规则字符串
+<span class='line'>181</span>  */</span><span class="WHIT">
+<span class='line'>182</span> </span><span class="COMM">/**
+<span class='line'>183</span>  * 删除校验规则
+<span class='line'>184</span>  * @function
+<span class='line'>185</span>  * @name Horn.TypeField#removeRule
+<span class='line'>186</span>  * @param {String} rule 校验规则字符串
+<span class='line'>187</span>  */</span><span class="WHIT">
+<span class='line'>188</span> 
+<span class='line'>189</span> </span><span class="COMM">/**
+<span class='line'>190</span>  * 显示表单，如果表单已经显示，此方法无效果，hide方法与之相对应
+<span class='line'>191</span>  * @function
+<span class='line'>192</span>  * @name Horn.TypeField#show
+<span class='line'>193</span>  */</span><span class="WHIT">
+<span class='line'>194</span> </span><span class="COMM">/**
+<span class='line'>195</span>  * 隐藏表单，如果表单已经隐藏，此方法无效果，show方法与之对应
+<span class='line'>196</span>  * @function
+<span class='line'>197</span>  * @name Horn.TypeField#hide
+<span class='line'>198</span>  */</span><span class="WHIT">
+<span class='line'>199</span> 
+<span class='line'>200</span> </span><span class="COMM">/**
+<span class='line'>201</span>  * 设置label内容
+<span class='line'>202</span>  * @function
+<span class='line'>203</span>  * @name Horn.TypeField#setLabel
+<span class='line'>204</span>  * @param {String} label 标签内容
+<span class='line'>205</span>  * @ignore
+<span class='line'>206</span>  */</span><span class="WHIT">
+<span class='line'>207</span> </span><span class="COMM">/**
+<span class='line'>208</span>  * 获取label内容
+<span class='line'>209</span>  * @function
+<span class='line'>210</span>  * @name Horn.TypeField#getLabel
+<span class='line'>211</span>  * @return 标签内容
+<span class='line'>212</span>  * @ignore
+<span class='line'>213</span>  */</span><span class="WHIT">
+<span class='line'>214</span> 
+<span class='line'>215</span> </span><span class="COMM">/**
+<span class='line'>216</span>  * 设置为必填项，同时增加红色的 *
+<span class='line'>217</span>  * @function
+<span class='line'>218</span>  * @name Horn.TypeField#setRequired
+<span class='line'>219</span>  * @param {Boolean} required 不传值或者传true表示必选项，传false表示取消必选项
+<span class='line'>220</span>  */</span><span class="WHIT">
+<span class='line'>221</span> </span><span class="COMM">/**
+<span class='line'>222</span>  * 设置字段是否禁用，被设置为禁用的组件，不可以编辑，也不参与表单提交，但是可以通过API的方式修改表单的值
+<span class='line'>223</span>  * @function
+<span class='line'>224</span>  * @name Horn.TypeField#setDisabled
+<span class='line'>225</span>  * @param {Boolean} disabled true表示禁用，false表示正常
+<span class='line'>226</span>  */</span><span class="WHIT">
+<span class='line'>227</span> </span><span class="COMM">/**
+<span class='line'>228</span>  * 设置是否只读，设置为只读方式的组件，不可以编辑，但是可以通过setValue、reset等API修改表单的值，并可以可以参与表单提交
+<span class='line'>229</span>  * @function
+<span class='line'>230</span>  * @name Horn.TypeField#setReadonly
+<span class='line'>231</span>  * @param {Boolean} readonly true表示只读，false表示正常
+<span class='line'>232</span>  */</span><span class="WHIT">
+<span class='line'>233</span> 
+<span class='line'>234</span> </span><span class="COMM">/**
+<span class='line'>235</span>  * 设置表单的值
+<span class='line'>236</span>  * @function
+<span class='line'>237</span>  * @name Horn.TypeField#setValue
+<span class='line'>238</span>  * @param {String} value 值
+<span class='line'>239</span>  */</span><span class="WHIT">
+<span class='line'>240</span> </span><span class="COMM">/**
+<span class='line'>241</span>  * 获取表单的值
+<span class='line'>242</span>  * @function
+<span class='line'>243</span>  * @name Horn.TypeField#getValue
+<span class='line'>244</span>  * @return 表单的提交值
+<span class='line'>245</span>  */</span><span class="WHIT">
+<span class='line'>246</span> </span><span class="COMM">/**
+<span class='line'>247</span>  * 如果设置了defValue的值，重置成的defValue值，否则重置成value值
+<span class='line'>248</span>  * @function
+<span class='line'>249</span>  * @name Horn.TypeField#reset
+<span class='line'>250</span>  */</span><span class="WHIT">
+<span class='line'>251</span> </span><span class="COMM">/**
+<span class='line'>252</span>  * 清空表单的值，显示值和隐藏值都设置为""
+<span class='line'>253</span>  * @function
+<span class='line'>254</span>  * @name Horn.TypeField#clearValue
+<span class='line'>255</span>  */</span><span class="WHIT">
+<span class='line'>256</span> 
+<span class='line'>257</span> </span><span class="COMM">/**
+<span class='line'>258</span>  * 获取由validate方法触发表单校验后的结果，并通过返回值标识校验的结果
+<span class='line'>259</span>  * @function
+<span class='line'>260</span>  * @name Horn.TypeField#isValid
+<span class='line'>261</span>  * @return {Boolean} true表示校验通过，false表示校验失败
+<span class='line'>262</span>  */</span><span class="WHIT">
+<span class='line'>263</span> </span><span class="COMM">/**
+<span class='line'>264</span>  * 触发校验表单的内容，然后通过调用isValid方法获取校验的结果
+<span class='line'>265</span>  * @function
+<span class='line'>266</span>  * @name Horn.TypeField#validate
+<span class='line'>267</span>  */</span><span class="WHIT">
+<span class='line'>268</span> </span><span class="COMM">/**
+<span class='line'>269</span>   * 是否隐藏组件
+<span class='line'>270</span>   * @name Horn.TypeField#hidden
+<span class='line'>271</span>   * @type Boolean
+<span class='line'>272</span>   * @default false
+<span class='line'>273</span>   * @example
+<span class='line'>274</span>   * #typefield({"check": "required;","value":"-3333.3392","defValue":"11111","maxlength":" ","id":"t2","name":"typefield2","label":"测试金额测试金额测试金额测试金额测试金额测试金额", "cols":1,"split":",","bigTips":true,"suffixNum":"5","hidden":true})
+<span class='line'>275</span>   */</span><span class="WHIT">
+<span class='line'>276</span> </span><span class="COMM">/**
+<span class='line'>277</span>  * typefield的输入数据的类型，可配置为money和cardNo（分别代表金额和卡号输入的类型），其他值暂时不能支持(该值默认值money，如果不需要请使用textfield)
+<span class='line'>278</span>  * @name Horn.TypeField#inputType
+<span class='line'>279</span>  * @type String
+<span class='line'>280</span>  * @default "money"
+<span class='line'>281</span>  * @example
+<span class='line'>282</span>  * #typefield({"check": "required;","value":"-3333.33","defValue":"11111","id":"t2","name":"typefield2","label":"测试金额", "cols":3,"split":",","inputType":"cardNo"})
+<span class='line'>283</span>  */</span><span class="WHIT">
+<span class='line'>284</span> </span><span class="COMM">/**
+<span class='line'>285</span>  * 是否开启typefield的大tips展示，如果开启会影响所占行的布局，建议放在该行的最右面，并且设置初始值
+<span class='line'>286</span>  * @name Horn.TypeField#bigTips
+<span class='line'>287</span>  * @type boolean
+<span class='line'>288</span>  * @default false
+<span class='line'>289</span>  * @example
+<span class='line'>290</span>  * #typefield({"check": "required;","value":"-3333.33","defValue":"11111","id":"t2","name":"typefield2","label":"测试金额", "cols":3,"split":",","bigTips":true})
+<span class='line'>291</span>  */</span><span class="WHIT">
+<span class='line'>292</span> </span><span class="COMM">/**
+<span class='line'>293</span>  * 设置显示的分隔符,如果inputType为cardNo，此配置不可用
+<span class='line'>294</span>  * @name Horn.TypeField#split
+<span class='line'>295</span>  * @type String
+<span class='line'>296</span>  * @default ","
+<span class='line'>297</span>  * @example
+<span class='line'>298</span>  * #typefield({"check": "required;","value":"-3333.33","defValue":"11111","id":"t2","name":"typefield2","label":"测试金额", "cols":3,"split":",","bigTips":true})
+<span class='line'>299</span>  */</span><span class="WHIT">
+<span class='line'>300</span> </span><span class="COMM">/**
+<span class='line'>301</span>  * 小数点后缀保留几位数，默认保留两位（对金额类型有效）
+<span class='line'>302</span>  * @name Horn.TypeField#suffixNum
+<span class='line'>303</span>  * @type int
+<span class='line'>304</span>  * @default 2
+<span class='line'>305</span>  * @example
+<span class='line'>306</span>  * #typefield({"check": "required;","value":"-3333.33","defValue":"11111","id":"t2","name":"typefield2","label":"测试金额", "cols":3,"split":",","suffixNum":3})
+<span class='line'>307</span>  */</span><span class="WHIT">
+<span class='line'>308</span> </span><span class="COMM">/**
+<span class='line'>309</span>  * 整数位数需要保留几位数，默认对整数位数不做限制（对金额类型有效）
+<span class='line'>310</span>  * @name Horn.TypeField#integerNum
+<span class='line'>311</span>  * @type int
+<span class='line'>312</span>  * @default null
+<span class='line'>313</span>  * @example
+<span class='line'>314</span>  * #typefield({"check": "required;","value":"-3333.33","defValue":"11111","id":"t2","name":"typefield2","label":"测试金额", "cols":3,"split":",","integerNum":3})
+<span class='line'>315</span>  */</span><span class="WHIT">
+<span class='line'>316</span> </span><span class="WHIT"> </span><span class="COMM">/**
+<span class='line'>317</span>   * emptyText属性(此属性当值为空时，会在输入框显示提示语)；
+<span class='line'>318</span>   * @name Horn.TypeField#emptyText
+<span class='line'>319</span>   * @type String
+<span class='line'>320</span>   * @default ""
+<span class='line'>321</span>   * @example
+<span class='line'>322</span>   * #typefield({"name":"test11f", "label":"textarea", "defValue": "textarea默认值", "cols": 3, "check": "required", "disabled":true,"emptyText":"请输入..."})
+<span class='line'>323</span>   */</span><span class="WHIT">
+<span class='line'>324</span> </span><span class="NAME">Horn.TypeField</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Horn.extend</span><span class="PUNC">(</span><span class="NAME">Horn.Field</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>325</span> </span><span class="WHIT">		</span><span class="NAME">regChars</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"-0123456789"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>326</span> </span><span class="WHIT">		</span><span class="NAME">suffixNumber</span><span class="PUNC">:</span><span class="NUMB">2</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>327</span> </span><span class="WHIT">		</span><span class="NAME">init</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">dom</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>328</span> </span><span class="WHIT">			</span><span class="NAME">Horn.TypeField.superclass.init.apply</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">arguments</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>329</span> </span><span class="WHIT">			</span><span class="NAME">this.params.inputType</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.params.inputType</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">this.params.inputType</span><span class="PUNC">:</span><span class="STRN">"money"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>330</span> </span><span class="WHIT">			</span><span class="COMM">//BUG #9566 TypeField--属性split设置为其他，不显示设置分隔符，仍然为逗号</span><span class="WHIT">
+<span class='line'>331</span> </span><span class="WHIT">			</span><span class="NAME">this.config</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>332</span> </span><span class="WHIT">			</span><span class="COMM">//****修改大文字的信息提示为可配置，默认不开启</span><span class="WHIT">
+<span class='line'>333</span> </span><span class="WHIT">			</span><span class="COMM">// $.extend(this.config,this.params);</span><span class="WHIT">
+<span class='line'>334</span> </span><span class="WHIT">			</span><span class="NAME">this.config.bigTips</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.params.bigTips</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>335</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.params.split</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>336</span> </span><span class="WHIT">				</span><span class="NAME">this.config.split</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.params.split</span><span class="WHIT">
+<span class='line'>337</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>338</span> </span><span class="WHIT">				</span><span class="NAME">this.config.split</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.params.split</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="STRN">","</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>339</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>340</span> </span><span class="WHIT">			</span><span class="COMM">//需求 #15026 【TS:201511240583-JRESPlus-资产管理事业部-张翔-1.typefield金额类型的，小数点目前只保留两位数，希望可以根据配置来决定保留几位数</span><span class="WHIT">
+<span class='line'>341</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.params.suffixNum</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>342</span> </span><span class="WHIT">				</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">temp</span><span class="PUNC">=</span><span class="REGX">/^\d+(\.\d+)?$/</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>343</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">temp.test</span><span class="PUNC">(</span><span class="NAME">this.params.suffixNum</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>344</span> </span><span class="WHIT">					</span><span class="NAME">this.suffixNumber</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.params.suffixNum</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>345</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>346</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>347</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.params.integerNum</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>348</span> </span><span class="WHIT">				</span><span class="NAME">this.integerNum</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.params.integerNum</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>349</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>350</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">that</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>351</span> </span><span class="WHIT">			</span><span class="WHIT">
+<span class='line'>352</span> </span><span class="WHIT">			</span><span class="COMM">//绑定 key press 事件</span><span class="WHIT">
+<span class='line'>353</span> </span><span class="WHIT">			</span><span class="NAME">this.field.bind</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="STRN">'keypress'</span><span class="PUNC">:</span><span class="NAME">Horn.Util.apply</span><span class="PUNC">(</span><span class="NAME">that.onKeyPress</span><span class="PUNC">,</span><span class="NAME">that</span><span class="PUNC">)</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>354</span> </span><span class="WHIT">			</span><span class="COMM">//BUG #9554 inputType 设置为cardNo后，显示时焦点一移入就会显示空白tip</span><span class="WHIT">
+<span class='line'>355</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">tipLabel</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.el.find</span><span class="PUNC">(</span><span class="STRN">"div.u-typefield-tip"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">appendTo</span><span class="PUNC">(</span><span class="NAME">$</span><span class="PUNC">(</span><span class="STRN">"body"</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">html</span><span class="PUNC">(</span><span class="NAME">this.params.value</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>356</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">tipDiv</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>357</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.field.width</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">this.field.width</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">></span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>358</span> </span><span class="WHIT">				</span><span class="NAME">tipDiv</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.el.find</span><span class="PUNC">(</span><span class="STRN">"div.u-typefield-capital"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">width</span><span class="PUNC">(</span><span class="NAME">this.field.width</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>359</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>360</span> </span><span class="WHIT">				</span><span class="NAME">tipDiv</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.el.find</span><span class="PUNC">(</span><span class="STRN">"div.u-typefield-capital"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">css</span><span class="PUNC">(</span><span class="STRN">'width'</span><span class="PUNC">,</span><span class="STRN">'100px'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>361</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>362</span> </span><span class="WHIT">			  </span><span class="WHIT">
+<span class='line'>363</span> </span><span class="WHIT">			</span><span class="COMM">//this.field.parent("div").css({"float":"left"})</span><span class="WHIT">
+<span class='line'>364</span> 
+<span class='line'>365</span> </span><span class="WHIT">			</span><span class="NAME">this.tipLabel</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">tipLabel</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>366</span> </span><span class="WHIT">			</span><span class="NAME">this.tipDiv</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">tipDiv</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>367</span> </span><span class="WHIT">			</span><span class="WHIT">
+<span class='line'>368</span> </span><span class="WHIT">			</span><span class="COMM">//金额录入组件(支持返显中文)</span><span class="WHIT">
+<span class='line'>369</span> </span><span class="WHIT">			</span><span class="COMM">//增加一个配置型对输入类型进行识别，inputType="money"或者inputType="cardNo"</span><span class="WHIT">
+<span class='line'>370</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.params.inputType</span><span class="PUNC">===</span><span class="STRN">"money"</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>371</span> </span><span class="WHIT">				 </span><span class="COMM">//校验输入属性</span><span class="WHIT">
+<span class='line'>372</span> </span><span class="WHIT">				 </span><span class="NAME">this.maskRe</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">RegExp</span><span class="PUNC">(</span><span class="STRN">"["</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">this.regChars</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="STRN">"\.]"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>373</span> </span><span class="WHIT">				 </span><span class="NAME">this.check</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"decmal1;"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>374</span> </span><span class="WHIT">                 </span><span class="NAME">this.initProcess</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>375</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.params.inputType</span><span class="PUNC">===</span><span class="STRN">"cardNo"</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>376</span> </span><span class="WHIT">				</span><span class="NAME">this.maskRe</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">RegExp</span><span class="PUNC">(</span><span class="STRN">"["</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">this.regChars</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="STRN">"]"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>377</span> </span><span class="WHIT">				</span><span class="NAME">this.check</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"num;"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>378</span> </span><span class="WHIT">				</span><span class="NAME">this.initProcess</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>379</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>380</span> </span><span class="WHIT">				</span><span class="KEYW">return</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>381</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>382</span> </span><span class="WHIT">			</span><span class="COMM">//resize</span><span class="WHIT">
+<span class='line'>383</span> </span><span class="WHIT">			</span><span class="NAME">$</span><span class="PUNC">(</span><span class="NAME">window</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">resize</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>384</span> </span><span class="WHIT">				</span><span class="NAME">tipLabel.hide</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>385</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>386</span> </span><span class="WHIT">			</span><span class="WHIT">
+<span class='line'>387</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">rv</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getIEVersion</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>388</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">rv</span><span class="PUNC">!=</span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">&&</span><span class="NAME">rv</span><span class="PUNC">&lt;</span><span class="NUMB">10</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>389</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.params.emptyText</span><span class="PUNC">&&</span><span class="NAME">this.params.emptyText</span><span class="PUNC">!=</span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>390</span> </span><span class="WHIT">					</span><span class="NAME">this.field.val</span><span class="PUNC">(</span><span class="NAME">this.params.emptyText</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>391</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>392</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>393</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>394</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'>395</span> 		 * BUG #9546
+<span class='line'>396</span> 		 */</span><span class="WHIT">
+<span class='line'>397</span> </span><span class="WHIT">		</span><span class="NAME">setValue</span><span class="PUNC">:</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>398</span> </span><span class="WHIT">			</span><span class="NAME">value</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">value</span><span class="PUNC">+</span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>399</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">!=</span><span class="KEYW">null</span><span class="PUNC">&&</span><span class="NAME">value</span><span class="PUNC">!=</span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>400</span> </span><span class="WHIT">				</span><span class="NAME">value</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">value</span><span class="PUNC">+</span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>401</span> </span><span class="WHIT">	        	</span><span class="NAME">value</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">value.replace</span><span class="PUNC">(</span><span class="REGX">/(^\s*)|(\s*$)/g</span><span class="PUNC">,</span><span class="STRN">''</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>402</span> </span><span class="WHIT">	        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>403</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hidden</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.hidden</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>404</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">field</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.field</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>405</span> </span><span class="WHIT">			</span><span class="WHIT">
+<span class='line'>406</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">value</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">value</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">||</span><span class="NAME">value</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>407</span> </span><span class="WHIT">				</span><span class="NAME">field.val</span><span class="PUNC">(</span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>408</span> </span><span class="WHIT">	            </span><span class="NAME">hidden.val</span><span class="PUNC">(</span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>409</span> </span><span class="WHIT">	            </span><span class="NAME">this.tipLabel.html</span><span class="PUNC">(</span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>410</span> </span><span class="WHIT">				</span><span class="NAME">this.tipDiv.html</span><span class="PUNC">(</span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>411</span> </span><span class="WHIT">	            </span><span class="COMM">// return false;</span><span class="WHIT">
+<span class='line'>412</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>413</span> </span><span class="WHIT">				</span><span class="WHIT">
+<span class='line'>414</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">value.indexOf</span><span class="PUNC">(</span><span class="STRN">"."</span><span class="PUNC">)</span><span class="PUNC">==</span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>415</span> </span><span class="WHIT">					</span><span class="NAME">value</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"0"</span><span class="PUNC">+</span><span class="NAME">value</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>416</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>417</span> </span><span class="WHIT">				</span><span class="WHIT">
+<span class='line'>418</span> </span><span class="WHIT">				</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">firstChar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">value.substring</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>419</span> </span><span class="WHIT">				</span><span class="COMM">//hidden's value without split !</span><span class="WHIT">
+<span class='line'>420</span> </span><span class="WHIT">				</span><span class="COMM">// value = value.replace(new RegExp("["+this.config.split+"||\s||^[0-9\.]]","g"),"");</span><span class="WHIT">
+<span class='line'>421</span> </span><span class="WHIT">				</span><span class="NAME">value</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">value.replace</span><span class="PUNC">(</span><span class="REGX">/[^0-9\.-]/g</span><span class="PUNC">,</span><span class="STRN">""</span><span class="PUNC">)</span><span class="COMM">//支持负数 20151030 add by周智星</span><span class="WHIT">
+<span class='line'>422</span> </span><span class="WHIT">				</span><span class="WHIT">
+<span class='line'>423</span> </span><span class="WHIT">				</span><span class="NAME">hidden.val</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>424</span> </span><span class="WHIT">				</span><span class="NAME">this.changeTipsVal</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>425</span> 
+<span class='line'>426</span> </span><span class="WHIT">				</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">formatValue</span><span class="PUNC">,</span><span class="NAME">CHValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>427</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.params.inputType</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"money"</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>428</span> </span><span class="WHIT">					</span><span class="NAME">formatValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">spliteByChar</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">,</span><span class="NAME">this.config.split</span><span class="PUNC">,</span><span class="NAME">this.suffixNumber</span><span class="PUNC">,</span><span class="NAME">this.integerNum</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>429</span> </span><span class="WHIT">					</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">firstChar</span><span class="PUNC">==</span><span class="STRN">"-"</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>430</span> </span><span class="WHIT">						</span><span class="NAME">formatValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">firstChar</span><span class="PUNC">+</span><span class="NAME">formatValue</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>431</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>432</span> </span><span class="WHIT">					</span><span class="NAME">field.val</span><span class="PUNC">(</span><span class="NAME">formatValue</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>433</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.params.inputType</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"cardNo"</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>434</span> </span><span class="WHIT">					</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">!=</span><span class="KEYW">null</span><span class="PUNC">&&</span><span class="NAME">value</span><span class="PUNC">!=</span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>435</span> </span><span class="WHIT">						</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">value.indexOf</span><span class="PUNC">(</span><span class="STRN">"."</span><span class="PUNC">)</span><span class="PUNC">!=</span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>436</span> </span><span class="WHIT">							</span><span class="NAME">value</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">value.split</span><span class="PUNC">(</span><span class="STRN">"."</span><span class="PUNC">)</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>437</span> </span><span class="WHIT">						</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>438</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>439</span> </span><span class="WHIT">					</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">v</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">value</span><span class="PUNC">,</span><span class="NAME">tmpStr</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>440</span> </span><span class="WHIT">					</span><span class="NAME">formatValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">v</span><span class="PUNC">?</span><span class="NAME">v.match</span><span class="PUNC">(</span><span class="REGX">/\d{1,4}/g</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">join</span><span class="PUNC">(</span><span class="STRN">"  "</span><span class="PUNC">)</span><span class="PUNC">:</span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>441</span> </span><span class="WHIT">					</span><span class="NAME">field.attr</span><span class="PUNC">(</span><span class="STRN">"value"</span><span class="PUNC">,</span><span class="NAME">formatValue</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>442</span> </span><span class="WHIT">					</span><span class="COMM">//field.attr("title",formatValue);</span><span class="WHIT">
+<span class='line'>443</span> </span><span class="WHIT">					</span><span class="NAME">field.val</span><span class="PUNC">(</span><span class="NAME">formatValue</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>444</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>445</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>446</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">!=</span><span class="KEYW">null</span><span class="PUNC">&&</span><span class="NAME">value</span><span class="PUNC">!=</span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>447</span> </span><span class="WHIT">				</span><span class="NAME">this.validate</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>448</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>449</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>450</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'>451</span> 		 * 
+<span class='line'>452</span> 		 */</span><span class="WHIT">
+<span class='line'>453</span> </span><span class="WHIT">		</span><span class="NAME">getValue</span><span class="PUNC">:</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>454</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">val</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.hidden.val</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>455</span> </span><span class="WHIT">	         </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">val</span><span class="PUNC">!=</span><span class="KEYW">null</span><span class="PUNC">&&</span><span class="NAME">val</span><span class="PUNC">!=</span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>456</span> </span><span class="WHIT">	        	 </span><span class="NAME">val</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="NAME">val</span><span class="PUNC">+</span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>457</span> </span><span class="WHIT">	         	</span><span class="NAME">val</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">val.replace</span><span class="PUNC">(</span><span class="REGX">/(^\s*)|(\s*$)/g</span><span class="PUNC">,</span><span class="STRN">''</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>458</span> </span><span class="WHIT">	         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>459</span> </span><span class="WHIT">			</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">val</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>460</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>461</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'>462</span> 		 * private
+<span class='line'>463</span> 		 */</span><span class="WHIT">
+<span class='line'>464</span> </span><span class="WHIT">		</span><span class="NAME">onKeyPress</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">e</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>465</span> </span><span class="WHIT">	        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">k</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">e.keyCode</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>466</span> </span><span class="WHIT">	        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">cc</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">String.fromCharCode</span><span class="PUNC">(</span><span class="NAME">k</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>467</span> </span><span class="WHIT">	        </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">this.maskRe.test</span><span class="PUNC">(</span><span class="NAME">cc</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>468</span> </span><span class="WHIT">	           </span><span class="COMM">/*if ( e && e.preventDefault ) {
+<span class='line'>469</span> 	                e.preventDefault();
+<span class='line'>470</span> 	            } else {
+<span class='line'>471</span> 	               window.event.returnValue = false;
+<span class='line'>472</span> 	           }*/</span><span class="WHIT">
+<span class='line'>473</span> </span><span class="WHIT">	        	</span><span class="COMM">// Horn.Util.stopPropagation(e);</span><span class="WHIT">
+<span class='line'>474</span> </span><span class="WHIT">	         </span><span class="COMM">//    return false;</span><span class="WHIT">
+<span class='line'>475</span> </span><span class="WHIT">	        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>476</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>477</span> </span><span class="WHIT">		</span><span class="NAME">showBigtips</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>478</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">w</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.field.width</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>479</span> </span><span class="WHIT">			</span><span class="NAME">h</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.field.outerHeight</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>480</span> </span><span class="WHIT">			</span><span class="NAME">this.tipLabel.css</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="STRN">"top"</span><span class="PUNC">:</span><span class="NAME">this.field.offset</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">top</span><span class="PUNC">+</span><span class="NAME">h</span><span class="PUNC">,</span><span class="STRN">"left"</span><span class="PUNC">:</span><span class="NAME">this.field.offset</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">left</span><span class="PUNC">,</span><span class="STRN">"z-index"</span><span class="PUNC">:</span><span class="NUMB">9999</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">show</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>481</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>482</span> </span><span class="WHIT">		</span><span class="NAME">hideBigtips</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>483</span> </span><span class="WHIT">			</span><span class="NAME">this.tipLabel.hide</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>484</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>485</span> </span><span class="WHIT">	    </span><span class="NAME">initProcess</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>486</span> </span><span class="WHIT">	    	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">that</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>487</span> </span><span class="WHIT">	    	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">tipLabel</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.tipLabel</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>488</span> 
+<span class='line'>489</span> </span><span class="WHIT">			</span><span class="COMM">//if default value</span><span class="WHIT">
+<span class='line'>490</span> </span><span class="WHIT">			</span><span class="COMM">//BUG #9559 textField_reset()重置有问题</span><span class="WHIT">
+<span class='line'>491</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.params.value</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="REGX">/^[\d|\.-]*$/</span><span class="PUNC">.</span><span class="NAME">test</span><span class="PUNC">(</span><span class="NAME">this.params.value</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="COMM">//支持负数 20151030 add by周智星</span><span class="WHIT">
+<span class='line'>492</span> </span><span class="WHIT">				</span><span class="NAME">this.setValue</span><span class="PUNC">(</span><span class="NAME">this.params.value</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>493</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>494</span> </span><span class="WHIT">				</span><span class="NAME">this.params.value</span><span class="PUNC">=</span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>495</span> </span><span class="WHIT">				</span><span class="NAME">this.setValue</span><span class="PUNC">(</span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>496</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>497</span> 
+<span class='line'>498</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.params.defValue</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="REGX">/^[\d|\.-]*$/</span><span class="PUNC">.</span><span class="NAME">test</span><span class="PUNC">(</span><span class="NAME">this.params.defValue</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="COMM">//支持负数 20151030 add by周智星</span><span class="WHIT">
+<span class='line'>499</span> </span><span class="WHIT">				</span><span class="COMM">//defValue</span><span class="WHIT">
+<span class='line'>500</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>501</span> </span><span class="WHIT">				</span><span class="NAME">this.params.defValue</span><span class="PUNC">=</span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>502</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>503</span> </span><span class="WHIT">			</span><span class="WHIT">
+<span class='line'>504</span> </span><span class="WHIT">			</span><span class="COMM">//用户的输入类型判断为金额输入，产生一个绝对定位的输入框在下面</span><span class="WHIT">
+<span class='line'>505</span> </span><span class="WHIT">			</span><span class="NAME">this.field.focusin</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>506</span> </span><span class="WHIT">				</span><span class="NAME">$</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">val</span><span class="PUNC">(</span><span class="NAME">that.hidden.val</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>507</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">that.params.bigTips</span><span class="PUNC">==</span><span class="KEYW">true</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT">  </span><span class="NAME">that.hidden.val</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">that.hidden.val</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">!=</span><span class="STRN">""</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>508</span> </span><span class="WHIT">					</span><span class="NAME">that.showBigtips</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="WHIT">
+<span class='line'>509</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>510</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>511</span> </span><span class="WHIT">			</span><span class="WHIT">
+<span class='line'>512</span> </span><span class="WHIT">			</span><span class="NAME">this.field.focusout</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>513</span> </span><span class="WHIT">				</span><span class="NAME">that.hideBigtips</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>514</span> </span><span class="WHIT">				</span><span class="NAME">that.setValue</span><span class="PUNC">(</span><span class="NAME">that.hidden.val</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>515</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>516</span> </span><span class="WHIT">			</span><span class="WHIT">
+<span class='line'>517</span> </span><span class="WHIT">			</span><span class="NAME">this.field.keyup</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">e</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>518</span> </span><span class="WHIT">				</span><span class="NAME">that.changeTipsVal</span><span class="PUNC">(</span><span class="NAME">$</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">val</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>519</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">that.hidden.val</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">that.hidden.val</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">!=</span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>520</span> </span><span class="WHIT">					</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">that.params.bigTips</span><span class="PUNC">==</span><span class="KEYW">true</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>521</span> </span><span class="WHIT">						</span><span class="NAME">that.showBigtips</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>522</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>523</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>524</span> </span><span class="WHIT">					</span><span class="NAME">that.hideBigtips</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>525</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>526</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>527</span> </span><span class="WHIT">	    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>528</span> </span><span class="WHIT">	    </span><span class="COMM">//BUG #9569 typeField_的inputType"为"money"时,event属性配置的事件不会触发</span><span class="WHIT">
+<span class='line'>529</span> </span><span class="WHIT">	    </span><span class="NAME">changeTipsVal</span><span class="PUNC">:</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>530</span> </span><span class="WHIT">			</span><span class="COMM">//hidden's value without split !</span><span class="WHIT">
+<span class='line'>531</span> </span><span class="WHIT">			</span><span class="COMM">// value = value.replace(new RegExp("["+this.config.split+"|\s]","g"),"");</span><span class="WHIT">
+<span class='line'>532</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">firstChar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">value.substring</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>533</span> </span><span class="WHIT">			</span><span class="WHIT">
+<span class='line'>534</span> </span><span class="WHIT">	    	</span><span class="NAME">value</span><span class="WHIT">  </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">value.replace</span><span class="PUNC">(</span><span class="REGX">/[^0-9\.-]/g</span><span class="PUNC">,</span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="COMM">//支持负数 20151030 add by周智星</span><span class="WHIT">
+<span class='line'>535</span> </span><span class="WHIT">	    	</span><span class="COMM">//bug 13928 typefield控件inputType属性设置为cardNo后，建议不能输入小数点</span><span class="WHIT">
+<span class='line'>536</span> </span><span class="WHIT">	    	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.params.inputType</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"cardNo"</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>537</span> </span><span class="WHIT">	    		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">!=</span><span class="KEYW">null</span><span class="PUNC">&&</span><span class="NAME">value</span><span class="PUNC">!=</span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>538</span> </span><span class="WHIT">					</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">value.indexOf</span><span class="PUNC">(</span><span class="STRN">"."</span><span class="PUNC">)</span><span class="PUNC">!=</span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>539</span> </span><span class="WHIT">						</span><span class="NAME">value</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">value.split</span><span class="PUNC">(</span><span class="STRN">"."</span><span class="PUNC">)</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>540</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>541</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>542</span> </span><span class="WHIT">	    	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>543</span> </span><span class="WHIT">			</span><span class="COMM">//value  = (value=="" || value==null) ? "":parseFloat(value)+"";</span><span class="WHIT">
+<span class='line'>544</span> </span><span class="WHIT">	    	</span><span class="COMM">//STORY #15410 【TS:201512040007-JRESPlus-财富管理事业部-王瑞明 当typefield控制为金额类型时录入1.00 会自动把.00去掉 请修复该问题</span><span class="WHIT">
+<span class='line'>545</span> </span><span class="WHIT">	    	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">==</span><span class="STRN">""</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">value</span><span class="PUNC">==</span><span class="KEYW">null</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>546</span> </span><span class="WHIT">				</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">endVal</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">value.split</span><span class="PUNC">(</span><span class="STRN">"."</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>547</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">endVal</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">endVal.length</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>548</span> </span><span class="WHIT">					</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">tmp</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseFloat</span><span class="PUNC">(</span><span class="NAME">endVal</span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">toFixed</span><span class="PUNC">(</span><span class="NAME">this.suffixNumber</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>549</span> </span><span class="WHIT">					</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">tmp</span><span class="PUNC">!=</span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>550</span> </span><span class="WHIT">						</span><span class="NAME">value</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseFloat</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">toFixed</span><span class="PUNC">(</span><span class="NAME">this.suffixNumber</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>551</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>552</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>553</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>554</span> </span><span class="WHIT">			</span><span class="NAME">this.hidden.val</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>555</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">formatValue</span><span class="PUNC">,</span><span class="NAME">CHValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>556</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.params.inputType</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"money"</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>557</span> </span><span class="WHIT">				</span><span class="COMM">//17802 【TS:201603100429-JRESPlus-财富管理事业部-虞凯-&lt;br>&lt;br>&lt;br>&lt;br>【项目名称】HUNDSUN</span><span class="WHIT">
+<span class='line'>558</span> </span><span class="WHIT">				</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">arrNum</span><span class="PUNC">=</span><span class="NAME">value.split</span><span class="PUNC">(</span><span class="STRN">"."</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>559</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">arrNum.length</span><span class="PUNC">></span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>560</span> </span><span class="WHIT">					</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">integerNum</span><span class="PUNC">=</span><span class="NAME">arrNum</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">substr</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NAME">this.integerNum</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>561</span> </span><span class="WHIT">					</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">arrNum.length</span><span class="PUNC">></span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>562</span> </span><span class="WHIT">						</span><span class="NAME">value</span><span class="PUNC">=</span><span class="NAME">integerNum</span><span class="PUNC">+</span><span class="STRN">"."</span><span class="PUNC">+</span><span class="NAME">arrNum</span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="WHIT">
+<span class='line'>563</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>564</span> </span><span class="WHIT">						</span><span class="NAME">value</span><span class="PUNC">=</span><span class="NAME">integerNum</span><span class="WHIT">
+<span class='line'>565</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>566</span> </span><span class="WHIT">					</span><span class="NAME">this.hidden.val</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="WHIT">
+<span class='line'>567</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>568</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">value.split</span><span class="PUNC">(</span><span class="STRN">"."</span><span class="PUNC">)</span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">value.split</span><span class="PUNC">(</span><span class="STRN">"."</span><span class="PUNC">)</span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">length</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>569</span> </span><span class="WHIT">					</span><span class="NAME">value</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseFloat</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">toFixed</span><span class="PUNC">(</span><span class="NAME">this.suffixNumber</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>570</span> </span><span class="WHIT">					</span><span class="NAME">this.hidden.val</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>571</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>572</span> </span><span class="WHIT">				</span><span class="NAME">formatValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">spliteByChar</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">,</span><span class="NAME">this.config.split</span><span class="PUNC">,</span><span class="NAME">this.suffixNumber</span><span class="PUNC">,</span><span class="NAME">this.integerNum</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>573</span> </span><span class="WHIT">				</span><span class="WHIT">
+<span class='line'>574</span> </span><span class="WHIT">			    </span><span class="NAME">CHValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">numtochinese</span><span class="PUNC">(</span><span class="NAME">value</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="NAME">this.suffixNumber</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>575</span> </span><span class="WHIT">				</span><span class="NAME">this.tipLabel.html</span><span class="PUNC">(</span><span class="NAME">CHValue</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>576</span> </span><span class="WHIT">				</span><span class="NAME">this.tipDiv.html</span><span class="PUNC">(</span><span class="NAME">CHValue</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>577</span> </span><span class="WHIT">				</span><span class="NAME">this.tipDiv.attr</span><span class="PUNC">(</span><span class="STRN">"title"</span><span class="PUNC">,</span><span class="NAME">CHValue</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>578</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.params.inputType</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"cardNo"</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>579</span> </span><span class="WHIT">				</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">v</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">value</span><span class="PUNC">,</span><span class="NAME">tmpStr</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>580</span> </span><span class="WHIT">				</span><span class="NAME">formatValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">v</span><span class="PUNC">?</span><span class="NAME">v.match</span><span class="PUNC">(</span><span class="REGX">/\d{1,4}/g</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">join</span><span class="PUNC">(</span><span class="STRN">"  "</span><span class="PUNC">)</span><span class="PUNC">:</span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>581</span> </span><span class="WHIT">				</span><span class="NAME">tmpStr</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">v</span><span class="PUNC">?</span><span class="NAME">v.match</span><span class="PUNC">(</span><span class="REGX">/\d{1,4}/g</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">join</span><span class="PUNC">(</span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">:</span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>582</span> </span><span class="WHIT">				</span><span class="NAME">this.tipLabel.html</span><span class="PUNC">(</span><span class="NAME">formatValue</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>583</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>584</span> </span><span class="WHIT">	    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>585</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>586</span> </span><span class="WHIT">	</span><span class="NAME">Horn.Field.regFieldType</span><span class="PUNC">(</span><span class="STRN">"div.hc_textfield.typefield"</span><span class="PUNC">,</span><span class="NAME">Horn.TypeField</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>587</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='line'>588</span> </span><span class="WHIT">    </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">isSpecialKey</span><span class="PUNC">(</span><span class="NAME">k</span><span class="PUNC">,</span><span class="NAME">e</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>589</span> </span><span class="WHIT">    	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">e.type</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">'keypress'</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">e.ctrlKey</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="WHIT">
+<span class='line'>590</span> </span><span class="WHIT">       </span><span class="PUNC">(</span><span class="NAME">k</span><span class="WHIT"> </span><span class="PUNC">>=</span><span class="WHIT"> </span><span class="NUMB">33</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">k</span><span class="WHIT"> </span><span class="PUNC">&lt;=</span><span class="WHIT"> </span><span class="NUMB">40</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT">  </span><span class="COMM">// Page Up/Down, End, Home, Left, Up, Right, Down</span><span class="WHIT">
+<span class='line'>591</span> </span><span class="WHIT">        </span><span class="NAME">k</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">13</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT">              </span><span class="COMM">//enter return</span><span class="WHIT">
+<span class='line'>592</span> </span><span class="WHIT">        </span><span class="NAME">k</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">9</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT">               </span><span class="COMM">//Tab</span><span class="WHIT">
+<span class='line'>593</span> </span><span class="WHIT">        </span><span class="NAME">k</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">27</span><span class="PUNC">||</span><span class="PUNC">(</span><span class="NAME">k</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">8</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="COMM">// Backspace</span><span class="WHIT">
+<span class='line'>594</span> </span><span class="WHIT">        </span><span class="PUNC">(</span><span class="NAME">k</span><span class="WHIT"> </span><span class="PUNC">>=</span><span class="WHIT"> </span><span class="NUMB">16</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">k</span><span class="WHIT"> </span><span class="PUNC">&lt;=</span><span class="WHIT"> </span><span class="NUMB">20</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="COMM">// Shift, Ctrl, Alt, Pause, Caps Lock</span><span class="WHIT">
+<span class='line'>595</span> </span><span class="WHIT">        </span><span class="PUNC">(</span><span class="NAME">k</span><span class="WHIT"> </span><span class="PUNC">>=</span><span class="WHIT"> </span><span class="NUMB">44</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">k</span><span class="WHIT"> </span><span class="PUNC">&lt;=</span><span class="WHIT"> </span><span class="NUMB">46</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">   </span><span class="COMM">// Print Screen, Insert ;</span><span class="WHIT">
+<span class='line'>596</span> </span><span class="WHIT">    	</span><span class="WHIT">
+<span class='line'>597</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>598</span> </span><span class="WHIT">	</span><span class="COMM">//格式化金额显示</span><span class="WHIT">
+<span class='line'>599</span> </span><span class="WHIT">	</span><span class="COMM">//BUG #9538 TypeField_value属性</span><span class="WHIT">
+<span class='line'>600</span> </span><span class="WHIT">	</span><span class="COMM">//BUG #9543 TypeField--金融类型输入组件-属性split</span><span class="WHIT">
+<span class='line'>601</span> </span><span class="WHIT">	</span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">spliteByChar</span><span class="PUNC">(</span><span class="NAME">val</span><span class="PUNC">,</span><span class="NAME">s</span><span class="PUNC">,</span><span class="NAME">suffixNumber</span><span class="PUNC">,</span><span class="NAME">integerNum</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>602</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">firstChar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">val.substring</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="COMM">//获取第一个字符</span><span class="WHIT">
+<span class='line'>603</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">firstChar</span><span class="PUNC">==</span><span class="STRN">"-"</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>604</span> </span><span class="WHIT">			</span><span class="NAME">val</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">val.substring</span><span class="PUNC">(</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>605</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>606</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">v</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">val</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>607</span> </span><span class="WHIT">			</span><span class="NAME">vArr</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">v.split</span><span class="PUNC">(</span><span class="STRN">"."</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>608</span> </span><span class="WHIT">			</span><span class="NAME">v0</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">vArr</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>609</span> </span><span class="WHIT">			</span><span class="NAME">tmpStr</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>610</span> </span><span class="WHIT">		</span><span class="WHIT">
+<span class='line'>611</span> </span><span class="WHIT">		</span><span class="NAME">v0</span><span class="PUNC">=</span><span class="NAME">v0.replace</span><span class="PUNC">(</span><span class="REGX">/\D{1}/g</span><span class="PUNC">,</span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>612</span> </span><span class="WHIT">		</span><span class="WHIT">
+<span class='line'>613</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">v0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>614</span> </span><span class="WHIT">		</span><span class="COMM">//17802 【TS:201603100429-JRESPlus-财富管理事业部-虞凯-&lt;br>&lt;br>&lt;br>&lt;br>【项目名称】HUNDSUN</span><span class="WHIT">
+<span class='line'>615</span> </span><span class="WHIT">		</span><span class="NAME">v0</span><span class="PUNC">=</span><span class="NAME">v0.substr</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NAME">integerNum</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>616</span> </span><span class="WHIT">		</span><span class="NAME">$.each</span><span class="PUNC">(</span><span class="NAME">v0.reverse</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">match</span><span class="PUNC">(</span><span class="REGX">/\d{1,3}/g</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">reverse</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">,</span><span class="NAME">o</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>617</span> </span><span class="WHIT">			</span><span class="NAME">tmpStr</span><span class="PUNC">+</span><span class="PUNC">=</span><span class="NAME">o.reverse</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">+</span><span class="NAME">s</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>618</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>619</span> </span><span class="WHIT">		</span><span class="COMM">//17546 【TS:201603010010-JRESPlus-财富管理事业部-王一俊-【项目名称】HUNDSUN另类投资管理系统软件V4.0&lt;br】 </span><span class="WHIT">
+<span class='line'>620</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">!=</span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>621</span> </span><span class="WHIT">			</span><span class="NAME">tmpStr</span><span class="PUNC">=</span><span class="NAME">tmpStr.replace</span><span class="PUNC">(</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">RegExp</span><span class="PUNC">(</span><span class="STRN">"["</span><span class="PUNC">+</span><span class="NAME">s</span><span class="PUNC">+</span><span class="STRN">"]$"</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>622</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">		</span><span class="WHIT">
+<span class='line'>623</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">reuslt</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">tmpStr</span><span class="PUNC">+</span><span class="PUNC">(</span><span class="NAME">vArr.length</span><span class="PUNC">></span><span class="NUMB">1</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="STRN">"."</span><span class="PUNC">+</span><span class="NAME">vArr</span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">substr</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NAME">suffixNumber</span><span class="PUNC">)</span><span class="PUNC">:</span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>624</span> </span><span class="WHIT">		</span><span class="WHIT">
+<span class='line'>625</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">reuslt</span><span class="WHIT">
+<span class='line'>626</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>627</span> 
+<span class='line'>628</span> </span><span class="WHIT">	</span><span class="COMM">/*
+<span class='line'>629</span> 	 * 功能：将货币数字（阿拉伯数字）(小写)转化成中文(大写）
+<span class='line'>630</span> 	 * 参数：Num为字符型,小数点之后保留两位,例：Arabia_to_Chinese("1234.06") 说明：1.目前本转换仅支持到 拾亿（元）
+<span class='line'>631</span> 	 * 位，金额单位为元，不能为万元，最小单位为分 2.不支持负数
+<span class='line'>632</span> 	 */</span><span class="WHIT">
+<span class='line'>633</span> </span><span class="WHIT">	</span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">numtochinese</span><span class="PUNC">(</span><span class="NAME">Num</span><span class="PUNC">,</span><span class="NAME">suffixNumber</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>634</span> </span><span class="WHIT">		</span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Num.length</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">>=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">--</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>635</span> </span><span class="WHIT">			</span><span class="NAME">Num</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Num.replace</span><span class="PUNC">(</span><span class="STRN">","</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">)</span><span class="COMM">// 替换tomoney()中的“,”</span><span class="WHIT">
+<span class='line'>636</span> </span><span class="WHIT">			</span><span class="NAME">Num</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Num.replace</span><span class="PUNC">(</span><span class="STRN">" "</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">)</span><span class="COMM">// 替换tomoney()中的空格</span><span class="WHIT">
+<span class='line'>637</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>638</span> </span><span class="WHIT">		</span><span class="NAME">Num</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Num.replace</span><span class="PUNC">(</span><span class="STRN">"￥"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">)</span><span class="COMM">// 替换掉可能出现的￥字符</span><span class="WHIT">
+<span class='line'>639</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">isNaN</span><span class="PUNC">(</span><span class="NAME">Num</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>640</span> </span><span class="WHIT">			</span><span class="COMM">// 验证输入的字符是否为数字</span><span class="WHIT">
+<span class='line'>641</span> </span><span class="COMM">//			alert("请检查小写金额是否正确");</span><span class="WHIT">
+<span class='line'>642</span> </span><span class="WHIT">			</span><span class="KEYW">return</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>643</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>644</span> </span><span class="WHIT">		</span><span class="COMM">// ---字符处理完毕，开始转换，转换采用前后两部分分别转换---//</span><span class="WHIT">
+<span class='line'>645</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">part</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">String</span><span class="PUNC">(</span><span class="NAME">Num</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">split</span><span class="PUNC">(</span><span class="STRN">"."</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>646</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">newchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>647</span> </span><span class="WHIT">		</span><span class="COMM">// 小数点前进行转化</span><span class="WHIT">
+<span class='line'>648</span> </span><span class="WHIT">		</span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">part</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">length</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">>=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">--</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>649</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">part</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">length</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">17</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>650</span> </span><span class="COMM">//				alert("");</span><span class="WHIT">
+<span class='line'>651</span> </span><span class="WHIT">				</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"位数过大，无法计算"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>652</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="COMM">// 若数量超过拾亿单位，提示</span><span class="WHIT">
+<span class='line'>653</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">""</span><span class="WHIT">
+<span class='line'>654</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">perchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">part</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">charAt</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>655</span> </span><span class="WHIT">			</span><span class="KEYW">switch</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">perchar</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>656</span> </span><span class="WHIT">			</span><span class="KEYW">case</span><span class="WHIT"> </span><span class="STRN">"0"</span><span class="PUNC">:</span><span class="WHIT">
+<span class='line'>657</span> </span><span class="WHIT">				</span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"零"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>658</span> </span><span class="WHIT">				</span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>659</span> </span><span class="WHIT">			</span><span class="KEYW">case</span><span class="WHIT"> </span><span class="STRN">"1"</span><span class="PUNC">:</span><span class="WHIT">
+<span class='line'>660</span> </span><span class="WHIT">				</span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"壹"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>661</span> </span><span class="WHIT">				</span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>662</span> </span><span class="WHIT">			</span><span class="KEYW">case</span><span class="WHIT"> </span><span class="STRN">"2"</span><span class="PUNC">:</span><span class="WHIT">
+<span class='line'>663</span> </span><span class="WHIT">				</span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"贰"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>664</span> </span><span class="WHIT">				</span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>665</span> </span><span class="WHIT">			</span><span class="KEYW">case</span><span class="WHIT"> </span><span class="STRN">"3"</span><span class="PUNC">:</span><span class="WHIT">
+<span class='line'>666</span> </span><span class="WHIT">				</span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"叁"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>667</span> </span><span class="WHIT">				</span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>668</span> </span><span class="WHIT">			</span><span class="KEYW">case</span><span class="WHIT"> </span><span class="STRN">"4"</span><span class="PUNC">:</span><span class="WHIT">
+<span class='line'>669</span> </span><span class="WHIT">				</span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"肆"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>670</span> </span><span class="WHIT">				</span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>671</span> </span><span class="WHIT">			</span><span class="KEYW">case</span><span class="WHIT"> </span><span class="STRN">"5"</span><span class="PUNC">:</span><span class="WHIT">
+<span class='line'>672</span> </span><span class="WHIT">				</span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"伍"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>673</span> </span><span class="WHIT">				</span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>674</span> </span><span class="WHIT">			</span><span class="KEYW">case</span><span class="WHIT"> </span><span class="STRN">"6"</span><span class="PUNC">:</span><span class="WHIT">
+<span class='line'>675</span> </span><span class="WHIT">				</span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"陆"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>676</span> </span><span class="WHIT">				</span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>677</span> </span><span class="WHIT">			</span><span class="KEYW">case</span><span class="WHIT"> </span><span class="STRN">"7"</span><span class="PUNC">:</span><span class="WHIT">
+<span class='line'>678</span> </span><span class="WHIT">				</span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"柒"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>679</span> </span><span class="WHIT">				</span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>680</span> </span><span class="WHIT">			</span><span class="KEYW">case</span><span class="WHIT"> </span><span class="STRN">"8"</span><span class="PUNC">:</span><span class="WHIT">
+<span class='line'>681</span> </span><span class="WHIT">				</span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"捌"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>682</span> </span><span class="WHIT">				</span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>683</span> </span><span class="WHIT">			</span><span class="KEYW">case</span><span class="WHIT"> </span><span class="STRN">"9"</span><span class="PUNC">:</span><span class="WHIT">
+<span class='line'>684</span> </span><span class="WHIT">				</span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"玖"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>685</span> </span><span class="WHIT">				</span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>686</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>687</span> </span><span class="WHIT">			</span><span class="KEYW">switch</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">part</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">length</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>688</span> </span><span class="WHIT">			</span><span class="KEYW">case</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">:</span><span class="WHIT">
+<span class='line'>689</span> </span><span class="WHIT">				</span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"元"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>690</span> </span><span class="WHIT">				</span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>691</span> </span><span class="WHIT">			</span><span class="KEYW">case</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">:</span><span class="WHIT">
+<span class='line'>692</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">perchar</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>693</span> </span><span class="WHIT">					</span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"拾"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>694</span> </span><span class="WHIT">				</span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>695</span> </span><span class="WHIT">			</span><span class="KEYW">case</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">:</span><span class="WHIT">
+<span class='line'>696</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">perchar</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>697</span> </span><span class="WHIT">					</span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"佰"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>698</span> </span><span class="WHIT">				</span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>699</span> </span><span class="WHIT">			</span><span class="KEYW">case</span><span class="WHIT"> </span><span class="NUMB">3</span><span class="PUNC">:</span><span class="WHIT">
+<span class='line'>700</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">perchar</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>701</span> </span><span class="WHIT">					</span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"仟"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>702</span> </span><span class="WHIT">				</span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>703</span> </span><span class="WHIT">			</span><span class="KEYW">case</span><span class="WHIT"> </span><span class="NUMB">4</span><span class="PUNC">:</span><span class="WHIT">
+<span class='line'>704</span> </span><span class="WHIT">				</span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"万"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>705</span> </span><span class="WHIT">				</span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>706</span> </span><span class="WHIT">			</span><span class="KEYW">case</span><span class="WHIT"> </span><span class="NUMB">5</span><span class="PUNC">:</span><span class="WHIT">
+<span class='line'>707</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">perchar</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>708</span> </span><span class="WHIT">					</span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"拾"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>709</span> </span><span class="WHIT">				</span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>710</span> </span><span class="WHIT">			</span><span class="KEYW">case</span><span class="WHIT"> </span><span class="NUMB">6</span><span class="PUNC">:</span><span class="WHIT">
+<span class='line'>711</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">perchar</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>712</span> </span><span class="WHIT">					</span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"佰"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>713</span> </span><span class="WHIT">				</span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>714</span> </span><span class="WHIT">			</span><span class="KEYW">case</span><span class="WHIT"> </span><span class="NUMB">7</span><span class="PUNC">:</span><span class="WHIT">
+<span class='line'>715</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">perchar</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>716</span> </span><span class="WHIT">					</span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"仟"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>717</span> </span><span class="WHIT">				</span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>718</span> </span><span class="WHIT">			</span><span class="KEYW">case</span><span class="WHIT"> </span><span class="NUMB">8</span><span class="PUNC">:</span><span class="WHIT">
+<span class='line'>719</span> </span><span class="WHIT">				</span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"亿"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>720</span> </span><span class="WHIT">				</span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>721</span> </span><span class="WHIT">			</span><span class="KEYW">case</span><span class="WHIT"> </span><span class="NUMB">9</span><span class="PUNC">:</span><span class="WHIT">
+<span class='line'>722</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">perchar</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>723</span> </span><span class="WHIT">				</span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"拾"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>724</span> </span><span class="WHIT">				</span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>725</span> </span><span class="WHIT">			</span><span class="KEYW">case</span><span class="WHIT"> </span><span class="NUMB">10</span><span class="PUNC">:</span><span class="WHIT">
+<span class='line'>726</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">perchar</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>727</span> </span><span class="WHIT">				</span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"百"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>728</span> </span><span class="WHIT">				</span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>729</span> </span><span class="WHIT">			</span><span class="KEYW">case</span><span class="WHIT"> </span><span class="NUMB">11</span><span class="PUNC">:</span><span class="WHIT">
+<span class='line'>730</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">perchar</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>731</span> </span><span class="WHIT">				</span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"仟"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>732</span> </span><span class="WHIT">				</span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>733</span> </span><span class="WHIT">			</span><span class="KEYW">case</span><span class="WHIT"> </span><span class="NUMB">12</span><span class="PUNC">:</span><span class="WHIT">
+<span class='line'>734</span> </span><span class="WHIT">				</span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"兆"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>735</span> </span><span class="WHIT">				</span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>736</span> </span><span class="WHIT">			</span><span class="KEYW">case</span><span class="WHIT"> </span><span class="NUMB">13</span><span class="PUNC">:</span><span class="WHIT">
+<span class='line'>737</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">perchar</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>738</span> </span><span class="WHIT">				</span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"拾"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>739</span> </span><span class="WHIT">				</span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>740</span> </span><span class="WHIT">			</span><span class="KEYW">case</span><span class="WHIT"> </span><span class="NUMB">14</span><span class="PUNC">:</span><span class="WHIT">
+<span class='line'>741</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">perchar</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>742</span> </span><span class="WHIT">				</span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"百"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>743</span> </span><span class="WHIT">				</span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>744</span> </span><span class="WHIT">			</span><span class="KEYW">case</span><span class="WHIT"> </span><span class="NUMB">15</span><span class="PUNC">:</span><span class="WHIT">
+<span class='line'>745</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">perchar</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>746</span> </span><span class="WHIT">				</span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"仟"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>747</span> </span><span class="WHIT">				</span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>748</span> </span><span class="WHIT">			</span><span class="KEYW">case</span><span class="WHIT"> </span><span class="NUMB">16</span><span class="PUNC">:</span><span class="WHIT">
+<span class='line'>749</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">perchar</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>750</span> </span><span class="WHIT">				</span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"吉"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>751</span> </span><span class="WHIT">				</span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>752</span> </span><span class="WHIT">			</span><span class="KEYW">case</span><span class="WHIT"> </span><span class="NUMB">17</span><span class="PUNC">:</span><span class="WHIT">
+<span class='line'>753</span> </span><span class="WHIT">				</span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"拾"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>754</span> </span><span class="WHIT">				</span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>755</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>756</span> </span><span class="WHIT">			</span><span class="NAME">newchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">newchar</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>757</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>758</span> </span><span class="WHIT">		</span><span class="COMM">// 小数点之后进行转化</span><span class="WHIT">
+<span class='line'>759</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">Num.indexOf</span><span class="PUNC">(</span><span class="STRN">"."</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>760</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">part</span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">length</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>761</span> </span><span class="WHIT">				</span><span class="COMM">//alert("小数点之后只能保留两位,系统将自动截段");</span><span class="WHIT">
+<span class='line'>762</span> </span><span class="WHIT">				</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">tempNum</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseFloat</span><span class="PUNC">(</span><span class="NAME">Num</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>763</span> </span><span class="WHIT">				</span><span class="NAME">Num</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">tempNum.toFixed</span><span class="PUNC">(</span><span class="NAME">suffixNumber</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>764</span> </span><span class="WHIT">				</span><span class="NAME">part</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">String</span><span class="PUNC">(</span><span class="NAME">Num</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">split</span><span class="PUNC">(</span><span class="STRN">"."</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>765</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>766</span> </span><span class="WHIT">			</span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">part</span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>767</span> </span><span class="WHIT">				</span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">""</span><span class="WHIT">
+<span class='line'>768</span> </span><span class="WHIT">				</span><span class="NAME">perchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">part</span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">charAt</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>769</span> </span><span class="WHIT">				</span><span class="KEYW">switch</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">perchar</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>770</span> </span><span class="WHIT">				</span><span class="KEYW">case</span><span class="WHIT"> </span><span class="STRN">"0"</span><span class="PUNC">:</span><span class="WHIT">
+<span class='line'>771</span> </span><span class="WHIT">					</span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"零"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>772</span> </span><span class="WHIT">					</span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>773</span> </span><span class="WHIT">				</span><span class="KEYW">case</span><span class="WHIT"> </span><span class="STRN">"1"</span><span class="PUNC">:</span><span class="WHIT">
+<span class='line'>774</span> </span><span class="WHIT">					</span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"壹"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>775</span> </span><span class="WHIT">					</span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>776</span> </span><span class="WHIT">				</span><span class="KEYW">case</span><span class="WHIT"> </span><span class="STRN">"2"</span><span class="PUNC">:</span><span class="WHIT">
+<span class='line'>777</span> </span><span class="WHIT">					</span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"贰"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>778</span> </span><span class="WHIT">					</span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>779</span> </span><span class="WHIT">				</span><span class="KEYW">case</span><span class="WHIT"> </span><span class="STRN">"3"</span><span class="PUNC">:</span><span class="WHIT">
+<span class='line'>780</span> </span><span class="WHIT">					</span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"叁"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>781</span> </span><span class="WHIT">					</span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>782</span> </span><span class="WHIT">				</span><span class="KEYW">case</span><span class="WHIT"> </span><span class="STRN">"4"</span><span class="PUNC">:</span><span class="WHIT">
+<span class='line'>783</span> </span><span class="WHIT">					</span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"肆"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>784</span> </span><span class="WHIT">					</span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>785</span> </span><span class="WHIT">				</span><span class="KEYW">case</span><span class="WHIT"> </span><span class="STRN">"5"</span><span class="PUNC">:</span><span class="WHIT">
+<span class='line'>786</span> </span><span class="WHIT">					</span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"伍"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>787</span> </span><span class="WHIT">					</span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>788</span> </span><span class="WHIT">				</span><span class="KEYW">case</span><span class="WHIT"> </span><span class="STRN">"6"</span><span class="PUNC">:</span><span class="WHIT">
+<span class='line'>789</span> </span><span class="WHIT">					</span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"陆"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>790</span> </span><span class="WHIT">					</span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>791</span> </span><span class="WHIT">				</span><span class="KEYW">case</span><span class="WHIT"> </span><span class="STRN">"7"</span><span class="PUNC">:</span><span class="WHIT">
+<span class='line'>792</span> </span><span class="WHIT">					</span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"柒"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>793</span> </span><span class="WHIT">					</span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>794</span> </span><span class="WHIT">				</span><span class="KEYW">case</span><span class="WHIT"> </span><span class="STRN">"8"</span><span class="PUNC">:</span><span class="WHIT">
+<span class='line'>795</span> </span><span class="WHIT">					</span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"捌"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>796</span> </span><span class="WHIT">					</span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>797</span> </span><span class="WHIT">				</span><span class="KEYW">case</span><span class="WHIT"> </span><span class="STRN">"9"</span><span class="PUNC">:</span><span class="WHIT">
+<span class='line'>798</span> </span><span class="WHIT">					</span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"玖"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>799</span> </span><span class="WHIT">					</span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>800</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>801</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>802</span> </span><span class="WHIT">					</span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"角"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>803</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>804</span> </span><span class="WHIT">					</span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"分"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>805</span> </span><span class="WHIT">				</span><span class="NAME">newchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">newchar</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">tmpnewchar</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>806</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>807</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>808</span> </span><span class="WHIT">		</span><span class="COMM">//替换所有无用汉字</span><span class="WHIT">
+<span class='line'>809</span> </span><span class="WHIT">		</span><span class="KEYW">while</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">newchar.search</span><span class="PUNC">(</span><span class="STRN">"零零"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>810</span> </span><span class="WHIT">			</span><span class="NAME">newchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">newchar.replace</span><span class="PUNC">(</span><span class="STRN">"零零"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"零"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>811</span> </span><span class="WHIT">		</span><span class="NAME">newchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">newchar.replace</span><span class="PUNC">(</span><span class="STRN">"零亿"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"亿"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>812</span> </span><span class="WHIT">		</span><span class="NAME">newchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">newchar.replace</span><span class="PUNC">(</span><span class="STRN">"亿万"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"亿"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>813</span> </span><span class="WHIT">		</span><span class="NAME">newchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">newchar.replace</span><span class="PUNC">(</span><span class="STRN">"零万"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"万"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>814</span> </span><span class="WHIT">		</span><span class="NAME">newchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">newchar.replace</span><span class="PUNC">(</span><span class="STRN">"零元"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"元"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>815</span> </span><span class="WHIT">		</span><span class="NAME">newchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">newchar.replace</span><span class="PUNC">(</span><span class="STRN">"零角"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>816</span> </span><span class="WHIT">		</span><span class="NAME">newchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">newchar.replace</span><span class="PUNC">(</span><span class="STRN">"零分"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>817</span> </span><span class="WHIT">		</span><span class="WHIT">
+<span class='line'>818</span> </span><span class="WHIT">		</span><span class="WHIT">
+<span class='line'>819</span> </span><span class="WHIT">		</span><span class="NAME">newchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">newchar.replace</span><span class="PUNC">(</span><span class="STRN">"亿万"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"亿"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>820</span> </span><span class="WHIT">		</span><span class="NAME">newchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">newchar.replace</span><span class="PUNC">(</span><span class="STRN">"兆亿"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"兆"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>821</span> </span><span class="WHIT">		</span><span class="NAME">newchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">newchar.replace</span><span class="PUNC">(</span><span class="STRN">"零兆"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"兆"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>822</span> </span><span class="WHIT">		</span><span class="NAME">newchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">newchar.replace</span><span class="PUNC">(</span><span class="STRN">"吉兆"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"吉"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>823</span> </span><span class="WHIT">		</span><span class="WHIT">
+<span class='line'>824</span> </span><span class="WHIT">		</span><span class="WHIT">
+<span class='line'>825</span> 
+<span class='line'>826</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">newchar.charAt</span><span class="PUNC">(</span><span class="NAME">newchar.length</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"元"</span><span class="WHIT">
+<span class='line'>827</span> </span><span class="WHIT">				</span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">newchar.charAt</span><span class="PUNC">(</span><span class="NAME">newchar.length</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"角"</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>828</span> </span><span class="WHIT">			</span><span class="NAME">newchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">newchar</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"整"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>829</span> 
+<span class='line'>830</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">digit</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="STRN">'壹'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'贰'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'叁'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'肆'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'伍'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'陆'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'柒'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'捌'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'玖'</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>831</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT">
+<span class='line'>832</span> </span><span class="WHIT">		</span><span class="KEYW">while</span><span class="PUNC">(</span><span class="NAME">newchar.length</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>833</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">digit.indexOf</span><span class="PUNC">(</span><span class="NAME">newchar</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>834</span> </span><span class="WHIT">				</span><span class="NAME">newchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">newchar.substr</span><span class="PUNC">(</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>835</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>836</span> </span><span class="WHIT">				</span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>837</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>838</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>839</span> </span><span class="WHIT">		</span><span class="COMM">// //remove 0元</span><span class="WHIT">
+<span class='line'>840</span> </span><span class="WHIT">		</span><span class="COMM">// if(newchar.indexOf('元') ==0){</span><span class="WHIT">
+<span class='line'>841</span> </span><span class="WHIT">		</span><span class="COMM">// 	newchar = newchar.substr(1);</span><span class="WHIT">
+<span class='line'>842</span> </span><span class="WHIT">		</span><span class="COMM">// }</span><span class="WHIT">
+<span class='line'>843</span> </span><span class="WHIT">		</span><span class="COMM">// if(newchar.indexOf('整') ==0){</span><span class="WHIT">
+<span class='line'>844</span> </span><span class="WHIT">		</span><span class="COMM">// 	newchar = newchar.substr(1);</span><span class="WHIT">
+<span class='line'>845</span> </span><span class="WHIT">		</span><span class="COMM">// }</span><span class="WHIT">
+<span class='line'>846</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">firstChar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Num.substring</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>847</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">firstChar</span><span class="PUNC">==</span><span class="STRN">"-"</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>848</span> </span><span class="WHIT">			</span><span class="NAME">newchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"负"</span><span class="PUNC">+</span><span class="NAME">newchar</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>849</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>850</span> </span><span class="WHIT">		</span><span class="COMM">//15324 金额控件suffixNum&quot;:3，保留3为小数，此时输入框中输入1.0000，tip显示为1元零，需要优化</span><span class="WHIT">
+<span class='line'>851</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">lastChar</span><span class="PUNC">=</span><span class="NAME">newchar.charAt</span><span class="PUNC">(</span><span class="NAME">newchar.length</span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>852</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="STRN">"零"</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">lastChar</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>853</span> </span><span class="WHIT">			</span><span class="NAME">newchar</span><span class="PUNC">=</span><span class="NAME">newchar.substring</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NAME">newchar.length</span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>854</span> </span><span class="WHIT">			</span><span class="NAME">newchar</span><span class="PUNC">=</span><span class="NAME">newchar</span><span class="PUNC">+</span><span class="STRN">"整"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>855</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>856</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">newchar</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>857</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>858</span> </span></pre></body></html>

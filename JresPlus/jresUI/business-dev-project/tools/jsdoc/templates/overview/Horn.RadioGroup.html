@@ -1,0 +1,49 @@
+
+<h3>radio_group单选框组件</h3>
+<p>组件描述</p>
+ <img src="../resource/images/radioGroup.png"/>
+
+<h4>继承组件</h4>
+<ul>
+	<li><a href="../symbols/Horn.Field.html">Horn.Field</a></li>
+</ul>
+
+<h4>适用范围</h4>
+<p>
+	当选择项不是太多，不会造成布局混乱时使用。如果选择项太多时，可以考虑增大cols值的设置(有效值:1,2,3)
+	或使用combox组件替换
+</p>
+<h4>约束</h4>
+<p>
+	<ol>
+		<li>无</li>
+	</ol>
+</p>
+<h4>注意事项</h4>
+<p>
+	<ol>
+		<li>name属性必须设置，否则会造成组件无法正常使用！</li>
+		<li>数据项不易过多（一行内可以完整显示），否则会导致换行显示影响美观，如果需要显示更多的项，可以考虑使用combox组件</li>
+		<li>需要使用panel组件做为容器</li>
+	</ol>
+</p>
+
+<h4>使用示例</h4>
+<p>示例1: 绑定数据词典</p>
+<textarea name="code" class="html" style="display: none;">
+#@form({})
+   	#@panel({})
+		#radio_group({"name":"test1","label":"radiogroup","defValue":"3", "dictName": "country"})
+   	#end
+#end
+</textarea>
+
+<p>示例2：绑定静态数据</p>
+<textarea name="code" class="html" style="display: none;">
+#radio_group({"name":"test2","label":"radiogroup","defValue":"3","items":[
+	{"text":"葡萄","code":"0"},
+	{"text":"苹果","code":"1"},
+	{"text":"香蕉","code":"2"},
+	{"text":"桔子","code":"3"}
+]})
+</textarea>

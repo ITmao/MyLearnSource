@@ -1,0 +1,44 @@
+
+<h3>fieldset</h3>
+<p>表单输入组件的模块化展示</p>
+ <img src="../resource/images/fieldSet.png"/>
+
+<h4>依赖组件</h4>
+<ul>
+	<li>无</li>
+</ul>
+
+<h4>适用范围</h4>
+<p>
+</p>
+<h4>约束</h4>
+<p>
+	<ol>
+		<li>无</li>
+	</ol>
+</p>
+<h4>注意事项</h4>
+<p>
+	<ol>
+		<li>内部需要使用panel组件做为容器</li>
+	</ol>
+</p>
+
+<h4>使用示例</h4>
+<p>示例:fieldset</p>
+<textarea name="code" class="html" style="display: none;">
+#@fieldset({"title":"详细信息"})
+    #@panel({})
+	    #textfield({"label":"任务号：", "name":"taskId","check": "number"})
+		#textfield({"label":"任务标题：", "name":"taskTitleLike"})
+	#end
+	#@panel({"name":"panel2","expandable":true,"isExpand":false})       		
+		#combox({"name":"range","label":"任务范围：","showLabel":false,"defValue":"$range","items":[
+	              {"text":"所有","code":"a"},
+				  {"text":"非委托","code":"o"},
+	              {"text":"委托","code":"d"}
+        ]})
+    #end
+#end
+</textarea>
+

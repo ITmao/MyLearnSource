@@ -1,0 +1,231 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/*
+<span class='line'>  2</span>  * 修改日期                        修改人员        修改说明
+<span class='line'>  3</span>  * -----------------------------------------------------------------------
+<span class='line'>  4</span>  * 2014-4-25 		周智星	BUG #6859 【tip】Horn.Tip.info传入的消失时间不是延迟消失的时间，而是开始消隐到真正消失的时间
+<span class='line'>  5</span>  * -----------------------------------------------------------------------
+<span class='line'>  6</span>  */</span><span class="WHIT">
+<span class='line'>  7</span> </span><span class="COMM">/**
+<span class='line'>  8</span>  * @name Horn.Tip
+<span class='line'>  9</span>  * @class
+<span class='line'> 10</span>  * 提示信息组件&lt;br/>
+<span class='line'> 11</span>  * 消息提示，包含成功提示、警告提示、错误提示
+<span class='line'> 12</span>  * 在延迟时间到达时，提示框自动隐藏或通过点击提示框马上隐藏
+<span class='line'> 13</span>  */</span><span class="WHIT">
+<span class='line'> 14</span> 
+<span class='line'> 15</span> </span><span class="COMM">/**
+<span class='line'> 16</span>  * @lends Horn.Tip#
+<span class='line'> 17</span>  */</span><span class="WHIT">
+<span class='line'> 18</span> </span><span class="WHIT"> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">Horn</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Horn</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 19</span> </span><span class="PUNC">;</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">H</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 20</span> </span><span class="WHIT">	</span><span class="NAME">Horn.Tip</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 21</span> </span><span class="WHIT">		</span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">show</span><span class="PUNC">(</span><span class="NAME">el</span><span class="PUNC">,</span><span class="NAME">second</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 22</span> </span><span class="WHIT">            </span><span class="NAME">el.click</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 23</span> </span><span class="WHIT">                </span><span class="NAME">$</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">remove</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 24</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 25</span> </span><span class="WHIT">            </span><span class="NAME">$</span><span class="PUNC">(</span><span class="NAME">el</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">delay</span><span class="PUNC">(</span><span class="NUMB">2000</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">fadeOut</span><span class="PUNC">(</span><span class="NAME">second</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 26</span> </span><span class="WHIT">			</span><span class="COMM">//var next = $(el).next() ;</span><span class="WHIT">
+<span class='line'> 27</span> </span><span class="WHIT">		</span><span class="COMM">//	$(el).slideDown(1000,"swing",function(){</span><span class="WHIT">
+<span class='line'> 28</span> </span><span class="WHIT">			</span><span class="COMM">//	show(next,second);</span><span class="WHIT">
+<span class='line'> 29</span> </span><span class="WHIT">		</span><span class="COMM">//	}).delay(second * 1000).slideUp(1000,"swing") ;</span><span class="WHIT">
+<span class='line'> 30</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 31</span> </span><span class="WHIT">		</span><span class="WHIT">
+<span class='line'> 32</span> </span><span class="WHIT">        </span><span class="COMM">/**
+<span class='line'> 33</span>          * 初始化提示消息显示效果
+<span class='line'> 34</span>          * @ignore
+<span class='line'> 35</span>          * @function
+<span class='line'> 36</span>          * @name Horn.Tip#init
+<span class='line'> 37</span>          * @param {Number}毫秒
+<span class='line'> 38</span>          */</span><span class="WHIT">
+<span class='line'> 39</span> </span><span class="WHIT">		</span><span class="NAME">this.init</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">second</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 40</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">tip</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">$</span><span class="PUNC">(</span><span class="STRN">"div.h_tips"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 41</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">first</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">tip.children</span><span class="PUNC">(</span><span class="STRN">"div"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">first</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 42</span> </span><span class="WHIT">				</span><span class="NAME">show</span><span class="PUNC">(</span><span class="NAME">first</span><span class="PUNC">,</span><span class="NAME">second</span><span class="PUNC">?</span><span class="NAME">second</span><span class="PUNC">:</span><span class="NAME">Horn.Tip.AUTO_HIDE_DELAY_SEC</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 43</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 44</span> </span><span class="WHIT">        </span><span class="COMM">/**
+<span class='line'> 45</span>          * 清空提示消息内容
+<span class='line'> 46</span>          * @function
+<span class='line'> 47</span>          * @name Horn.Tip#clear
+<span class='line'> 48</span>          * @ignore
+<span class='line'> 49</span>          */</span><span class="WHIT">
+<span class='line'> 50</span> </span><span class="WHIT">		</span><span class="NAME">this.clear</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 51</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">tip</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">$</span><span class="PUNC">(</span><span class="STRN">"div.h_tips"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 52</span> </span><span class="WHIT">			</span><span class="NAME">tip.children</span><span class="PUNC">(</span><span class="STRN">"div:hidden"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">remove</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 53</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 54</span> </span><span class="WHIT">        </span><span class="COMM">/**
+<span class='line'> 55</span>          * 添加提示消息
+<span class='line'> 56</span>          * @function
+<span class='line'> 57</span>          * @name Horn.Tip#addTip
+<span class='line'> 58</span>          * @param type 提示类型
+<span class='line'> 59</span>          * @param message 提示消息
+<span class='line'> 60</span>          * @ignore
+<span class='line'> 61</span>          */</span><span class="WHIT">
+<span class='line'> 62</span> </span><span class="WHIT">		</span><span class="NAME">this.addTip</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">type</span><span class="PUNC">,</span><span class="NAME">message</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 63</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">arguments.length</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 64</span> </span><span class="WHIT">				</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.addTip</span><span class="PUNC">(</span><span class="NAME">Horn.Tip.TYPES.INFO</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">type</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 65</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 66</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">css</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 67</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">type</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT">  </span><span class="NAME">Horn.Tip.TYPES.INFO</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 68</span> </span><span class="WHIT">				</span><span class="NAME">css</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Horn.Tip.CSS.INFO</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 69</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">type</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT">  </span><span class="NAME">Horn.Tip.TYPES.WARNING</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 70</span> </span><span class="WHIT">				</span><span class="NAME">css</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Horn.Tip.CSS.WARNING</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 71</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">type</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT">  </span><span class="NAME">Horn.Tip.TYPES.SUCCESS</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 72</span> </span><span class="WHIT">				</span><span class="NAME">css</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Horn.Tip.CSS.SUCCESS</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 73</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="WHIT">
+<span class='line'> 74</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">tip</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">$</span><span class="PUNC">(</span><span class="STRN">"div.h_tips"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 75</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">isFirst</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 76</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">tip.length</span><span class="PUNC">==</span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 77</span> </span><span class="WHIT">				</span><span class="NAME">isFirst</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 78</span> </span><span class="WHIT">				</span><span class="NAME">tip</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">$</span><span class="PUNC">(</span><span class="STRN">'&lt;div class="h_tips">&lt;/div>'</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 79</span> </span><span class="WHIT">				</span><span class="NAME">tip.appendTo</span><span class="PUNC">(</span><span class="NAME">$</span><span class="PUNC">(</span><span class="NAME">document.body</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 80</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 81</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">message</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 82</span> </span><span class="WHIT">				</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">style</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">""</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 83</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">isFirst</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 84</span> </span><span class="WHIT">					</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">Horn.fixed_</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 85</span> </span><span class="WHIT">						</span><span class="NAME">tip.css</span><span class="PUNC">(</span><span class="STRN">"position"</span><span class="PUNC">,</span><span class="STRN">"fixed"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 86</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 87</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 88</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">isFirst</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 89</span> </span><span class="WHIT">		</span><span class="COMM">//			style = "style='display:none;'" ;</span><span class="WHIT">
+<span class='line'> 90</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 91</span> </span><span class="WHIT">				</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">cssSplit</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">css.split</span><span class="PUNC">(</span><span class="STRN">";"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 92</span> </span><span class="WHIT">				</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">css1</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">cssSplit</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 93</span> </span><span class="WHIT">				</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">css2</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">cssSplit</span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 94</span> </span><span class="WHIT">				</span><span class="NAME">tip.prepend</span><span class="PUNC">(</span><span class="NAME">$</span><span class="PUNC">(</span><span class="STRN">"&lt;div class=\"m-tip-box "</span><span class="PUNC">+</span><span class="NAME">css1</span><span class="PUNC">+</span><span class="STRN">"\" "</span><span class="PUNC">+</span><span class="NAME">style</span><span class="PUNC">+</span><span class="STRN">">&lt;span>&lt;i class=\"fa "</span><span class="PUNC">+</span><span class="NAME">css2</span><span class="PUNC">+</span><span class="STRN">"\">&lt;/i>&lt;/span> "</span><span class="PUNC">+</span><span class="NAME">message</span><span class="PUNC">+</span><span class="STRN">"&lt;/div>"</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 95</span> </span><span class="WHIT">				</span><span class="COMM">//tip.prepend($("&lt;div class='"+css+"' "+style+">"+message+"&lt;/div>")) ;</span><span class="WHIT">
+<span class='line'> 96</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 97</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 98</span> </span><span class="WHIT">        </span><span class="COMM">/**
+<span class='line'> 99</span>          * 添加提示消息
+<span class='line'>100</span>          * @function
+<span class='line'>101</span>          * @name Horn.Tip#addTips
+<span class='line'>102</span>          * @param {Array} messages 提示消息数组
+<span class='line'>103</span>          * @ignore
+<span class='line'>104</span>          */</span><span class="WHIT">
+<span class='line'>105</span> </span><span class="WHIT">		</span><span class="NAME">this.addTips</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">type</span><span class="PUNC">,</span><span class="NAME">messages</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>106</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">arguments.length</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>107</span> </span><span class="WHIT">				</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.addTips</span><span class="PUNC">(</span><span class="NAME">Horn.Tip.TYPES.INFO</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">type</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>108</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>109</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">messages</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">messages.length</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>110</span> </span><span class="WHIT">				</span><span class="KEYW">for</span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">=</span><span class="NUMB">0</span><span class="PUNC">;</span><span class="NAME">i</span><span class="PUNC">&lt;</span><span class="NAME">messages.length</span><span class="PUNC">;</span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>111</span> </span><span class="WHIT">					</span><span class="NAME">this.addTip</span><span class="PUNC">(</span><span class="NAME">type</span><span class="PUNC">,</span><span class="NAME">messages</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>112</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">	</span><span class="WHIT">
+<span class='line'>113</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>114</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>115</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>116</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='line'>117</span> </span><span class="WHIT">	</span><span class="NAME">Horn.apply</span><span class="PUNC">(</span><span class="NAME">Horn.Tip</span><span class="PUNC">,</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>118</span> </span><span class="WHIT">        </span><span class="COMM">/**
+<span class='line'>119</span>          * @description 提示消息种类
+<span class='line'>120</span>          * @field
+<span class='line'>121</span>          * @static
+<span class='line'>122</span>          * @private
+<span class='line'>123</span>          * @name Horn.Tip#TYPES
+<span class='line'>124</span>          */</span><span class="WHIT">
+<span class='line'>125</span> </span><span class="WHIT">		</span><span class="NAME">TYPES</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>126</span> </span><span class="WHIT">			</span><span class="NAME">INFO</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"C"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>127</span> </span><span class="WHIT">			</span><span class="NAME">WARNING</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"W"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>128</span> </span><span class="WHIT">			</span><span class="NAME">SUCCESS</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="STRN">"S"</span><span class="WHIT">
+<span class='line'>129</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>130</span> </span><span class="WHIT">        </span><span class="COMM">/**
+<span class='line'>131</span>          * @description 提示消息对应的css
+<span class='line'>132</span>          * @field
+<span class='line'>133</span>          * @static
+<span class='line'>134</span>          * @private
+<span class='line'>135</span>          * @name Horn.Tip#CSS
+<span class='line'>136</span>          */</span><span class="WHIT">
+<span class='line'>137</span> </span><span class="WHIT">		</span><span class="NAME">CSS</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>138</span> </span><span class="WHIT">			</span><span class="NAME">INFO</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"m-tip-warning;fa-exclamation"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>139</span> </span><span class="WHIT">			</span><span class="NAME">WARNING</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"m-tip-error;fa-close"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>140</span> </span><span class="WHIT">			</span><span class="NAME">SUCCESS</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="STRN">"m-tip-success;fa-check"</span><span class="WHIT">	</span><span class="WHIT">
+<span class='line'>141</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>142</span> </span><span class="WHIT">        </span><span class="COMM">/**
+<span class='line'>143</span>          * @description 自动隐藏的延迟时间
+<span class='line'>144</span>          * @field
+<span class='line'>145</span>          * @static
+<span class='line'>146</span>          * @private
+<span class='line'>147</span>          * @name Horn.Tip#AUTO_HIDE_DELAY_SEC
+<span class='line'>148</span>          * @ignore
+<span class='line'>149</span>          */</span><span class="WHIT">
+<span class='line'>150</span> </span><span class="WHIT">		</span><span class="NAME">AUTO_HIDE_DELAY_SEC</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">500</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>151</span> </span><span class="WHIT">        </span><span class="COMM">/**
+<span class='line'>152</span>          * @description 显示提示消息
+<span class='line'>153</span>          * @function
+<span class='line'>154</span>          * @name Horn.Tip#info
+<span class='line'>155</span>          * @param {string} message 提示消息信息
+<span class='line'>156</span>          * @param {Number} ms 提示框自动隐藏的时间以毫秒为单位，若ms不为空，隐藏时间为：2000毫秒(提示框停留时间)+ms(提示框渐变消失时间),否则默认为2000毫秒(提示框停留时间)+500毫秒(提示框渐变消失时间)。
+<span class='line'>157</span>          * @return {void}
+<span class='line'>158</span>          */</span><span class="WHIT">
+<span class='line'>159</span> </span><span class="WHIT">		</span><span class="NAME">info</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">message</span><span class="PUNC">,</span><span class="NAME">ms</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>160</span> </span><span class="WHIT">			</span><span class="NAME">this.show</span><span class="PUNC">(</span><span class="NAME">this.TYPES.INFO</span><span class="PUNC">,</span><span class="NAME">message</span><span class="PUNC">,</span><span class="NAME">ms</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>161</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>162</span> </span><span class="WHIT">        </span><span class="COMM">/**
+<span class='line'>163</span>          * @description 显示警告消息
+<span class='line'>164</span>          * @function
+<span class='line'>165</span>          * @name Horn.Tip#warn
+<span class='line'>166</span>          * @param {string} message 提示消息信息
+<span class='line'>167</span>          * @param {Number} ms 提示框自动隐藏的时间以毫秒为单位，若ms不为空，隐藏时间为：2000毫秒(提示框停留时间)+ms(提示框渐变消失时间),否则默认为2000毫秒(提示框停留时间)+500毫秒(提示框渐变消失时间)。
+<span class='line'>168</span>          * @return {void}
+<span class='line'>169</span>          */</span><span class="WHIT">
+<span class='line'>170</span> </span><span class="WHIT">		</span><span class="NAME">warn</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">message</span><span class="PUNC">,</span><span class="NAME">second</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>171</span> </span><span class="WHIT">			</span><span class="NAME">this.show</span><span class="PUNC">(</span><span class="NAME">this.TYPES.WARNING</span><span class="PUNC">,</span><span class="NAME">message</span><span class="PUNC">,</span><span class="NAME">second</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>172</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>173</span> </span><span class="WHIT">        </span><span class="COMM">/**
+<span class='line'>174</span>          * @description 显示成功消息
+<span class='line'>175</span>          * @function
+<span class='line'>176</span>          * @name Horn.Tip#success
+<span class='line'>177</span>          * @param {string} message 提示消息信息
+<span class='line'>178</span>          * @param {Number} ms 提示框自动隐藏的时间以毫秒为单位，若ms不为空，隐藏时间为：2000毫秒(提示框停留时间)+ms(提示框渐变消失时间),否则默认为2000毫秒(提示框停留时间)+500毫秒(提示框渐变消失时间)。
+<span class='line'>179</span>          * @return {void}
+<span class='line'>180</span>          */</span><span class="WHIT">
+<span class='line'>181</span> </span><span class="WHIT">		</span><span class="NAME">success</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">message</span><span class="PUNC">,</span><span class="NAME">second</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>182</span> </span><span class="WHIT">			</span><span class="NAME">this.show</span><span class="PUNC">(</span><span class="NAME">this.TYPES.SUCCESS</span><span class="PUNC">,</span><span class="NAME">message</span><span class="PUNC">,</span><span class="NAME">second</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>183</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>184</span> </span><span class="WHIT">        </span><span class="COMM">/**
+<span class='line'>185</span>          * @description 显示提示消息
+<span class='line'>186</span>          * @function
+<span class='line'>187</span>          * @name Horn.Tip#show
+<span class='line'>188</span>          * @param type 提示消息类型分为三种:(信息)Horn.Tip.TYPES.INFO,(警告)Horn.Tip.TYPES.WARNING,(成功)Horn.Tip.TYPES.SUCCESS
+<span class='line'>189</span>          * @param message 提示消息信息
+<span class='line'>190</span>          * @param ms 提示框自动隐藏的时间以秒为单位，若ms不为空，隐藏时间为：2000毫秒(提示框停留时间)+ms(提示框渐变消失时间),否则默认为2000毫秒(提示框停留时间)+500毫秒(提示框渐变消失时间)。
+<span class='line'>191</span>          * @return {void}
+<span class='line'>192</span>          * @ignore
+<span class='line'>193</span>          */</span><span class="WHIT">
+<span class='line'>194</span> </span><span class="WHIT">		</span><span class="NAME">show</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">type</span><span class="WHIT"> </span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">message</span><span class="PUNC">,</span><span class="NAME">second</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>195</span> </span><span class="WHIT">			</span><span class="NAME">this.clear</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>196</span> </span><span class="WHIT">			</span><span class="NAME">this.addTip</span><span class="PUNC">(</span><span class="NAME">type</span><span class="WHIT"> </span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">message</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>197</span> </span><span class="WHIT">			</span><span class="NAME">this.init</span><span class="PUNC">(</span><span class="NAME">second</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>198</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>199</span> </span><span class="WHIT">        </span><span class="COMM">/**
+<span class='line'>200</span>          * @description 显示提示消息
+<span class='line'>201</span>          * @function
+<span class='line'>202</span>          * @name Horn.Tip#shows
+<span class='line'>203</span>          * @param messages 提示消息信息组 [{"type":Horn.Tip.TYPES.SUCCESS,"message":"联合开户成功"}]
+<span class='line'>204</span>          * @param second 提示框自动隐藏的时间以秒为单位，若ms不为空，隐藏时间为：2000毫秒(提示框停留时间)+ms(提示框渐变消失时间),否则默认为2000毫秒(提示框停留时间)+500毫秒(提示框渐变消失时间)。
+<span class='line'>205</span>          * @return {void}
+<span class='line'>206</span>          * @ignore
+<span class='line'>207</span>          */</span><span class="WHIT">
+<span class='line'>208</span> </span><span class="WHIT">        </span><span class="NAME">shows</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">messages</span><span class="PUNC">,</span><span class="NAME">second</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>209</span> </span><span class="WHIT">            </span><span class="NAME">this.clear</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>210</span> </span><span class="WHIT">            </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">messages</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">messages.length</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>211</span> </span><span class="WHIT">                </span><span class="KEYW">for</span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">=</span><span class="NUMB">0</span><span class="PUNC">;</span><span class="NAME">i</span><span class="PUNC">&lt;</span><span class="NAME">messages.length</span><span class="PUNC">;</span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>212</span> </span><span class="WHIT">                    </span><span class="NAME">this.addTip</span><span class="PUNC">(</span><span class="NAME">messages</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">type</span><span class="WHIT"> </span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">messages</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">message</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>213</span> </span><span class="WHIT">                </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>214</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>215</span> </span><span class="WHIT">            </span><span class="NAME">this.init</span><span class="PUNC">(</span><span class="NAME">second</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>216</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>217</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>218</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='line'>219</span> 	 * 注册提示消息
+<span class='line'>220</span> 	 */</span><span class="WHIT">
+<span class='line'>221</span> </span><span class="WHIT">	</span><span class="NAME">Horn.register</span><span class="PUNC">(</span><span class="NAME">Horn.Tip.init</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>222</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">(</span><span class="NAME">Horn</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>223</span> 
+<span class='line'>224</span> </span><span class="WHIT">	 </span></pre></body></html>

@@ -1,0 +1,61 @@
+#**   
+ * @author zhangc   
+ * @class
+ * @name ztree
+ * @param name {String} 名称
+ * @param id {String} 唯一标识
+ * @param data {JSON} 组成树结构的组件
+ * @param checkMode {String} radio/checkbox选择模式,单选和多选的选择
+ * @param expandFirst {Boolean} 载入时展开
+ * @param reRenderFn {Function} 用于对dom重新进行重新渲染的函数
+ * @param nodeclick {String} 当节点被点击时使用的函数
+ * @param beforenodeclick {String} 当节点被点击前会调用的函数。
+ * @description 一个简单Ztree封装，暂仅作bate版本，慎用。
+ * @see 
+ * @example \#ztree({"name":"testztree","data":"$treedata","expandFirst":true,"checkMode":"checkbox","nodeclick":"show","beforenodeclick":"show"})
+ * @since version 0.1
+ *#	
+#**
+ * @lends ztree
+ *#
+#macro(ztree $params)
+	
+	<div class="g-ztree-wrap">
+    	#if("$!params.toolbar"=="true")
+    	<div id="div.ztreeBtn_$!{params.name}"  name="div.ztreeBtn_$!{params.name}" class="ztree_toolbar u-ztree-toolbar">
+			<ul class="u-ztree-btn">
+			     	<li><a href="javascript:void(0)" id="expand_$!{params.name}" name="expand_$!{params.name}" ><i class="fa fa-expand"></i>展开</a></li>
+			     	<li><a href="javascript:void(0)" id="unexpand_$!{params.name}" name="unexpand_$!{params.name}"><i class="fa fa-compress"></i>收缩</a></li>
+			     	<li><a href="javascript:void(0)" id="refresh_$!{params.name}" name="refresh_$!{params.name}"><i class="fa fa-refresh"></i>刷新</a></li>
+		     </ul>
+        </div>
+    	#end
+    	#if("$!params.search"=="true")
+    	<div id="div.search_$!{params.name}"  name="div.search_$!{params.name}" class="u-ztree-search">
+    		<input name="search_$!{params.name}" id="search_$!{params.name}" type="text" class="ztree_search u-ztree-search-input"/>
+        </div>
+		#end
+		<div class="u-ztree">
+            <div class="h_ztree" id="$!{params.id}" $horn.paramsCache($params)  name="$!{params.name}" style="overflow: auto;"
+        		items='$!{params.data}'
+        		#if($params.checkMode)
+        			checkMode="$!{params.checkMode}"
+        		#end
+        		#if($params.expandFirst)
+        			expandFirst="$!{params.expandFirst}"
+        		#end
+        		#if($params.reRenderFn)
+        			reRenderFn="$!{params.reRenderFn}"
+				#end
+				#if($params.onExpand)
+        			onExpand="$!{params.onExpand}"
+				#else
+					onExpand="jresplusUIZtreeOnExpand"
+        		#end
+        		treeclick="$!{params.nodeclick}" 
+        		beforetreeclick="$!{params.beforenodeclick}">
+                <div class="ztree"></div>
+            </div>
+		</div>
+    </div>
+#end

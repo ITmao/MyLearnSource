@@ -1,0 +1,113 @@
+#**   
+ * @author huling   
+ * @class
+ * @name textarea
+ * @param cols {String} 跨列数
+ * @param maxlength {String} 最大字符数
+ * @param name {String} 名称
+ * @param id {String} 唯一标识
+ * @param disabled {String} 是否禁用
+ * @param readonly {String} 是否只读
+ * @param alias {String} 别名
+ * @param value {String} 值
+ * @param label {String} 单选框组件显示值
+ * @param check {String} 验证串
+ * @param events {Json} 事件，格示见示例
+ * @description textarea组件，文本域组件
+ * @see The <a href="huling@hundsun.com">huling</a >.   
+ * @example \#textarea({"label":"业务备注","name":"businRemark", "cols":3})
+ * @since version 0.1
+ *#	
+#**
+ * @lends textarea
+ *#
+#macro(textarea $uiTextAreaConfig)
+	#set($col = 4)
+	#set($cols = "")
+    #if($layoutcolumn) 
+    	#if($layoutcolumn==1)
+			#set($col = 12)
+		#elseif($layoutcolumn==2)
+			#set($col = 6)
+			#if($uiTextAreaConfig.cols&&$uiTextAreaConfig.cols==2)
+				#set($cols = "g-grid-6-row")
+			#end
+		#elseif($layoutcolumn==3)
+			#set($col = 4)
+			#if($uiTextAreaConfig.cols)
+				#if($uiTextAreaConfig.cols==3)
+					#set($cols = "g-grid-4-row")
+				#elseif($uiTextAreaConfig.cols==2)
+					#set($cols = "g-grid-4-8-row")
+				#end
+			#end
+		#elseif($layoutcolumn==4)
+			#set($col = 3)
+			#if($uiTextAreaConfig.cols)
+				#if($uiTextAreaConfig.cols==4)
+					#set($cols = "g-grid-3-row")
+				#elseif($uiTextAreaConfig.cols==3)
+					#set($cols = "g-grid-3-9-row")
+				#elseif($uiTextAreaConfig.cols==2)
+					#set($cols = "g-grid-3-6-row")
+				#end
+			#end
+		#end
+    #end
+    #set($val = "")
+    #set($val = $uiTextAreaConfig.value)
+    #if(!$val || $val =="" && $uiTextAreaConfig.name )
+        #set($val =  "$horn.getValue($!uiTextAreaConfig.name)")
+    #end
+	##查看模式
+    #if($view)
+		<div class="g-grid-$col #if($cols!="")$cols#end">
+	  	<div class="g-unit-wrap">
+		    <label #if($layoutcolumn==1)class="g-grid-2 unit-label"#else class="g-grid-4 unit-label"#end><span ref="$!uiTextAreaConfig.name" title="$!{uiTextAreaConfig.label}">$!{uiTextAreaConfig.label}</span></label>
+		    <div class="g-grid-8">
+				<div name="$!{uiTextAreaConfig.name}" class="hc_label" title="$!val" $horn.paramsCache($uiTextAreaConfig) 
+                #if($uiTextAreaConfig.dictName)
+    				dictName="$!{uiTextAreaConfig.dictName}"
+    				$horn.addGlobal('componentSelects_s',$!{uiTextAreaConfig.dictName})
+    			#end
+    			><textarea  class="textarea-view" readonly>$!val</textarea></div>
+			</div>
+	    </div>
+	 </div>
+	#else
+	  <div class="g-grid-$col #if($cols!="")$cols#end"">
+	  	<div class="g-unit-wrap">
+			 #set($checkStr=$horn.getCheckStr($uiTextAreaConfig.name,$uiTextAreaConfig.check))
+	    	#set($groupStr=$horn.getGroupStr($uiTextAreaConfig.name,$uiTextAreaConfig.group))
+			#if(!$uiTextAreaConfig.hiddenLabel)
+				<label #if($layoutcolumn==1)class="g-grid-2 unit-label"#else class="g-grid-4 unit-label"#end title="$!{uiTextAreaConfig.label}">#if($checkStr.indexOf("required")>-1)<span class="m-verify-symbol">*</span>#end$!{uiTextAreaConfig.label}</label>
+			#end	
+		    <div  class="g-grid-8">
+		      <div id="$!{uiTextAreaConfig.id}" $horn.paramsCache($uiTextAreaConfig)  name="$uiTextAreaConfig.name"  class="hc_textarea">
+			    	<textarea name="$uiTextAreaConfig.name" class="u-textarea"   title="$!val" #if($uiTextAreaConfig.emptyText)placeholder="$!uiTextAreaConfig.emptyText"#end
+			    	#if($uiTextAreaConfig.alias)
+			    		alias="${uiTextAreaConfig.alias}"
+			    	#end
+			        #if(${uiTextAreaConfig.disabled})
+			              disabled="disabled"
+			        #end
+			        #if(${uiTextAreaConfig.readonly})
+			              readonly="readonly"
+					#end
+					#if("$!{uiTextAreaConfig.rows}"!="")
+			              rows="$!{uiTextAreaConfig.rows}"
+					#else
+						style = "height:34px;"
+					#end
+			    	##foreach($event in $uiTextAreaConfig.events)
+			    	##	$event.event = "$event.function" 
+			    	##end
+			    	check="$!{checkStr}"
+					group="$!{groupStr}"
+			    	>$!val</textarea></div>
+		    </div>
+	    </div>
+	  </div>
+	#end
+	#set($uiTextAreaConfig = {})
+#end

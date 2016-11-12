@@ -1,0 +1,192 @@
+#**   
+ * @author zhouzx   
+ * @class
+ * @name screen_start
+ * @param title {String} 标题
+ * @param id {String} 唯一标识
+ * @param cols {String} 列数
+ * @description screen_start组件，是screen中最顶层的容器开始组件，需要配以#screen_end实现
+ * @see The <a href="zhouzx@hundsun.com">huling</a >.   
+ * @example \#screen_start({"title":"联合开户"})
+ * @since version 0.1
+ *#	
+#**
+ * @lends screen_start
+ *#
+ #**
+  * 修改记录：
+  * 
+  *
+  *#
+#macro(screen_start $uiScreenConfig)
+#set($layoutcolumn = 3)
+#if($uiScreenConfig.cols) 
+	#set($layoutcolumn = $uiScreenConfig.cols)
+#end
+<div id="$!{uiScreenConfig.id}" class="g-screen">
+		<h1><span>$!{uiScreenConfig.title}</span></h1>
+#end
+#**   
+ * @author zhouzx   
+ * @class
+ * @name screen_start
+ * @param title {String} 标题
+ * @param id {String} 唯一标识
+ * @param cols {String} 列数
+ * @param showLabel(String) select或combox组件数据字典类型的是否显示key值 ，默认不显示,true为显示，false为不显示。(注！showLabel为true,整个sreen里的数据字典组件都显示key，反之不显示)
+ * @description screen组件
+ * @see The <a href="zhouzx@hundsun.com">huling</a >.   
+ * @example \#@screen({"title":"联合开户","showLabel":"true"})
+ * @since version 0.1
+ *#	
+#**
+ * @lends screen
+ *#
+#macro(screen $uiScreenConfig)
+	<div id="$!{uiScreenConfig.id}" class="g-screen">
+		<h1><span>$!{uiScreenConfig.title}</span></h1>
+		$bodyContent
+	</div>
+	<div class="hc_hide_div">
+		#csrf_page_token()
+		#if(!$dictManager)
+			$horn.logDictManagerNotExist();
+		#end
+		#foreach($componentSelect in $!componentSelects_m)
+			<div class="hc_checkboxdiv" multiple_line="true" ref_target="${componentSelect}_m">
+				<ul>
+					#foreach($dictEntry in $dictManager.getDicts($componentSelect))
+					<li key="${dictEntry.label}" pKey="$!{dictEntry.pLabel}" title="${dictEntry.value}">
+						<label>
+						<input type="checkbox" class="combox_input">
+							#if($uiScreenConfig.showLabel&&"$!uiScreenConfig.showLabel"=="true")<span class="hce_dictlabel" >${dictEntry.label}:</span>#end${dictEntry.value}
+						</label>
+					</li>
+					#end
+				</ul>
+			</div>
+		#end
+		#foreach($componentSelect in $!componentSelects_s)
+			<div class="hc_checkboxdiv" multiple_line="false" ref_target="${componentSelect}_s">
+				<ul>
+					#foreach($dictEntry in $dictManager.getDicts($componentSelect))
+					<li key="${dictEntry.label}" pKey="$!{dictEntry.pLabel}" title="${dictEntry.value}">
+						<label>
+						#if($uiScreenConfig.showLabel&&"$!uiScreenConfig.showLabel"=="true")<span class="hce_dictlabel" >${dictEntry.label}:</span>#end${dictEntry.value}
+						</label>
+					</li>
+					#end
+				</ul>
+			</div>
+		#end
+	    #jscode()
+			Horn.paramCaches = Horn.paramCaches || {};
+    		Horn.apply(Horn.paramCaches,$!horn.printParamCaches());
+    		#if($ToBackField)
+        		#foreach($backFild in $ToBackField)
+        			Horn.Validate.addError("$backFild.label","$backFild.value");
+        		#end
+    		#end
+    		#foreach($tipMessage in $tipMessages)
+    			Horn.Tip.show("$tipMessage.type","$tipMessage.message") ;
+    		#end
+			#if(true == $devMode)
+				Horn.debug_=true;
+				if(BigPipe){
+					BigPipe.debug_=true;
+				}
+			#else
+				Horn.debug_=false;
+				if(BigPipe){
+					BigPipe.debug_=false;
+				}
+			#end
+    	#end
+	</div>
+	#set($uiScreenConfig = {})
+#end
+#**   
+ * @author zhouzx   
+ * @class
+ * @name screen_end
+ * @description screen_end组件，是screen中最顶层的容器结束组件，需要配以#screen_start实现
+ * @see The <a href="zhouzx@hundsun.com">huling</a >.   
+ * @example \#screen_end
+ * @since version 2.0
+ *#	
+#**
+ * @lends screen_end
+ *#
+#macro(screen_end)
+</div>
+	<div class="hc_hide_div">
+		#foreach($componentSelect in $!componentSelects_m)
+			<div class="hc_checkboxdiv" multiple_line="true" ref_target="${componentSelect}_m">
+				<ul>
+					#foreach($dictEntry in $dictManager.getDicts($componentSelect))
+					<li key="${dictEntry.label}" pKey="$!{dictEntry.pLabel}" title="${dictEntry.value}">
+						<label>
+						<input type="checkbox" class="combox_input">
+							#if($uiScreenConfig.showLabel&&"$!uiScreenConfig.showLabel"=="true")<span class="hce_dictlabel" >${dictEntry.label}:</span>#end${dictEntry.value}
+						</label>
+					</li>
+					#end
+				</ul>
+			</div>
+		#end
+		#foreach($componentSelect in $!componentSelects_s)
+			<div class="hc_checkboxdiv" multiple_line="false" ref_target="${componentSelect}_s">
+				<ul>
+					#foreach($dictEntry in $dictManager.getDicts($componentSelect))
+					<li key="${dictEntry.label}" pKey="$!{dictEntry.pLabel}" title="${dictEntry.value}">
+						<label>
+						#if($uiScreenConfig.showLabel&&"$!uiScreenConfig.showLabel"=="true")<span class="hce_dictlabel" >${dictEntry.label}:</span>#end${dictEntry.value}
+						</label>
+					</li>
+					#end
+				</ul>
+			</div>
+		#end
+	    #jscode()
+			Horn.ready(function(){
+				if(window.doLayout){
+					window.doLayout();
+				}
+			});
+			Horn.paramCaches = Horn.paramCaches || {};
+    		Horn.apply(Horn.paramCaches,$!horn.printParamCaches());
+    		#if($ToBackField)
+        		#foreach($backFild in $ToBackField)
+        			Horn.Validate.addError("$backFild.label","$backFild.value");
+        		#end
+    		#end
+    		#foreach($tipMessage in $tipMessages)
+    			Horn.Tip.show("$tipMessage.type","$tipMessage.message") ;
+			#end
+			#if(true == $devMode)
+				Horn.debug_=true;
+			#end
+    	#end
+			</div>
+		#set($uiScreenConfig = {})
+#end
+#macro(getValue $uiGetValueParam)
+	$horn.getValue($uiGetValueParam)
+#end
+#macro(resource_include)
+	<!--resources-->
+	#if($headStyleLinks)
+	    #foreach($headStyleLink in $headStyleLinks)
+	    <link rel="stylesheet" href="$imageServer.get($headStyleLink)" type="text/css">
+	    #end
+    #end
+    #if($headScriptLinks)
+    	#foreach($headScriptLink in $headScriptLinks)
+    	<script src="$imageServer.get($headScriptLink)" type="text/javascript"></script>
+    	#end
+	#end	
+#end
+##三元表达式的宏
+#macro(nt $p1 $p2)
+	#if($p1)$p1#else$p2#end
+#end

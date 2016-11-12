@@ -1,0 +1,251 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/**
+<span class='line'>  2</span>  * @name Horn.Checkbox
+<span class='line'>  3</span>  * @class
+<span class='line'>  4</span>  * 复选框组件(从field继承)&lt;br/>
+<span class='line'>  5</span>  * 与html原生的checkbox一致
+<span class='line'>  6</span>  */</span><span class="WHIT">
+<span class='line'>  7</span> </span><span class="COMM">/**
+<span class='line'>  8</span>  * @lends Horn.Checkbox#
+<span class='line'>  9</span>  */</span><span class="WHIT">
+<span class='line'> 10</span> </span><span class="WHIT">	 </span><span class="WHIT">
+<span class='line'> 11</span> </span><span class="COMM">/**
+<span class='line'> 12</span>  * 组件的唯一标示
+<span class='line'> 13</span>  * @name Horn.Checkbox#&lt;b>id&lt;/b>
+<span class='line'> 14</span>  * @type String
+<span class='line'> 15</span>  * @default ""
+<span class='line'> 16</span>  * @example
+<span class='line'> 17</span>  * 无
+<span class='line'> 18</span>  */</span><span class="WHIT">
+<span class='line'> 19</span> </span><span class="COMM">/**
+<span class='line'> 20</span>  * 组件的名称
+<span class='line'> 21</span>  * @name Horn.Checkbox#&lt;b>name&lt;/b>
+<span class='line'> 22</span>  * @type String
+<span class='line'> 23</span>  * @default ""
+<span class='line'> 24</span>  * @example
+<span class='line'> 25</span>  * 无
+<span class='line'> 26</span>  */</span><span class="WHIT">
+<span class='line'> 27</span> </span><span class="WHIT">	 </span><span class="WHIT">
+<span class='line'> 28</span> </span><span class="WHIT"> </span><span class="COMM">/**
+<span class='line'> 29</span>  * 所占列数
+<span class='line'> 30</span>  * @name Horn.Checkbox#&lt;b>cols&lt;/b>
+<span class='line'> 31</span>  * @type Number
+<span class='line'> 32</span>  * @default 1
+<span class='line'> 33</span>  * @example
+<span class='line'> 34</span>  * 无
+<span class='line'> 35</span>  */</span><span class="WHIT">
+<span class='line'> 36</span> </span><span class="WHIT"> </span><span class="WHIT">
+<span class='line'> 37</span> </span><span class="COMM">/**
+<span class='line'> 38</span>  * 值
+<span class='line'> 39</span>  * @name Horn.Checkbox#&lt;b>value&lt;/b>
+<span class='line'> 40</span>  * @type String
+<span class='line'> 41</span>  * @default ""
+<span class='line'> 42</span>  * @example
+<span class='line'> 43</span>  * 无
+<span class='line'> 44</span>  */</span><span class="WHIT">
+<span class='line'> 45</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='line'> 46</span> </span><span class="COMM">/**
+<span class='line'> 47</span>  * 是否被选中
+<span class='line'> 48</span>  * @name Horn.Checkbox#&lt;b>checked&lt;/b>
+<span class='line'> 49</span>  * @type Boolean
+<span class='line'> 50</span>  * @default false
+<span class='line'> 51</span>  * @example
+<span class='line'> 52</span>  * 无
+<span class='line'> 53</span>  */</span><span class="WHIT">
+<span class='line'> 54</span> </span><span class="COMM">/**
+<span class='line'> 55</span>  * 标签名
+<span class='line'> 56</span>  * @name Horn.Checkbox#&lt;b>label&lt;/b>
+<span class='line'> 57</span>  * @type String
+<span class='line'> 58</span>  * @default ""
+<span class='line'> 59</span>  * @example
+<span class='line'> 60</span>  * 无
+<span class='line'> 61</span>  */</span><span class="WHIT">
+<span class='line'> 62</span> 
+<span class='line'> 63</span> </span><span class="COMM">/**
+<span class='line'> 64</span>  * 事件配置）
+<span class='line'> 65</span>  * @name Horn.Checkbox#&lt;b>events&lt;/b>
+<span class='line'> 66</span>  * @type Array
+<span class='line'> 67</span>  * @default 
+<span class='line'> 68</span>  * @example
+<span class='line'> 69</span>  * "events":[{"event":"onclick","function":"checkA(this.value)"}]
+<span class='line'> 70</span>  */</span><span class="WHIT">
+<span class='line'> 71</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='line'> 72</span> </span><span class="COMM">/**
+<span class='line'> 73</span>  * 校验规则(注：只针对required起效，不支持自定义校验)
+<span class='line'> 74</span>  * @name Horn.Checkbox#&lt;b>check&lt;/b>
+<span class='line'> 75</span>  * @type String
+<span class='line'> 76</span>  * @default ""
+<span class='line'> 77</span>  * @example
+<span class='line'> 78</span>  * 无
+<span class='line'> 79</span>  */</span><span class="WHIT">
+<span class='line'> 80</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='line'> 81</span> </span><span class="WHIT"> </span><span class="COMM">/**
+<span class='line'> 82</span>   * 是否隐藏组件
+<span class='line'> 83</span>   * @name Horn.Checkbox#hidden
+<span class='line'> 84</span>   * @type Boolean
+<span class='line'> 85</span>   * @default false
+<span class='line'> 86</span>   * @example
+<span class='line'> 87</span>   * #checkbox({"name":"test115","label":"checkbox", "cols":1, "check": "required","hidden":false})
+<span class='line'> 88</span>   */</span><span class="WHIT">
+<span class='line'> 89</span> </span><span class="COMM">/**
+<span class='line'> 90</span>  * 是否禁用&lt;br/>
+<span class='line'> 91</span>  * @name Horn.Checkbox#&lt;b>disabled&lt;/b>
+<span class='line'> 92</span>  * @type Boolean
+<span class='line'> 93</span>  * @default false
+<span class='line'> 94</span>  * @example
+<span class='line'> 95</span>  * #checkbox({"name":"test115","label":"checkbox", "cols":1, "check": "required","disabled":false})
+<span class='line'> 96</span>  */</span><span class="WHIT">
+<span class='line'> 97</span> 
+<span class='line'> 98</span> </span><span class="WHIT">	</span><span class="NAME">Horn.Checkbox</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Horn.extend</span><span class="PUNC">(</span><span class="NAME">Horn.Field</span><span class="PUNC">,</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 99</span> </span><span class="WHIT">		</span><span class="NAME">COMPONENT_CLASS</span><span class="PUNC">:</span><span class="STRN">"Checkbox"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>100</span> </span><span class="WHIT">		</span><span class="NAME">checkbox</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>101</span> </span><span class="WHIT">		</span><span class="NAME">init</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>102</span> </span><span class="WHIT">			</span><span class="NAME">Horn.Checkbox.superclass.init.apply</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="NAME">arguments</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>103</span> </span><span class="WHIT">			</span><span class="NAME">this.checkbox</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.el.find</span><span class="PUNC">(</span><span class="STRN">'input:checkbox'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>104</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>105</span> </span><span class="WHIT">		</span><span class="NAME">getEventTarget</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>106</span> </span><span class="WHIT">			</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.el.find</span><span class="PUNC">(</span><span class="STRN">'input:checkbox'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>107</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>108</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'>109</span>          * @ignore
+<span class='line'>110</span>          * @name Horn.CheckboxGroup#initEvents
+<span class='line'>111</span>          * @description  正则检查字符串数组 
+<span class='line'>112</span>          * @function 初始化方法
+<span class='line'>113</span>          * @private
+<span class='line'>114</span>          */</span><span class="WHIT">
+<span class='line'>115</span> </span><span class="WHIT">        </span><span class="NAME">initEvents</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>116</span> </span><span class="WHIT">            </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_checkboxgroup</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>117</span> </span><span class="WHIT">            </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">checkboxs</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_checkboxgroup.el.find</span><span class="PUNC">(</span><span class="STRN">'input:checkbox[check*=required]'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>118</span> </span><span class="WHIT">            </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">checkboxs</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">checkboxs.size</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">></span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>119</span> </span><span class="WHIT">                </span><span class="NAME">this.checkRegx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">$</span><span class="PUNC">(</span><span class="NAME">checkboxs</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">attr</span><span class="PUNC">(</span><span class="STRN">"check"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">split</span><span class="PUNC">(</span><span class="STRN">';'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>120</span> </span><span class="WHIT">                </span><span class="NAME">checkboxs.each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">idx</span><span class="PUNC">,</span><span class="NAME">checkbox</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>121</span> </span><span class="WHIT">                    </span><span class="NAME">$</span><span class="PUNC">(</span><span class="NAME">checkbox</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="STRN">"click"</span><span class="PUNC">,</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>122</span> </span><span class="WHIT">                    	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">checkedboxs</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_checkboxgroup.el.children</span><span class="PUNC">(</span><span class="STRN">"div"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">children</span><span class="PUNC">(</span><span class="STRN">"label"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">find</span><span class="PUNC">(</span><span class="STRN">'input:checkbox[checked]'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>123</span> </span><span class="WHIT">                        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">checked</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">$</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">get</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">checked</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>124</span> </span><span class="WHIT">                   	 	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">checked</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>125</span> </span><span class="WHIT">                        	</span><span class="NAME">_checkboxgroup.removeError</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>126</span> </span><span class="WHIT">                        </span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>127</span> </span><span class="WHIT">                        	</span><span class="NAME">_checkboxgroup.showError</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>128</span> </span><span class="WHIT">                        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>129</span> </span><span class="WHIT">                    </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>130</span> </span><span class="WHIT">                </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>131</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>132</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>133</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'>134</span>          * @ignore
+<span class='line'>135</span>          * @description 显示错误信息
+<span class='line'>136</span>          * @function
+<span class='line'>137</span>          * @name Horn.CheckboxGroup#showError
+<span class='line'>138</span>          */</span><span class="WHIT">
+<span class='line'>139</span> </span><span class="WHIT">        </span><span class="NAME">showError</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>140</span> </span><span class="WHIT">        	</span><span class="COMM">//var userAgent = window.navigator.userAgent.toLowerCase();</span><span class="WHIT">
+<span class='line'>141</span> </span><span class="WHIT">			</span><span class="COMM">/*var msie10 = $.browser.msie && /msie 10\.0/i.test(userAgent);
+<span class='line'>142</span> 	        var msie9 = $.browser.msie && /msie 9\.0/i.test(userAgent); 
+<span class='line'>143</span> 	        var msie8 = $.browser.msie && /msie 8\.0/i.test(userAgent);*/</span><span class="WHIT">
+<span class='line'>144</span> </span><span class="WHIT">	        </span><span class="COMM">/*var msie7 = $.browser.msie && /msie 7\.0/i.test(userAgent);
+<span class='line'>145</span> 	        var greaterThanIe7 = true;
+<span class='line'>146</span> 	        
+<span class='line'>147</span> 	        if($.browser.msie){
+<span class='line'>148</span> 		        //文本模式版本
+<span class='line'>149</span> 		        if (document.documentMode && document.documentMode>=8){ // IE8文本模式
+<span class='line'>150</span> 		        	greaterThanIe7 = true;
+<span class='line'>151</span> 		        }else if(document.documentMode && document.documentMode&lt;8){ // IE 5-7文本模式  
+<span class='line'>152</span> 		        	greaterThanIe7 = false;
+<span class='line'>153</span> 		        }
+<span class='line'>154</span> 	        }*/</span><span class="WHIT">
+<span class='line'>155</span> </span><span class="WHIT">            </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_checkboxgroup</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>156</span> </span><span class="WHIT">        	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">this.msgDiv</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>157</span> </span><span class="WHIT">        		</span><span class="NAME">this.msgDiv</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">$</span><span class="PUNC">(</span><span class="STRN">'&lt;div class="m-verify-tip bottom" role="m-verify-tip" style="display: none;">&lt;/div>'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>158</span> </span><span class="WHIT">        		</span><span class="NAME">this.el.after</span><span class="PUNC">(</span><span class="NAME">this.msgDiv</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>159</span> </span><span class="WHIT">        	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>160</span> </span><span class="WHIT">            </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">msg</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.msgDiv</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>161</span> </span><span class="WHIT">            </span><span class="NAME">msg.html</span><span class="PUNC">(</span><span class="STRN">"&lt;div class=\"verify-tip-arrow\">&lt;/div>&lt;div class=\"verify-tip-inner\">当前复选框不能为空&lt;/div>"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>162</span> </span><span class="WHIT">            </span><span class="NAME">msg.css</span><span class="PUNC">(</span><span class="STRN">"display"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"block"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>163</span> </span><span class="WHIT">            </span><span class="NAME">_checkboxgroup.el.addClass</span><span class="PUNC">(</span><span class="STRN">'m-verify-error'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>164</span> </span><span class="WHIT">            </span><span class="NAME">_checkboxgroup.el.removeClass</span><span class="PUNC">(</span><span class="STRN">'m-verify-success'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>165</span> </span><span class="WHIT">            </span><span class="NAME">_checkboxgroup.err</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>166</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>167</span> </span><span class="WHIT">        </span><span class="COMM">/**
+<span class='line'>168</span>          * @ignore
+<span class='line'>169</span>          * @description 删除错误信息
+<span class='line'>170</span>          * @function
+<span class='line'>171</span>          * @name Horn.CheckboxGroup#removeError
+<span class='line'>172</span>          */</span><span class="WHIT">
+<span class='line'>173</span> </span><span class="WHIT">        </span><span class="NAME">removeError</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>174</span> </span><span class="WHIT">            </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_checkboxgroup</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>175</span> </span><span class="WHIT">            </span><span class="NAME">_checkboxgroup.el.removeClass</span><span class="PUNC">(</span><span class="STRN">'m-verify-error'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>176</span> </span><span class="WHIT">            </span><span class="NAME">_checkboxgroup.el.addClass</span><span class="PUNC">(</span><span class="STRN">'m-verify-success'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>177</span> </span><span class="WHIT">            </span><span class="NAME">_checkboxgroup.err</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>178</span> </span><span class="WHIT">        	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">msg</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.msgDiv</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>179</span> </span><span class="WHIT">        	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">msg</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">msg.remove</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>180</span> </span><span class="WHIT">        	</span><span class="KEYW">delete</span><span class="WHIT"> </span><span class="NAME">this.msgDiv</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>181</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>182</span> </span><span class="WHIT">        </span><span class="COMM">/**
+<span class='line'>183</span>          * 设置checkbox的值(若不为true和false则直接设置给提交值)
+<span class='line'>184</span>          * @function
+<span class='line'>185</span>          * @name Horn.Checkbox.setValue
+<span class='line'>186</span>          * @param 0/1或true/false
+<span class='line'>187</span>          */</span><span class="WHIT">
+<span class='line'>188</span> </span><span class="WHIT">		</span><span class="NAME">setValue</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">val</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>189</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.checkbox.get</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>190</span> </span><span class="WHIT">				</span><span class="NAME">this.checkbox.get</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">checked</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">!</span><span class="PUNC">!</span><span class="NAME">val</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>191</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>192</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">val</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">$.type</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">val</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="STRN">'boolean'</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>193</span> </span><span class="WHIT">				</span><span class="NAME">this.setStaticValue</span><span class="PUNC">(</span><span class="NAME">val</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>194</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>195</span> </span><span class="WHIT">			</span><span class="NAME">this.checkbox.val</span><span class="PUNC">(</span><span class="NAME">val</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>196</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>197</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'>198</span>          * 设置对应的提交值
+<span class='line'>199</span>          * @function
+<span class='line'>200</span>          * @name Horn.Checkbox.setStaticValue
+<span class='line'>201</span>          * @param {String} 预备提交的值
+<span class='line'>202</span>          * @ignore
+<span class='line'>203</span> 		 */</span><span class="WHIT">
+<span class='line'>204</span> </span><span class="WHIT">		</span><span class="NAME">setStaticValue</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">val</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>205</span> </span><span class="WHIT">			</span><span class="NAME">this.checkbox.val</span><span class="PUNC">(</span><span class="NAME">val</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>206</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>207</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'>208</span>          * @ignore
+<span class='line'>209</span>          * @description  内容校验
+<span class='line'>210</span>          * @function
+<span class='line'>211</span>          * @name Horn.CheckboxGroup.validate
+<span class='line'>212</span>          * @ignore
+<span class='line'>213</span>          */</span><span class="WHIT">
+<span class='line'>214</span> </span><span class="WHIT">		</span><span class="NAME">validate</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>215</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_checkboxgroup</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>216</span> </span><span class="WHIT">            </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">checkboxs</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.el.find</span><span class="PUNC">(</span><span class="STRN">'input:checkbox[check*=required]'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>217</span> </span><span class="WHIT">            </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">checkboxs</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">checkboxs.size</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">></span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>218</span> </span><span class="WHIT">               </span><span class="WHIT">
+<span class='line'>219</span> </span><span class="WHIT">                </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">_checkboxgroup.disabled</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>220</span> </span><span class="WHIT">                	</span><span class="NAME">_checkboxgroup.err</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>221</span> </span><span class="WHIT">                	</span><span class="KEYW">return</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>222</span> </span><span class="WHIT">                </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>223</span> </span><span class="WHIT">                </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">check</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.checkbox.get</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">checked</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>224</span> </span><span class="WHIT">                </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">check</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>225</span> </span><span class="WHIT">                	</span><span class="NAME">_checkboxgroup.err</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>226</span> </span><span class="WHIT">                	</span><span class="NAME">_checkboxgroup.showError</span><span class="PUNC">(</span><span class="STRN">"该选项不能为空"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>227</span> </span><span class="WHIT">                </span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>228</span> </span><span class="WHIT">                	</span><span class="NAME">_checkboxgroup.err</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>229</span> </span><span class="WHIT">                	</span><span class="NAME">_checkboxgroup.removeError</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>230</span> </span><span class="WHIT">                </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>231</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>232</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>233</span> </span><span class="WHIT">        </span><span class="COMM">/**
+<span class='line'>234</span>          * @description 获取checkbox的值
+<span class='line'>235</span>          * @function
+<span class='line'>236</span>          * @name Horn.Checkbox.getValue
+<span class='line'>237</span>          * @return {int} 0,1
+<span class='line'>238</span>          */</span><span class="WHIT">
+<span class='line'>239</span> </span><span class="WHIT">		</span><span class="NAME">getValue</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>240</span> </span><span class="WHIT">			</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.checkbox.val</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>241</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>242</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>243</span> </span><span class="WHIT">	</span><span class="NAME">Horn.Field.regFieldType</span><span class="PUNC">(</span><span class="STRN">"div.hc_checkbox"</span><span class="PUNC">,</span><span class="NAME">Horn.Checkbox</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>244</span> </span></pre></body></html>
