@@ -36,5 +36,7 @@
         <mapper class="com.mybatis.mapping.UserMapperI"/>
         <!-- 注册orderMapper.xml文件,orderMapper.xml位于com.mybatis.mapping这个包下，所以resource写成com/mybatis/mapping/orderMapper.xml-->
         <mapper resource="com/mybatis/mapping/orderMapper.xml"/>
+        <!-- 注册classMapper.xml文件，classMapper.xml位于me.gacl.mapping这个包下，所以resource写成me/gacl/mapping/classMapper.xml-->
+        <mapper resource="com/mybatis/mapping/classMapper.xml"/>
     </mappers>    
 </configuration>

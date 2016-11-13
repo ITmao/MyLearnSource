@@ -4,6 +4,8 @@
 例如namespace="me.gacl.mapping.userMapper"就是me.gacl.mapping(包名)+userMapper(userMapper.xml文件去除后缀)-->
 
 <mapper namespace="com.mybatis.mapping.usersMapper">
+	<!-- 开启二级缓存 -->
+	<cache/>
     <!-- 在select标签中编写查询的SQL语句， 设置select标签的id属性为getUser，id属性值必须是唯一的，不能够重复
    	 使用parameterType属性指明查询时使用的参数类型，resultType属性指明查询返回的结果集类型
     resultType="me.gacl.domain.User"就表示将查询结果封装成一个User类的对象返回
@@ -33,4 +35,18 @@
     <select id="getAllUsers" resultType="_Users">
         select * from users
     </select>
+    
+    <!-- 查询得到男性或女性的数量, 如果传入的是0就女性否则是男性-->
+    <select id="getUserCount" parameterMap="getUserCountMap" statementType="CALLABLE">
+        CALL mybatis.ges_user_count(?,?)
+    </select>
+    
+    <!--
+        parameterMap.put("sexid", 0);
+        parameterMap.put("usercount", -1);
+     -->
+    <parameterMap type="java.util.Map" id="getUserCountMap">
+        <parameter property="sexid" mode="IN" jdbcType="INTEGER"/>
+        <parameter property="usercount" mode="OUT" jdbcType="INTEGER"/>
+    </parameterMap>
 </mapper>
