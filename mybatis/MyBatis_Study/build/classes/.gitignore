@@ -1,2 +1,4 @@
 /com/
+/conf.xml
+/db.properties
 /学习mybatis建库脚本.sql
