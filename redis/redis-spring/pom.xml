@@ -5,15 +5,38 @@
   <artifactId>redis-spring</artifactId>
   <packaging>war</packaging>
   <version>1.0-SNAPSHOT</version>
-  <name>redis-spring Maven Webapp</name>
+  <name>redis-spring</name>
   <url>http://maven.apache.org</url>
   <dependencies>
+    <!-- 添加junit单元测试包 -->
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.12</version>
+        <scope>test</scope>
     </dependency>
+    <!--Redis start -->
+	<dependency>
+		<groupId>org.springframework.data</groupId>
+		<artifactId>spring-data-redis</artifactId>
+		<version>1.6.1.RELEASE</version>
+	</dependency>
+	<dependency>
+		<groupId>redis.clients</groupId>
+		<artifactId>jedis</artifactId>
+		<version>2.7.3</version>
+	</dependency>
+     <!--Redis end -->
+     <dependency>
+		<groupId>org.slf4j</groupId>
+		<artifactId>slf4j-api</artifactId>
+		<version>1.5.6</version>
+	</dependency>
+	<dependency>
+		<groupId>org.slf4j</groupId>
+		<artifactId>slf4j-log4j12</artifactId>
+		<version>1.5.6</version>
+	</dependency>
   </dependencies>
   <build>
     <finalName>redis-spring</finalName>
